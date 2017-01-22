@@ -1,0 +1,103 @@
+
+GDSprites.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+DarkTile
+  rotate: false
+  xy: 1, 13
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+LightTile
+  rotate: false
+  xy: 103, 13
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+BluePiece
+  rotate: false
+  xy: 205, 49
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Bot1
+  rotate: false
+  xy: 271, 49
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Bot2
+  rotate: false
+  xy: 337, 49
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Hole
+  rotate: false
+  xy: 403, 49
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Hole2
+  rotate: false
+  xy: 469, 49
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Hole3
+  rotate: false
+  xy: 535, 49
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Hole4
+  rotate: false
+  xy: 601, 49
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+RedPiece
+  rotate: false
+  xy: 667, 49
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Star
+  rotate: false
+  xy: 733, 49
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Star1
+  rotate: false
+  xy: 205, 15
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Star2
+  rotate: false
+  xy: 799, 81
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Beam
+  rotate: false
+  xy: 1, 1
+  size: 24, 10
+  orig: 24, 10
+  offset: 0, 0
+  index: -1

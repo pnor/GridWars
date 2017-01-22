@@ -1,0 +1,28 @@
+package com.mygdx.game;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.mygdx.game.components.*;
+
+/**
+ * @author pnore_000
+ */
+public class ComponentMappers {
+    //sprites
+    public static ComponentMapper<SpriteComponent> sm =ComponentMapper.getFor(SpriteComponent.class);
+    //animations
+    public static ComponentMapper<AnimationComponent> animm =ComponentMapper.getFor(AnimationComponent.class);
+    //position
+    public static ComponentMapper<PositionComponent> pm =ComponentMapper.getFor(PositionComponent.class);
+    //movement
+    public static ComponentMapper<MovementComponent> mm =ComponentMapper.getFor(MovementComponent.class);
+    //board
+    public static ComponentMapper<BoardComponent> bm =ComponentMapper.getFor(BoardComponent.class);
+    //actor
+    public static ComponentMapper<ActorComponent> am =ComponentMapper.getFor(ActorComponent.class);
+    //stats
+    public static ComponentMapper<StatComponent> stm =ComponentMapper.getFor(StatComponent.class);
+    //names
+    public static ComponentMapper<NameComponent> nm = ComponentMapper.getFor(NameComponent.class);
+
+
+}
