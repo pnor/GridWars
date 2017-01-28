@@ -46,7 +46,7 @@ public class BattleScreen implements Screen {
     private final Board board = new Board(7, 7, Color.LIGHT_GRAY, Color.DARK_GRAY);
     private final CodeBoard codeBoard = new CodeBoard(7, 7);
 
-    //Selection
+    //Selection ~~
     private Entity selectedEntity;
     private boolean checkedStats;
 
