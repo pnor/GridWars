@@ -49,71 +49,66 @@ public class CodeBoard {
     /**
      * Adds an {@code Entity} at a place on the board
      * @param e entity. Must have {@code BoardComponent}
-     * @param r rows
-     * @param c column
+     * @param bp position
      */
-    public void add(Entity e, int r, int c) {
-        if (r < 0 || c < 0 || r >= rows || c >= columns) {
-            System.out.println("r = " + r + ", c = " + c);
+    public void add(Entity e, BoardPosition bp) {
+        if (bp.r < 0 || bp.c < 0 || bp.r >= rows || bp.c >= columns) {
+            System.out.println("r = " + bp.r + ", c = " + bp.c);
             throw new IndexOutOfBoundsException();
         }
 
-        grid.get(r).set(c, e);
-        bm.get(e).update(r, c);
+        grid.get(bp.r).set(bp.c, e);
+        bm.get(e).update(bp);
     }
 
     /**
      * Removes an {@code Entity} from the board.
-     * @param r rows
-     * @param c column
+     * @param bp position
      * @return removed Entity
      */
-    public Entity remove(int r, int c) {
-        if (r < 0 || c < 0 || r >= rows || c >= columns) {
-            System.out.println("r = " + r + ", c = " + c);
+    public Entity remove(BoardPosition bp) {
+        if (bp.r < 0 || bp.c < 0 || bp.r >= rows || bp.c >= columns) {
+            System.out.println("r = " + bp.r + ", c = " + bp.c);
             throw new IndexOutOfBoundsException();
         }
 
-        Entity e = grid.get(r).get(c);
+        Entity e = grid.get(bp.r).get(bp.c);
         if (bm.has(e))
-            bm.get(e).update(-1, -1);
+            bm.get(e).update(new BoardPosition(-1, -1));
 
-        Entity temp = grid.get(r).get(c);
-        grid.get(r).set(c, null);
+        Entity temp = grid.get(bp.r).get(bp.c);
+        grid.get(bp.r).set(bp.c, null);
         return temp;
     }
 
     /**
      * Moves an entity from one place to another on the board. Entity must have {@code BoardComponent}
-     * @param r old row
-     * @param c old column
-     * @param newR new row location
-     * @param newC new column location
+     * @param bp old position
+     * @param newBp new location
      */
-    public void move(int r, int c, int newR, int newC) {
-        if ((r < 0 || c < 0 || r >= rows || c >= columns) || (newR < 0 || newC < 0 || newR >= rows || newC >= columns)) {
-            System.out.println("r = " + r + ", c = " + c);
+    public void move(BoardPosition bp, BoardPosition newBp) {
+        if ((bp.r < 0 || bp.c < 0 || bp.r >= rows || bp.c >= columns) || (newBp.r < 0 || newBp.c < 0 || newBp.r >= rows || newBp.c >= columns)) {
+            System.out.println("r = " + bp.r + ", c = " + bp.c);
             throw new IndexOutOfBoundsException();
         }
-        add(remove(r, c), newR, newC);
-        bm.get(grid.get(r).get(c)).update(newR, newC);
+        add(remove(bp), newBp);
+        bm.get(grid.get(bp.r).get(bp.c)).update(newBp);
 
     }
 
     /**
      * Moves an entity from one place to another on the board. Entity must have {@code BoardComponent}
      * @param e Entity
-     * @param r new row
-     * @param c new column
+     * @param bp new location
      */
-    public void move(Entity e, int r, int c) {
-        if (r < 0 || c < 0 || r >= rows || c >= columns) {
-            System.out.println("r = " + r + ", c = " + c);
+    public void move(Entity e, BoardPosition bp) {
+        if (bp.r < 0 || bp.c < 0 || bp.r >= rows || bp.c >= columns) {
+            System.out.println("r = " + bp.r + ", c = " + bp.c);
             throw new IndexOutOfBoundsException();
         }
 
-        add(remove(bm.get(e).r, bm.get(e).c), r, c);
-        bm.get(e).update(r, c);
+        add(remove(bm.get(e).pos), bp);
+        bm.get(e).update(bp);
     }
 
     /**

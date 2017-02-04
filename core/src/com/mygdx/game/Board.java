@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.actors.Tile;
 import com.mygdx.game.actors.UIActor;
@@ -90,6 +89,8 @@ public class Board {
 
         for (int i = 0; i < r; i++) {
             grid.add(new Array<Tile>());
+            if ((r % 2) == 0)
+                dark = !dark;
             for (int j = 0; j < c; j++) {
                 if (dark)
                     grid.get(i).add(d.copy(i, j));
@@ -123,6 +124,8 @@ public class Board {
 
         for (int i = 0; i < r; i++) {
             grid.add(new Array<Tile>());
+            if ((r % 2) == 0)
+                dark = !dark;
             for (int j = 0; j < c; j++) {
                 if (dark)
                     grid.get(i).add(d.copy(i, j));
@@ -157,6 +160,8 @@ public class Board {
 
         for (int i = 0; i < r; i++) {
             grid.add(new Array<Tile>());
+            if ((r % 2) == 0)
+                dark = !dark;
             for (int j = 0; j < c; j++) {
                 if (dark)
                     grid.get(i).add(d.copy(i, j));

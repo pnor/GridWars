@@ -2,19 +2,16 @@ package com.mygdx.game;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.actions.IntAction;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
@@ -22,14 +19,11 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.SpriteActor;
 import com.mygdx.game.actors.Tile;
-import com.mygdx.game.actors.UIActor;
 import com.mygdx.game.components.*;
 import com.mygdx.game.systems.DrawingSystem;
 import com.mygdx.game.systems.MovementSystem;
 
-import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
-import java.util.Comparator;
 
 import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.atlas;
@@ -135,9 +129,9 @@ public class BattleScreen implements Screen {
 
         //put Entity on Board!
         BoardManager manage = bm.get(tester).boards;
-        manage.add(tester, 0, 0);
-        manage.add(tester2, 3, 3);
-        manage.add(tester3, 4, 0);
+        manage.add(tester, new BoardPosition(0, 0));
+        manage.add(tester2, new BoardPosition(3, 3));
+        manage.add(tester3, new BoardPosition(4, 0));
         engine.addEntity(effect);
         engine.addEntity(effect2);
 
@@ -151,6 +145,7 @@ public class BattleScreen implements Screen {
             }
             table.row();
         }
+
         final TextButton act = new TextButton("ACT!", skin, "toggle");
         final TextButton move = new TextButton("Move to...", skin, "toggle");
         final TextField rowField = new TextField("row", skin);
@@ -160,15 +155,13 @@ public class BattleScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == act) {
-                        bm.get(tester).boards.move(tester, t, u);
+                        bm.get(tester).boards.move(tester, new BoardPosition(t, u));
                         t++;
                         u++;
                         if (t + 1 > board.getRowSize() || u + 1 > board.getColumnSize()) {
                             t = 0;
                             u = 0;
                         }
-                        System.out.println("" + bm.get(tester).r + " , " + bm.get(tester).c);
-                        System.out.println("R Size: " + codeBoard.getRows() + "  C Size: " + codeBoard.getColumns());
                     }
                     if (actor == move) {
                         int r, c;
@@ -179,10 +172,8 @@ public class BattleScreen implements Screen {
                             return;
                         }
                         if (!((r >= board.getRowSize() || r < 0) || (c >= board.getColumnSize() || c < 0))) {
-                            bm.get(tester2).boards.move(tester2, r, c);
+                            bm.get(tester2).boards.move(tester2, new BoardPosition(r, c));
                         }
-                        System.out.println("" + bm.get(tester2).r + " , " + bm.get(tester2).c);
-                        System.out.println("R Size: " + codeBoard.getRows() + "  C Size: " + codeBoard.getColumns());
                     }
                 }
             }
@@ -290,7 +281,7 @@ public class BattleScreen implements Screen {
                             }
                     } catch (Exception exc) { }
 
-                    bm.get(selectedEntity).boards.move(selectedEntity, t.getRow(), t.getColumn());
+                    bm.get(selectedEntity).boards.move(selectedEntity, new BoardPosition(t.getRow(), t.getColumn()));
                 }
             }
         }
@@ -338,8 +329,8 @@ public class BattleScreen implements Screen {
 
         int spd = stm.get(e).spd;
         int newR; int newC;
-        int entityRow = bm.get(e).r;
-        int entityCol = bm.get(e).c;
+        int entityRow = bm.get(e).pos.r;
+        int entityCol = bm.get(e).pos.c;
         Array<Tile> tiles = new Array<Tile>();
 
         for (int i = -spd; i <= spd; i++) {

@@ -32,17 +32,16 @@ public class BoardManager {
      * Adds an entity's data to a board and codeBoard. Doesn't add if there is an entity
      * there already
      * @param e Entity. Must have a {@code ActorComponent}
-     * @param r row to add at
-     * @param c columns to add at
+     * @param bp position to add at
      * @return true if it added the entity
      */
-    public boolean add(Entity e, int r, int c) {
-        if (codeBoard.get(r, c) != null)
+    public boolean add(Entity e, BoardPosition bp) {
+        if (codeBoard.get(bp.r, bp.c) != null)
             //there's something there
             return false;
 
-        codeBoard.add(e, r, c);
-        board.add(am.get(e).actor, r, c);
+        codeBoard.add(e, bp);
+        board.add(am.get(e).actor, bp.r, bp.c);
         return true;
     }
 
@@ -52,65 +51,61 @@ public class BoardManager {
      * @return true if it removed an entity
      */
     public boolean remove(Entity e) {
-        if (codeBoard.get(bm.get(e).r, bm.get(e).c) != null || (bm.get(e).r == -1 && bm.get(e).c == -1))
+        if (codeBoard.get(bm.get(e).pos.r, bm.get(e).pos.c) != null || (bm.get(e).pos.r == -1 && bm.get(e).pos.c == -1))
             //there's nothing there OR the entity's not on the board
             return false;
 
-        codeBoard.remove(bm.get(e).r, bm.get(e).c);
-        board.remove(am.get(e).actor, bm.get(e).r, bm.get(e).c);
+        codeBoard.remove(bm.get(e).pos);
+        board.remove(am.get(e).actor, bm.get(e).pos.r, bm.get(e).pos.c);
         return true;
     }
 
     /**
      * Removes an entity's data to a board and codeBoard at a specific index
-     * @param r row
-     * @param c column
+     * @param bp board position
      * @return true if an entity was removed
      */
-    public boolean remove(int r, int c) {
-        if (codeBoard.get(r, c) != null)
+    public boolean remove(BoardPosition bp) {
+        if (codeBoard.get(bp.r, bp.c) != null)
             //there's nothing there
             return false;
 
-        board.remove(am.get(codeBoard.get(r, c)).actor, r, c);
-        codeBoard.remove(r, c);
+        board.remove(am.get(codeBoard.get(bp.r, bp.c)).actor, bp.r, bp.c);
+        codeBoard.remove(bp);
         return true;
     }
 
     /**
      * Moves an entity's data to another place on the board and codeBoard.
      * Entity must have a {@code ActorComponent} and {@code BoardComponent}.
-     * @param r old row
-     * @param c old column
-     * @param newR new row
-     * @param newC new column
+     * @param bp old position
+     * @param newBp new position
      * @return true if an entity was moved
      */
-    public boolean move(int r, int c, int newR, int newC) {
-        if (codeBoard.get(r, c) == null || codeBoard.get(newR, newC) != null)
+    public boolean move(BoardPosition bp, BoardPosition newBp) {
+        if (codeBoard.get(bp.r, bp.c) == null || codeBoard.get(newBp.r, newBp.c) != null)
             //there's nothing to move OR there's something at the destination
             return false;
 
-        board.move(am.get(codeBoard.get(r, c)).actor, r, c, newR, newC);
-        codeBoard.move(r, c, newR, newC);
+        board.move(am.get(codeBoard.get(bp.r, bp.c)).actor, bp.r, bp.c, newBp.r, newBp.c);
+        codeBoard.move(bp, newBp);
         return true;
     }
 
     /**
      * Moves an entity's data to another place on the board and codeBoard.
      * @param e Entity, must have a {@code ActorComponent} and {@code BoardComponent}.
-     * @param r new row
-     * @param c new column
+     * @param bp new position
      * @return true if an entity was moved
      */
-    public boolean move(Entity e, int r, int c) {
-        if (codeBoard.get(bm.get(e).r, bm.get(e).c) == null || codeBoard.get(r, c) != null) {
+    public boolean move(Entity e, BoardPosition bp) {
+        if (codeBoard.get(bm.get(e).pos.r, bm.get(e).pos.c) == null || codeBoard.get(bp.r, bp.c) != null) {
             //there's nothing to move || there's something at the destination
             return false;
         }
 
-        board.move(am.get(codeBoard.get(bm.get(e).r, bm.get(e).c)).actor, bm.get(e).r, bm.get(e).c, r, c);
-        codeBoard.move(e, r, c);
+        board.move(am.get(codeBoard.get(bm.get(e).pos.r, bm.get(e).pos.c)).actor, bm.get(e).pos.r, bm.get(e).pos.c, bp.r, bp.c);
+        codeBoard.move(e, bp);
         return true;
     }
 

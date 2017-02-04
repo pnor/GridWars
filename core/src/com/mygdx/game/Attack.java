@@ -1,9 +1,12 @@
 package com.mygdx.game;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
+
 /**
- * Created by pnore_000 on 1/31/2017.
+ * Phillip O
+ * What happens when a move is used. Is used mainly in the {@code Move} class.
  */
 public interface Attack {
-    void effect();
-
+    public void effect(Entity e, Array<BoardPosition> range, BoardManager boards);
 }

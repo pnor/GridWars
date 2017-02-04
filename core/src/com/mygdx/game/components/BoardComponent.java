@@ -3,9 +3,8 @@ package com.mygdx.game.components;
 import com.badlogic.ashley.core.Component;
 import com.mygdx.game.Board;
 import com.mygdx.game.BoardManager;
+import com.mygdx.game.BoardPosition;
 import com.mygdx.game.CodeBoard;
-
-import java.awt.*;
 
 /**
  * Represents a location on the board.
@@ -16,8 +15,7 @@ public class BoardComponent implements Component {
     /**
      * if r and c are -1, means its not on the board
      */
-    public int r = -1;
-    public int c = -1;
+    public BoardPosition pos;
 
     public BoardComponent() {
         super();
@@ -31,9 +29,8 @@ public class BoardComponent implements Component {
         boards = bm;
     }
 
-    public void update(int r2, int c2) {
-        r = r2;
-        c = c2;
+    public void update(BoardPosition bp) {
+        pos = new BoardPosition(bp.r, bp.c);
     }
 
     public static void setBoardManager(BoardManager bm) {
