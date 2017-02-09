@@ -107,6 +107,14 @@ public class BattleScreen implements Screen {
         }, Animation.PlayMode.LOOP, 0.5f)));
         tester2.add(new BoardComponent());
         tester2.add(new StatComponent(5, 7, 2, 1, 3));
+        tester2.add(new MovesetComponent(new Array<Move>(new Move[]{
+                new Move("Tackle", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0,1)}), new Attack() {
+                    @Override
+                    public void effect(Entity e, Array<BoardPosition> range, BoardManager boards) {
+
+                    }
+                }
+        })));
         tester2.add(new NameComponent("Robo - Beta"));
 
         tester3 = new Entity();
