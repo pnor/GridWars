@@ -21,15 +21,15 @@ public class Move {
     /**
      * Creates a move that can be used
      * @param name2 name
-     * @param user user of move
-     * @param range range
+     * @param usr user of move
+     * @param rnge range
      * @param board {@code BoardManager}
      * @param atk effect of attack
      */
-    public Move(String name2, Entity user, Array<BoardPosition> range, BoardManager board, Attack atk) {
+    public Move(String name2, Entity usr, Array<BoardPosition> rnge, BoardManager board, Attack atk) {
         name = name2;
-        user = user;
-        range = range;
+        user = usr;
+        range = rnge;
         boards = board;
         attack  = atk;
     }
@@ -39,6 +39,10 @@ public class Move {
      */
     public void useAttack() {
         attack.effect(user, range, boards);
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Array<BoardPosition> getRange() {

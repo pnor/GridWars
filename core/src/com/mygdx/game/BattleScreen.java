@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -23,8 +23,6 @@ import com.mygdx.game.components.*;
 import com.mygdx.game.systems.DrawingSystem;
 import com.mygdx.game.systems.MovementSystem;
 
-import java.awt.geom.Point2D;
-
 import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.atlas;
 
@@ -37,7 +35,7 @@ public class BattleScreen implements Screen {
     private Stage stage;
 
     //Board
-    private final Board board = new Board(7, 7, Color.LIGHT_GRAY, Color.DARK_GRAY);
+    private final Board board = new Board(7, 7, new Color(221f/255, 221f/255f, 119f/255f, 1), new Color(1, 1, 102f/255f, 1));
     private final CodeBoard codeBoard = new CodeBoard(7, 7);
 
     //Selection ~~
@@ -45,24 +43,29 @@ public class BattleScreen implements Screen {
     private boolean checkedStats;
 
     //Ui Elements
-    private Table table;
-    private Table statsTable;
     private Skin skin;
     private TextureAtlas uiatlas;
-    private Label NameLabel;
-    private Label HpLabel;
-    private Label SpLabel;
-    private Label AtkLabel;
-    private Label DefLabel;
-    private Label SpdLabel;
+    private Table table;
+    private Table statsTable;
+        private Label hpLabel;
+        private Label spLabel;
+        private Label atkLabel;
+        private Label defLabel;
+        private Label spdLabel;
+        private Label nameLabel;
+    private Table attackTable;
+        private Label attackTitleLabel;
+        private TextButton attackBtn1;
+        private TextButton attackBtn2;
+        private TextButton attackBtn3;
+        private TextButton attackBtn4;
+        //maybe entites should rotate sperate from this menu
 
     //Entities
     private Engine engine;
     private Entity tester;
     private Entity tester2;
     private Entity tester3;
-    private Entity effect;
-    private Entity effect2;
 
     //TEST VALUES
     private int t = 1; //x
@@ -79,8 +82,10 @@ public class BattleScreen implements Screen {
         stage.getViewport().setScreenSize(1000, 900);
         table = new Table();
         statsTable = new Table();
+        attackTable = new Table();
         stage.addActor(table);
         stage.addActor(statsTable);
+        stage.addActor(attackTable);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         uiatlas = new TextureAtlas("uiskin.atlas");
         skin.addRegions(uiatlas);
@@ -108,12 +113,21 @@ public class BattleScreen implements Screen {
         tester2.add(new BoardComponent());
         tester2.add(new StatComponent(5, 7, 2, 1, 3));
         tester2.add(new MovesetComponent(new Array<Move>(new Move[]{
-                new Move("Tackle", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0,1)}), new Attack() {
+                new Move("Tackle", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0,1)}), BoardComponent.boards, new Attack() {
                     @Override
                     public void effect(Entity e, Array<BoardPosition> range, BoardManager boards) {
-
+                        Entity enemy = boards.getCodeBoard().get(range.get(0).r, range.get(0).c);
+                        stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk - stm.get(enemy).def, 0, 999);
                     }
-                }
+                }),
+                new Move("Full-Out Assault", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1,1), new BoardPosition(0,1), new BoardPosition(1,1)}), BoardComponent.boards, new Attack() {
+                    @Override
+                    public void effect(Entity e, Array<BoardPosition> range, BoardManager boards) {
+                        Entity enemy = boards.getCodeBoard().get(range.get(0).r, range.get(0).c);
+                        stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk + 2 - stm.get(enemy).def, 0, 999);
+                        stm.get(e).sp -= 1;
+                    }
+                })
         })));
         tester2.add(new NameComponent("Robo - Beta"));
 
@@ -123,7 +137,7 @@ public class BattleScreen implements Screen {
                 Animation.PlayMode.LOOP_PINGPONG, 0.1f)));
         tester3.add(new BoardComponent());
         tester3.add(new NameComponent("Hole"));
-
+        /*
         effect = new Entity();
         effect.add(new PositionComponent(new Point2D.Float(stage.getWidth() - 50, stage.getHeight() / 4), 100, 100, 0));
         effect.add(new SpriteComponent(atlas.findRegion("Star")));
@@ -134,14 +148,16 @@ public class BattleScreen implements Screen {
         effect2.add(new AnimationComponent(1, new TextureRegion[]{atlas.findRegion("Star1"),
                 atlas.findRegion("Star2")}, Animation.PlayMode.LOOP));
         effect2.add(new MovementComponent(new Vector2(5, 1)));
-
+        */
         //put Entity on Board!
         BoardManager manage = bm.get(tester).boards;
         manage.add(tester, new BoardPosition(0, 0));
         manage.add(tester2, new BoardPosition(3, 3));
         manage.add(tester3, new BoardPosition(4, 0));
+        /*
         engine.addEntity(effect);
         engine.addEntity(effect2);
+        */
 
         //set up MAIN ui -----
         for (int i = 0; i < board.getRowSize(); i++) {
@@ -199,29 +215,64 @@ public class BattleScreen implements Screen {
         table.debug();
 
         //set up stats ui
-        NameLabel = new Label("---", skin);
-        NameLabel.setColor(Color.YELLOW);
-        HpLabel = new Label("-", skin);
-        HpLabel.setColor(Color.GREEN);
-        SpLabel = new Label("-", skin);
-        SpLabel.setColor(Color.ORANGE);
-        AtkLabel = new Label("-", skin);
-        DefLabel = new Label("-", skin);
-        SpdLabel = new Label("-", skin);
-        statsTable.add(NameLabel).size(125, 50).row();
-        NameLabel.setAlignment(Align.center);
-        statsTable.add(HpLabel).center().size(125, 50).row();
-        HpLabel.setAlignment(Align.center);
-        statsTable.add(SpLabel).center().size(125, 50).row();
-        SpLabel.setAlignment(Align.center);
-        statsTable.add(AtkLabel).center().size(125, 50).row();
-        AtkLabel.setAlignment(Align.center);
-        statsTable.add(DefLabel).center().size(125, 50).row();
-        DefLabel.setAlignment(Align.center);
-        statsTable.add(SpdLabel).center().size(125, 50).row();
-        SpdLabel.setAlignment(Align.center);
+        nameLabel = new Label("---", skin);
+        nameLabel.setColor(Color.YELLOW);
+        hpLabel = new Label("-", skin);
+        hpLabel.setColor(Color.GREEN);
+        spLabel = new Label("-", skin);
+        spLabel.setColor(Color.ORANGE);
+        atkLabel = new Label("-", skin);
+        defLabel = new Label("-", skin);
+        spdLabel = new Label("-", skin);
+        statsTable.add(nameLabel).size(125, 50).row();
+        nameLabel.setAlignment(Align.center);
+        statsTable.add(hpLabel).center().size(125, 50).row();
+        hpLabel.setAlignment(Align.center);
+        statsTable.add(spLabel).center().size(125, 50).row();
+        spLabel.setAlignment(Align.center);
+        statsTable.add(atkLabel).center().size(125, 50).row();
+        atkLabel.setAlignment(Align.center);
+        statsTable.add(defLabel).center().size(125, 50).row();
+        defLabel.setAlignment(Align.center);
+        statsTable.add(spdLabel).center().size(125, 50).row();
+        spdLabel.setAlignment(Align.center);
         statsTable.debug();
-        statsTable.setPosition(stage.getWidth() * .85f, stage.getHeight() * .6666f);
+        statsTable.setPosition(stage.getWidth() * .85f, stage.getHeight() * .8f);
+
+        //set up attack menu ui
+        attackTitleLabel = new Label("Actions", skin);
+        attackTitleLabel.setColor(Color.YELLOW);
+        attackBtn1 = new TextButton("---", skin, "toggle");
+        attackBtn2 = new TextButton("---", skin, "toggle");
+        attackBtn3 = new TextButton("---", skin, "toggle");
+        attackBtn4 = new TextButton("---", skin, "toggle");
+        ChangeListener attackSelector = new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (((Button) actor).isPressed()) {
+                    if (actor == attackBtn1) {
+
+                    } else if (actor == attackBtn2) {
+
+                    } else if (actor == attackBtn3) {
+
+                    } else if (actor == attackBtn4) {
+
+                    }
+                }
+            }
+        };
+        attackBtn1.addListener(attackSelector);
+        attackBtn2.addListener(attackSelector);
+        attackBtn3.addListener(attackSelector);
+        attackBtn4.addListener(attackSelector);
+        attackTable.add(attackTitleLabel).size(125, 50).row();
+        attackTable.add(attackBtn1).size(125, 50).padBottom(10f).row();
+        attackTable.add(attackBtn2).size(125, 50).padBottom(10f).row();
+        attackTable.add(attackBtn3).size(125, 50).padBottom(10f).row();
+        attackTable.add(attackBtn4).size(125, 50).padBottom(10f).row();
+        attackTable.debug();
+        attackTable.setPosition(stage.getWidth() * .85f, stage.getHeight() * .3f);
     }
 
     @Override
@@ -299,22 +350,46 @@ public class BattleScreen implements Screen {
             if (!checkedStats) {
                 if (stm.has(selectedEntity)) {
                     StatComponent stat = stm.get(selectedEntity);
-                    HpLabel.setText("Health : " + stat.hp + " / " + stat.maxHP);
-                    SpLabel.setText("Skill : " + stat.sp + " / " + stat.maxSP);
-                    AtkLabel.setText("Attack : " + stat.atk);
-                    DefLabel.setText("Defense : " + stat.def);
-                    SpdLabel.setText("Speed : " + stat.spd);
+                    hpLabel.setText("Health : " + stat.hp + " / " + stat.maxHP);
+                    spLabel.setText("Skill : " + stat.sp + " / " + stat.maxSP);
+                    atkLabel.setText("Attack : " + stat.atk);
+                    defLabel.setText("Defense : " + stat.def);
+                    spdLabel.setText("Speed : " + stat.spd);
                 } else {
-                    HpLabel.setText("Health : -- / --");
-                    SpLabel.setText("Skill : -- / --");
-                    AtkLabel.setText("Attack : --");
-                    DefLabel.setText("Defense : --");
-                    SpdLabel.setText("Speed : --");
+                    hpLabel.setText("Health : -- / --");
+                    spLabel.setText("Skill : -- / --");
+                    atkLabel.setText("Attack : --");
+                    defLabel.setText("Defense : --");
+                    spdLabel.setText("Speed : --");
+                }
+                if (mvm.has(selectedEntity)) {
+                    MovesetComponent moves = mvm.get(selectedEntity);
+                    if ( moves.moveList.size > 0 && moves.moveList.get(0) != null)
+                        attackBtn1.setText(moves.moveList.get(0).getName());
+                    else
+                        attackBtn1.setText("---");
+                    if (moves.moveList.size > 1 && moves.moveList.get(1) != null)
+                        attackBtn2.setText(moves.moveList.get(1).getName());
+                    else
+                        attackBtn2.setText("---");
+                    if (moves.moveList.size > 2 && moves.moveList.get(2) != null)
+                        attackBtn3.setText(moves.moveList.get(2).getName());
+                    else
+                        attackBtn3.setText("---");
+                    if (moves.moveList.size > 3 && moves.moveList.get(3) != null)
+                        attackBtn4.setText(moves.moveList.get(3).getName());
+                    else
+                        attackBtn4.setText("---");
+                } else {
+                    attackBtn1.setText("---");
+                    attackBtn2.setText("---");
+                    attackBtn3.setText("---");
+                    attackBtn4.setText("---");
                 }
                 if (nm.has(selectedEntity))
-                    NameLabel.setText(nm.get(selectedEntity).name);
+                    nameLabel.setText(nm.get(selectedEntity).name);
                 else
-                    NameLabel.setText("???");
+                    nameLabel.setText("???");
 
                 checkedStats = true;
             }

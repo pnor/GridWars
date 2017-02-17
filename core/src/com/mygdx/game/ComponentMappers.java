@@ -21,6 +21,8 @@ public class ComponentMappers {
     public static ComponentMapper<ActorComponent> am =ComponentMapper.getFor(ActorComponent.class);
     //stats
     public static ComponentMapper<StatComponent> stm =ComponentMapper.getFor(StatComponent.class);
+    //moveset
+    public static ComponentMapper<MovesetComponent> mvm =ComponentMapper.getFor(MovesetComponent.class);
     //names
     public static ComponentMapper<NameComponent> nm = ComponentMapper.getFor(NameComponent.class);
 
