@@ -137,6 +137,23 @@ public class BattleScreen implements Screen {
                         stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk + 2 - stm.get(enemy).def, 0, 999);
                         stm.get(e).sp -= 1;
                     }
+                }),
+                new Move("Very Long-Named Raid Attack", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1,2), new BoardPosition(0,1), new BoardPosition(1,2), new BoardPosition(0,2)}), BoardComponent.boards, new Attack() {
+                    @Override
+                    public void effect(Entity e, Array<BoardPosition> range, BoardManager boards) {
+                        Entity enemy = boards.getCodeBoard().get(range.get(0).r, range.get(0).c);
+                        stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk + 1 - stm.get(enemy).def, 0, 999);
+                        stm.get(e).sp -= 1;
+                    }
+                }),
+                new Move("Laser Beam Barrage", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2,1), new BoardPosition(1,1), new BoardPosition(2,0),
+                        new BoardPosition(-1,-1), new BoardPosition(0,-2), new BoardPosition(2,2), new BoardPosition(-1,1)}), BoardComponent.boards, new Attack() {
+                    @Override
+                    public void effect(Entity e, Array<BoardPosition> range, BoardManager boards) {
+                        Entity enemy = boards.getCodeBoard().get(range.get(0).r, range.get(0).c);
+                        stm.get(enemy).hp -= 1;
+                        stm.get(e).sp -= 1;
+                    }
                 })
         })));
         tester2.add(new NameComponent("Robo - Beta"));
@@ -276,22 +293,24 @@ public class BattleScreen implements Screen {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 if (fromActor == attackBtn1)
-                    moveHover = 1;
+                    moveHover = 0;
                 else if (fromActor == attackBtn2)
-                    moveHover = 2;
+                    moveHover = 1;
                 else if (fromActor == attackBtn3)
-                    moveHover = 3;
+                    moveHover = 2;
                 else if (fromActor == attackBtn4)
-                    moveHover = 4;
+                    moveHover = 3;
+                else
+                    System.out.println("No button");
                 showedMoveRange = false;
                 clearMoveRange = false;
-                System.out.println("ENTERED : " + ++ENTEREDNUM);
+                System.out.println("(" + moveHover + ") ENTERED : " + ++ENTEREDNUM);
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 clearMoveRange = true;
-                System.out.println("EXITED : " + ++EXITNUM);
+                System.out.println("(" + moveHover + ") EXITED : " + ++EXITNUM);
             }
         };
         attackBtn1.addListener(attackSelector);
@@ -302,11 +321,11 @@ public class BattleScreen implements Screen {
         attackBtn2.addListener(attackShower);
         attackBtn3.addListener(attackShower);
         attackBtn4.addListener(attackShower);
-        attackTable.add(attackTitleLabel).size(125, 50).row();
-        attackTable.add(attackBtn1).size(125, 50).padBottom(10f).row();
-        attackTable.add(attackBtn2).size(125, 50).padBottom(10f).row();
-        attackTable.add(attackBtn3).size(125, 50).padBottom(10f).row();
-        attackTable.add(attackBtn4).size(125, 50).padBottom(10f).row();
+        attackTable.add(attackTitleLabel).size(125, 50).center().row();
+        attackTable.add(attackBtn1).size(125, 50).padBottom(15f).row();
+        attackTable.add(attackBtn2).size(125, 50).padBottom(15f).row();
+        attackTable.add(attackBtn3).size(125, 50).padBottom(15f).row();
+        attackTable.add(attackBtn4).size(125, 50).padBottom(15f).row();
         attackTable.debug();
         attackTable.setPosition(stage.getWidth() * .85f, stage.getHeight() * .3f);
     }
@@ -387,8 +406,9 @@ public class BattleScreen implements Screen {
                 //highlight attack squares
                 if (mvm.get(selectedEntity).moveList.size > moveHover) {
                     for (BoardPosition pos : mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
-                        bm.get(selectedEntity).boards.getBoard().getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c).shadeTile(Color.RED);
-                        System.out.println("working?");
+                        try {
+                            bm.get(selectedEntity).boards.getBoard().getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c).shadeTile(Color.RED);
+                        } catch (Exception e) { }
                     }
                     showedMoveRange = true;
                 }
@@ -396,9 +416,23 @@ public class BattleScreen implements Screen {
             //remove attack squares
             if (clearMoveRange && moveHover != -1) {
                 if (mvm.get(selectedEntity).moveList.size > moveHover) {
+                    boolean wasBlue = false;
                     for (BoardPosition pos : mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
-                        board.getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c).revertTileColor();
-                        System.out.println("reverted");
+                        try {
+                        Tile currTile = board.getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c);
+                        if (currTile.getIsListening()) {
+                            for (Tile t : getMovableSquares(selectedEntity)) {
+                                if (t == currTile)
+                                    wasBlue = true;
+                            }
+                            if (wasBlue)
+                                currTile.shadeTile(Color.BLUE);
+                            else
+                                currTile.revertTileColor();
+                        }
+                        else
+                            currTile.revertTileColor();
+                        } catch (Exception e) { }
                     }
 
                     clearMoveRange = false;
