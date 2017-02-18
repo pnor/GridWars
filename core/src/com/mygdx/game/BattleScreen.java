@@ -11,9 +11,11 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.actors.AnimationActor;
@@ -38,9 +40,15 @@ public class BattleScreen implements Screen {
     private final Board board = new Board(7, 7, new Color(221f/255, 221f/255f, 119f/255f, 1), new Color(1, 1, 102f/255f, 1));
     private final CodeBoard codeBoard = new CodeBoard(7, 7);
 
-    //Selection ~~
+    //Selection and Hover
     private Entity selectedEntity;
     private boolean checkedStats;
+    /**
+     * value represents which move to show. If -1, means its showing no moves.
+     */
+    private int moveHover = -1;
+    private boolean showedMoveRange;
+    private boolean clearMoveRange;
 
     //Ui Elements
     private Skin skin;
@@ -70,6 +78,8 @@ public class BattleScreen implements Screen {
     //TEST VALUES
     private int t = 1; //x
     private int u = 1; //y
+    private int ENTEREDNUM;
+    private int EXITNUM;
     public Actor TESTER;
 
     @Override
@@ -262,10 +272,36 @@ public class BattleScreen implements Screen {
                 }
             }
         };
+        ClickListener attackShower = new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                if (fromActor == attackBtn1)
+                    moveHover = 1;
+                else if (fromActor == attackBtn2)
+                    moveHover = 2;
+                else if (fromActor == attackBtn3)
+                    moveHover = 3;
+                else if (fromActor == attackBtn4)
+                    moveHover = 4;
+                showedMoveRange = false;
+                clearMoveRange = false;
+                System.out.println("ENTERED : " + ++ENTEREDNUM);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                clearMoveRange = true;
+                System.out.println("EXITED : " + ++EXITNUM);
+            }
+        };
         attackBtn1.addListener(attackSelector);
         attackBtn2.addListener(attackSelector);
         attackBtn3.addListener(attackSelector);
         attackBtn4.addListener(attackSelector);
+        attackBtn1.addListener(attackShower);
+        attackBtn2.addListener(attackShower);
+        attackBtn3.addListener(attackShower);
+        attackBtn4.addListener(attackShower);
         attackTable.add(attackTitleLabel).size(125, 50).row();
         attackTable.add(attackBtn1).size(125, 50).padBottom(10f).row();
         attackTable.add(attackBtn2).size(125, 50).padBottom(10f).row();
@@ -313,7 +349,7 @@ public class BattleScreen implements Screen {
 
                 try { // newly highlights spaces
                     for (Tile t : getMovableSquares(selectedEntity))
-                        if (t != null) {
+                        if (t != null && !t.getIsListening()) {
                             t.shadeTile(Color.BLUE);
                             t.startListening();
                         }
@@ -344,6 +380,33 @@ public class BattleScreen implements Screen {
                 }
             }
         }
+
+        //show Attack Squares visual ---
+        if (selectedEntity != null && mvm.has(selectedEntity)) {
+            if (!showedMoveRange && moveHover > -1) {
+                //highlight attack squares
+                if (mvm.get(selectedEntity).moveList.size > moveHover) {
+                    for (BoardPosition pos : mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
+                        bm.get(selectedEntity).boards.getBoard().getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c).shadeTile(Color.RED);
+                        System.out.println("working?");
+                    }
+                    showedMoveRange = true;
+                }
+            }
+            //remove attack squares
+            if (clearMoveRange && moveHover != -1) {
+                if (mvm.get(selectedEntity).moveList.size > moveHover) {
+                    for (BoardPosition pos : mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
+                        board.getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c).revertTileColor();
+                        System.out.println("reverted");
+                    }
+
+                    clearMoveRange = false;
+                    moveHover = -1;
+                }
+            }
+        }
+
 
         if (selectedEntity != null) {
         //show selected stats ---

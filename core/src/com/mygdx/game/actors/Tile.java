@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import static com.mygdx.game.GridWars.atlas;
 
@@ -20,6 +19,7 @@ public class Tile extends Group {
     private int c;
 
     private boolean lastSelected;
+    private boolean isListening;
 
     /**
      * Creates a new tile with no set color.
@@ -92,13 +92,16 @@ public class Tile extends Group {
      * Adds a listener to the tile back that toggles whether it was last selected
      */
     public void startListening() {
-        tileBack.addListener(new InputListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                lastSelected = true;
-                return false;
-            }
-        });
+        if (!isListening) {
+            tileBack.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    lastSelected = true;
+                    return false;
+                }
+            });
+            isListening = true;
+        }
     }
 
     /**
@@ -106,6 +109,7 @@ public class Tile extends Group {
      */
     public void stopListening() {
         tileBack.clearListeners();
+        isListening = false;
     }
 
     /**
@@ -138,6 +142,10 @@ public class Tile extends Group {
 
     public void setLastSelected(boolean b) {
         lastSelected = b;
+    }
+
+    public boolean getIsListening() {
+        return isListening;
     }
 
     /**
