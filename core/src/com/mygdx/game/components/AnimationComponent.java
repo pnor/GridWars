@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 /**
+ * Component for Entities that play an animation.
  * @author pnore_000
  */
 public class AnimationComponent implements Component {

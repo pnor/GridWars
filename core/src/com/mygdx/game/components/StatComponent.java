@@ -3,6 +3,7 @@ package com.mygdx.game.components;
 import com.badlogic.ashley.core.Component;
 
 /**
+ * Component representing the stats of an Entity on the board.
  * @author pnore_000
  */
 public class StatComponent implements Component {

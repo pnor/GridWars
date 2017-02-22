@@ -7,7 +7,7 @@ import com.mygdx.game.BoardPosition;
 import com.mygdx.game.CodeBoard;
 
 /**
- * Represents a location on the board.
+ * Represents a location and orientation on the board.
  * @author pnore_000
  */
 public class BoardComponent implements Component {
@@ -15,7 +15,14 @@ public class BoardComponent implements Component {
     /**
      * if r and c are -1, means its not on the board
      */
-    public BoardPosition pos;
+    public BoardPosition pos = new BoardPosition(-1, -1);
+    /**
+     * 0 : forward
+     * 1 : right
+     * 2 : down
+     * 3 : left
+     */
+    public int rotation;
 
     public BoardComponent() {
         super();
@@ -30,7 +37,7 @@ public class BoardComponent implements Component {
     }
 
     public void update(BoardPosition bp) {
-        pos = new BoardPosition(bp.r, bp.c);
+        pos.set(bp.r, bp.c);
     }
 
     public static void setBoardManager(BoardManager bm) {

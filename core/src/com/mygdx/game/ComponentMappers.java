@@ -15,6 +15,8 @@ public class ComponentMappers {
     public static ComponentMapper<PositionComponent> pm =ComponentMapper.getFor(PositionComponent.class);
     //movement
     public static ComponentMapper<MovementComponent> mm =ComponentMapper.getFor(MovementComponent.class);
+    //events
+    public static ComponentMapper<EventComponent> em =ComponentMapper.getFor(EventComponent.class);
     //board
     public static ComponentMapper<BoardComponent> bm =ComponentMapper.getFor(BoardComponent.class);
     //actor

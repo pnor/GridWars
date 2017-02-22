@@ -1,6 +1,7 @@
 package com.mygdx.game.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
 
 import java.awt.geom.Point2D;
 
@@ -12,7 +13,7 @@ public class PositionComponent implements Component {
     /**
      * coordinate
      */
-    public Point2D.Float position;
+    public Vector2 position;
     public float height, width;
     /**
      * in relation to sprite
@@ -20,7 +21,7 @@ public class PositionComponent implements Component {
     public Point2D.Float origin;
     public float rotation;
 
-    public PositionComponent(Point2D.Float pos, float h, float w, float r) {
+    public PositionComponent(Vector2 pos, float h, float w, float r) {
         position = pos;
         height = h;
         width = w;

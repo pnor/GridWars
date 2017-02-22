@@ -72,12 +72,12 @@ public class CodeBoard {
             throw new IndexOutOfBoundsException();
         }
 
+        Entity temp = grid.get(bp.r).get(bp.c);
         Entity e = grid.get(bp.r).get(bp.c);
+        grid.get(bp.r).set(bp.c, null);
         if (bm.has(e))
             bm.get(e).update(new BoardPosition(-1, -1));
 
-        Entity temp = grid.get(bp.r).get(bp.c);
-        grid.get(bp.r).set(bp.c, null);
         return temp;
     }
 
