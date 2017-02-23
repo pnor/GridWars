@@ -21,10 +21,6 @@ public class SpriteComponent implements Component{
         sprite = new Sprite(tex);
     }
 
-    public void setSpriteLocation(float x, float y) {
-        sprite.setPosition(x, y);
-    }
-
     public void draw(Batch batch) {
         batch.begin();
         sprite.draw(batch);

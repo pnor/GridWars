@@ -38,6 +38,14 @@ public class BoardPosition {
         c = newC;
     }
 
+    /**
+     * Creates a copy of this object
+     * @return copy of this object
+     */
+    public BoardPosition copy() {
+        return new BoardPosition(this.r, this.c);
+    }
+
     public String toString() {
         return "row: " + r + " col: " + c;
     }

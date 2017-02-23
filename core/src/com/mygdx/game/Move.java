@@ -49,13 +49,15 @@ public class Move {
      * Executes the effect of this object
      */
     public void useAttack() {
+        Array<BoardPosition> effectedPositions = new Array<BoardPosition>();
         for (BoardPosition bp : range) {
             bp = bp.add(bm.get(user).pos.r, bm.get(user).pos.c);
+            effectedPositions.add(bp.copy());
             if (boards.getCodeBoard().get(bp.r, bp.c) == null)
                 continue;
             attack.effect(user, bp, boards);
-            attack.doVisuals(engine, stage, boards);
         }
+        attack.doVisuals(effectedPositions, engine, stage, boards);
     }
 
     public String getName() {

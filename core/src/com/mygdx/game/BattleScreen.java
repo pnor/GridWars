@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -128,7 +129,7 @@ public class BattleScreen implements Screen {
                     }
 
                     @Override
-                    public void doVisuals(Engine engine, Stage stage, BoardManager boardManager) {
+                    public void doVisuals(Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
 
                     }
         })})));
@@ -149,8 +150,20 @@ public class BattleScreen implements Screen {
                     }
 
                     @Override
-                    public void doVisuals(Engine engine, Stage stage, BoardManager boardManager) {
+                    public void doVisuals(Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
+                        BoardPosition bp = targetPositions.get(0);
+                        Tile t = boardManager.getBoard().getTile(bp.r, bp.c);
+                        Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 15, t.getHeight() / 2 - 15));
 
+                        Array<Entity> stars = new Array<Entity>(new Entity[]{new Entity(), new Entity(), new Entity(), new Entity(), new Entity()});
+                        for (Entity e : stars) {
+                            e.add(new PositionComponent(tilePosition.cpy().add((float) (Math.random() * 70) - 35, (float) (Math.random() * 70) - 35)
+                                    , 30, 30, (float) (Math.random()*360)));
+                            e.add(new AnimationComponent(.3f, new TextureRegion[]{atlas.findRegion("Star1"),
+                                    atlas.findRegion("Star2")}, Animation.PlayMode.LOOP));
+                            animm.get(e).shadeColor = Color.GREEN;
+                            engine.addEntity(e);
+                        }
                     }
                 }),
                 new Move("Full-Out Assault", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1,1), new BoardPosition(0,1), new BoardPosition(1,1)}), engine, stage, BoardComponent.boards, new Attack() {
@@ -162,7 +175,7 @@ public class BattleScreen implements Screen {
                     }
 
                     @Override
-                    public void doVisuals(Engine engine, Stage stage, BoardManager boardManager) {
+                    public void doVisuals(Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
 
                     }
                 }),
@@ -175,7 +188,7 @@ public class BattleScreen implements Screen {
                     }
 
                     @Override
-                    public void doVisuals(Engine engine, Stage stage, BoardManager boardManager) {
+                    public void doVisuals(Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
 
                     }
                 }),
@@ -189,7 +202,7 @@ public class BattleScreen implements Screen {
                     }
 
                     @Override
-                    public void doVisuals(Engine engine, Stage stage, BoardManager boardManager) {
+                    public void doVisuals(Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
 
                     }
                 })
@@ -320,7 +333,8 @@ public class BattleScreen implements Screen {
         ChangeListener attackSelector = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (((Button) actor).isPressed()) {
+            if (((Button) actor).isPressed()) {
+                if (selectedEntity != null) {
                     if (actor == attackBtn1) {
                         mvm.get(selectedEntity).moveList.get(0).useAttack();
                     } else if (actor == attackBtn2) {
@@ -331,6 +345,7 @@ public class BattleScreen implements Screen {
 
                     }
                 }
+            }
             }
         };
         ClickListener attackShower = new ClickListener() {

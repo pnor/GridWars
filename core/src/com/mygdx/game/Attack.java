@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Phillip O
@@ -17,6 +18,6 @@ public interface Attack {
      */
     void effect(Entity e, BoardPosition bp, BoardManager boards);
 
-    public void doVisuals(Engine engine, Stage stage, BoardManager boardManager);
+    public void doVisuals(Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager);
 
 }

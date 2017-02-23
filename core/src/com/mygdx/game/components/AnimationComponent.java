@@ -17,6 +17,9 @@ public class AnimationComponent implements Component {
     public Color shadeColor = Color.WHITE;
     private float x;
     private float y;
+    private float width;
+    private float height;
+    private float rotation;
     public float currentTime;
     /**
      * z-index. Determines what things appear on top of others
@@ -47,9 +50,20 @@ public class AnimationComponent implements Component {
         y = y2;
     }
 
+    public void setSpriteRotation(float newDegrees) {
+        rotation = newDegrees;
+    }
+
+    public void setSpriteSize(float h, float w) {
+        height = h;
+        width = w;
+    }
+
     public void draw(Batch batch) {
         Sprite drawSprite = getSprite();
         drawSprite.setPosition(x, y);
+        drawSprite.setSize(width, height);
+        drawSprite.setRotation(rotation);
         drawSprite.setColor(shadeColor);
 
         batch.begin();

@@ -18,14 +18,14 @@ public class PositionComponent implements Component {
     /**
      * in relation to sprite
      */
-    public Point2D.Float origin;
+    public Vector2 origin;
     public float rotation;
 
     public PositionComponent(Vector2 pos, float h, float w, float r) {
         position = pos;
         height = h;
         width = w;
-        origin = new Point2D.Float(pos.x + w / 2, pos.y + h / 2);
+        origin = new Vector2(pos.x + w / 2, pos.y + h / 2);
         rotation = r;
     }
 
