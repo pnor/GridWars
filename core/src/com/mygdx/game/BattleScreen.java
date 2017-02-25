@@ -46,6 +46,8 @@ public class BattleScreen implements Screen {
     //Selection and Hover
     private Entity selectedEntity;
     private boolean checkedStats;
+    //Attack Processing
+    private Move currentMove;
     /**
      * value represents which move to show. If -1, means its showing no moves.
      */
@@ -116,24 +118,26 @@ public class BattleScreen implements Screen {
         TESTER = new SpriteActor(atlas.createSprite("BluePiece"), 20, 20);
 
         BoardComponent.setBoardManager(new BoardManager(board, codeBoard));
+        Visuals.boardManager = BoardComponent.boards;
+        Visuals.engine = engine;
+        Visuals.stage = stage;
+
         tester = new Entity();
         tester.add(new ActorComponent(new SpriteActor(atlas.createSprite("RedPiece"), true, true)));
         tester.add(new BoardComponent());
         tester.add(new StatComponent(10, 999, 7, 0, 1));
-        tester.add(new MovesetComponent(new Array<Move>(new Move[]{
+        /*tester.add(new MovesetComponent(new Array<Move>(new Move[]{
                 new Move("Chess Capture", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0,1)}), engine, stage, BoardComponent.boards, new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp, BoardManager boards) {
                         Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
                         stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk - stm.get(enemy).def, 0, 999);
                     }
+                }, new Visuals(new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0,1), new GameTimer(1f),  {
 
-                    @Override
-                    public void doVisuals(Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
-
-                    }
-        })})));
-
+                })
+        })));
+        */
         tester2 = new Entity();
         tester2.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("Bot1"),
@@ -141,31 +145,33 @@ public class BattleScreen implements Screen {
         }, Animation.PlayMode.LOOP, 0.5f)));
         tester2.add(new BoardComponent());
         tester2.add(new StatComponent(5, 7, 2, 1, 3));
+        VisualEffect TackleVis = new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t = boardManager.getBoard().getTile(bp.r, bp.c);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 15, t.getHeight() / 2 - 15));
+                System.out.println("TilePosition : " + bp);
+                Entity star = new Entity();
+                star.add(new PositionComponent(tilePosition.cpy().add((float) (Math.random() * 70) - 35, (float) (Math.random() * 70) - 35)
+                        , 30, 30, (float) (Math.random()*360)));
+                star.add(new AnimationComponent(.3f, new TextureRegion[]{atlas.findRegion("Star1"),
+                        atlas.findRegion("Star2")}, Animation.PlayMode.LOOP));
+                engine.addEntity(star);
+            }
+        };
         tester2.add(new MovesetComponent(new Array<Move>(new Move[]{
-                new Move("Tackle", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0,1)}), engine, stage, BoardComponent.boards, new Attack() {
+                new Move("Tackle", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0,1)}), engine, stage, BoardComponent.boards,
+                        new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp, BoardManager boards) {
                         Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
                         stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk - stm.get(enemy).def, 0, 999);
                     }
-
-                    @Override
-                    public void doVisuals(Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
-                        BoardPosition bp = targetPositions.get(0);
-                        Tile t = boardManager.getBoard().getTile(bp.r, bp.c);
-                        Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 15, t.getHeight() / 2 - 15));
-
-                        Array<Entity> stars = new Array<Entity>(new Entity[]{new Entity(), new Entity(), new Entity(), new Entity(), new Entity()});
-                        for (Entity e : stars) {
-                            e.add(new PositionComponent(tilePosition.cpy().add((float) (Math.random() * 70) - 35, (float) (Math.random() * 70) - 35)
-                                    , 30, 30, (float) (Math.random()*360)));
-                            e.add(new AnimationComponent(.3f, new TextureRegion[]{atlas.findRegion("Star1"),
-                                    atlas.findRegion("Star2")}, Animation.PlayMode.LOOP));
-                            animm.get(e).shadeColor = Color.GREEN;
-                            engine.addEntity(e);
-                        }
-                    }
-                }),
+                }, new Visuals(tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0,1)}), new GameTimer(1f),
+                        new Array<VisualEffect>(new VisualEffect[]{TackleVis, TackleVis, TackleVis, TackleVis, TackleVis}),
+                        new Array<Float>(new Float[]{new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f)})))
+                /*
                 new Move("Full-Out Assault", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1,1), new BoardPosition(0,1), new BoardPosition(1,1)}), engine, stage, BoardComponent.boards, new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp, BoardManager boards) {
@@ -205,7 +211,7 @@ public class BattleScreen implements Screen {
                     public void doVisuals(Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
 
                     }
-                })
+                }*/
         })));
         tester2.add(new NameComponent("Robo - Beta"));
 
@@ -336,7 +342,12 @@ public class BattleScreen implements Screen {
             if (((Button) actor).isPressed()) {
                 if (selectedEntity != null) {
                     if (actor == attackBtn1) {
-                        mvm.get(selectedEntity).moveList.get(0).useAttack();
+                        if (mvm.has(selectedEntity)) {
+                            mvm.get(selectedEntity).moveList.get(0).useAttack();
+                            currentMove = mvm.get(selectedEntity).moveList.get(0);
+                            currentMove.getVisuals().setPlaying(true);
+                            System.out.println("button ");
+                        }
                     } else if (actor == attackBtn2) {
 
                     } else if (actor == attackBtn3) {
@@ -583,6 +594,16 @@ public class BattleScreen implements Screen {
             }
         }
 
+        //playing current move animation
+        if (currentMove != null) {
+            if (currentMove.getVisuals().getIsPlaying()) {
+                currentMove.updateVisuals(delta);
+                currentMove.getVisuals().play();
+            } else {
+                currentMove.getVisuals().reset();
+                currentMove = null;
+            }
+        }
         stage.act(delta);
         stage.draw();
         engine.update(delta);

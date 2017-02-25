@@ -14,6 +14,7 @@ import static com.mygdx.game.ComponentMappers.bm;
 public class Move {
     private String name;
     private Attack attack;
+    private Visuals visuals;
     /**
      * Represents effected tiles relative to user's position
      */
@@ -34,8 +35,10 @@ public class Move {
      * @param stge {@code Stage}
      * @param board {@code BoardManager}
      * @param atk effect of attack
+     * @param vis visual effect
      */
-    public Move(String name2, Entity usr, Array<BoardPosition> rnge, Engine engne, Stage stge, BoardManager board, Attack atk) {
+    public Move(String name2, Entity usr, Array<BoardPosition> rnge, Engine engne, Stage stge, BoardManager board,
+                Attack atk, Visuals vis) {
         name = name2;
         user = usr;
         range = rnge;
@@ -43,6 +46,7 @@ public class Move {
         stage = stge;
         boards = board;
         attack  = atk;
+        visuals = vis;
     }
 
     /**
@@ -56,8 +60,16 @@ public class Move {
             if (boards.getCodeBoard().get(bp.r, bp.c) == null)
                 continue;
             attack.effect(user, bp, boards);
+            visuals.setPlaying(true);
         }
-        attack.doVisuals(effectedPositions, engine, stage, boards);
+    }
+
+    public void updateVisuals(float dt) {
+        visuals.updateTimer(dt);
+    }
+
+    public Visuals getVisuals() {
+        return visuals;
     }
 
     public String getName() {

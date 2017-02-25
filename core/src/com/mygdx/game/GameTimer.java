@@ -5,23 +5,21 @@ package com.mygdx.game;
  */
 public class GameTimer {
     private final float initialTime;
-    private float time;
+    private float time = 0;
 
     /**
      * Constructs a {@code GameTimer} with a given time.
      * @param t time
      */
     public GameTimer(float t) {
-        time = t;
-        initialTime = time;
+        initialTime = t;
     }
 
     /**
      * Constructs a {@code GameTimer} with the starting time of 90.
      */
     public GameTimer() {
-        time = 90f;
-        initialTime = 90f;
+        initialTime = 3;
     }
 
     @Override
@@ -34,10 +32,7 @@ public class GameTimer {
      * @return
      */
     public boolean checkIfFinished() {
-        if (time <= 0f)
-            return true;
-
-        return false;
+        return (time >= initialTime);
     }
 
     /**

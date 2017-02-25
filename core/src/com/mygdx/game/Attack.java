@@ -1,13 +1,10 @@
 package com.mygdx.game;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 
 /**
  * Phillip O
- * What happens when a move is used. Is used mainly in the {@code Move} class.
+ * What happens (unrelated to visuals) when a move is used. Is used mainly in the {@code Move} class.
  */
 public interface Attack {
     /**
@@ -17,7 +14,4 @@ public interface Attack {
      * @param boards {@code BoardManager}
      */
     void effect(Entity e, BoardPosition bp, BoardManager boards);
-
-    public void doVisuals(Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager);
-
 }
