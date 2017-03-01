@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.screens_ui;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
- * Class for the buttons representing attacks on the battle board.
+ * Class for buttons that do something when the mouse hovers over them.
  * @author Phillip O'Reggio
  */
 public class HoverButton extends TextButton {

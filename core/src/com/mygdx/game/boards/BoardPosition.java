@@ -1,6 +1,7 @@
-package com.mygdx.game;
+package com.mygdx.game.boards;
 
 /**
+ * The coordinates of a position on a grid-based board.
  * @author Phillip O'Reggio
  */
 public class BoardPosition {

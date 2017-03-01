@@ -1,10 +1,12 @@
-package com.mygdx.game;
+package com.mygdx.game.screens_ui;
 
 import com.badlogic.gdx.InputProcessor;
+import com.mygdx.game.move_related.Move;
 
 import static com.mygdx.game.ComponentMappers.mvm;
 
 /**
+ * Has methods for actions that would be done on the Battle board, such as scrolling to rotate.
  * @author Phillip O'Reggio
  */
 public class BattleInputProcessor implements InputProcessor {

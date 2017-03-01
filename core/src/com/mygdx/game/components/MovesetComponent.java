@@ -2,7 +2,7 @@ package com.mygdx.game.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.Move;
+import com.mygdx.game.move_related.Move;
 
 /**
  * Component representing a list of moves for an Entity on the board to use.

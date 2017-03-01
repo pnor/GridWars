@@ -1,6 +1,8 @@
-package com.mygdx.game;
+package com.mygdx.game.move_related;
 
 import com.badlogic.ashley.core.Entity;
+import com.mygdx.game.boards.BoardManager;
+import com.mygdx.game.boards.BoardPosition;
 
 /**
  * Phillip O

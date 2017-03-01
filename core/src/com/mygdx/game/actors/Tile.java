@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import static com.mygdx.game.GridWars.atlas;
 
 /**
+ * Representation of a single Tile Actor on a grid.
  * @author pnore_000
  */
 public class Tile extends Group {

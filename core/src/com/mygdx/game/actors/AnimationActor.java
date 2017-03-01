@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 /**
+ * Actor that displays an animation.
  * @author pnore_000
  *
  */

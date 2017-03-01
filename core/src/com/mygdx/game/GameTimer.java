@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 /**
+ * A timer that updates by passing in the delta time.
  * @author Phillip O'Reggio
  */
 public class GameTimer {

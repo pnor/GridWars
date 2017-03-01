@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.creators;
 
 /**
  * Class containing static methods for creating certain Entities.

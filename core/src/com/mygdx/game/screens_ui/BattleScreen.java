@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.screens_ui;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -18,10 +18,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.GameTimer;
 import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.SpriteActor;
 import com.mygdx.game.actors.Tile;
+import com.mygdx.game.boards.Board;
+import com.mygdx.game.boards.BoardManager;
+import com.mygdx.game.boards.BoardPosition;
+import com.mygdx.game.boards.CodeBoard;
 import com.mygdx.game.components.*;
+import com.mygdx.game.move_related.Attack;
+import com.mygdx.game.move_related.Move;
+import com.mygdx.game.move_related.VisualEffect;
+import com.mygdx.game.move_related.Visuals;
 import com.mygdx.game.systems.DrawingSystem;
 import com.mygdx.game.systems.EventSystem;
 import com.mygdx.game.systems.LifetimeSystem;
@@ -40,7 +49,7 @@ public class BattleScreen implements Screen {
 
     //Board
     //private final Board board = new Board(7, 7, new Color(221f / 255, 221f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1));
-    private final Board board = new Board(7, 7, Color.BLUE, Color.SKY);
+    private final Board board = new Board(7, 7, Color.BROWN, Color.FIREBRICK);
     private final CodeBoard codeBoard = new CodeBoard(7, 7);
 
     //Selection and Hover

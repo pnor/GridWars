@@ -1,10 +1,10 @@
 package com.mygdx.game.components;
 
 import com.badlogic.ashley.core.Component;
-import com.mygdx.game.Board;
-import com.mygdx.game.BoardManager;
-import com.mygdx.game.BoardPosition;
-import com.mygdx.game.CodeBoard;
+import com.mygdx.game.boards.Board;
+import com.mygdx.game.boards.BoardManager;
+import com.mygdx.game.boards.BoardPosition;
+import com.mygdx.game.boards.CodeBoard;
 
 /**
  * Represents a location and orientation on the board.
@@ -16,13 +16,6 @@ public class BoardComponent implements Component {
      * if r and c are -1, means its not on the board
      */
     public BoardPosition pos = new BoardPosition(-1, -1);
-    /**
-     * 0 : forward
-     * 1 : right
-     * 2 : down
-     * 3 : left
-     */
-    public int rotation;
 
     public BoardComponent() {
         super();
