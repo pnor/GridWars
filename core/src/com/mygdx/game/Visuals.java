@@ -24,6 +24,14 @@ public class Visuals {
     private int currentTime;
     private boolean isPlaying;
 
+    /**
+     * Creates a {@code Visuals} object
+     * @param u user
+     * @param positions effected squares
+     * @param timr timer that controls which Visual Effect plays
+     * @param visual Array of {@code VisualEffect} objects
+     * @param triggerTime Array of trigger times for animations
+     */
     public Visuals(Entity u, Array<BoardPosition> positions, GameTimer timr, Array<VisualEffect> visual, Array<Float> triggerTime) {
         user = u;
         targetPositions = positions;
@@ -32,6 +40,9 @@ public class Visuals {
         triggerTimes = triggerTime;
     }
 
+    /**
+     * Plays the animation. (Is called multiple times to play entire thing)
+     */
     public void play() {
         if (timer.checkIfFinished())
             isPlaying = false;
@@ -39,6 +50,9 @@ public class Visuals {
             playVisuals();
     }
 
+    /**
+     * Plays the current visual
+     */
     private void playVisuals() {
         if (currentVisual >= visuals.size || currentTime >= triggerTimes.size)
             return;
@@ -49,6 +63,9 @@ public class Visuals {
         }
     }
 
+    /**
+     * @return the next time at which a visual should play
+     */
     private float getNextTargetTime() {
         float target = 0;
         for (int i = 0; i < currentTime; i++) {
@@ -57,22 +74,37 @@ public class Visuals {
         return target;
     }
 
+    /**
+     * Resets this object so it can play from the start of its animation
+     */
     public void reset() {
         timer.setTime(0);
         currentTime = 0;
         currentVisual = 0;
     }
 
+    /**
+     * Updates this object's timer
+     * @param dt
+     */
     public void updateTimer(float dt) {
         timer.increaseTimer(dt);
     }
 
+    /**
+     * Sets whether this object is playing or not
+     * @param startPlaying whether its playing or not
+     */
     public void setPlaying(boolean startPlaying) {
         isPlaying = startPlaying;
     }
 
     public boolean getIsPlaying() {
         return isPlaying;
+    }
+
+    public void setTargetPositions(Array<BoardPosition> positions) {
+        targetPositions = positions;
     }
 
 }

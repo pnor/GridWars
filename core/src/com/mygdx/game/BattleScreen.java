@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,11 +13,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.actors.AnimationActor;
@@ -25,6 +24,7 @@ import com.mygdx.game.actors.Tile;
 import com.mygdx.game.components.*;
 import com.mygdx.game.systems.DrawingSystem;
 import com.mygdx.game.systems.EventSystem;
+import com.mygdx.game.systems.LifetimeSystem;
 import com.mygdx.game.systems.MovementSystem;
 
 import static com.mygdx.game.ComponentMappers.*;
@@ -35,44 +35,43 @@ import static com.mygdx.game.GridWars.atlas;
  */
 public class BattleScreen implements Screen {
 
-
     private Stage stage;
+    private BattleInputProcessor battleInputProcessor;
 
     //Board
-    private final Board board = new Board(7, 7, new Color(221f/255, 221f/255f, 119f/255f, 1), new Color(1, 1, 102f/255f, 1));
-    //private final Board board = new Board(7, 7, Color.BLUE, Color.SKY);
+    //private final Board board = new Board(7, 7, new Color(221f / 255, 221f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1));
+    private final Board board = new Board(7, 7, Color.BLUE, Color.SKY);
     private final CodeBoard codeBoard = new CodeBoard(7, 7);
 
     //Selection and Hover
     private Entity selectedEntity;
     private boolean checkedStats;
+
     //Attack Processing
     private Move currentMove;
     /**
      * value represents which move to show. If -1, means its showing no moves.
      */
     private int moveHover = -1;
-    private boolean showedMoveRange;
-    private boolean clearMoveRange;
+    private boolean hoverChanged;
 
     //Ui Elements
     private Skin skin;
     private TextureAtlas uiatlas;
     private Table table;
     private Table statsTable;
-        private Label hpLabel;
-        private Label spLabel;
-        private Label atkLabel;
-        private Label defLabel;
-        private Label spdLabel;
-        private Label nameLabel;
+    private Label hpLabel;
+    private Label spLabel;
+    private Label atkLabel;
+    private Label defLabel;
+    private Label spdLabel;
+    private Label nameLabel;
     private Table attackTable;
-        private Label attackTitleLabel;
-        private TextButton attackBtn1;
-        private TextButton attackBtn2;
-        private TextButton attackBtn3;
-        private TextButton attackBtn4;
-        //maybe entites should rotate sperate from this menu
+    private Label attackTitleLabel;
+    private HoverButton attackBtn1;
+    private HoverButton attackBtn2;
+    private HoverButton attackBtn3;
+    private HoverButton attackBtn4;
 
     //Entities
     private Engine engine;
@@ -106,13 +105,15 @@ public class BattleScreen implements Screen {
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         uiatlas = new TextureAtlas("uiskin.atlas");
         skin.addRegions(uiatlas);
-        Gdx.input.setInputProcessor(stage);
+        battleInputProcessor = new BattleInputProcessor(this);
+        Gdx.input.setInputProcessor(new InputMultiplexer(stage, battleInputProcessor));
 
         //Set up Engine
         engine = new Engine();
         engine.addSystem(new DrawingSystem(stage.getBatch()));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new EventSystem());
+        engine.addSystem(new LifetimeSystem());
 
         //set up Entity
         TESTER = new SpriteActor(atlas.createSprite("BluePiece"), 20, 20);
@@ -126,18 +127,7 @@ public class BattleScreen implements Screen {
         tester.add(new ActorComponent(new SpriteActor(atlas.createSprite("RedPiece"), true, true)));
         tester.add(new BoardComponent());
         tester.add(new StatComponent(10, 999, 7, 0, 1));
-        /*tester.add(new MovesetComponent(new Array<Move>(new Move[]{
-                new Move("Chess Capture", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0,1)}), engine, stage, BoardComponent.boards, new Attack() {
-                    @Override
-                    public void effect(Entity e, BoardPosition bp, BoardManager boards) {
-                        Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
-                        stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk - stm.get(enemy).def, 0, 999);
-                    }
-                }, new Visuals(new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0,1), new GameTimer(1f),  {
 
-                })
-        })));
-        */
         tester2 = new Entity();
         tester2.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("Bot1"),
@@ -149,69 +139,35 @@ public class BattleScreen implements Screen {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
-                Tile t = boardManager.getBoard().getTile(bp.r, bp.c);
-                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 15, t.getHeight() / 2 - 15));
-                System.out.println("TilePosition : " + bp);
+                System.out.println("visual effect   " + bp);
+                Tile t;
+                try {
+                    t = boardManager.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 22.5f, t.getHeight() / 2 - 22.5f));
                 Entity star = new Entity();
                 star.add(new PositionComponent(tilePosition.cpy().add((float) (Math.random() * 70) - 35, (float) (Math.random() * 70) - 35)
-                        , 30, 30, (float) (Math.random()*360)));
+                        , 45, 45, (float) (Math.random() * 360)));
+                star.add(new LifetimeComponent(0, .6f));
                 star.add(new AnimationComponent(.3f, new TextureRegion[]{atlas.findRegion("Star1"),
                         atlas.findRegion("Star2")}, Animation.PlayMode.LOOP));
                 engine.addEntity(star);
             }
         };
         tester2.add(new MovesetComponent(new Array<Move>(new Move[]{
-                new Move("Tackle", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0,1)}), engine, stage, BoardComponent.boards,
+                new Move("Tackle", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage, BoardComponent.boards,
                         new Attack() {
-                    @Override
-                    public void effect(Entity e, BoardPosition bp, BoardManager boards) {
-                        Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
-                        stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk - stm.get(enemy).def, 0, 999);
-                    }
-                }, new Visuals(tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0,1)}), new GameTimer(1f),
+                            @Override
+                            public void effect(Entity e, BoardPosition bp, BoardManager boards) {
+                                System.out.println("attack effect   " + bp);
+                                Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
+                                stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk - stm.get(enemy).def, 0, 999);
+                            }
+                        }, new Visuals(tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 1)}), new GameTimer(1f),
                         new Array<VisualEffect>(new VisualEffect[]{TackleVis, TackleVis, TackleVis, TackleVis, TackleVis}),
                         new Array<Float>(new Float[]{new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f)})))
-                /*
-                new Move("Full-Out Assault", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1,1), new BoardPosition(0,1), new BoardPosition(1,1)}), engine, stage, BoardComponent.boards, new Attack() {
-                    @Override
-                    public void effect(Entity e, BoardPosition bp, BoardManager boards) {
-                        Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
-                        stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk + 2 - stm.get(enemy).def, 0, 999);
-                        stm.get(e).sp -= 1;
-                    }
-
-                    @Override
-                    public void doVisuals(Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
-
-                    }
-                }),
-                new Move("Very Long-Named Raid Attack", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1,2), new BoardPosition(0,1), new BoardPosition(1,2), new BoardPosition(0,2)}), engine, stage, BoardComponent.boards, new Attack() {
-                    @Override
-                    public void effect(Entity e, BoardPosition bp, BoardManager boards) {
-                        Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
-                        stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk + 1 - stm.get(enemy).def, 0, 999);
-                        stm.get(e).sp -= 1;
-                    }
-
-                    @Override
-                    public void doVisuals(Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
-
-                    }
-                }),
-                new Move("Laser Beam Barrage", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2,1), new BoardPosition(1,1), new BoardPosition(2,0),
-                        new BoardPosition(-1,-1), new BoardPosition(0,-2), new BoardPosition(2,2), new BoardPosition(-1,1)}), engine, stage, BoardComponent.boards, new Attack() {
-                    @Override
-                    public void effect(Entity e, BoardPosition bp, BoardManager boards) {
-                        Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
-                        stm.get(enemy).hp -= 1;
-                        stm.get(e).sp -= 1;
-                    }
-
-                    @Override
-                    public void doVisuals(Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
-
-                    }
-                }*/
         })));
         tester2.add(new NameComponent("Robo - Beta"));
 
@@ -249,7 +205,7 @@ public class BattleScreen implements Screen {
         engine.addEntity(effect2);*/
 
 
-        //set up MAIN ui -----
+        //set up Board ui -----
         for (int i = 0; i < board.getRowSize(); i++) {
             for (int j = 0; j < board.getColumnSize(); j++) {
                 if (i == 0)
@@ -259,46 +215,6 @@ public class BattleScreen implements Screen {
             }
             table.row();
         }
-
-        final TextButton act = new TextButton("ACT!", skin, "toggle");
-        final TextButton move = new TextButton("Move to...", skin, "toggle");
-        final TextField rowField = new TextField("row", skin);
-        final TextField colField = new TextField("col", skin);
-        ChangeListener change = new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (((Button) actor).isPressed()) {
-                    if (actor == act) {
-                        bm.get(tester).boards.move(tester, new BoardPosition(t, u));
-                        t++;
-                        u++;
-                        if (t + 1 > board.getRowSize() || u + 1 > board.getColumnSize()) {
-                            t = 0;
-                            u = 0;
-                        }
-                    }
-                    if (actor == move) {
-                        int r, c;
-                        try {
-                            r = Integer.parseInt(rowField.getText());
-                            c = Integer.parseInt(colField.getText());
-                        } catch(NumberFormatException e) {
-                            return;
-                        }
-                        if (!((r >= board.getRowSize() || r < 0) || (c >= board.getColumnSize() || c < 0))) {
-                            bm.get(tester2).boards.move(tester2, new BoardPosition(r, c));
-                        }
-                    }
-                }
-            }
-        };
-        act.addListener(change);
-        move.addListener(change);
-
-        table.add(act).colspan(2).height(80).width(150);
-        table.add(move).height(80).width(100);
-        table.add(rowField).height(30).width(100);
-        table.add(colField).height(30).width(100);
 
         //table.center();
         table.setPosition(stage.getWidth() / 2.5f, stage.getHeight() / 2);
@@ -332,85 +248,33 @@ public class BattleScreen implements Screen {
         //set up attack menu ui
         attackTitleLabel = new Label("Actions", skin);
         attackTitleLabel.setColor(Color.YELLOW);
-        attackBtn1 = new TextButton("---", skin, "toggle");
-        attackBtn2 = new TextButton("---", skin, "toggle");
-        attackBtn3 = new TextButton("---", skin, "toggle");
-        attackBtn4 = new TextButton("---", skin, "toggle");
+        attackBtn1 = new HoverButton("---", skin);
+        attackBtn2 = new HoverButton("---", skin);
+        attackBtn3 = new HoverButton("---", skin);
+        attackBtn4 = new HoverButton("---", skin);
         ChangeListener attackSelector = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-            if (((Button) actor).isPressed()) {
-                if (selectedEntity != null) {
-                    if (actor == attackBtn1) {
-                        if (mvm.has(selectedEntity)) {
-                            mvm.get(selectedEntity).moveList.get(0).useAttack();
-                            currentMove = mvm.get(selectedEntity).moveList.get(0);
-                            currentMove.getVisuals().setPlaying(true);
-                            System.out.println("button ");
+                if (((Button) actor).isPressed()) {
+                    if (selectedEntity != null) {
+                        if (actor == attackBtn1) {
+                            if (mvm.has(selectedEntity)) {
+                                mvm.get(selectedEntity).moveList.get(0).useAttack();
+                                currentMove = mvm.get(selectedEntity).moveList.get(0);
+                                currentMove.getVisuals().setPlaying(true);
+                            }
+                        } else if (actor == attackBtn2) {
+
+                        } else if (actor == attackBtn3) {
+
+                        } else if (actor == attackBtn4) {
+
                         }
-                    } else if (actor == attackBtn2) {
-
-                    } else if (actor == attackBtn3) {
-
-                    } else if (actor == attackBtn4) {
-
                     }
                 }
             }
-            }
         };
-        ClickListener attackShower = new ClickListener() {
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                if (pointer != -1)
-                    return;
-                //System.out.println("ENTER METHOD start");
 
-                if (fromActor == attackBtn1) {
-                    moveHover = 0;
-                    attackBtn1.setColor(Color.ORANGE);
-                } else if (fromActor == attackBtn2) {
-                    moveHover = 1;
-                    attackBtn2.setColor(Color.ORANGE);
-                } else if (fromActor == attackBtn3) {
-                    moveHover = 2;
-                    attackBtn3.setColor(Color.ORANGE);
-                } else if (fromActor == attackBtn4) {
-                    moveHover = 3;
-                    attackBtn1.setColor(Color.ORANGE);
-                } else if (fromActor == null) {
-                    //moveHover = 0;
-                    return;  //temporary "fix"
-                }
-
-               // System.out.println(fromActor);
-                showedMoveRange = false;
-                clearMoveRange = false;
-                //System.out.println("(" + moveHover + ") ENTERED");
-               // System.out.println("ENTER METHOD end \n");
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                //System.out.println("EXIT METHOD start");
-                if (pointer != -1)
-                    return;
-                //revert button shading
-                if (moveHover == 0)
-                    attackBtn1.setColor(Color.WHITE);
-                else if (moveHover == 1)
-                    attackBtn2.setColor(Color.WHITE);
-                else if (moveHover == 2)
-                    attackBtn3.setColor(Color.WHITE);
-                else if (moveHover == 3)
-                    attackBtn1.setColor(Color.WHITE);
-
-               // System.out.println(toActor);
-                clearMoveRange = true;
-                //System.out.println("(" + moveHover + ") EXITED");
-               // System.out.println("EXIT METHOD end \n");
-            }
-        };
         attackBtn1.addListener(attackSelector);
         attackBtn1.setName("Attack1");
         attackBtn2.addListener(attackSelector);
@@ -419,10 +283,7 @@ public class BattleScreen implements Screen {
         attackBtn3.setName("Attack3");
         attackBtn4.addListener(attackSelector);
         attackBtn4.setName("Attack4");
-        attackBtn1.addListener(attackShower);
-        attackBtn2.addListener(attackShower);
-        attackBtn3.addListener(attackShower);
-        attackBtn4.addListener(attackShower);
+
         attackTable.add(attackTitleLabel).center().size(175, 50).row();
         attackTable.add(attackBtn1).size(175, 50).padBottom(15f).row();
         attackTable.add(attackBtn2).size(175, 50).padBottom(15f).row();
@@ -474,7 +335,8 @@ public class BattleScreen implements Screen {
                             t.shadeTile(Color.CYAN);
                             t.startListening();
                         }
-                } catch (Exception exc) { }
+                } catch (Exception exc) {
+                }
 
                 checkedStats = false;
                 am.get(e).actor.setLastSelected(false);
@@ -502,50 +364,35 @@ public class BattleScreen implements Screen {
             }
         }
 
-        //show Attack Squares visual ---
-        if (selectedEntity != null && mvm.has(selectedEntity)) {
-            if (!showedMoveRange && moveHover > -1) {
-                //highlight attack squares
-                if (mvm.get(selectedEntity).moveList.size > moveHover) {
-                    for (BoardPosition pos : mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
-                        try {
-                            bm.get(selectedEntity).boards.getBoard().getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c).shadeTile(Color.RED);
-                        } catch (Exception e) { }
-                    }
-                    showedMoveRange = true;
-                }
-            }
-            //remove attack squares
-            if (clearMoveRange && moveHover != -1) {
-                if (mvm.get(selectedEntity).moveList.size > moveHover) {
-                    boolean wasBlue = false;
-                    for (BoardPosition pos : mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
-                        try {
-                        Tile currTile = board.getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c);
-                        if (currTile.getIsListening()) {
-                            for (Tile t : getMovableSquares(selectedEntity)) {
-                                if (t == currTile)
-                                    wasBlue = true;
-                            }
-                            if (wasBlue)
-                                currTile.shadeTile(Color.CYAN);
-                            else
-                                currTile.revertTileColor();
-                        }
-                        else
-                            currTile.revertTileColor();
-                        } catch (Exception e) { }
-                    }
-
-                    clearMoveRange = false;
-                    moveHover = -1;
-                }
+        //updating attack squares
+        HoverButton tempButton = null;
+        if (!hoverChanged) {
+            if (attackBtn1.getHover()) {
+                moveHover = 0;
+                showAttackTiles();
+                hoverChanged = true;
+            } else if (attackBtn2.getHover()) {
+                moveHover = 1;
+                showAttackTiles();
+                hoverChanged = true;
+            } else if (attackBtn3.getHover()) {
+                moveHover = 2;
+                showAttackTiles();
+                hoverChanged = true;
+            } else if (attackBtn4.getHover()) {
+                moveHover = 3;
+                showAttackTiles();
+                hoverChanged = true;
             }
         }
-
+        if (hoverChanged && !((attackBtn1.getHover() || attackBtn2.getHover() || attackBtn3.getHover() || attackBtn4.getHover()))) {
+            removeAttackTiles();
+            moveHover = -1;
+            hoverChanged = false;
+        }
 
         if (selectedEntity != null) {
-        //show selected stats ---
+            //show selected stats ---
             if (!checkedStats) {
                 if (stm.has(selectedEntity)) {
                     StatComponent stat = stm.get(selectedEntity);
@@ -563,7 +410,7 @@ public class BattleScreen implements Screen {
                 }
                 if (mvm.has(selectedEntity)) {
                     MovesetComponent moves = mvm.get(selectedEntity);
-                    if ( moves.moveList.size > 0 && moves.moveList.get(0) != null)
+                    if (moves.moveList.size > 0 && moves.moveList.get(0) != null)
                         attackBtn1.setText(moves.moveList.get(0).getName());
                     else
                         attackBtn1.setText("---");
@@ -607,6 +454,56 @@ public class BattleScreen implements Screen {
         stage.act(delta);
         stage.draw();
         engine.update(delta);
+    }
+
+    public void showAttackTiles() {
+        //show Attack Squares visual ---
+        if (selectedEntity != null && mvm.has(selectedEntity)) {
+            if (moveHover > -1) {
+                //highlight attack squares
+                if (mvm.get(selectedEntity).moveList.size > moveHover) {
+                    for (BoardPosition pos :  mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
+                        try {
+                            bm.get(selectedEntity).boards.getBoard().getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c).shadeTile(Color.RED);
+                        } catch (IndexOutOfBoundsException e) { }
+                    }
+                }
+            }
+        }
+    }
+
+    public void removeAttackTiles() {
+        //remove attack squares
+        if (moveHover != -1) {
+            if (selectedEntity != null && mvm.has(selectedEntity) && mvm.get(selectedEntity).moveList.size > moveHover) {
+                //boolean wasBlue = false;
+                for (BoardPosition pos :  mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
+                    try {
+                        Tile currTile = board.getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c);
+                        /*
+                        if (currTile.getIsListening()) {
+                            for (Tile t : getMovableSquares(selectedEntity)) {
+                                if (t == currTile) {
+                                    wasBlue = true;
+                                    break;
+                                }
+                            }
+                            if (wasBlue)
+                                currTile.shadeTile(Color.CYAN);
+                            else
+                                currTile.revertTileColor();
+
+                        } else
+                            currTile.revertTileColor();
+                            */
+                        if (currTile.getIsListening())
+                            currTile.shadeTile(Color.CYAN);
+                        else
+                            currTile.revertTileColor();
+                    } catch (IndexOutOfBoundsException e) { }
+                }
+            }
+        }
     }
 
     /**
@@ -661,5 +558,13 @@ public class BattleScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    public int getMoveHover() {
+        return moveHover;
+    }
+
+    public Entity getSelectedEntity() {
+        return selectedEntity;
     }
 }

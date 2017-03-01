@@ -57,10 +57,39 @@ public class Move {
         for (BoardPosition bp : range) {
             bp = bp.add(bm.get(user).pos.r, bm.get(user).pos.c);
             effectedPositions.add(bp.copy());
-            if (boards.getCodeBoard().get(bp.r, bp.c) == null)
+            try {
+                if (boards.getCodeBoard().get(bp.r, bp.c) == null)
+                    continue;
+            } catch (IndexOutOfBoundsException e) {
                 continue;
+            }
+
             attack.effect(user, bp, boards);
             visuals.setPlaying(true);
+        }
+    }
+
+    /**
+     * Changes the effected squares of an attack based on direction. Note that this will change the range of an
+     * Attack, not return a copy!
+     * @param clockwise whether the range will be spun clockwise(true) or counterclockwise(false)
+     * @param boardPositions positions to be oriented
+     */
+    public static void orientAttack(boolean clockwise, Array<BoardPosition> boardPositions) {
+        if (clockwise) {
+            for (BoardPosition bp : boardPositions) {
+                //swap r and c
+                int temp = bp.r;
+                bp.r = bp.c;
+                bp.c = -temp;
+            }
+        } else {
+            for (BoardPosition bp : boardPositions) {
+                //make negative
+                int temp = bp.r;
+                bp.r = -bp.c;
+                bp.c = temp;
+            }
         }
     }
 

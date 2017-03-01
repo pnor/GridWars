@@ -4,7 +4,7 @@ package com.mygdx.game;
  * @author Phillip O'Reggio
  */
 public class GameTimer {
-    private final float initialTime;
+    private final float endTime;
     private float time = 0;
 
     /**
@@ -12,14 +12,14 @@ public class GameTimer {
      * @param t time
      */
     public GameTimer(float t) {
-        initialTime = t;
+        endTime = t;
     }
 
     /**
      * Constructs a {@code GameTimer} with the starting time of 90.
      */
     public GameTimer() {
-        initialTime = 3;
+        endTime = 3;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class GameTimer {
      * @return
      */
     public boolean checkIfFinished() {
-        return (time >= initialTime);
+        return (time >= endTime);
     }
 
     /**
@@ -57,7 +57,7 @@ public class GameTimer {
      * @return The difference between the initialized time and the current time.
      */
     public float getGap() {
-        return initialTime - time;
+        return endTime - time;
     }
 
     public GameTimer copy() {
@@ -68,8 +68,8 @@ public class GameTimer {
         return time;
     }
 
-    public float getInitialTime() {
-        return initialTime;
+    public float getEndTime() {
+        return endTime;
     }
 
     public void setTime(float t) {
