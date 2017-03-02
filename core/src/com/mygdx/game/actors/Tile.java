@@ -28,17 +28,22 @@ public class Tile extends Group {
      * @param cPos column position in relation to board
      * @param isItDark if true, the tile will be dark. Else, will be lighter
      */
-    public Tile(int rPos, int cPos, boolean isItDark) {
+    public Tile(int rPos, int cPos, boolean isItDark, float size) {
         super();
         isDark = isItDark;
         r = rPos;
         c = cPos;
 
         UIActor tile;
-        if (isItDark)
-            tile = new SpriteActor(atlas.createSprite("DarkTile"), false);
-        else
-            tile = new SpriteActor(atlas.createSprite("LightTile"), false);
+        if (isItDark) {
+            Sprite s = atlas.createSprite("DarkTile");
+            s.setSize(size, size);
+            tile = new SpriteActor(s, false);
+        } else {
+            Sprite s = atlas.createSprite("LightTile");
+            s.setSize(size, size);
+            tile = new SpriteActor(s, false);
+        }
 
         this.addActor(tile);
         tileBack = tile;
@@ -51,8 +56,9 @@ public class Tile extends Group {
      * @param cPos column position in relation to board
      * @param isItDark if true, the tile will be dark. Else, will be lighter
      * @param c color of the tile
+     * @param size siz of the tile
      */
-    public Tile(int rPos, int cPos, boolean isItDark, Color c) {
+    public Tile(int rPos, int cPos, boolean isItDark, Color c, float size) {
         super();
         isDark = isItDark;
         color = c;
@@ -63,10 +69,12 @@ public class Tile extends Group {
         if (isItDark) {
             Sprite s = atlas.createSprite("DarkTile");
             s.setColor(c);
+            s.setSize(size, size);
             tile = new SpriteActor(s, false);
         } else {
             Sprite s = atlas.createSprite("LightTile");
             s.setColor(c);
+            s.setSize(size, size);
             tile = new SpriteActor(s, false);
         }
         addActor(tile);
@@ -119,9 +127,9 @@ public class Tile extends Group {
      */
     public Tile copy() {
         if (color == null)
-            return new Tile(r, c, isDark);
+            return new Tile(r, c, isDark, getWidth());
         else
-            return new Tile(r, c, isDark, color);
+            return new Tile(r, c, isDark, color, getWidth());
     }
 
     /**
@@ -132,9 +140,9 @@ public class Tile extends Group {
      */
     public Tile copy(int rPos, int cPos) {
         if (color == null)
-            return new Tile(rPos, cPos, isDark);
+            return new Tile(rPos, cPos, isDark, getWidth());
         else
-            return new Tile(rPos, cPos, isDark, color);
+            return new Tile(rPos, cPos, isDark, color, getWidth());
     }
 
     public boolean getLastSelected() {

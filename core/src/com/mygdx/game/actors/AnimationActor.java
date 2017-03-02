@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
  * @author pnore_000
  *
  */
-public class AnimationActor extends UIActor{
+public class AnimationActor extends UIActor {
     private Animation animation;
     private Sprite currentFrame;
     private Color shadeColor;
@@ -20,8 +20,9 @@ public class AnimationActor extends UIActor{
 
     /**
      * Creates an {@code AnimationActor} with a looping animation.
+     *
      * @param duration how long duration will take
-     * @param s images shown in animation
+     * @param s        images shown in animation
      */
     public AnimationActor(float duration, TextureRegion[] s) {
         super(s[0].getRegionWidth(), s[0].getRegionHeight(), true);
@@ -30,8 +31,9 @@ public class AnimationActor extends UIActor{
 
     /**
      * Creates an {@code AnimationActor} with an animation.
+     *
      * @param duration how long duration will take
-     * @param s images shown in animation
+     * @param s        images shown in animation
      * @param playType how animation will play
      */
     public AnimationActor(float duration, TextureRegion[] s, Animation.PlayMode playType) {
@@ -41,7 +43,8 @@ public class AnimationActor extends UIActor{
 
     /**
      * Creates an {@code AnimationActor} with an animation that is selectable.
-     * @param s images shown in animation
+     *
+     * @param s        images shown in animation
      * @param playType how animation will play
      * @param duration how long duration will take
      */
@@ -70,8 +73,10 @@ public class AnimationActor extends UIActor{
     @Override
     public void draw(Batch batch, float parentAlpha) {
         currentFrame.setPosition(getX(), getY());
+        currentFrame.setScale(getScaleX());
         if (shadeColor != null && currentFrame.getColor() != shadeColor)
             currentFrame.setColor(shadeColor);
         currentFrame.draw(batch, parentAlpha);
     }
+
 }

@@ -30,7 +30,7 @@ public class BoardManager {
 
     /**
      * Adds an entity's data to a board and codeBoard. Doesn't add if there is an entity
-     * there already
+     * there already. Also scales added entity to board's size.
      * @param e Entity. Must have a {@code ActorComponent}
      * @param bp position to add at
      * @return true if it added the entity
@@ -42,6 +42,7 @@ public class BoardManager {
 
         codeBoard.add(e, bp);
         board.add(am.get(e).actor, bp.r, bp.c);
+        scaleEntity(e);
         return true;
     }
 
@@ -107,6 +108,16 @@ public class BoardManager {
         board.move(am.get(codeBoard.get(bm.get(e).pos.r, bm.get(e).pos.c)).actor, bm.get(e).pos.r, bm.get(e).pos.c, bp.r, bp.c);
         codeBoard.move(e, bp);
         return true;
+    }
+
+    /**
+     * Scales an entity to the size of the board's tiles.
+     * @param e Entity to be scaled
+     */
+    private void scaleEntity(Entity e) {
+        if (am.has(e))
+            if (am.get(e).actor.getParent() != null)
+                am.get(e).actor.setScale(am.get(e).actor.getParent().getWidth() / 100);
     }
 
     public Board getBoard() {

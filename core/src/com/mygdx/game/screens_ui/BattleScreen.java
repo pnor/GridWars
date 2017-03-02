@@ -49,8 +49,8 @@ public class BattleScreen implements Screen {
 
     //Board
     //private final Board board = new Board(7, 7, new Color(221f / 255, 221f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1));
-    private final Board board = new Board(7, 7, Color.BROWN, Color.FIREBRICK);
-    private final CodeBoard codeBoard = new CodeBoard(7, 7);
+    private final Board board = new Board(10, 10, Color.LIME, Color.GREEN, 70);
+    private final CodeBoard codeBoard = new CodeBoard(10, 10);
 
     //Selection and Hover
     private Entity selectedEntity;
@@ -218,9 +218,9 @@ public class BattleScreen implements Screen {
         for (int i = 0; i < board.getRowSize(); i++) {
             for (int j = 0; j < board.getColumnSize(); j++) {
                 if (i == 0)
-                    table.add().width(100).height(100);
+                    table.add().width(board.getTiles().get(0).getWidth()).height(board.getTiles().get(0).getHeight());
                 else
-                    table.add().height(100);
+                    table.add().height(board.getTiles().get(0).getHeight());
             }
             table.row();
         }

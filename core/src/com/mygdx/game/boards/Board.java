@@ -17,74 +17,21 @@ public class Board {
                 columns = 5;
 
     /**
-     * Creates a regular 5 by 5 board
-     */
-    public Board() {
-        Tile d = new Tile(0, 0, true);
-        Tile l = new Tile(0, 1, false);
-        grid = new Array<Array<Tile>>();
-        grid.add(new Array<Tile>(new Tile[]{d.copy(), l.copy(), d.copy(0, 2), l.copy(0, 3), d.copy(0, 4)}));
-        grid.add(new Array<Tile>(new Tile[]{l.copy(1, 0), d.copy(1, 1), l.copy(1, 2), d.copy(1, 3), l.copy(1, 4)}));
-        grid.add(new Array<Tile>(new Tile[]{d.copy(2, 0), l.copy(2, 1), d.copy(2, 2), l.copy(2, 3), d.copy(2, 4)}));
-        grid.add(new Array<Tile>(new Tile[]{l.copy(3, 0), d.copy(3, 1), l.copy(3, 2), d.copy(3, 3), l.copy(3, 4)}));
-        grid.add(new Array<Tile>(new Tile[]{d.copy(4, 0), l.copy(4, 1), d.copy(4, 2), l.copy(4, 3), d.copy(4, 4)}));
-    }
-
-    /**
-     * Creates a 5 by 5 board of a single certain color
-     *
-     * @param c {@code Color}
-     */
-    public Board(Color c) {
-        if (c == null)
-            throw new NullPointerException("Color of board can't be null!");
-
-        Tile d = new Tile(0, 0, true, c);
-        Tile l = new Tile(0, 1, false, c);
-        grid = new Array<Array<Tile>>();
-        grid.add(new Array<Tile>(new Tile[]{d.copy(), l.copy(), d.copy(0, 2), l.copy(0, 3), d.copy(0, 4)}));
-        grid.add(new Array<Tile>(new Tile[]{l.copy(1, 0), d.copy(1, 1), l.copy(1, 2), d.copy(1, 3), l.copy(1, 4)}));
-        grid.add(new Array<Tile>(new Tile[]{d.copy(2, 0), l.copy(2, 1), d.copy(2, 2), l.copy(2, 3), d.copy(2, 4)}));
-        grid.add(new Array<Tile>(new Tile[]{l.copy(3, 0), d.copy(3, 1), l.copy(3, 2), d.copy(3, 3), l.copy(3, 4)}));
-        grid.add(new Array<Tile>(new Tile[]{d.copy(4, 0), l.copy(4, 1), d.copy(4, 2), l.copy(4, 3), d.copy(4, 4)}));
-    }
-
-    /**
-     * Creates a 5 by 5 board of 2 colors
-     *
-     * @param darkColor color of dark tiles
-     * @param lightColor color of light tiles
-     */
-    public Board(Color darkColor, Color lightColor) {
-        if (darkColor == null || lightColor == null)
-            throw new NullPointerException("Color of board can't be null!");
-
-        Tile d = new Tile(0, 0, true, darkColor);
-        Tile l = new Tile(0, 1, false, lightColor);
-        grid = new Array<Array<Tile>>();
-        grid.add(new Array<Tile>(new Tile[]{d.copy(), l.copy(), d.copy(0, 2), l.copy(0, 3), d.copy(0, 4)}));
-        grid.add(new Array<Tile>(new Tile[]{l.copy(1, 0), d.copy(1, 1), l.copy(1, 2), d.copy(1, 3), l.copy(1, 4)}));
-        grid.add(new Array<Tile>(new Tile[]{d.copy(2, 0), l.copy(2, 1), d.copy(2, 2), l.copy(2, 3), d.copy(2, 4)}));
-        grid.add(new Array<Tile>(new Tile[]{l.copy(3, 0), d.copy(3, 1), l.copy(3, 2), d.copy(3, 3), l.copy(3, 4)}));
-        grid.add(new Array<Tile>(new Tile[]{d.copy(4, 0), l.copy(4, 1), d.copy(4, 2), l.copy(4, 3), d.copy(4, 4)}));
-    }
-
-
-    /**
      * Creates a board of a pre-determined size
      *
      * @param r row size
      * @param c column size
+     * @param tileSize size of the tiles
      */
-    public Board(int r, int c) {
+    public Board(int r, int c, float tileSize) {
         if (r <= 0 || c <= 0)
             throw new IndexOutOfBoundsException();
 
         rows = r;
         columns = c;
         boolean dark = true;
-        Tile d = new Tile(0, 0, true);
-        Tile l = new Tile(0, 1, false);
+        Tile d = new Tile(0, 0, true, tileSize);
+        Tile l = new Tile(0, 1, false, tileSize);
         grid = new Array<Array<Tile>>();
 
         for (int i = 0; i < r; i++) {
@@ -108,8 +55,9 @@ public class Board {
      * @param r     row size
      * @param c     column size
      * @param color color of board
+     * @param tileSize size of the tiles
      */
-    public Board(int r, int c, Color color) {
+    public Board(int r, int c, Color color, float tileSize) {
         if (r <= 0 || c <= 0)
             throw new IndexOutOfBoundsException();
         if (color == null)
@@ -118,8 +66,8 @@ public class Board {
         rows = r;
         columns = c;
         boolean dark = true;
-        Tile d = new Tile(0, 0, true, color);
-        Tile l = new Tile(0, 1, false, color);
+        Tile d = new Tile(0, 0, true, color, tileSize);
+        Tile l = new Tile(0, 1, false, color, tileSize);
         grid = new Array<Array<Tile>>();
 
         for (int i = 0; i < r; i++) {
@@ -144,8 +92,9 @@ public class Board {
      * @param c  column size
      * @param darkColor color of dark tiles
      * @param lightColor color of light tiles
+     * @param tileSize size of the tiles
      */
-    public Board(int r, int c, Color darkColor, Color lightColor) {
+    public Board(int r, int c, Color darkColor, Color lightColor, float tileSize) {
         if (r <= 0 || c <= 0)
             throw new IndexOutOfBoundsException();
         if (darkColor == null || lightColor == null)
@@ -154,8 +103,8 @@ public class Board {
         rows = r;
         columns = c;
         boolean dark = true;
-        Tile d = new Tile(0, 0, true, darkColor);
-        Tile l = new Tile(0, 1, false, lightColor);
+        Tile d = new Tile(0, 0, true, darkColor, tileSize);
+        Tile l = new Tile(0, 1, false, lightColor, tileSize);
         grid = new Array<Array<Tile>>();
 
         for (int i = 0; i < r; i++) {
