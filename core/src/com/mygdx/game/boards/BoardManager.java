@@ -117,7 +117,7 @@ public class BoardManager {
     private void scaleEntity(Entity e) {
         if (am.has(e))
             if (am.get(e).actor.getParent() != null)
-                am.get(e).actor.setScale(am.get(e).actor.getParent().getWidth() / 100);
+                am.get(e).actor.setScale(board.getScale());
     }
 
     public Board getBoard() {

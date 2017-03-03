@@ -15,6 +15,7 @@ public class Board {
     private Array<Array<Tile>> grid;
     private int rows = 5,
                 columns = 5;
+    private float scaleFactor = 1;
 
     /**
      * Creates a board of a pre-determined size
@@ -26,7 +27,7 @@ public class Board {
     public Board(int r, int c, float tileSize) {
         if (r <= 0 || c <= 0)
             throw new IndexOutOfBoundsException();
-
+        scaleFactor = tileSize / 100;
         rows = r;
         columns = c;
         boolean dark = true;
@@ -63,6 +64,7 @@ public class Board {
         if (color == null)
             throw new NullPointerException("Color of board can't be null!");
 
+        scaleFactor = tileSize / 100;
         rows = r;
         columns = c;
         boolean dark = true;
@@ -100,6 +102,7 @@ public class Board {
         if (darkColor == null || lightColor == null)
             throw new NullPointerException("Color of board can't be null!");
 
+        scaleFactor = tileSize / 100;
         rows = r;
         columns = c;
         boolean dark = true;
@@ -203,6 +206,10 @@ public class Board {
 
     public int getColumnSize() {
         return columns;
+    }
+
+    public float getScale() {
+        return scaleFactor;
     }
 
     public Array<Array<Tile>> getGrid() {

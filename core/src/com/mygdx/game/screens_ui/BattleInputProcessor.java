@@ -12,6 +12,7 @@ import static com.mygdx.game.ComponentMappers.mvm;
 public class BattleInputProcessor implements InputProcessor {
 
     private BattleScreen battleScreen;
+    private boolean disabled;
 
     public BattleInputProcessor(BattleScreen screen) {
         battleScreen = screen;
@@ -54,6 +55,9 @@ public class BattleInputProcessor implements InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
+        if (disabled)
+            return false;
+
         if (battleScreen.getMoveHover() > -1)
             battleScreen.removeAttackTiles();
 
@@ -79,5 +83,13 @@ public class BattleInputProcessor implements InputProcessor {
             battleScreen.showAttackTiles();
 
         return false;
+    }
+
+    public void setDisabled(boolean b) {
+        disabled = b;
+    }
+
+    public boolean getDisabled() {
+        return disabled;
     }
 }

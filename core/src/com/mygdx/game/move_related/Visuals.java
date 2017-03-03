@@ -4,15 +4,17 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.GameTimer;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
-import com.mygdx.game.GameTimer;
+import com.mygdx.game.screens_ui.BattleScreen;
 
 /**
  * Represents the visual effect that plays when an attack is used.
  * @author Phillip O'Reggio
  */
 public class Visuals {
+    private BattleScreen battleScreen;
     public static Engine engine;
     public static Stage stage;
     public static BoardManager boardManager;
@@ -29,13 +31,15 @@ public class Visuals {
 
     /**
      * Creates a {@code Visuals} object
+     * @param screen {@code BattleScreen}
      * @param u user
      * @param positions effected squares
      * @param timr timer that controls which Visual Effect plays
      * @param visual Array of {@code VisualEffect} objects
      * @param triggerTime Array of trigger times for animations
      */
-    public Visuals(Entity u, Array<BoardPosition> positions, GameTimer timr, Array<VisualEffect> visual, Array<Float> triggerTime) {
+    public Visuals(BattleScreen screen, Entity u, Array<BoardPosition> positions, GameTimer timr, Array<VisualEffect> visual, Array<Float> triggerTime) {
+        battleScreen = screen;
         user = u;
         targetPositions = positions;
         timer = timr;
@@ -47,8 +51,10 @@ public class Visuals {
      * Plays the animation. (Is called multiple times to play entire thing)
      */
     public void play() {
-        if (timer.checkIfFinished())
+        if (timer.checkIfFinished()) {
+            battleScreen.enableUI();
             isPlaying = false;
+        }
         if (isPlaying)
             playVisuals();
     }

@@ -10,15 +10,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.GameTimer;
 import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.SpriteActor;
 import com.mygdx.game.actors.Tile;
@@ -27,9 +25,8 @@ import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.boards.CodeBoard;
 import com.mygdx.game.components.*;
-import com.mygdx.game.move_related.Attack;
+import com.mygdx.game.creators.MoveConstructor;
 import com.mygdx.game.move_related.Move;
-import com.mygdx.game.move_related.VisualEffect;
 import com.mygdx.game.move_related.Visuals;
 import com.mygdx.game.systems.DrawingSystem;
 import com.mygdx.game.systems.EventSystem;
@@ -49,8 +46,8 @@ public class BattleScreen implements Screen {
 
     //Board
     //private final Board board = new Board(7, 7, new Color(221f / 255, 221f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1));
-    private final Board board = new Board(10, 10, Color.LIME, Color.GREEN, 70);
-    private final CodeBoard codeBoard = new CodeBoard(10, 10);
+    private final Board board = new Board(5, 5, Color.LIME, Color.GREEN, 100);
+    private final CodeBoard codeBoard = new CodeBoard(5, 5);
 
     //Selection and Hover
     private Entity selectedEntity;
@@ -92,9 +89,6 @@ public class BattleScreen implements Screen {
     private Entity effect2;
     */
 
-    //TEST VALUES
-    private int t = 1; //x
-    private int u = 1; //y
     public Actor TESTER;
 
     @Override
@@ -144,42 +138,8 @@ public class BattleScreen implements Screen {
         }, Animation.PlayMode.LOOP, 0.5f)));
         tester2.add(new BoardComponent());
         tester2.add(new StatComponent(5, 7, 2, 1, 3));
-        VisualEffect TackleVis = new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
-                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
-                System.out.println("visual effect   " + bp);
-                Tile t;
-                try {
-                    t = boardManager.getBoard().getTile(bp.r, bp.c);
-                } catch (IndexOutOfBoundsException e) {
-                    return;
-                }
-                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 22.5f, t.getHeight() / 2 - 22.5f));
-                Entity star = new Entity();
-                star.add(new PositionComponent(tilePosition.cpy().add((float) (Math.random() * 70) - 35, (float) (Math.random() * 70) - 35)
-                        , 45, 45, (float) (Math.random() * 360)));
-                star.add(new LifetimeComponent(0, .6f));
-                star.add(new AnimationComponent(.3f, new TextureRegion[]{atlas.findRegion("Star1"),
-                        atlas.findRegion("Star2")}, Animation.PlayMode.LOOP));
-                engine.addEntity(star);
-            }
-        };
-        tester2.add(new MovesetComponent(new Array<Move>(new Move[]{
-                new Move("Tackle", tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage, BoardComponent.boards,
-                        new Attack() {
-                            @Override
-                            public void effect(Entity e, BoardPosition bp, BoardManager boards) {
-                                System.out.println("attack effect   " + bp);
-                                Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
-                                stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk - stm.get(enemy).def, 0, 999);
-                            }
-                        }, new Visuals(tester2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 1)}), new GameTimer(1f),
-                        new Array<VisualEffect>(new VisualEffect[]{TackleVis, TackleVis, TackleVis, TackleVis, TackleVis}),
-                        new Array<Float>(new Float[]{new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f)})))
-        })));
+        tester2.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(tester2, engine, stage, this)})));
         tester2.add(new NameComponent("Robo - Beta"));
-
         tester3 = new Entity();
         tester3.add(new ActorComponent(new AnimationActor(new TextureRegion[]{atlas.findRegion("Hole"),
                 atlas.findRegion("Hole2"), atlas.findRegion("Hole3"), atlas.findRegion("Hole4")},
@@ -271,6 +231,7 @@ public class BattleScreen implements Screen {
                                 mvm.get(selectedEntity).moveList.get(0).useAttack();
                                 currentMove = mvm.get(selectedEntity).moveList.get(0);
                                 currentMove.getVisuals().setPlaying(true);
+                                disableUI();
                             }
                         } else if (actor == attackBtn2) {
 
@@ -293,6 +254,7 @@ public class BattleScreen implements Screen {
         attackBtn4.addListener(attackSelector);
         attackBtn4.setName("Attack4");
 
+        attackTitleLabel.setAlignment(Align.center);
         attackTable.add(attackTitleLabel).center().size(175, 50).row();
         attackTable.add(attackBtn1).size(175, 50).padBottom(15f).row();
         attackTable.add(attackBtn2).size(175, 50).padBottom(15f).row();
@@ -542,6 +504,28 @@ public class BattleScreen implements Screen {
         }
 
         return tiles;
+    }
+
+    /**
+     * Disables the user input of the battle screen.
+     */
+    public void disableUI() {
+        battleInputProcessor.setDisabled(true);
+        attackBtn1.setTouchable(Touchable.disabled);
+        attackBtn2.setTouchable(Touchable.disabled);
+        attackBtn3.setTouchable(Touchable.disabled);
+        attackBtn4.setTouchable(Touchable.disabled);
+    }
+
+    /**
+     * Enables the user input of the battle screen.
+     */
+    public void enableUI() {
+        battleInputProcessor.setDisabled(false);
+        attackBtn1.setTouchable(Touchable.enabled);
+        attackBtn2.setTouchable(Touchable.enabled);
+        attackBtn3.setTouchable(Touchable.enabled);
+        attackBtn4.setTouchable(Touchable.enabled);
     }
 
     @Override
