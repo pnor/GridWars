@@ -23,7 +23,7 @@ public class BoardManager {
      */
     public BoardManager(Board b, CodeBoard cb) {
         if (b.getRowSize() * b.getColumnSize() != cb.getRows() * cb.getColumns())
-            throw new IndexOutOfBoundsException("Boards of unequal size");
+            throw new ExceptionInInitializerError("Boards of unequal size");
         board = b;
         codeBoard = cb;
     }

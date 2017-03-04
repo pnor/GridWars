@@ -37,7 +37,6 @@ public class MoveConstructor {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
-                System.out.println("visual effect   " + bp);
                 Tile t;
                 try {
                     t = boardManager.getBoard().getTile(bp.r, bp.c);
@@ -59,7 +58,6 @@ public class MoveConstructor {
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp, BoardManager boards) {
-                        System.out.println("attack effect   " + bp);
                         Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
                         stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk - stm.get(enemy).def, 0, 999);
                     }
