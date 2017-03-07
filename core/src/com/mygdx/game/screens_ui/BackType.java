@@ -16,7 +16,7 @@ import static com.mygdx.game.ComponentMappers.sm;
  */
 public enum BackType {
     SCROLL_VERTICAL(new Vector2(0,30), 450, 0, null, null),
-    SCROLL_HORIZONTAL(new Vector2(30,0), 500, 0, null, null),
+    SCROLL_HORIZONTAL(new Vector2(120,0), 500, 0, null, null),
     ROTATE(null, 0, 30, null, null),
     FADE_COLOR(null, 0, 0, null, null);
 
@@ -41,22 +41,22 @@ public enum BackType {
         destinationColor = destination;
     }
 
-    public void update() {
+    public void update(float deltaTime) {
         switch (this) {
             case SCROLL_VERTICAL:
-                pm.get(e).position.add(movement);
+                pm.get(e).position.add(movement.x * deltaTime, movement.y * deltaTime);
                 if (pm.get(e).position.y > loopPoint)
                     pm.get(e).position.set(pm.get(e).position.x, 0);
                 break;
 
             case SCROLL_HORIZONTAL:
-                pm.get(e).position.add(movement);
+                pm.get(e).position.add(movement.x * deltaTime, movement.y * deltaTime);
                 if (pm.get(e).position.x > loopPoint)
                     pm.get(e).position.set(0, pm.get(e).position.y);
                 break;
 
             case ROTATE:
-                pm.get(e).rotation += rotateAmount;
+                pm.get(e).rotation += rotateAmount * deltaTime;
                 break;
 
             case FADE_COLOR:
@@ -70,9 +70,9 @@ public enum BackType {
                     progressIncreasing = true;
 
                 if (progressIncreasing)
-                    progress += 0.1;
+                    progress += 1 * deltaTime;
                 else
-                    progress -= 0.1;
+                    progress -= 1 * deltaTime;
                 break;
         }
     }
@@ -87,5 +87,9 @@ public enum BackType {
         startColor = start;
         destinationColor = dest;
         sm.get(e).sprite.setColor(startColor);
+    }
+
+    public Entity getEntity() {
+        return e;
     }
 }

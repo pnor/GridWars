@@ -44,6 +44,9 @@ public class BattleScreen implements Screen {
     private Stage stage;
     private BattleInputProcessor battleInputProcessor;
 
+    //Background
+    Background background;
+
     //Board
     //private final Board board = new Board(7, 7, new Color(221f / 255, 221f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1));
     private final Board board = new Board(5, 5, Color.LIME, Color.GREEN, 100);
@@ -64,6 +67,7 @@ public class BattleScreen implements Screen {
     //Ui Elements
     private Skin skin;
     private TextureAtlas uiatlas;
+    private TextureAtlas backAtlas;
     private Table table;
     private Table statsTable;
     private Label hpLabel;
@@ -106,6 +110,7 @@ public class BattleScreen implements Screen {
         stage.addActor(statsTable);
         stage.addActor(attackTable);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
+        backAtlas = new TextureAtlas(Gdx.files.internal("BackPack.pack"));
         uiatlas = new TextureAtlas("uiskin.atlas");
         skin.addRegions(uiatlas);
         battleInputProcessor = new BattleInputProcessor(this);
@@ -117,6 +122,10 @@ public class BattleScreen implements Screen {
         engine.addSystem(new MovementSystem());
         engine.addSystem(new EventSystem());
         engine.addSystem(new LifetimeSystem());
+
+        //set up Background
+        background = new Background(backAtlas.findRegion("BlankBackground"), new TextureRegion[]{backAtlas.findRegion("DiagStripeOverlay")},
+                new BackType[]{BackType.FADE_COLOR}, Color.RED, Color.BLUE);
 
         //set up Entity
         TESTER = new SpriteActor(atlas.createSprite("BluePiece"), 20, 20);
@@ -422,7 +431,10 @@ public class BattleScreen implements Screen {
                 currentMove = null;
             }
         }
+
+        background.update(delta);
         stage.act(delta);
+        engine.getSystem(DrawingSystem.class).drawBackground(background, delta);
         stage.draw();
         engine.update(delta);
     }

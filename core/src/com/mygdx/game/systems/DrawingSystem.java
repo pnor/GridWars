@@ -6,6 +6,8 @@ import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mygdx.game.components.AnimationComponent;
 import com.mygdx.game.components.SpriteComponent;
+import com.mygdx.game.screens_ui.BackType;
+import com.mygdx.game.screens_ui.Background;
 
 import java.util.Comparator;
 
@@ -36,6 +38,42 @@ public class DrawingSystem extends SortedIteratingSystem{
                 animm.get(e).setSpriteSize(pm.get(e).height, pm.get(e).width);
                 animm.get(e).setSpriteRotation(pm.get(e).rotation);
                 animm.get(e).draw(batch);
+            }
+        }
+    }
+
+    /**
+     * Draws the Entity's located in a {@code Background} object
+     * @param back Background of the screen
+     */
+    public void drawBackground(Background back, float deltaTime) {
+        //draw static background layer
+        if (sm.has(back.getBackLayer())) {
+            /*sm.get(back.getBackLayer()).sprite.setPosition(pm.get(back.getBackLayer()).position.x, pm.get(back.getBackLayer()).position.y);
+            sm.get(back.getBackLayer()).sprite.setSize(pm.get(back.getBackLayer()).width, pm.get(back.getBackLayer()).height);
+            sm.get(back.getBackLayer()).sprite.setRotation(pm.get(back.getBackLayer()).rotation);*/
+            sm.get(back.getBackLayer()).draw(batch);
+        } else {
+            animm.get(back.getBackLayer()).currentTime += deltaTime;
+            /*animm.get(back.getBackLayer()).setSpriteLocation(pm.get(back.getBackLayer()).position.x, pm.get(back.getBackLayer()).position.y);
+            animm.get(back.getBackLayer()).setSpriteSize(pm.get(back.getBackLayer()).height, pm.get(back.getBackLayer()).width);
+            animm.get(back.getBackLayer()).setSpriteRotation(pm.get(back.getBackLayer()).rotation);*/
+            animm.get(back.getBackLayer()).draw(batch);
+        }
+
+        //draw rest of layers
+        for (BackType b : back.getLayers()) {
+            if (sm.has(b.getEntity())) {
+                sm.get(b.getEntity()).sprite.setPosition(pm.get(b.getEntity()).position.x, pm.get(b.getEntity()).position.y);
+                sm.get(b.getEntity()).sprite.setSize(pm.get(b.getEntity()).width, pm.get(b.getEntity()).height);
+                sm.get(b.getEntity()).sprite.setRotation(pm.get(b.getEntity()).rotation);
+                sm.get(b.getEntity()).draw(batch);
+            } else {
+                animm.get(b.getEntity()).currentTime += deltaTime;
+                animm.get(b.getEntity()).setSpriteLocation(pm.get(b.getEntity()).position.x, pm.get(b.getEntity()).position.y);
+                animm.get(b.getEntity()).setSpriteSize(pm.get(b.getEntity()).height, pm.get(b.getEntity()).width);
+                animm.get(b.getEntity()).setSpriteRotation(pm.get(b.getEntity()).rotation);
+                animm.get(b.getEntity()).draw(batch);
             }
         }
     }
