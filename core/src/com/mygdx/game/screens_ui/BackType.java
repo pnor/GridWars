@@ -15,8 +15,8 @@ import static com.mygdx.game.ComponentMappers.sm;
  * @author Phillip O'Reggio
  */
 public enum BackType {
-    SCROLL_VERTICAL(new Vector2(0,30), 450, 0, null, null),
-    SCROLL_HORIZONTAL(new Vector2(120,0), 500, 0, null, null),
+    SCROLL_VERTICAL(new Vector2(0, -30), 450, 0, null, null),
+    SCROLL_HORIZONTAL(new Vector2(-120, 0), 500, 0, null, null),
     ROTATE(null, 0, 30, null, null),
     FADE_COLOR(null, 0, 0, null, null);
 
@@ -45,13 +45,13 @@ public enum BackType {
         switch (this) {
             case SCROLL_VERTICAL:
                 pm.get(e).position.add(movement.x * deltaTime, movement.y * deltaTime);
-                if (pm.get(e).position.y > loopPoint)
+                if (Math.abs(pm.get(e).position.y) > loopPoint)
                     pm.get(e).position.set(pm.get(e).position.x, 0);
                 break;
 
             case SCROLL_HORIZONTAL:
                 pm.get(e).position.add(movement.x * deltaTime, movement.y * deltaTime);
-                if (pm.get(e).position.x > loopPoint)
+                if (Math.abs(pm.get(e).position.x) > loopPoint)
                     pm.get(e).position.set(0, pm.get(e).position.y);
                 break;
 

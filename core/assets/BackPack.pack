@@ -10,14 +10,9 @@ DiagStripeOverlay
   orig: 1500, 1350
   offset: 0, 0
   index: -1
-
-BackPack2.png
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 BlankBackground
   rotate: false
-  xy: 1, 1
+  xy: 1503, 451
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0

@@ -2,12 +2,14 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.mygdx.game.screens_ui.BattleScreen;
 
 public class GridWars extends Game {
+	public AssetManager assets = new AssetManager();
 	public SpriteBatch batch;
 	public Texture img;
 	public static TextureAtlas atlas;
@@ -18,7 +20,7 @@ public class GridWars extends Game {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
 		atlas = new TextureAtlas(Gdx.files.internal("GDSprites.pack"));
-		setScreen(new BattleScreen());
+		setScreen(new BattleScreen(this));
 	}
 
 	@Override

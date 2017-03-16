@@ -61,7 +61,7 @@ public class MoveConstructor {
                         Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
                         stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk - stm.get(enemy).def, 0, 999);
                     }
-                }, new Visuals(screen, user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 1)}), new GameTimer(1f),
+                }, new Visuals(screen, user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), new GameTimer(1f),
                 new Array<VisualEffect>(new VisualEffect[]{TackleVis, TackleVis, TackleVis, TackleVis, TackleVis}),
                 new Array<Float>(new Float[]{new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f)})));
 

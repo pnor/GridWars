@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.GridWars;
 import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.SpriteActor;
 import com.mygdx.game.actors.Tile;
@@ -41,6 +42,8 @@ import static com.mygdx.game.GridWars.atlas;
  */
 public class BattleScreen implements Screen {
 
+    private GridWars gridWars;
+
     private Stage stage;
     private BattleInputProcessor battleInputProcessor;
 
@@ -49,6 +52,9 @@ public class BattleScreen implements Screen {
 
     //Board
     //private final Board board = new Board(7, 7, new Color(221f / 255, 221f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1));
+        /*7 is the basic size. Requires no scaling with anything below 7 size
+        The math for scaling above 7 : 700 / size
+        */
     private final Board board = new Board(5, 5, Color.LIME, Color.GREEN, 100);
     private final CodeBoard codeBoard = new CodeBoard(5, 5);
 
@@ -95,10 +101,12 @@ public class BattleScreen implements Screen {
 
     public Actor TESTER;
 
+    public BattleScreen(GridWars game) {
+        gridWars = game;
+    }
+
     @Override
     public void show() {
-        //AssetManager assets = new AssetManager();
-
         //set up assets
         stage = new Stage();
         stage.getViewport().setWorldSize(1000, 900);
@@ -125,7 +133,7 @@ public class BattleScreen implements Screen {
 
         //set up Background
         background = new Background(backAtlas.findRegion("BlankBackground"), new TextureRegion[]{backAtlas.findRegion("DiagStripeOverlay")},
-                new BackType[]{BackType.FADE_COLOR}, Color.RED, Color.BLUE);
+                new BackType[]{BackType.SCROLL_HORIZONTAL}, null, null);
 
         //set up Entity
         TESTER = new SpriteActor(atlas.createSprite("BluePiece"), 20, 20);
