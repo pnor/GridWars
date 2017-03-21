@@ -52,12 +52,13 @@ public class BoardManager {
      * @return true if it removed an entity
      */
     public boolean remove(Entity e) {
-        if (codeBoard.get(bm.get(e).pos.r, bm.get(e).pos.c) != null || (bm.get(e).pos.r == -1 && bm.get(e).pos.c == -1))
+        if (codeBoard.get(bm.get(e).pos.r, bm.get(e).pos.c) == null || (bm.get(e).pos.r == -1 && bm.get(e).pos.c == -1)) {
             //there's nothing there OR the entity's not on the board
             return false;
+        }
 
-        codeBoard.remove(bm.get(e).pos);
         board.remove(am.get(e).actor, bm.get(e).pos.r, bm.get(e).pos.c);
+        codeBoard.remove(bm.get(e).pos, true);
         return true;
     }
 
@@ -71,8 +72,8 @@ public class BoardManager {
             //there's nothing there
             return false;
 
+        codeBoard.remove(bp, true);
         board.remove(am.get(codeBoard.get(bp.r, bp.c)).actor, bp.r, bp.c);
-        codeBoard.remove(bp);
         return true;
     }
 

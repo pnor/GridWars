@@ -17,7 +17,7 @@ public class EventSystem extends IteratingSystem {
     }
 
     @Override
-    protected void processEntity(Entity e, float deltaTime) {
+    public void processEntity(Entity e, float deltaTime) {
         EventComponent event;
         event = em.get(e);
 

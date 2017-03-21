@@ -30,6 +30,7 @@ public class BoardComponent implements Component {
     }
 
     public void update(BoardPosition bp) {
+        System.out.println("updated: " + bp.r + ", " + bp.c);
         pos.set(bp.r, bp.c);
     }
 

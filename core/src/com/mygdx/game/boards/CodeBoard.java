@@ -64,9 +64,10 @@ public class CodeBoard {
     /**
      * Removes an {@code Entity} from the board.
      * @param bp position
+     * @param defaultPositionValue whether it should set the {@code BoardPosition} of the removed Entity to -1, -1
      * @return removed Entity
      */
-    public Entity remove(BoardPosition bp) {
+    public Entity remove(BoardPosition bp, boolean defaultPositionValue) {
         if (bp.r < 0 || bp.c < 0 || bp.r >= rows || bp.c >= columns) {
             System.out.println("r = " + bp.r + ", c = " + bp.c);
             throw new IndexOutOfBoundsException();
@@ -75,7 +76,7 @@ public class CodeBoard {
         Entity temp = grid.get(bp.r).get(bp.c);
         Entity e = grid.get(bp.r).get(bp.c);
         grid.get(bp.r).set(bp.c, null);
-        if (bm.has(e))
+        if (defaultPositionValue && bm.has(e))
             bm.get(e).update(new BoardPosition(-1, -1));
 
         return temp;
@@ -91,7 +92,7 @@ public class CodeBoard {
             System.out.println("r = " + bp.r + ", c = " + bp.c);
             throw new IndexOutOfBoundsException();
         }
-        add(remove(bp), newBp);
+        add(remove(bp, false), newBp);
         bm.get(grid.get(bp.r).get(bp.c)).update(newBp);
 
     }
@@ -107,7 +108,7 @@ public class CodeBoard {
             throw new IndexOutOfBoundsException();
         }
 
-        add(remove(bm.get(e).pos), bp);
+        add(remove(bm.get(e).pos, false), bp);
         bm.get(e).update(bp);
     }
 

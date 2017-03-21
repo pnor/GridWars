@@ -7,7 +7,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -18,21 +17,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GridWars;
-import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.SpriteActor;
 import com.mygdx.game.actors.Tile;
 import com.mygdx.game.boards.Board;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.boards.CodeBoard;
-import com.mygdx.game.components.*;
-import com.mygdx.game.creators.MoveConstructor;
+import com.mygdx.game.components.BoardComponent;
+import com.mygdx.game.components.MovesetComponent;
+import com.mygdx.game.components.StatComponent;
+import com.mygdx.game.creators.EntityConstructor;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.Visuals;
-import com.mygdx.game.systems.DrawingSystem;
-import com.mygdx.game.systems.EventSystem;
-import com.mygdx.game.systems.LifetimeSystem;
-import com.mygdx.game.systems.MovementSystem;
+import com.mygdx.game.systems.*;
 
 import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.atlas;
@@ -55,8 +52,8 @@ public class BattleScreen implements Screen {
         /*7 is the basic size. Requires no scaling with anything below 7 size
         The math for scaling above 7 : 700 / size
         */
-    private final Board board = new Board(5, 5, Color.LIME, Color.GREEN, 100);
-    private final CodeBoard codeBoard = new CodeBoard(5, 5);
+    private final Board board = new Board(6, 6, Color.LIME, Color.GREEN, 100);
+    private final CodeBoard codeBoard = new CodeBoard(6, 6);
 
     //Selection and Hover
     private Entity selectedEntity;
@@ -130,6 +127,7 @@ public class BattleScreen implements Screen {
         engine.addSystem(new MovementSystem());
         engine.addSystem(new EventSystem());
         engine.addSystem(new LifetimeSystem());
+        engine.addSystem(new DeathSystem(BoardComponent.boards));
 
         //set up Background
         background = new Background(backAtlas.findRegion("BlankBackground"), new TextureRegion[]{backAtlas.findRegion("DiagStripeOverlay")},
@@ -143,26 +141,19 @@ public class BattleScreen implements Screen {
         Visuals.engine = engine;
         Visuals.stage = stage;
 
-        tester = new Entity();
-        tester.add(new ActorComponent(new SpriteActor(atlas.createSprite("RedPiece"), true, true)));
-        tester.add(new BoardComponent());
-        tester.add(new StatComponent(10, 999, 7, 0, 1));
+        tester = EntityConstructor.testerChessPiece(this, engine, stage);
+        tester2 = EntityConstructor.testerRobot(this, engine, stage);
+        tester3 = EntityConstructor.testerHole(this, engine, stage);
+        Entity temp = EntityConstructor.testerRobot(this, engine, stage);
+        Entity temp2 = EntityConstructor.testerRobot(this, engine, stage);
+        Entity temp3 = EntityConstructor.testerRobot(this, engine, stage);
 
-        tester2 = new Entity();
-        tester2.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("Bot1"),
-                atlas.findRegion("Bot2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
-        tester2.add(new BoardComponent());
-        tester2.add(new StatComponent(5, 7, 2, 1, 3));
-        tester2.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(tester2, engine, stage, this)})));
-        tester2.add(new NameComponent("Robo - Beta"));
-        tester3 = new Entity();
-        tester3.add(new ActorComponent(new AnimationActor(new TextureRegion[]{atlas.findRegion("Hole"),
-                atlas.findRegion("Hole2"), atlas.findRegion("Hole3"), atlas.findRegion("Hole4")},
-                Animation.PlayMode.LOOP_PINGPONG, 0.1f)));
-        tester3.add(new BoardComponent());
-        tester3.add(new NameComponent("Hole"));
+        engine.addEntity(tester);
+        engine.addEntity(tester2);
+        engine.addEntity(tester3);
+        engine.addEntity(temp);
+        engine.addEntity(temp2);
+        engine.addEntity(temp3);
 
         /*
         effect = new Entity();
@@ -186,6 +177,10 @@ public class BattleScreen implements Screen {
         manage.add(tester, new BoardPosition(0, 0));
         manage.add(tester2, new BoardPosition(3, 3));
         manage.add(tester3, new BoardPosition(4, 0));
+        manage.add(temp, new BoardPosition(1,1));
+        manage.add(temp2, new BoardPosition(2,3));
+        manage.add(temp3, new BoardPosition(3,4));
+
         /*
         engine.addEntity(effect);
         engine.addEntity(effect2);*/
@@ -281,6 +276,10 @@ public class BattleScreen implements Screen {
         attackTable.setPosition(stage.getWidth() * .875f, stage.getHeight() * .3f);
     }
 
+    /**
+     * !! WHEN I DO THIS, DESCRIBE THE RENDER LOOP PROCESS BY PROCESS !!
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -300,6 +299,7 @@ public class BattleScreen implements Screen {
         }
         table.getCells();
 
+
         //update last ENTITY selected ---
         for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
             //if for actor component? if throwing ERRORS
@@ -312,9 +312,11 @@ public class BattleScreen implements Screen {
                                     t.revertTileColor();
                                     t.stopListening();
                                 }
-                } catch (Exception exc) { }
+                } catch (IndexOutOfBoundsException exc) {
+                }
 
                 selectedEntity = e;
+                if (!Visuals.visualsArePlaying)
                 am.get(selectedEntity).actor.shade(Color.ORANGE);
 
                 try { // newly highlights spaces
@@ -323,14 +325,15 @@ public class BattleScreen implements Screen {
                             t.shadeTile(Color.CYAN);
                             t.startListening();
                         }
-                } catch (Exception exc) {
+                } catch (IndexOutOfBoundsException exc) {
                 }
 
                 checkedStats = false;
                 am.get(e).actor.setLastSelected(false);
             }
 
-            if (selectedEntity != e && am.get(e).actor.getColor() != Color.WHITE)
+            if (selectedEntity != null && selectedEntity != e && am.get(e).actor.getColor() != Color.WHITE)
+                if (!Visuals.visualsArePlaying)
                 am.get(e).actor.shade(Color.WHITE);
         }
 
@@ -345,7 +348,7 @@ public class BattleScreen implements Screen {
                                 tl.revertTileColor();
                                 tl.stopListening();
                             }
-                    } catch (Exception exc) { }
+                    } catch (IndexOutOfBoundsException exc) { }
 
                     bm.get(selectedEntity).boards.move(selectedEntity, new BoardPosition(t.getRow(), t.getColumn()));
                 }
@@ -445,6 +448,13 @@ public class BattleScreen implements Screen {
         engine.getSystem(DrawingSystem.class).drawBackground(background, delta);
         stage.draw();
         engine.update(delta);
+
+        //Handling dead entities
+        for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
+            if (stm.has(e) && !stm.get(e).alive) {
+                BoardComponent.boards.remove(e);
+            }
+        }
     }
 
     public void showAttackTiles() {

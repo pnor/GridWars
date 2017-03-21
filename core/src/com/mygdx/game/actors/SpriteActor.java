@@ -98,6 +98,7 @@ public class SpriteActor extends UIActor{
     @Override
     public void draw(Batch batch, float parentAlpha) {
         sprite.setPosition(getX(), getY());
+        sprite.setScale(getScaleX());
         sprite.draw(batch, parentAlpha);
     }
 }

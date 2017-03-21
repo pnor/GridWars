@@ -27,7 +27,12 @@ public class Visuals {
     private int currentVisual;
     private Array<Float> triggerTimes;
     private int currentTime;
+
     private boolean isPlaying;
+    /**
+     * true when any kind of visuals are playing
+     */
+    public static boolean visualsArePlaying;
 
     /**
      * Creates a {@code Visuals} object
@@ -48,28 +53,30 @@ public class Visuals {
     }
 
     /**
-     * Plays the animation. (Is called multiple times to play entire thing)
-     */
-    public void play() {
-        if (timer.checkIfFinished()) {
-            battleScreen.enableUI();
-            isPlaying = false;
-        }
-        if (isPlaying)
-            playVisuals();
-    }
-
-    /**
-     * Plays the current visual
+     * Checks to see if it is time to play the current {@code VisualEffect}. If it is, it plays it.
      */
     private void playVisuals() {
         if (currentVisual >= visuals.size || currentTime >= triggerTimes.size)
             return;
+
         if (timer.getTime() >= getNextTargetTime()) {
             visuals.get(currentVisual).doVisuals(user, targetPositions, engine, stage, boardManager);
             currentVisual += 1;
             currentTime += 1;
         }
+    }
+
+    /**
+     * Plays the animation (Is called multiple times to play entire thing).
+     */
+    public void play() {
+        if (timer.checkIfFinished()) {
+            battleScreen.enableUI();
+            isPlaying = false;
+            Visuals.visualsArePlaying = false;
+        }
+        if (isPlaying)
+            playVisuals();
     }
 
     /**
@@ -100,12 +107,17 @@ public class Visuals {
         timer.increaseTimer(dt);
     }
 
+    public GameTimer getTimer() {
+        return timer;
+    }
+
     /**
      * Sets whether this object is playing or not
      * @param startPlaying whether its playing or not
      */
     public void setPlaying(boolean startPlaying) {
         isPlaying = startPlaying;
+        Visuals.visualsArePlaying = true;
     }
 
     public boolean getIsPlaying() {
