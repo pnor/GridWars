@@ -34,10 +34,40 @@ import static com.mygdx.game.GridWars.atlas;
 public class MoveConstructor {
 
     /**
+     * Creates a generic damage animation
+     * @param user Entity that is being damaged
+     * @param engine {@code Engine}
+     * @param stage {@code Stage}
+     * @param screen {@code BattleScreen}
+     * @return damage animation {@code Visuals}
+     */
+    public static Visuals damageAnimation(Entity user, Engine engine, Stage stage, BattleScreen screen) {
+        VisualEffect initialRed = new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
+                am.get(user).actor.shade(new Color(.9f, .1f, .1f, 1));
+            }
+        };
+
+        VisualEffect returnToWhite = new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
+                am.get(user).actor.shade(am.get(user).actor.getColor().lerp(Color.WHITE, .1f));
+            }
+        };
+
+        return new Visuals(screen, user, null, new GameTimer(.6002f),
+                new Array<VisualEffect>(new VisualEffect[]{initialRed, returnToWhite, returnToWhite, returnToWhite, returnToWhite, returnToWhite,
+                        returnToWhite, returnToWhite, returnToWhite, returnToWhite, returnToWhite}),
+                new Array<Float>(new Float[]{new Float(.001f), new Float(.15f), new Float(.05f), new Float(.05f), new Float(.05f), new Float(.05f),
+                        new Float(.05f), new Float(.05f), new Float(.05f), new Float(.05f), new Float(.05f)}), false);
+    }
+
+    /**
      * Creates the generic death animation
-     * @param user
-     * @param engine
-     * @param stage
+     * @param user Entity that is being killed
+     * @param engine {@code Engine}
+     * @param stage {@code Stage}
      * @return death animation {@code Visuals}
      */
     public static Visuals deathAnimation(Entity user, Engine engine, Stage stage, BattleScreen screen) {
@@ -55,11 +85,11 @@ public class MoveConstructor {
                                 am.get(user).actor.getColor().b - .1f, am.get(user).actor.getColor().a - .1f));
             }
         };
-        return new Visuals(screen, user, null, new GameTimer(1f),
+        return new Visuals(screen, user, null, new GameTimer(1.195f),
                 new Array<VisualEffect>(new VisualEffect[]{initialRed, fadeAndBlacken, fadeAndBlacken, fadeAndBlacken, fadeAndBlacken, fadeAndBlacken,
                         fadeAndBlacken, fadeAndBlacken, fadeAndBlacken, fadeAndBlacken, fadeAndBlacken}),
-                new Array<Float>(new Float[]{new Float(.001f), new Float(.25f), new Float(.1f), new Float(.1f), new Float(.1f), new Float(.1f), new Float(.1f),
-                        new Float(.1f), new Float(.1f), new Float(.1f), new Float(.1f)}));
+                new Array<Float>(new Float[]{new Float(.001f), new Float(.275f), new Float(.1f), new Float(.1f), new Float(.1f), new Float(.1f), new Float(.1f),
+                        new Float(.1f), new Float(.1f), new Float(.1f), new Float(.1f)}), false);
     }
 
     public static Move Tackle(Entity user, Engine engine, Stage stage, BattleScreen screen) {
@@ -91,10 +121,12 @@ public class MoveConstructor {
                         Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
                         if (stm.has(enemy))
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk - stm.get(enemy).def, 0, 999);
+                        if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
+                            vm.get(enemy).damageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(screen, user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), new GameTimer(1f),
                 new Array<VisualEffect>(new VisualEffect[]{TackleVis, TackleVis, TackleVis, TackleVis, TackleVis}),
-                new Array<Float>(new Float[]{new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f)})));
+                new Array<Float>(new Float[]{new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f)}), true));
 
         return move;
     }

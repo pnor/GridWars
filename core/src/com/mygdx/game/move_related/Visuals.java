@@ -29,6 +29,8 @@ public class Visuals {
     private int currentTime;
 
     private boolean isPlaying;
+    private boolean autoReset;
+    public boolean effectsUI;
     /**
      * true when any kind of visuals are playing
      */
@@ -42,14 +44,16 @@ public class Visuals {
      * @param timr timer that controls which Visual Effect plays
      * @param visual Array of {@code VisualEffect} objects
      * @param triggerTime Array of trigger times for animations
+     * @param effectUI whether this will enable the UI on the {@code BattleScreen}
      */
-    public Visuals(BattleScreen screen, Entity u, Array<BoardPosition> positions, GameTimer timr, Array<VisualEffect> visual, Array<Float> triggerTime) {
+    public Visuals(BattleScreen screen, Entity u, Array<BoardPosition> positions, GameTimer timr, Array<VisualEffect> visual, Array<Float> triggerTime, boolean effectUI) {
         battleScreen = screen;
         user = u;
         targetPositions = positions;
         timer = timr;
         visuals = visual;
         triggerTimes = triggerTime;
+        effectsUI = effectUI;
     }
 
     /**
@@ -58,6 +62,9 @@ public class Visuals {
     private void playVisuals() {
         if (currentVisual >= visuals.size || currentTime >= triggerTimes.size)
             return;
+
+        if (!Visuals.visualsArePlaying)
+            Visuals.visualsArePlaying = true;
 
         if (timer.getTime() >= getNextTargetTime()) {
             visuals.get(currentVisual).doVisuals(user, targetPositions, engine, stage, boardManager);
@@ -71,9 +78,14 @@ public class Visuals {
      */
     public void play() {
         if (timer.checkIfFinished()) {
-            battleScreen.enableUI();
+            if (effectsUI)
+                battleScreen.enableUI();
             isPlaying = false;
             Visuals.visualsArePlaying = false;
+            if (autoReset) {
+                autoReset = false;
+                reset();
+            }
         }
         if (isPlaying)
             playVisuals();
@@ -114,9 +126,11 @@ public class Visuals {
     /**
      * Sets whether this object is playing or not
      * @param startPlaying whether its playing or not
+     * @param autoreset whether it should reset itself after playing
      */
-    public void setPlaying(boolean startPlaying) {
+    public void setPlaying(boolean startPlaying, boolean autoreset) {
         isPlaying = startPlaying;
+        autoReset = autoreset;
         Visuals.visualsArePlaying = true;
     }
 

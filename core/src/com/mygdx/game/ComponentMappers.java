@@ -8,25 +8,27 @@ import com.mygdx.game.components.*;
  */
 public class ComponentMappers {
     //sprites
-    public static ComponentMapper<SpriteComponent> sm =ComponentMapper.getFor(SpriteComponent.class);
+    public static ComponentMapper<SpriteComponent> sm = ComponentMapper.getFor(SpriteComponent.class);
     //animations
-    public static ComponentMapper<AnimationComponent> animm =ComponentMapper.getFor(AnimationComponent.class);
+    public static ComponentMapper<AnimationComponent> animm = ComponentMapper.getFor(AnimationComponent.class);
     //position
-    public static ComponentMapper<PositionComponent> pm =ComponentMapper.getFor(PositionComponent.class);
+    public static ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
     //movement
-    public static ComponentMapper<MovementComponent> mm =ComponentMapper.getFor(MovementComponent.class);
+    public static ComponentMapper<MovementComponent> mm = ComponentMapper.getFor(MovementComponent.class);
     //lifetime
-    public static ComponentMapper<LifetimeComponent> lfm =ComponentMapper.getFor(LifetimeComponent.class);
+    public static ComponentMapper<LifetimeComponent> lfm = ComponentMapper.getFor(LifetimeComponent.class);
     //events
-    public static ComponentMapper<EventComponent> em =ComponentMapper.getFor(EventComponent.class);
+    public static ComponentMapper<EventComponent> em = ComponentMapper.getFor(EventComponent.class);
     //board
-    public static ComponentMapper<BoardComponent> bm =ComponentMapper.getFor(BoardComponent.class);
+    public static ComponentMapper<BoardComponent> bm = ComponentMapper.getFor(BoardComponent.class);
     //actor
-    public static ComponentMapper<ActorComponent> am =ComponentMapper.getFor(ActorComponent.class);
+    public static ComponentMapper<ActorComponent> am = ComponentMapper.getFor(ActorComponent.class);
+    //visuals
+    public static ComponentMapper<VisualsComponent> vm = ComponentMapper.getFor(VisualsComponent.class);
     //stats
-    public static ComponentMapper<StatComponent> stm =ComponentMapper.getFor(StatComponent.class);
+    public static ComponentMapper<StatComponent> stm = ComponentMapper.getFor(StatComponent.class);
     //moveset
-    public static ComponentMapper<MovesetComponent> mvm =ComponentMapper.getFor(MovesetComponent.class);
+    public static ComponentMapper<MovesetComponent> mvm = ComponentMapper.getFor(MovesetComponent.class);
     //names
     public static ComponentMapper<NameComponent> nm = ComponentMapper.getFor(NameComponent.class);
 

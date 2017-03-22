@@ -127,7 +127,7 @@ public class BattleScreen implements Screen {
         engine.addSystem(new MovementSystem());
         engine.addSystem(new EventSystem());
         engine.addSystem(new LifetimeSystem());
-        engine.addSystem(new DeathSystem(BoardComponent.boards));
+        engine.addSystem(new DamageDeathSystem(BoardComponent.boards));
 
         //set up Background
         background = new Background(backAtlas.findRegion("BlankBackground"), new TextureRegion[]{backAtlas.findRegion("DiagStripeOverlay")},
@@ -242,7 +242,7 @@ public class BattleScreen implements Screen {
                             if (mvm.has(selectedEntity)) {
                                 mvm.get(selectedEntity).moveList.get(0).useAttack();
                                 currentMove = mvm.get(selectedEntity).moveList.get(0);
-                                currentMove.getVisuals().setPlaying(true);
+                                currentMove.getVisuals().setPlaying(true, false);
                                 disableUI();
                             }
                         } else if (actor == attackBtn2) {
@@ -306,26 +306,28 @@ public class BattleScreen implements Screen {
             if (am.get(e).actor.getLastSelected()) {
                 try {   //removes previously highlighted
                     if (am.get(e).actor.getLastSelected())
-                        if (selectedEntity != null)
+                        if (selectedEntity != null && stm.has(selectedEntity) && stm.get(selectedEntity).spd > 0) {
                             for (Tile t : getMovableSquares(selectedEntity))
                                 if (t != null) {
                                     t.revertTileColor();
                                     t.stopListening();
                                 }
-                } catch (IndexOutOfBoundsException exc) {
-                }
+                        }
+                } catch(IndexOutOfBoundsException exc){}
 
                 selectedEntity = e;
                 if (!Visuals.visualsArePlaying)
                 am.get(selectedEntity).actor.shade(Color.ORANGE);
 
-                try { // newly highlights spaces
-                    for (Tile t : getMovableSquares(selectedEntity))
-                        if (t != null && !t.getIsListening()) {
-                            t.shadeTile(Color.CYAN);
-                            t.startListening();
-                        }
-                } catch (IndexOutOfBoundsException exc) {
+                if (stm.has(selectedEntity) && stm.get(selectedEntity).spd > 0) {
+                    try { // newly highlights spaces
+                        for (Tile t : getMovableSquares(selectedEntity))
+                            if (t != null && !t.getIsListening()) {
+                                t.shadeTile(Color.CYAN);
+                                t.startListening();
+                            }
+                    } catch (IndexOutOfBoundsException exc) {
+                    }
                 }
 
                 checkedStats = false;
@@ -334,7 +336,7 @@ public class BattleScreen implements Screen {
 
             if (selectedEntity != null && selectedEntity != e && am.get(e).actor.getColor() != Color.WHITE)
                 if (!Visuals.visualsArePlaying)
-                am.get(e).actor.shade(Color.WHITE);
+                    am.get(e).actor.shade(Color.WHITE);
         }
 
         //update last TILE selected ---

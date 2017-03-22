@@ -67,7 +67,7 @@ public class Move {
             }
 
             attack.effect(user, bp, boards);
-            visuals.setPlaying(true);
+            visuals.setPlaying(true, false);
         }
     }
 
