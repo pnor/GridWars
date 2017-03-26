@@ -2,7 +2,7 @@ package com.mygdx.game.screens_ui;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.components.PositionComponent;
@@ -60,27 +60,32 @@ public enum BackType {
                 break;
 
             case FADE_COLOR:
-                sm.get(e).sprite.setColor(new Color(MathUtils.lerp(startColor.r, destinationColor.r, progress),
-                                MathUtils.lerp(startColor.g, destinationColor.g, progress),
-                                MathUtils.lerp(startColor.b, destinationColor.b, progress),
-                                MathUtils.lerp(startColor.a, destinationColor.a, progress)));
-                if (progress >= 100)
+                if (progress >= 10f)
                     progressIncreasing = false;
                 else if (progress <= 0)
                     progressIncreasing = true;
 
-                if (progressIncreasing)
-                    progress += 1 * deltaTime;
-                else
-                    progress -= 1 * deltaTime;
+                if (progressIncreasing) {
+                    sm.get(e).sprite.setColor(new Color(MathUtils.lerp(sm.get(e).sprite.getColor().r, destinationColor.r, deltaTime),
+                            MathUtils.lerp(sm.get(e).sprite.getColor().g, destinationColor.g, deltaTime),
+                            MathUtils.lerp(sm.get(e).sprite.getColor().b, destinationColor.b, deltaTime),
+                            MathUtils.lerp(sm.get(e).sprite.getColor().a, destinationColor.a, deltaTime)));
+                    progress += deltaTime;
+                } else {
+                    sm.get(e).sprite.setColor(new Color(MathUtils.lerp(sm.get(e).sprite.getColor().r, startColor.r, deltaTime),
+                            MathUtils.lerp(sm.get(e).sprite.getColor().g, startColor.g, deltaTime),
+                            MathUtils.lerp(sm.get(e).sprite.getColor().b, startColor.b, deltaTime),
+                            MathUtils.lerp(sm.get(e).sprite.getColor().a, startColor.a, deltaTime)));
+                    progress -= deltaTime;
+                }
                 break;
         }
     }
 
-    public void setImage(TextureRegion tex) {
-        e.add(new SpriteComponent(tex));
-        pm.get(e).width = tex.getRegionWidth();
-        pm.get(e).height = tex.getRegionHeight();
+    public void setImage(Sprite spr) {
+        e.add(new SpriteComponent(spr));
+        pm.get(e).width = spr.getWidth();
+        pm.get(e).height = spr.getHeight();
     }
 
     public void setColors(Color start, Color dest) {

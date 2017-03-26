@@ -1,5 +1,6 @@
 package com.mygdx.game.screens_ui;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -20,13 +21,13 @@ public class HoverButton extends TextButton {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 hover = true;
-                System.out.println("ENTER   hover : " + hover);
+                setColor(Color.RED);
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 hover = false;
-                System.out.println("EXIT   hover : " + hover);
+                setColor(Color.WHITE);
             }
         });
     }
@@ -37,11 +38,13 @@ public class HoverButton extends TextButton {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 hover = true;
+                setColor(Color.RED);
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 hover = false;
+                setColor(Color.WHITE);
             }
         });
     }

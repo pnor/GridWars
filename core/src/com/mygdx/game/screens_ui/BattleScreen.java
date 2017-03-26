@@ -7,17 +7,19 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GridWars;
-import com.mygdx.game.actors.SpriteActor;
 import com.mygdx.game.actors.Tile;
 import com.mygdx.game.boards.Board;
 import com.mygdx.game.boards.BoardManager;
@@ -26,13 +28,11 @@ import com.mygdx.game.boards.CodeBoard;
 import com.mygdx.game.components.BoardComponent;
 import com.mygdx.game.components.MovesetComponent;
 import com.mygdx.game.components.StatComponent;
-import com.mygdx.game.creators.EntityConstructor;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.Visuals;
 import com.mygdx.game.systems.*;
 
 import static com.mygdx.game.ComponentMappers.*;
-import static com.mygdx.game.GridWars.atlas;
 
 /**
  * @author pnore_000
@@ -40,7 +40,7 @@ import static com.mygdx.game.GridWars.atlas;
 public class BattleScreen implements Screen {
 
     private GridWars gridWars;
-
+    private Engine engine;
     private Stage stage;
     private BattleInputProcessor battleInputProcessor;
 
@@ -52,8 +52,11 @@ public class BattleScreen implements Screen {
         /*7 is the basic size. Requires no scaling with anything below 7 size
         The math for scaling above 7 : 700 / size
         */
-    private final Board board = new Board(6, 6, Color.LIME, Color.GREEN, 100);
-    private final CodeBoard codeBoard = new CodeBoard(6, 6);
+    private final Board board;
+    private final CodeBoard codeBoard;
+
+    //Entities
+    private Array<Array<Entity>> teams = new Array<Array<Entity>>();
 
     //Selection and Hover
     private Entity selectedEntity;
@@ -85,21 +88,20 @@ public class BattleScreen implements Screen {
     private HoverButton attackBtn2;
     private HoverButton attackBtn3;
     private HoverButton attackBtn4;
+    private Table infoTable;
+    private Label infoLbl;
 
-    //Entities
-    private Engine engine;
-    private Entity tester;
-    private Entity tester2;
-    private Entity tester3;
-    /*
-    private Entity effect;
-    private Entity effect2;
-    */
 
-    public Actor TESTER;
 
-    public BattleScreen(GridWars game) {
+    public BattleScreen(GridWars game, int boardSize, Color darkBoardColor, Color lightBoardColor) {
         gridWars = game;
+        if (boardSize <= 7) {
+            board = new Board(boardSize, boardSize, darkBoardColor, lightBoardColor, 100);
+            codeBoard = new CodeBoard(boardSize, boardSize);
+        } else {
+            board = new Board(boardSize, boardSize, darkBoardColor, lightBoardColor, 700 / boardSize);
+            codeBoard = new CodeBoard(boardSize, boardSize);
+        }
     }
 
     @Override
@@ -111,9 +113,11 @@ public class BattleScreen implements Screen {
         table = new Table();
         statsTable = new Table();
         attackTable = new Table();
+        infoTable = new Table();
         stage.addActor(table);
         stage.addActor(statsTable);
         stage.addActor(attackTable);
+        stage.addActor(infoTable);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         backAtlas = new TextureAtlas(Gdx.files.internal("BackPack.pack"));
         uiatlas = new TextureAtlas("uiskin.atlas");
@@ -130,60 +134,26 @@ public class BattleScreen implements Screen {
         engine.addSystem(new DamageDeathSystem(BoardComponent.boards));
 
         //set up Background
-        background = new Background(backAtlas.findRegion("BlankBackground"), new TextureRegion[]{backAtlas.findRegion("DiagStripeOverlay")},
-                new BackType[]{BackType.SCROLL_HORIZONTAL}, null, null);
+        Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
+        backgroundLay.setColor(Color.DARK_GRAY);
+        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeOverlay")));
+        topLayer.setColor(Color.GRAY);
+        background = new Background(backgroundLay,
+                new Sprite[]{new Sprite(backAtlas.findRegion("DiagStripeOverlay")), topLayer},
+                new BackType[]{BackType.FADE_COLOR, BackType.SCROLL_HORIZONTAL},
+                Color.CYAN, Color.RED);
 
         //set up Entity
-        TESTER = new SpriteActor(atlas.createSprite("BluePiece"), 20, 20);
+
+        //add to Engine
+        for (Array<Entity> t : teams)
+            for (Entity e : t)
+                engine.addEntity(e);
 
         BoardComponent.setBoardManager(new BoardManager(board, codeBoard));
         Visuals.boardManager = BoardComponent.boards;
         Visuals.engine = engine;
         Visuals.stage = stage;
-
-        tester = EntityConstructor.testerChessPiece(this, engine, stage);
-        tester2 = EntityConstructor.testerRobot(this, engine, stage);
-        tester3 = EntityConstructor.testerHole(this, engine, stage);
-        Entity temp = EntityConstructor.testerRobot(this, engine, stage);
-        Entity temp2 = EntityConstructor.testerRobot(this, engine, stage);
-        Entity temp3 = EntityConstructor.testerRobot(this, engine, stage);
-
-        engine.addEntity(tester);
-        engine.addEntity(tester2);
-        engine.addEntity(tester3);
-        engine.addEntity(temp);
-        engine.addEntity(temp2);
-        engine.addEntity(temp3);
-
-        /*
-        effect = new Entity();
-        effect.add(new PositionComponent(new Vector2(stage.getWidth() - 50, stage.getHeight() / 4), 100, 100, 0));
-        effect.add(new SpriteComponent(atlas.findRegion("Star")));
-        effect2 = new Entity();
-        effect2.add(new PositionComponent(new Vector2(stage.getWidth() / 6, stage.getHeight() / 1.3f)
-                , 100, 100, 0));
-        effect2.add(new AnimationComponent(.3f, new TextureRegion[]{atlas.findRegion("Star1"),
-                atlas.findRegion("Star2")}, Animation.PlayMode.LOOP));
-        effect2.add(new MovementComponent(new Vector2(2, -1)));
-        effect2.add(new EventComponent(.5f, 0, true, true, new GameEvent() {
-            @Override
-            public void event(Entity e, Engine engine) {
-                mm.get(e).movement.add(MathUtils.sin(Math.abs(mm.get(e).movement.y)), -1);
-            }
-        }));
-        */
-        //put Entity on Board!
-        BoardManager manage = bm.get(tester).boards;
-        manage.add(tester, new BoardPosition(0, 0));
-        manage.add(tester2, new BoardPosition(3, 3));
-        manage.add(tester3, new BoardPosition(4, 0));
-        manage.add(temp, new BoardPosition(1,1));
-        manage.add(temp2, new BoardPosition(2,3));
-        manage.add(temp3, new BoardPosition(3,4));
-
-        /*
-        engine.addEntity(effect);
-        engine.addEntity(effect2);*/
 
 
         //set up Board ui -----
@@ -196,10 +166,9 @@ public class BattleScreen implements Screen {
             }
             table.row();
         }
-
-        //table.center();
         table.setPosition(stage.getWidth() / 2.5f, stage.getHeight() / 2);
-        //table.debug();
+        NinePatch tableBack = new NinePatch(new Texture(Gdx.files.internal("TableBackground.png")), 33, 33, 33, 33);
+        NinePatchDrawable tableBackground = new NinePatchDrawable(tableBack);
 
         //set up stats ui
         nameLabel = new Label("---", skin);
@@ -223,8 +192,10 @@ public class BattleScreen implements Screen {
         defLabel.setAlignment(Align.center);
         statsTable.add(spdLabel).center().size(125, 50).row();
         spdLabel.setAlignment(Align.center);
-        statsTable.debug();
-        statsTable.setPosition(stage.getWidth() * .875f, stage.getHeight() * .8f);
+        //statsTable.debug();
+        statsTable.setBackground(tableBackground);
+        statsTable.pack();
+        statsTable.setPosition(stage.getWidth() * .875f - (statsTable.getWidth() / 2), stage.getHeight() * .75f - (statsTable.getHeight() / 2));
 
         //set up attack menu ui
         attackTitleLabel = new Label("Actions", skin);
@@ -237,21 +208,27 @@ public class BattleScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
-                    if (selectedEntity != null) {
+                    if (selectedEntity != null && mvm.has(selectedEntity)) {
                         if (actor == attackBtn1) {
-                            if (mvm.has(selectedEntity)) {
-                                mvm.get(selectedEntity).moveList.get(0).useAttack();
-                                currentMove = mvm.get(selectedEntity).moveList.get(0);
-                                currentMove.getVisuals().setPlaying(true, false);
-                                disableUI();
-                            }
+                            mvm.get(selectedEntity).moveList.get(0).useAttack();
+                            currentMove = mvm.get(selectedEntity).moveList.get(0);
+
                         } else if (actor == attackBtn2) {
-
+                            mvm.get(selectedEntity).moveList.get(1).useAttack();
+                            currentMove = mvm.get(selectedEntity).moveList.get(1);
                         } else if (actor == attackBtn3) {
-
+                            mvm.get(selectedEntity).moveList.get(2).useAttack();
+                            currentMove = mvm.get(selectedEntity).moveList.get(2);
                         } else if (actor == attackBtn4) {
-
+                            mvm.get(selectedEntity).moveList.get(3).useAttack();
+                            currentMove = mvm.get(selectedEntity).moveList.get(3);
                         }
+                        currentMove.getVisuals().setPlaying(true, false);
+                        disableUI();
+                        if (nm.has(selectedEntity))
+                            infoLbl.setText(nm.get(selectedEntity).name + " used " + currentMove.getName() + "!");
+                        else
+                            infoLbl.setText(currentMove.getName() + " was used!");
                     }
                 }
             }
@@ -272,8 +249,19 @@ public class BattleScreen implements Screen {
         attackTable.add(attackBtn2).size(175, 50).padBottom(15f).row();
         attackTable.add(attackBtn3).size(175, 50).padBottom(15f).row();
         attackTable.add(attackBtn4).size(175, 50).padBottom(15f).row();
-        attackTable.debug();
-        attackTable.setPosition(stage.getWidth() * .875f, stage.getHeight() * .3f);
+        //attackTable.debug();
+        attackTable.setBackground(tableBackground);
+        attackTable.pack();
+        attackTable.setPosition(stage.getWidth() * .875f - (attackTable.getWidth() / 2), stage.getHeight() * .25f - (attackTable.getWidth() / 2));
+
+        //set up infoTable
+        infoLbl = new GradualLabel(.001f, "---", skin);
+        infoTable.add(infoLbl).height(25).center();
+        infoTable.setBackground(tableBackground);
+        infoTable.pack();
+        infoTable.setPosition(table.getX() - 350, stage.getHeight() * .9f);
+        infoTable.setSize(700, 80);
+
     }
 
     /**
@@ -358,7 +346,6 @@ public class BattleScreen implements Screen {
         }
 
         //updating attack squares
-        HoverButton tempButton = null;
         if (!hoverChanged) {
             if (attackBtn1.getHover()) {
                 moveHover = 0;
@@ -455,6 +442,8 @@ public class BattleScreen implements Screen {
         for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
             if (stm.has(e) && !stm.get(e).alive) {
                 BoardComponent.boards.remove(e);
+                if (nm.has(e))
+                    infoLbl.setText(nm.get(e).name + " has been defeated!");
             }
         }
     }
@@ -534,7 +523,6 @@ public class BattleScreen implements Screen {
                 tiles.add(board.getTile(newR, newC));
             }
         }
-
         return tiles;
     }
 
@@ -589,7 +577,25 @@ public class BattleScreen implements Screen {
         return moveHover;
     }
 
+    public void setTeams(Array<Entity>... team) {
+        for (Array<Entity> t : team) {
+            teams.add(t);
+        }
+
+        for (Array<Entity> t : teams)
+            for (Entity e : t)
+                engine.addEntity(e);
+    }
+
     public Entity getSelectedEntity() {
         return selectedEntity;
+    }
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 }

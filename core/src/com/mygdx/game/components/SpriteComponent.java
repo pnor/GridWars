@@ -21,6 +21,10 @@ public class SpriteComponent implements Component{
         sprite = new Sprite(tex);
     }
 
+    public SpriteComponent(Sprite spr) {
+        sprite = spr;
+    }
+
     public void draw(Batch batch) {
         batch.begin();
         sprite.draw(batch);
