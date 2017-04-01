@@ -10,6 +10,7 @@ import com.mygdx.game.move_related.Move;
  */
 public class MovesetComponent implements Component {
     public Array<Move> moveList;
+    public boolean canAttack = true;
 
     public MovesetComponent(Array<Move> m) {
         moveList = m;

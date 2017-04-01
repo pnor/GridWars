@@ -19,12 +19,18 @@ public class VisualsComponent implements Component {
     public Visuals damageAnimation;
 
     /**
+     * plays when the entity takes heavy damage
+     */
+    public Visuals heavyDamageAnimation;
+
+    /**
      * Creates this object with preset values for damage and death animations
      * @param damageAnim damage animation
      * @param deathAnim death animation
      */
-    public VisualsComponent(Visuals damageAnim, Visuals deathAnim) {
+    public VisualsComponent(Visuals damageAnim, Visuals heavyAnim, Visuals deathAnim) {
         damageAnimation = damageAnim;
+        heavyDamageAnimation = heavyAnim;
         deathAnimation = deathAnim;
     }
 

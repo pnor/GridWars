@@ -23,36 +23,37 @@ public class Visuals {
     private Array<BoardPosition> targetPositions;
 
     private GameTimer timer;
-    private Array<VisualEffect> visuals;
+    private Array<VisualEvent> visuals;
     private int currentVisual;
-    private Array<Float> triggerTimes;
-    private int currentTime;
 
     private boolean isPlaying;
     private boolean autoReset;
     public boolean effectsUI;
     /**
-     * true when any kind of visuals are playing
+     * greater than 0 when any kind of visuals are playing
      */
-    public static boolean visualsArePlaying;
+    public static int visualsArePlaying;
 
     /**
      * Creates a {@code Visuals} object
      * @param screen {@code BattleScreen}
      * @param u user
      * @param positions effected squares
-     * @param timr timer that controls which Visual Effect plays
-     * @param visual Array of {@code VisualEffect} objects
-     * @param triggerTime Array of trigger times for animations
+     * @param visual Array of {@code VisualEvent} objects
      * @param effectUI whether this will enable the UI on the {@code BattleScreen}
      */
-    public Visuals(BattleScreen screen, Entity u, Array<BoardPosition> positions, GameTimer timr, Array<VisualEffect> visual, Array<Float> triggerTime, boolean effectUI) {
+    public Visuals(BattleScreen screen, Entity u, Array<BoardPosition> positions, Array<VisualEvent> visual, boolean effectUI) {
         battleScreen = screen;
         user = u;
         targetPositions = positions;
-        timer = timr;
+
+        float total = 0f;
+        for (VisualEvent v : visual) {
+            total += v.getTriggerTime() * v.getRepeatAmount();
+        }
+        timer = new GameTimer(total + .03f);
+
         visuals = visual;
-        triggerTimes = triggerTime;
         effectsUI = effectUI;
     }
 
@@ -60,16 +61,14 @@ public class Visuals {
      * Checks to see if it is time to play the current {@code VisualEffect}. If it is, it plays it.
      */
     private void playVisuals() {
-        if (currentVisual >= visuals.size || currentTime >= triggerTimes.size)
+        if (currentVisual >= visuals.size)
             return;
-
-        if (!Visuals.visualsArePlaying)
-            Visuals.visualsArePlaying = true;
-
         if (timer.getTime() >= getNextTargetTime()) {
-            visuals.get(currentVisual).doVisuals(user, targetPositions, engine, stage, boardManager);
-            currentVisual += 1;
-            currentTime += 1;
+            VisualEvent cur = visuals.get(currentVisual);
+            cur.doVisuals(user, targetPositions, engine, stage, boardManager);
+            cur.incrementRepeat(1);
+            if (cur.getCurrentAmount() >= cur.getRepeatAmount())
+                currentVisual += 1;
         }
     }
 
@@ -78,10 +77,10 @@ public class Visuals {
      */
     public void play() {
         if (timer.checkIfFinished()) {
+            isPlaying = false;
+            Visuals.visualsArePlaying -= 1;
             if (effectsUI)
                 battleScreen.enableUI();
-            isPlaying = false;
-            Visuals.visualsArePlaying = false;
             if (autoReset) {
                 autoReset = false;
                 reset();
@@ -96,9 +95,10 @@ public class Visuals {
      */
     private float getNextTargetTime() {
         float target = 0;
-        for (int i = 0; i < currentTime; i++) {
-            target += triggerTimes.get(currentTime);
-        }
+
+        for (int i = 0; i <= currentVisual; i++)
+            target += visuals.get(i).getTriggerTime() * (visuals.get(i).getCurrentAmount());
+
         return target;
     }
 
@@ -107,8 +107,9 @@ public class Visuals {
      */
     public void reset() {
         timer.setTime(0);
-        currentTime = 0;
         currentVisual = 0;
+        for (VisualEvent v : visuals)
+            v.resetRepeat();
     }
 
     /**
@@ -129,9 +130,13 @@ public class Visuals {
      * @param autoreset whether it should reset itself after playing
      */
     public void setPlaying(boolean startPlaying, boolean autoreset) {
+        if (!isPlaying && startPlaying)
+            Visuals.visualsArePlaying += 1;
+        else if (isPlaying && !startPlaying)
+            Visuals.visualsArePlaying -= 1;
+
         isPlaying = startPlaying;
         autoReset = autoreset;
-        Visuals.visualsArePlaying = true;
     }
 
     public boolean getIsPlaying() {

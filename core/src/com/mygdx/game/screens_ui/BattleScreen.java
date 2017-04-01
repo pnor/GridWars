@@ -69,6 +69,7 @@ public class BattleScreen implements Screen {
      */
     private int moveHover = -1;
     private boolean hoverChanged;
+    public boolean attacksEnabled = true;
 
     //Ui Elements
     private Skin skin;
@@ -91,6 +92,10 @@ public class BattleScreen implements Screen {
     private Table infoTable;
     private Label infoLbl;
 
+    //debug values
+    private float deltaTimeSums;
+    private final int deltatimeIntervals = 5;
+    private int currentDeltaTime;
 
 
     public BattleScreen(GridWars game, int boardSize, Color darkBoardColor, Color lightBoardColor) {
@@ -212,7 +217,6 @@ public class BattleScreen implements Screen {
                         if (actor == attackBtn1) {
                             mvm.get(selectedEntity).moveList.get(0).useAttack();
                             currentMove = mvm.get(selectedEntity).moveList.get(0);
-
                         } else if (actor == attackBtn2) {
                             mvm.get(selectedEntity).moveList.get(1).useAttack();
                             currentMove = mvm.get(selectedEntity).moveList.get(1);
@@ -223,6 +227,8 @@ public class BattleScreen implements Screen {
                             mvm.get(selectedEntity).moveList.get(3).useAttack();
                             currentMove = mvm.get(selectedEntity).moveList.get(3);
                         }
+
+                        mvm.get(selectedEntity).canAttack = false;
                         currentMove.getVisuals().setPlaying(true, false);
                         disableUI();
                         if (nm.has(selectedEntity))
@@ -272,6 +278,15 @@ public class BattleScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if (!(currentDeltaTime >= deltatimeIntervals)) {
+            deltaTimeSums += delta;
+            currentDeltaTime += 1;
+        } else {
+            currentDeltaTime = 0;
+            System.out.println("Average delta time : " + deltaTimeSums / deltatimeIntervals + "  [interval:" + deltatimeIntervals + "]");
+            deltaTimeSums = 0;
+            System.out.println(Visuals.visualsArePlaying);
+        }
 
         //sync code board and ui board ---
         int rowSize = board.getRowSize();
@@ -304,8 +319,8 @@ public class BattleScreen implements Screen {
                 } catch(IndexOutOfBoundsException exc){}
 
                 selectedEntity = e;
-                if (!Visuals.visualsArePlaying)
-                am.get(selectedEntity).actor.shade(Color.ORANGE);
+                if (Visuals.visualsArePlaying == 0)
+                    am.get(selectedEntity).actor.shade(Color.ORANGE);
 
                 if (stm.has(selectedEntity) && stm.get(selectedEntity).spd > 0) {
                     try { // newly highlights spaces
@@ -323,7 +338,7 @@ public class BattleScreen implements Screen {
             }
 
             if (selectedEntity != null && selectedEntity != e && am.get(e).actor.getColor() != Color.WHITE)
-                if (!Visuals.visualsArePlaying)
+                if (Visuals.visualsArePlaying == 0)
                     am.get(e).actor.shade(Color.WHITE);
         }
 
@@ -346,6 +361,11 @@ public class BattleScreen implements Screen {
         }
 
         //updating attack squares
+        if (selectedEntity != null && !mvm.get(selectedEntity).canAttack && attacksEnabled)
+            disableAttacks();
+        else if (selectedEntity == null || (selectedEntity != null && mvm.get(selectedEntity).canAttack && !attacksEnabled))
+            enableAttacks();
+
         if (!hoverChanged) {
             if (attackBtn1.getHover()) {
                 moveHover = 0;
@@ -446,6 +466,11 @@ public class BattleScreen implements Screen {
                     infoLbl.setText(nm.get(e).name + " has been defeated!");
             }
         }
+
+        //debug
+        if (Visuals.visualsArePlaying < 0)
+            throw (new IndexOutOfBoundsException("Visuals.visualsArePlaying is < 0"));
+
     }
 
     public void showAttackTiles() {
@@ -531,10 +556,7 @@ public class BattleScreen implements Screen {
      */
     public void disableUI() {
         battleInputProcessor.setDisabled(true);
-        attackBtn1.setTouchable(Touchable.disabled);
-        attackBtn2.setTouchable(Touchable.disabled);
-        attackBtn3.setTouchable(Touchable.disabled);
-        attackBtn4.setTouchable(Touchable.disabled);
+        disableAttacks();
     }
 
     /**
@@ -542,10 +564,26 @@ public class BattleScreen implements Screen {
      */
     public void enableUI() {
         battleInputProcessor.setDisabled(false);
+        enableAttacks();
+    }
+
+    /**
+     * Disables attack buttons
+     */
+    public void disableAttacks() {
+        attackBtn1.setTouchable(Touchable.disabled);
+        attackBtn2.setTouchable(Touchable.disabled);
+        attackBtn3.setTouchable(Touchable.disabled);
+        attackBtn4.setTouchable(Touchable.disabled);
+        attacksEnabled = false;
+    }
+
+    public void enableAttacks() {
         attackBtn1.setTouchable(Touchable.enabled);
         attackBtn2.setTouchable(Touchable.enabled);
         attackBtn3.setTouchable(Touchable.enabled);
         attackBtn4.setTouchable(Touchable.enabled);
+        attacksEnabled = true;
     }
 
     @Override

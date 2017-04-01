@@ -9,6 +9,8 @@ import com.badlogic.ashley.core.Component;
 public class StatComponent implements Component {
 
     public boolean alive = true;
+    public boolean canMove;
+
     /**
      * health
      */

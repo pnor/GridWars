@@ -12,6 +12,5 @@ import com.mygdx.game.boards.BoardPosition;
  * @author Phillip O'Reggio
  */
 public interface VisualEffect {
-
     public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager);
 }

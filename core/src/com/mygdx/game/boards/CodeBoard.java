@@ -129,7 +129,7 @@ public class CodeBoard {
     /**
      * @param r row
      * @param c column
-     * @return Entity at the given index
+     * @return Entity at the given index. Can be null.
      */
     public Entity get(int r, int c) {
         return grid.get(r).get(c);

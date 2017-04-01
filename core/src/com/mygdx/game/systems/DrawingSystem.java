@@ -49,15 +49,9 @@ public class DrawingSystem extends SortedIteratingSystem{
     public void drawBackground(Background back, float deltaTime) {
         //draw static background layer
         if (sm.has(back.getBackLayer())) {
-            /*sm.get(back.getBackLayer()).sprite.setPosition(pm.get(back.getBackLayer()).position.x, pm.get(back.getBackLayer()).position.y);
-            sm.get(back.getBackLayer()).sprite.setSize(pm.get(back.getBackLayer()).width, pm.get(back.getBackLayer()).height);
-            sm.get(back.getBackLayer()).sprite.setRotation(pm.get(back.getBackLayer()).rotation);*/
             sm.get(back.getBackLayer()).draw(batch);
         } else {
             animm.get(back.getBackLayer()).currentTime += deltaTime;
-            /*animm.get(back.getBackLayer()).setSpriteLocation(pm.get(back.getBackLayer()).position.x, pm.get(back.getBackLayer()).position.y);
-            animm.get(back.getBackLayer()).setSpriteSize(pm.get(back.getBackLayer()).height, pm.get(back.getBackLayer()).width);
-            animm.get(back.getBackLayer()).setSpriteRotation(pm.get(back.getBackLayer()).rotation);*/
             animm.get(back.getBackLayer()).draw(batch);
         }
 

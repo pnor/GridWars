@@ -28,6 +28,7 @@ public class EntityConstructor {
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity, engine, stage, screen)})));
         entity.add(new StatComponent(1, 999, 7, 0, 8));
         entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity, engine, stage, screen),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage, screen),
                 MoveConstructor.deathAnimation(entity, engine, stage, screen)));
 
         return entity;
@@ -43,8 +44,10 @@ public class EntityConstructor {
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 7, 2, 1, 3));
         entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity, engine, stage, screen),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage, screen),
                 MoveConstructor.deathAnimation(entity, engine, stage, screen)));
-        entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity, engine, stage, screen)})));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity, engine, stage, screen),
+                MoveConstructor.StarSpin(entity, engine, stage, screen)})));
         entity.add(new NameComponent("Robo - Beta"));
 
         return entity;

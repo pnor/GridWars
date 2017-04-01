@@ -9,18 +9,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.GameTimer;
+import com.mygdx.game.GameEvent;
 import com.mygdx.game.actors.Tile;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
-import com.mygdx.game.components.AnimationComponent;
-import com.mygdx.game.components.BoardComponent;
-import com.mygdx.game.components.LifetimeComponent;
-import com.mygdx.game.components.PositionComponent;
-import com.mygdx.game.move_related.Attack;
-import com.mygdx.game.move_related.Move;
-import com.mygdx.game.move_related.VisualEffect;
-import com.mygdx.game.move_related.Visuals;
+import com.mygdx.game.components.*;
+import com.mygdx.game.move_related.*;
 import com.mygdx.game.screens_ui.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.*;
@@ -42,25 +36,73 @@ public class MoveConstructor {
      * @return damage animation {@code Visuals}
      */
     public static Visuals damageAnimation(Entity user, Engine engine, Stage stage, BattleScreen screen) {
-        VisualEffect initialRed = new VisualEffect() {
+        VisualEvent initialRed = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
                 am.get(user).actor.shade(new Color(.9f, .1f, .1f, 1));
             }
-        };
+        }, .001f, 1);
 
-        VisualEffect returnToWhite = new VisualEffect() {
+        VisualEvent returnToWhiteFirst = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
                 am.get(user).actor.shade(am.get(user).actor.getColor().lerp(Color.WHITE, .1f));
             }
-        };
+        }, .15f, 1);
 
-        return new Visuals(screen, user, null, new GameTimer(.6002f),
-                new Array<VisualEffect>(new VisualEffect[]{initialRed, returnToWhite, returnToWhite, returnToWhite, returnToWhite, returnToWhite,
-                        returnToWhite, returnToWhite, returnToWhite, returnToWhite, returnToWhite}),
-                new Array<Float>(new Float[]{new Float(.001f), new Float(.15f), new Float(.05f), new Float(.05f), new Float(.05f), new Float(.05f),
-                        new Float(.05f), new Float(.05f), new Float(.05f), new Float(.05f), new Float(.05f)}), false);
+        VisualEvent returnToWhite = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
+                am.get(user).actor.shade(am.get(user).actor.getColor().lerp(Color.WHITE, .1f));
+            }
+        }, .05f, 9);
+
+        return new Visuals(screen, user, null,
+                new Array<VisualEvent>(new VisualEvent[]{initialRed, returnToWhiteFirst, returnToWhite}), false);
+    }
+
+    /**
+     * Creates a generic damage animation
+     * @param user Entity that is being damaged
+     * @param engine {@code Engine}
+     * @param stage {@code Stage}
+     * @param screen {@code BattleScreen}
+     * @return damage animation {@code Visuals}
+     */
+    public static Visuals heavyDamageAnimation(Entity user, Engine engine, Stage stage, BattleScreen screen) {
+        VisualEvent initialRed = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
+                am.get(user).actor.shade(new Color(.8f, 0, 0, 1));
+            }
+        }, .001f, 1);
+
+        VisualEvent moveRight = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
+                am.get(user).actor.moveBy(3, 0);
+            }
+        }, .05f, 2);
+
+        VisualEvent moveLeft = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
+                am.get(user).actor.moveBy(-3, 0);
+            }
+        }, .05f, 2);
+
+        VisualEvent returnToWhite = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
+                am.get(user).actor.shade(am.get(user).actor.getColor().lerp(Color.WHITE, .1f));
+            }
+        }, .02f, 10);
+
+        return new Visuals(screen, user, null,
+                new Array<VisualEvent>(new VisualEvent[]{initialRed,
+                        moveRight.copy(.001f, 1), moveLeft, moveRight, moveLeft.copy(), moveRight.copy(1),
+                        returnToWhite
+                }), false);
     }
 
     /**
@@ -71,29 +113,28 @@ public class MoveConstructor {
      * @return death animation {@code Visuals}
      */
     public static Visuals deathAnimation(Entity user, Engine engine, Stage stage, BattleScreen screen) {
-        VisualEffect initialRed = new VisualEffect() {
+        VisualEvent initialRed = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
                 am.get(user).actor.shade(Color.RED);
             }
-        };
-        VisualEffect fadeAndBlacken = new VisualEffect() {
+        }, .001f, 1);
+
+        VisualEvent fadeAndBlacken = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
                 am.get(user).actor.shade(
-                        new Color(am.get(user).actor.getColor().r - .1f, am.get(user).actor.getColor().g - .1f,
+                        new Color(am.get(user).actor.getColor().r - .01f, am.get(user).actor.getColor().g - .1f,
                                 am.get(user).actor.getColor().b - .1f, am.get(user).actor.getColor().a - .1f));
             }
-        };
-        return new Visuals(screen, user, null, new GameTimer(1.195f),
-                new Array<VisualEffect>(new VisualEffect[]{initialRed, fadeAndBlacken, fadeAndBlacken, fadeAndBlacken, fadeAndBlacken, fadeAndBlacken,
-                        fadeAndBlacken, fadeAndBlacken, fadeAndBlacken, fadeAndBlacken, fadeAndBlacken}),
-                new Array<Float>(new Float[]{new Float(.001f), new Float(.275f), new Float(.1f), new Float(.1f), new Float(.1f), new Float(.1f), new Float(.1f),
-                        new Float(.1f), new Float(.1f), new Float(.1f), new Float(.1f)}), false);
+        }, .1f, 9);
+
+        return new Visuals(screen, user, null,
+                new Array<VisualEvent>(new VisualEvent[]{initialRed, fadeAndBlacken.copy(.275f, 1), fadeAndBlacken}), false);
     }
 
     public static Move Tackle(Entity user, Engine engine, Stage stage, BattleScreen screen) {
-        VisualEffect TackleVis = new VisualEffect() {
+        VisualEvent TackleVis = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
@@ -112,9 +153,9 @@ public class MoveConstructor {
                         atlas.findRegion("Star2")}, Animation.PlayMode.LOOP));
                 engine.addEntity(star);
             }
-        };
+        }, .2f, 4);
 
-        Move move = new Move("Tackle", user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage, BoardComponent.boards,
+        return new Move("Tackle", user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage, BoardComponent.boards,
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp, BoardManager boards) {
@@ -124,10 +165,56 @@ public class MoveConstructor {
                         if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
                     }
-                }, new Visuals(screen, user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), new GameTimer(1f),
-                new Array<VisualEffect>(new VisualEffect[]{TackleVis, TackleVis, TackleVis, TackleVis, TackleVis}),
-                new Array<Float>(new Float[]{new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f), new Float(0.2f)}), true));
+                }, new Visuals(screen, user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{TackleVis.copy(0.1f, 1), TackleVis}), true));
+    }
 
-        return move;
+    public static Move StarSpin(Entity user, Engine engine, Stage stage, BattleScreen screen) {
+        VisualEvent spin = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boardManager.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 22.5f, t.getHeight() / 2 - 22.5f));
+                Entity star = new Entity();
+                star.add(new PositionComponent(new Vector2(tilePosition.cpy().x,
+                        tilePosition.cpy().y),
+                        45 * boardManager.getBoard().getScale(),
+                        45 * boardManager.getBoard().getScale(),
+                        0));
+                star.add(new LifetimeComponent(0, 1.2f));
+                star.add(new AnimationComponent(.3f, new TextureRegion[]{atlas.findRegion("Star1"),
+                        atlas.findRegion("Star2")}, Animation.PlayMode.LOOP));
+                star.add(new EventComponent(.1f, 0f, true, true, new GameEvent() {
+                    @Override
+                    public void event(Entity e, Engine engine) {
+                        pm.get(e).rotation += 40;
+                    }
+                }));
+                engine.addEntity(star);
+            }
+        }, 0f, 1);
+
+        return new Move("Star Spin", user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}), engine, stage, BoardComponent.boards,
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp, BoardManager boards) {
+                        Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
+                        if (stm.has(enemy))
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk / 2 - stm.get(enemy).def, 0, 999);
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk / 2 - stm.get(enemy).def, 0, 999);
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk / 2 - stm.get(enemy).def, 0, 999);
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk / 2 - stm.get(enemy).def, 0, 999);
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk / 2 - stm.get(enemy).def, 0, 999);
+                        if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
+                            vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
+                    }
+                }, new Visuals(screen, user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+                new Array<VisualEvent>(new VisualEvent[]{spin}), true));
     }
 }
