@@ -12,6 +12,7 @@ import com.mygdx.game.components.*;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.screens_ui.BattleScreen;
 
+import static com.mygdx.game.ComponentMappers.state;
 import static com.mygdx.game.GridWars.atlas;
 
 /**
@@ -27,6 +28,9 @@ public class EntityConstructor {
         entity.add(new BoardComponent());
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity, engine, stage, screen)})));
         entity.add(new StatComponent(1, 999, 7, 0, 8));
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
         entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity, engine, stage, screen),
                 MoveConstructor.heavyDamageAnimation(entity, engine, stage, screen),
                 MoveConstructor.deathAnimation(entity, engine, stage, screen)));
@@ -43,6 +47,9 @@ public class EntityConstructor {
         }, Animation.PlayMode.LOOP, 0.5f)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 7, 2, 1, 3));
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
         entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity, engine, stage, screen),
                 MoveConstructor.heavyDamageAnimation(entity, engine, stage, screen),
                 MoveConstructor.deathAnimation(entity, engine, stage, screen)));

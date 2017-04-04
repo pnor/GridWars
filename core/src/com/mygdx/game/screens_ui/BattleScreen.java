@@ -94,7 +94,7 @@ public class BattleScreen implements Screen {
 
     //debug values
     private float deltaTimeSums;
-    private final int deltatimeIntervals = 5;
+    private final int deltatimeIntervals = 10;
     private int currentDeltaTime;
 
 
@@ -228,7 +228,7 @@ public class BattleScreen implements Screen {
                             currentMove = mvm.get(selectedEntity).moveList.get(3);
                         }
 
-                        mvm.get(selectedEntity).canAttack = false;
+                        state.get(selectedEntity).canAttack = false;
                         currentMove.getVisuals().setPlaying(true, false);
                         disableUI();
                         if (nm.has(selectedEntity))
@@ -317,6 +317,9 @@ public class BattleScreen implements Screen {
                                 }
                         }
                 } catch(IndexOutOfBoundsException exc){}
+                //stop orange highlight
+                if (Visuals.visualsArePlaying == 0 && selectedEntity != null)
+                    shadeBasedOnState(selectedEntity);
 
                 selectedEntity = e;
                 if (Visuals.visualsArePlaying == 0)
@@ -336,10 +339,6 @@ public class BattleScreen implements Screen {
                 checkedStats = false;
                 am.get(e).actor.setLastSelected(false);
             }
-
-            if (selectedEntity != null && selectedEntity != e && am.get(e).actor.getColor() != Color.WHITE)
-                if (Visuals.visualsArePlaying == 0)
-                    am.get(e).actor.shade(Color.WHITE);
         }
 
         //update last TILE selected ---
@@ -361,9 +360,9 @@ public class BattleScreen implements Screen {
         }
 
         //updating attack squares
-        if (selectedEntity != null && !mvm.get(selectedEntity).canAttack && attacksEnabled)
+        if (selectedEntity != null && state.has(selectedEntity) && !state.get(selectedEntity).canAttack && attacksEnabled)
             disableAttacks();
-        else if (selectedEntity == null || (selectedEntity != null && mvm.get(selectedEntity).canAttack && !attacksEnabled))
+        else if (selectedEntity == null || (selectedEntity != null && state.has(selectedEntity) && state.get(selectedEntity).canAttack && !attacksEnabled))
             enableAttacks();
 
         if (!hoverChanged) {
@@ -552,6 +551,41 @@ public class BattleScreen implements Screen {
     }
 
     /**
+     * Shades an entity based on its current state
+     * @param e entity being shaded
+     */
+    public void shadeBasedOnState(Entity e) {
+        if (!state.has(e)) {
+            am.get(e).actor.shade(Color.WHITE);
+            return;
+        }
+
+        if (!state.get(e).canMove || !state.get(e).canAttack)
+            am.get(e).actor.shade(Color.GRAY);
+        else if (!state.get(e).canMove && !state.get(e).canAttack)
+            am.get(e).actor.shade(Color.DARK_GRAY);
+        else
+            am.get(e).actor.shade(Color.WHITE);
+    }
+
+    /**
+     * Checks if the entity is shaded the color that it would be if it was not selected
+     * @param e Entity
+     * @return true if the entity is correctly shaded. false otherwise. Also returns false if the entity has no state
+     */
+    public boolean checkShading(Entity e) {
+        if (!state.has(e))
+            return false;
+
+        if (!(state.get(e).canMove || state.get(e).canAttack))
+            return am.get(e).actor.getColor() == Color.GRAY;
+        else if (!state.get(e).canMove && state.get(e).canAttack)
+            return am.get(e).actor.getColor() == Color.DARK_GRAY;
+        else
+            return am.get(e).actor.getColor() == Color.WHITE;
+    }
+
+    /**
      * Disables the user input of the battle screen.
      */
     public void disableUI() {
@@ -572,17 +606,26 @@ public class BattleScreen implements Screen {
      */
     public void disableAttacks() {
         attackBtn1.setTouchable(Touchable.disabled);
+        attackBtn1.setColor(Color.DARK_GRAY);
         attackBtn2.setTouchable(Touchable.disabled);
+        attackBtn2.setColor(Color.DARK_GRAY);
         attackBtn3.setTouchable(Touchable.disabled);
+        attackBtn3.setColor(Color.DARK_GRAY);
         attackBtn4.setTouchable(Touchable.disabled);
+        attackBtn4.setColor(Color.DARK_GRAY);
+
         attacksEnabled = false;
     }
 
     public void enableAttacks() {
         attackBtn1.setTouchable(Touchable.enabled);
+        attackBtn1.setColor(Color.WHITE);
         attackBtn2.setTouchable(Touchable.enabled);
+        attackBtn2.setColor(Color.WHITE);
         attackBtn3.setTouchable(Touchable.enabled);
+        attackBtn3.setColor(Color.WHITE);
         attackBtn4.setTouchable(Touchable.enabled);
+        attackBtn4.setColor(Color.WHITE);
         attacksEnabled = true;
     }
 
