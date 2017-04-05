@@ -325,7 +325,7 @@ public class BattleScreen implements Screen {
                 if (Visuals.visualsArePlaying == 0)
                     am.get(selectedEntity).actor.shade(Color.ORANGE);
 
-                if (stm.has(selectedEntity) && stm.get(selectedEntity).spd > 0) {
+                if (stm.has(selectedEntity) && stm.get(selectedEntity).spd > 0 && state.has(selectedEntity) && state.get(selectedEntity).canMove) {
                     try { // newly highlights spaces
                         for (Tile t : getMovableSquares(selectedEntity))
                             if (t != null && !t.getIsListening()) {
@@ -354,7 +354,9 @@ public class BattleScreen implements Screen {
                             }
                     } catch (IndexOutOfBoundsException exc) { }
 
+                    //move Entity location
                     bm.get(selectedEntity).boards.move(selectedEntity, new BoardPosition(t.getRow(), t.getColumn()));
+                    state.get(selectedEntity).canMove = false;
                 }
             }
         }
@@ -559,11 +561,10 @@ public class BattleScreen implements Screen {
             am.get(e).actor.shade(Color.WHITE);
             return;
         }
-
-        if (!state.get(e).canMove || !state.get(e).canAttack)
-            am.get(e).actor.shade(Color.GRAY);
-        else if (!state.get(e).canMove && !state.get(e).canAttack)
+        if (!state.get(e).canMove && !state.get(e).canAttack)
             am.get(e).actor.shade(Color.DARK_GRAY);
+        else if (!state.get(e).canMove || !state.get(e).canAttack)
+            am.get(e).actor.shade(Color.GRAY);
         else
             am.get(e).actor.shade(Color.WHITE);
     }
@@ -577,9 +578,10 @@ public class BattleScreen implements Screen {
         if (!state.has(e))
             return false;
 
+
         if (!(state.get(e).canMove || state.get(e).canAttack))
             return am.get(e).actor.getColor() == Color.GRAY;
-        else if (!state.get(e).canMove && state.get(e).canAttack)
+        else if (!state.get(e).canMove && !state.get(e).canAttack)
             return am.get(e).actor.getColor() == Color.DARK_GRAY;
         else
             return am.get(e).actor.getColor() == Color.WHITE;

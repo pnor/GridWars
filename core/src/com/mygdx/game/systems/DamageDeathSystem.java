@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.components.StatComponent;
+import com.mygdx.game.move_related.Visuals;
 
 import static com.mygdx.game.ComponentMappers.stm;
 import static com.mygdx.game.ComponentMappers.vm;
@@ -27,8 +28,10 @@ public class DamageDeathSystem extends IteratingSystem {
                 if (vm.has(e) && vm.get(e).deathAnimation == null) {
                     stm.get(e).alive = false;
                 } else {
-                    if (vm.get(e).deathAnimation.getTimer().checkIfFinished())
+                    if (vm.get(e).deathAnimation.getTimer().checkIfFinished()) {
                         stm.get(e).alive = false;
+                        Visuals.visualsArePlaying -= 1;
+                    }
 
                     if (!vm.get(e).deathAnimation.getIsPlaying()) {
                         vm.get(e).deathAnimation.setPlaying(true, false);
