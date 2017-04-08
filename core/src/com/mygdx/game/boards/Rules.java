@@ -27,7 +27,10 @@ public class Rules {
     public void nextTurn() {
         currentTeamTurn = (currentTeamTurn + 1) % totalTeams;
         if (screen.getSelectedEntity() != null)
-            screen.removeAttackTiles();
+            try {
+                screen.removeMovementTiles();
+            } catch (IndexOutOfBoundsException e) {}
+
 
         for (Array<Entity> t : entities) {
             for (Entity e : t)

@@ -342,17 +342,12 @@ public class BattleScreen implements Screen {
             //if for actor component? if throwing ERRORS
             if (am.get(e).actor.getLastSelected()) {
                 try {   //removes previously highlighted
-                    if (am.get(e).actor.getLastSelected())
-                        if (selectedEntity != null && stm.has(selectedEntity) && stm.get(selectedEntity).spd > 0) {
-                            for (Tile t : getMovableSquares(selectedEntity))
-                                if (t != null) {
-                                    t.revertTileColor();
-                                    t.stopListening();
-                                }
-                        }
+                    if (selectedEntity != null && stm.has(selectedEntity) && stm.get(selectedEntity).spd > 0)
+                        removeMovementTiles();
                 } catch(IndexOutOfBoundsException exc){}
-                //stop orange highlight
-                if (Visuals.visualsArePlaying == 0 && selectedEntity != null)
+
+                if (Visuals.visualsArePlaying == 0 && selectedEntity != null) //stop orange highlight
+
                     shadeBasedOnState(selectedEntity);
 
                 selectedEntity = e; //selectedEntity changes to new entity here on
@@ -365,13 +360,8 @@ public class BattleScreen implements Screen {
                 //check if has a speed > 0, and can move. Also if it is not on another team/has no team
                 if (mayMove(selectedEntity)) {
                     try { // newly highlights spaces
-                        for (Tile t : getMovableSquares(selectedEntity))
-                            if (t != null && !t.getIsListening()) {
-                                t.shadeTile(Color.CYAN);
-                                t.startListening();
-                            }
-                    } catch (IndexOutOfBoundsException exc) {
-                    }
+                        showMovementTiles();
+                    } catch (IndexOutOfBoundsException exc) {}
                 }
 
                 checkedStats = false;
@@ -385,11 +375,7 @@ public class BattleScreen implements Screen {
                 if (t.getLastSelected()) {
                     t.setLastSelected(false);
                     try {   //removes previously highlighted
-                        for (Tile tl : getMovableSquares(selectedEntity))
-                            if (tl != null) {
-                                tl.revertTileColor();
-                                tl.stopListening();
-                            }
+                        removeMovementTiles();
                     } catch (IndexOutOfBoundsException exc) { }
 
                     //move Entity location
@@ -514,11 +500,23 @@ public class BattleScreen implements Screen {
     }
 
     public void showMovementTiles() {
-
+        for (Tile t : getMovableSquares(selectedEntity))
+            if (t != null && !t.getIsListening()) {
+                t.shadeTile(Color.CYAN);
+                t.startListening();
+            }
     }
 
+    /**
+     * Removes the movement tiles of the current selected entity. Can throw IndexOutOfBoundsExceptions if it goes outside
+     * the board, so a try catch loop should be written around it.
+     */
     public void removeMovementTiles() {
-
+        for (Tile t : getMovableSquares(selectedEntity))
+            if (t != null) {
+                t.revertTileColor();
+                t.stopListening();
+            }
     }
 
     public void showAttackTiles() {
