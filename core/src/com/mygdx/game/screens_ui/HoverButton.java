@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class HoverButton extends TextButton {
 
     private boolean hover;
+    private Color defualtColor = Color.WHITE;
+    private Color highlightColor = Color.RED;
 
     public HoverButton(String text, Skin skin) {
         super(text, skin);
@@ -21,13 +23,13 @@ public class HoverButton extends TextButton {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 hover = true;
-                setColor(Color.RED);
+                HoverButton.super.setColor(highlightColor);
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 hover = false;
-                setColor(Color.WHITE);
+                setColor(defualtColor);
             }
         });
     }
@@ -38,15 +40,42 @@ public class HoverButton extends TextButton {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 hover = true;
-                setColor(Color.RED);
+                HoverButton.super.setColor(highlightColor);
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 hover = false;
-                setColor(Color.WHITE);
+                setColor(defualtColor);
             }
         });
+    }
+
+    public HoverButton(String text, Skin skin, Color defualtCol, Color highlightCol) {
+        super(text, skin);
+        defualtColor = defualtCol;
+        super.setColor(defualtCol);
+        highlightColor = highlightCol;
+
+        this.addListener(new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                hover = true;
+                HoverButton.super.setColor(highlightColor);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                hover = false;
+                setColor(defualtColor);
+            }
+        });
+    }
+
+    @Override
+    public void setColor(Color color) {
+        super.setColor(color);
+        defualtColor = color;
     }
 
     public boolean getHover() {

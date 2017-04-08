@@ -21,10 +21,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.actors.Tile;
-import com.mygdx.game.boards.Board;
-import com.mygdx.game.boards.BoardManager;
-import com.mygdx.game.boards.BoardPosition;
-import com.mygdx.game.boards.CodeBoard;
+import com.mygdx.game.boards.*;
 import com.mygdx.game.components.BoardComponent;
 import com.mygdx.game.components.MovesetComponent;
 import com.mygdx.game.components.StatComponent;
@@ -55,6 +52,9 @@ public class BattleScreen implements Screen {
     private final Board board;
     private final CodeBoard codeBoard;
 
+    //rules
+    private Rules rules;
+
     //Entities
     private Array<Array<Entity>> teams = new Array<Array<Entity>>();
 
@@ -75,7 +75,13 @@ public class BattleScreen implements Screen {
     private Skin skin;
     private TextureAtlas uiatlas;
     private TextureAtlas backAtlas;
-    private Table table;
+    /**
+     * Table with board tiles
+     */
+    private Table boardTable;
+    /**
+     * Table that displays stat values and names
+     */
     private Table statsTable;
     private Label hpLabel;
     private Label spLabel;
@@ -83,18 +89,30 @@ public class BattleScreen implements Screen {
     private Label defLabel;
     private Label spdLabel;
     private Label nameLabel;
+    /**
+     * Table with attack buttons
+     */
     private Table attackTable;
     private Label attackTitleLabel;
     private HoverButton attackBtn1;
     private HoverButton attackBtn2;
     private HoverButton attackBtn3;
     private HoverButton attackBtn4;
+    /**
+     * Table that shows the info label
+     */
     private Table infoTable;
     private Label infoLbl;
+    /**
+     * Has data for the team. Has end turn button, and will have a icon of all the entities on a team
+     */
+    private Table teamTable;
+    private HoverButton endTurnBtn;
+
 
     //debug values
     private float deltaTimeSums;
-    private final int deltatimeIntervals = 10;
+    private final int deltatimeIntervals = 10000;
     private int currentDeltaTime;
 
 
@@ -115,20 +133,23 @@ public class BattleScreen implements Screen {
         stage = new Stage();
         stage.getViewport().setWorldSize(1000, 900);
         stage.getViewport().setScreenSize(1000, 900);
-        table = new Table();
+        boardTable = new Table();
         statsTable = new Table();
         attackTable = new Table();
         infoTable = new Table();
-        stage.addActor(table);
+        teamTable = new Table();
+        stage.addActor(boardTable);
         stage.addActor(statsTable);
         stage.addActor(attackTable);
         stage.addActor(infoTable);
+        stage.addActor(teamTable);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         backAtlas = new TextureAtlas(Gdx.files.internal("BackPack.pack"));
         uiatlas = new TextureAtlas("uiskin.atlas");
         skin.addRegions(uiatlas);
         battleInputProcessor = new BattleInputProcessor(this);
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, battleInputProcessor));
+        rules = new Rules(this, teams);
 
         //Set up Engine
         engine = new Engine();
@@ -140,15 +161,13 @@ public class BattleScreen implements Screen {
 
         //set up Background
         Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
-        backgroundLay.setColor(Color.DARK_GRAY);
+        backgroundLay.setColor(new Color(121f / 255, 121f / 255f, 19f / 255f, 1));
         Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeOverlay")));
-        topLayer.setColor(Color.GRAY);
+        topLayer.setColor(new Color(181f / 255, 181f / 255f, 79f / 255f, 1));
         background = new Background(backgroundLay,
                 new Sprite[]{new Sprite(backAtlas.findRegion("DiagStripeOverlay")), topLayer},
                 new BackType[]{BackType.FADE_COLOR, BackType.SCROLL_HORIZONTAL},
-                Color.CYAN, Color.RED);
-
-        //set up Entity
+                Color.DARK_GRAY, Color.WHITE);
 
         //add to Engine
         for (Array<Entity> t : teams)
@@ -165,13 +184,13 @@ public class BattleScreen implements Screen {
         for (int i = 0; i < board.getRowSize(); i++) {
             for (int j = 0; j < board.getColumnSize(); j++) {
                 if (i == 0)
-                    table.add().width(board.getTiles().get(0).getWidth()).height(board.getTiles().get(0).getHeight());
+                    boardTable.add().width(board.getTiles().get(0).getWidth()).height(board.getTiles().get(0).getHeight());
                 else
-                    table.add().height(board.getTiles().get(0).getHeight());
+                    boardTable.add().height(board.getTiles().get(0).getHeight());
             }
-            table.row();
+            boardTable.row();
         }
-        table.setPosition(stage.getWidth() / 2.5f, stage.getHeight() / 2);
+        boardTable.setPosition(stage.getWidth() / 2.5f, stage.getHeight() / 2);
         NinePatch tableBack = new NinePatch(new Texture(Gdx.files.internal("TableBackground.png")), 33, 33, 33, 33);
         NinePatchDrawable tableBackground = new NinePatchDrawable(tableBack);
 
@@ -213,7 +232,7 @@ public class BattleScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
-                    if (selectedEntity != null && mvm.has(selectedEntity)) {
+                    if (mayAttack(selectedEntity)) {
                         if (actor == attackBtn1) {
                             mvm.get(selectedEntity).moveList.get(0).useAttack();
                             currentMove = mvm.get(selectedEntity).moveList.get(0);
@@ -255,7 +274,6 @@ public class BattleScreen implements Screen {
         attackTable.add(attackBtn2).size(175, 50).padBottom(15f).row();
         attackTable.add(attackBtn3).size(175, 50).padBottom(15f).row();
         attackTable.add(attackBtn4).size(175, 50).padBottom(15f).row();
-        //attackTable.debug();
         attackTable.setBackground(tableBackground);
         attackTable.pack();
         attackTable.setPosition(stage.getWidth() * .875f - (attackTable.getWidth() / 2), stage.getHeight() * .25f - (attackTable.getWidth() / 2));
@@ -265,9 +283,25 @@ public class BattleScreen implements Screen {
         infoTable.add(infoLbl).height(25).center();
         infoTable.setBackground(tableBackground);
         infoTable.pack();
-        infoTable.setPosition(table.getX() - 350, stage.getHeight() * .9f);
+        infoTable.setPosition(boardTable.getX() - 350, stage.getHeight() * .9f);
         infoTable.setSize(700, 80);
 
+        //set up team table
+        endTurnBtn = new HoverButton("End Turn", skin, new Color(200f / 255f, 200f / 255f, 255f / 255f, 1), new Color(.8f, 1f, 1f, 1));
+        endTurnBtn.addListener(new ChangeListener() {
+           @Override
+           public void changed(ChangeEvent event, Actor actor) {
+               if (((Button) actor).isPressed()) {
+                   rules.nextTurn();
+               }
+           }
+        });
+        teamTable.add(endTurnBtn).height(40).width(120);
+        teamTable.setBackground(tableBackground);
+        teamTable.pack();
+        teamTable.setSize(200, 90);
+        teamTable.setPosition(teamTable.getX() + teamTable.getOriginX(), stage.getHeight() * .01f);
+        //teamTable.debug();
     }
 
     /**
@@ -293,14 +327,14 @@ public class BattleScreen implements Screen {
         int colSize = board.getColumnSize();
         int curRow = 0;
         int cur = 0;
-        Array<Cell> cells = table.getCells();
+        Array<Cell> cells = boardTable.getCells();
 
         for (int i = 0; i < board.getRowSize() * board.getColumnSize(); i++) {
             cells.get(i).setActor(board.getTile(curRow, cur % rowSize));
             cur += 1;
             curRow = cur / colSize;
         }
-        table.getCells();
+        boardTable.getCells();
 
 
         //update last ENTITY selected ---
@@ -321,11 +355,15 @@ public class BattleScreen implements Screen {
                 if (Visuals.visualsArePlaying == 0 && selectedEntity != null)
                     shadeBasedOnState(selectedEntity);
 
-                selectedEntity = e;
+                selectedEntity = e; //selectedEntity changes to new entity here on
+
                 if (Visuals.visualsArePlaying == 0)
                     am.get(selectedEntity).actor.shade(Color.ORANGE);
+                if (mayAttack(selectedEntity) && !attacksEnabled)
+                    enableAttacks();
 
-                if (stm.has(selectedEntity) && stm.get(selectedEntity).spd > 0 && state.has(selectedEntity) && state.get(selectedEntity).canMove) {
+                //check if has a speed > 0, and can move. Also if it is not on another team/has no team
+                if (mayMove(selectedEntity)) {
                     try { // newly highlights spaces
                         for (Tile t : getMovableSquares(selectedEntity))
                             if (t != null && !t.getIsListening()) {
@@ -362,9 +400,9 @@ public class BattleScreen implements Screen {
         }
 
         //updating attack squares
-        if (selectedEntity != null && state.has(selectedEntity) && !state.get(selectedEntity).canAttack && attacksEnabled)
+        if (!mayAttack(selectedEntity) && attacksEnabled)
             disableAttacks();
-        else if (selectedEntity == null || (selectedEntity != null && state.has(selectedEntity) && state.get(selectedEntity).canAttack && !attacksEnabled))
+        else if (mayAttack(selectedEntity) && !attacksEnabled)
             enableAttacks();
 
         if (!hoverChanged) {
@@ -453,6 +491,7 @@ public class BattleScreen implements Screen {
             }
         }
 
+        //update everything. (Graphics, engine, stage)
         background.update(delta);
         stage.act(delta);
         engine.getSystem(DrawingSystem.class).drawBackground(background, delta);
@@ -471,6 +510,14 @@ public class BattleScreen implements Screen {
         //debug
         if (Visuals.visualsArePlaying < 0)
             throw (new IndexOutOfBoundsException("Visuals.visualsArePlaying is < 0"));
+
+    }
+
+    public void showMovementTiles() {
+
+    }
+
+    public void removeMovementTiles() {
 
     }
 
@@ -631,6 +678,29 @@ public class BattleScreen implements Screen {
         attacksEnabled = true;
     }
 
+    /**
+     * Checks if an entity has the criteria to use attacks.
+     * Criteria : not null, has {@code MovesetComponent}, has {@code StateComponent}, can attack,
+     * has {@code TeamComponent}, the current team turn is the same as the entity's team
+     * @param e Entity
+     * @return true if it may attack. False otherwise
+     */
+    public boolean mayAttack(Entity e) {
+        return e != null && mvm.has(e) && state.has(e) && state.get(e).canAttack && team.has(e) &&
+                team.get(e).teamNumber == rules.getCurrentTeam();
+    }
+
+    /**
+     * Checks if the entity has the criteria to move.
+     * Criteria : has {@code StatComponent}, speed is > 0, can move, and current team turn is the same as the entity's team
+     * @param e Entity
+     * @return true if it can move, false otherwise.
+     */
+    public boolean mayMove(Entity e) {
+        return stm.has(e) && stm.get(e).spd > 0 && state.has(e) &&
+                state.get(e).canMove && team.has(e) && team.get(e).teamNumber == rules.getCurrentTeam();
+    }
+
     @Override
     public void resize(int width, int height) {
 
@@ -668,6 +738,8 @@ public class BattleScreen implements Screen {
         for (Array<Entity> t : teams)
             for (Entity e : t)
                 engine.addEntity(e);
+
+        rules.calculateTotalTeams();
     }
 
     public Entity getSelectedEntity() {
@@ -680,5 +752,9 @@ public class BattleScreen implements Screen {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public Rules getRules() {
+        return rules;
     }
 }

@@ -48,20 +48,20 @@ public class GridWars extends Game {
 	}
 
 	public void createTesterBattleScreen() {
-		BattleScreen screen = new BattleScreen(this, 5, Color.ORANGE, Color.LIGHT_GRAY);
+		BattleScreen screen = new BattleScreen(this, 8,new Color(241f / 255, 201f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1));
 		setScreen(screen);
 
 		Array<Entity> teamA = new Array<Entity>();
-		teamA.add(EntityConstructor.testerChessPiece(screen, screen.getEngine(), screen.getStage()));
+		teamA.add(EntityConstructor.testerChessPiece(0, screen, screen.getEngine(), screen.getStage()));
 
 		Array<Entity> teamB = new Array<Entity>();
-		teamB.add(EntityConstructor.testerRobot(screen, screen.getEngine(), screen.getStage()));
-		teamB.add(EntityConstructor.testerRobot(screen, screen.getEngine(), screen.getStage()));
-		teamB.add(EntityConstructor.testerRobot(screen, screen.getEngine(), screen.getStage()));
-		teamB.add(EntityConstructor.testerRobot(screen, screen.getEngine(), screen.getStage()));
+		teamB.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
+		teamB.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
+		teamB.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
+		teamB.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
 
 		Array<Entity> teamC = new Array<Entity>();
-		teamC.add(EntityConstructor.testerHole(screen, screen.getEngine(), screen.getStage()));
+		teamC.add(EntityConstructor.testerHole(-1, screen, screen.getEngine(), screen.getStage()));
 
 		screen.setTeams(teamA, teamB, teamC);
 

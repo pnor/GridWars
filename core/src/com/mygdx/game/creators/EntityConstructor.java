@@ -21,8 +21,10 @@ import static com.mygdx.game.GridWars.atlas;
  */
 public class EntityConstructor {
     //Testing purposes
-    public static Entity testerChessPiece(BattleScreen screen, Engine engine, Stage stage) {
+    public static Entity testerChessPiece(int team, BattleScreen screen, Engine engine, Stage stage) {
         Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
 
         entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("Star"), true, true)));
         entity.add(new BoardComponent());
@@ -38,8 +40,10 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity testerRobot(BattleScreen screen, Engine engine, Stage stage) {
+    public static Entity testerRobot(int team, BattleScreen screen, Engine engine, Stage stage) {
         Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("Bot1"),
@@ -60,8 +64,10 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity testerHole(BattleScreen scrren, Engine engine, Stage stage) {
+    public static Entity testerHole(int team, BattleScreen screen, Engine engine, Stage stage) {
         Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{atlas.findRegion("Hole"),
                 atlas.findRegion("Hole2"), atlas.findRegion("Hole3"), atlas.findRegion("Hole4")},
