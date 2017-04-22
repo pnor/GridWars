@@ -11,9 +11,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -21,12 +24,19 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.actors.Tile;
-import com.mygdx.game.boards.*;
+import com.mygdx.game.boards.Board;
+import com.mygdx.game.boards.BoardManager;
+import com.mygdx.game.boards.BoardPosition;
+import com.mygdx.game.boards.CodeBoard;
 import com.mygdx.game.components.BoardComponent;
 import com.mygdx.game.components.MovesetComponent;
 import com.mygdx.game.components.StatComponent;
+import com.mygdx.game.components.StatusEffectComponent;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.Visuals;
+import com.mygdx.game.rules_types.Battle2PRules;
+import com.mygdx.game.rules_types.Rules;
+import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.systems.*;
 
 import static com.mygdx.game.ComponentMappers.*;
@@ -53,10 +63,11 @@ public class BattleScreen implements Screen {
     private final CodeBoard codeBoard;
 
     //rules
-    private Rules rules;
+    private static Rules rules;
+    private boolean gameHasEnded;
 
     //Entities
-    private Array<Array<Entity>> teams = new Array<Array<Entity>>();
+    private Array<Team> teams = new Array<Team>();
 
     //Selection and Hover
     private Entity selectedEntity;
@@ -83,12 +94,14 @@ public class BattleScreen implements Screen {
      * Table that displays stat values and names
      */
     private Table statsTable;
-    private Label hpLabel;
-    private Label spLabel;
-    private Label atkLabel;
-    private Label defLabel;
-    private Label spdLabel;
-    private Label nameLabel;
+    private Label nameLbl,
+            hpLblID, hpLbl,
+            spLblID, spLbl,
+            atkLblID, atkLbl,
+            defLblID, defLbl,
+            spdLblID, spdLbl,
+            statusLbl;
+
     /**
      * Table with attack buttons
      */
@@ -108,6 +121,11 @@ public class BattleScreen implements Screen {
      */
     private Table teamTable;
     private HoverButton endTurnBtn;
+    /**
+     * The box that says the next team's turn has started.
+     */
+    private Table endTurnMessageTable;
+    private Label endTurnMessageLbl;
 
 
     //debug values
@@ -129,6 +147,9 @@ public class BattleScreen implements Screen {
 
     @Override
     public void show() {
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
         //set up assets
         stage = new Stage();
         stage.getViewport().setWorldSize(1000, 900);
@@ -138,18 +159,20 @@ public class BattleScreen implements Screen {
         attackTable = new Table();
         infoTable = new Table();
         teamTable = new Table();
+        endTurnMessageTable = new Table();
         stage.addActor(boardTable);
         stage.addActor(statsTable);
         stage.addActor(attackTable);
         stage.addActor(infoTable);
         stage.addActor(teamTable);
+        stage.addActor(endTurnMessageTable);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         backAtlas = new TextureAtlas(Gdx.files.internal("BackPack.pack"));
         uiatlas = new TextureAtlas("uiskin.atlas");
         skin.addRegions(uiatlas);
         battleInputProcessor = new BattleInputProcessor(this);
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, battleInputProcessor));
-        rules = new Rules(this, teams);
+        rules = new Battle2PRules(this, teams);
 
         //Set up Engine
         engine = new Engine();
@@ -170,15 +193,14 @@ public class BattleScreen implements Screen {
                 Color.DARK_GRAY, Color.WHITE);
 
         //add to Engine
-        for (Array<Entity> t : teams)
-            for (Entity e : t)
+        for (Team t : teams)
+            for (Entity e : t.getEntities())
                 engine.addEntity(e);
 
         BoardComponent.setBoardManager(new BoardManager(board, codeBoard));
         Visuals.boardManager = BoardComponent.boards;
         Visuals.engine = engine;
         Visuals.stage = stage;
-
 
         //set up Board ui -----
         for (int i = 0; i < board.getRowSize(); i++) {
@@ -195,34 +217,49 @@ public class BattleScreen implements Screen {
         NinePatchDrawable tableBackground = new NinePatchDrawable(tableBack);
 
         //set up stats ui
-        nameLabel = new Label("---", skin);
-        nameLabel.setColor(Color.YELLOW);
-        hpLabel = new Label("-", skin);
-        hpLabel.setColor(Color.GREEN);
-        spLabel = new Label("-", skin);
-        spLabel.setColor(Color.ORANGE);
-        atkLabel = new Label("-", skin);
-        defLabel = new Label("-", skin);
-        spdLabel = new Label("-", skin);
-        statsTable.add(nameLabel).size(125, 50).row();
-        nameLabel.setAlignment(Align.center);
-        statsTable.add(hpLabel).center().size(125, 50).row();
-        hpLabel.setAlignment(Align.center);
-        statsTable.add(spLabel).center().size(125, 50).row();
-        spLabel.setAlignment(Align.center);
-        statsTable.add(atkLabel).center().size(125, 50).row();
-        atkLabel.setAlignment(Align.center);
-        statsTable.add(defLabel).center().size(125, 50).row();
-        defLabel.setAlignment(Align.center);
-        statsTable.add(spdLabel).center().size(125, 50).row();
-        spdLabel.setAlignment(Align.center);
-        //statsTable.debug();
+        param.size = 20; //name
+        nameLbl = new Label("---", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        nameLbl.setColor(Color.YELLOW);
+        param.size = 16; //hp
+        param.borderColor = Color.GREEN;
+        hpLblID = new Label("Health", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        hpLbl = new Label("-", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        hpLblID.setColor(Color.GREEN);
+        param.borderColor = Color.ORANGE; //skill
+        spLblID = new Label("Skill", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        spLbl = new Label("-", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        spLblID.setColor(Color.ORANGE);
+        atkLblID = new Label("Attack", skin); //attack
+        atkLbl = new Label("-", skin);
+        atkLblID.setColor(Color.RED);
+        defLblID = new Label("Defense", skin); //defense
+        defLbl = new Label("-", skin);
+        defLblID.setColor(Color.BLUE);
+        spdLblID = new Label("Speed", skin); //speed
+        spdLbl = new Label("-", skin);
+        spdLblID.setColor(Color.PINK);
+        statsTable.add().size(70, 0); statsTable.add().size(70, 0).row();
+        statsTable.add(nameLbl).colspan(2).padBottom(10f).row(); //set up table
+        nameLbl.setAlignment(Align.center);
+        statsTable.add(hpLblID).height(40);
+        statsTable.add(hpLbl).row();
+        statsTable.add(spLblID).height(40);
+        statsTable.add(spLbl).row();
+        statsTable.add(atkLblID).height(40);
+        statsTable.add(atkLbl).row();
+        statsTable.add(defLblID).height(40);
+        statsTable.add(defLbl).row();
+        statsTable.add(spdLblID).height(40);
+        statsTable.add(spdLbl).row();
+            //statsTable.debug();
         statsTable.setBackground(tableBackground);
         statsTable.pack();
         statsTable.setPosition(stage.getWidth() * .875f - (statsTable.getWidth() / 2), stage.getHeight() * .75f - (statsTable.getHeight() / 2));
 
         //set up attack menu ui
-        attackTitleLabel = new Label("Actions", skin);
+        param.size = 20;
+        param.borderWidth = 0;
+        attackTitleLabel = new Label("Actions", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         attackTitleLabel.setColor(Color.YELLOW);
         attackBtn1 = new HoverButton("---", skin);
         attackBtn2 = new HoverButton("---", skin);
@@ -251,9 +288,15 @@ public class BattleScreen implements Screen {
                         currentMove.getVisuals().setPlaying(true, false);
                         disableUI();
                         if (nm.has(selectedEntity))
-                            infoLbl.setText(nm.get(selectedEntity).name + " used " + currentMove.getName() + "!");
+                            if (currentMove.getAttackMessage() != null)
+                                infoLbl.setText(currentMove.getAttackMessage());
+                            else
+                                infoLbl.setText(nm.get(selectedEntity).name + " used " + currentMove.getName() + "!");
                         else
-                            infoLbl.setText(currentMove.getName() + " was used!");
+                            if (currentMove.getAttackMessage() != null)
+                                infoLbl.setText(currentMove.getAttackMessage());
+                            else
+                                infoLbl.setText(currentMove.getName() + " was used!");
                     }
                 }
             }
@@ -293,6 +336,13 @@ public class BattleScreen implements Screen {
            public void changed(ChangeEvent event, Actor actor) {
                if (((Button) actor).isPressed()) {
                    rules.nextTurn();
+                   endTurnMessageLbl.setText("" + rules.getCurrentTeam().getTeamName() + " turn!");
+                   endTurnMessageTable.setColor(rules.getCurrentTeam().getTeamColor());
+                   SequenceAction sequence = new SequenceAction();
+                   sequence.addAction(Actions.fadeIn(.2f));
+                   sequence.addAction(Actions.delay(1f));
+                   sequence.addAction(Actions.fadeOut(.2f));
+                   endTurnMessageTable.addAction(sequence);
                }
            }
         });
@@ -302,6 +352,19 @@ public class BattleScreen implements Screen {
         teamTable.setSize(200, 90);
         teamTable.setPosition(teamTable.getX() + teamTable.getOriginX(), stage.getHeight() * .01f);
         //teamTable.debug();
+
+        //set up endTurnMessageTable
+        param.size = 25;
+        endTurnMessageLbl = new Label("Team <Unset> Turn", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        endTurnMessageTable.setBackground(tableBackground);
+        endTurnMessageTable.pack();
+        endTurnMessageTable.setSize(380, 120);
+        endTurnMessageTable.setPosition(stage.getWidth() / 2 - endTurnMessageTable.getWidth() / 2, (stage.getHeight() / 2 - endTurnMessageTable.getHeight() / 2));
+        endTurnMessageTable.add(endTurnMessageLbl);
+        endTurnMessageTable.setColor(Color.WHITE);
+        endTurnMessageTable.addAction(Actions.fadeOut(0f));
+
+        fontGenerator.dispose();
     }
 
     /**
@@ -312,6 +375,7 @@ public class BattleScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         if (!(currentDeltaTime >= deltatimeIntervals)) {
             deltaTimeSums += delta;
             currentDeltaTime += 1;
@@ -336,144 +400,106 @@ public class BattleScreen implements Screen {
         }
         boardTable.getCells();
 
-
-        //update last ENTITY selected ---
-        for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
-            //if for actor component? if throwing ERRORS
-            if (am.get(e).actor.getLastSelected()) {
-                try {   //removes previously highlighted
-                    if (selectedEntity != null && stm.has(selectedEntity) && stm.get(selectedEntity).spd > 0)
-                        removeMovementTiles();
-                } catch(IndexOutOfBoundsException exc){}
-
-                if (Visuals.visualsArePlaying == 0 && selectedEntity != null) //stop orange highlight
-
-                    shadeBasedOnState(selectedEntity);
-
-                selectedEntity = e; //selectedEntity changes to new entity here on
-
-                if (Visuals.visualsArePlaying == 0)
-                    am.get(selectedEntity).actor.shade(Color.ORANGE);
-                if (mayAttack(selectedEntity) && !attacksEnabled)
-                    enableAttacks();
-
-                //check if has a speed > 0, and can move. Also if it is not on another team/has no team
-                if (mayMove(selectedEntity)) {
-                    try { // newly highlights spaces
-                        showMovementTiles();
-                    } catch (IndexOutOfBoundsException exc) {}
-                }
-
-                checkedStats = false;
-                am.get(e).actor.setLastSelected(false);
-            }
-        }
-
-        //update last TILE selected ---
-        if (selectedEntity != null) {
-            for (Tile t : BoardComponent.boards.getBoard().getTiles()) {
-                if (t.getLastSelected()) {
-                    t.setLastSelected(false);
+        if (!gameHasEnded) {
+            //update last ENTITY selected ---
+            for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
+                //if for actor component? if throwing ERRORS
+                if (am.get(e).actor.getLastSelected()) {
                     try {   //removes previously highlighted
-                        removeMovementTiles();
-                    } catch (IndexOutOfBoundsException exc) { }
+                        if (selectedEntity != null && stm.has(selectedEntity) && stm.get(selectedEntity).getModSpd(selectedEntity) > 0)
+                            removeMovementTiles();
+                    } catch (IndexOutOfBoundsException exc) {
+                    }
 
-                    //move Entity location
-                    bm.get(selectedEntity).boards.move(selectedEntity, new BoardPosition(t.getRow(), t.getColumn()));
-                    state.get(selectedEntity).canMove = false;
+                    if (Visuals.visualsArePlaying == 0 && selectedEntity != null) //stop orange highlight
+
+                        shadeBasedOnState(selectedEntity);
+
+                    selectedEntity = e; //selectedEntity changes to new entity here on
+
+                    if (Visuals.visualsArePlaying == 0)
+                        am.get(selectedEntity).actor.shade(Color.ORANGE);
+                    if (mayAttack(selectedEntity) && !attacksEnabled)
+                        enableAttacks();
+
+                    //check if has a speed > 0, and can move. Also if it is not on another team/has no team
+                    if (mayMove(selectedEntity)) {
+                        try { // newly highlights spaces
+                            showMovementTiles();
+                        } catch (IndexOutOfBoundsException exc) {
+                        }
+                    }
+
+                    checkedStats = false;
+                    am.get(e).actor.setLastSelected(false);
                 }
             }
-        }
 
-        //updating attack squares
-        if (!mayAttack(selectedEntity) && attacksEnabled)
-            disableAttacks();
-        else if (mayAttack(selectedEntity) && !attacksEnabled)
-            enableAttacks();
+            //update last TILE selected ---
+            if (selectedEntity != null) {
+                for (Tile t : BoardComponent.boards.getBoard().getTiles()) {
+                    if (t.getLastSelected()) {
+                        t.setLastSelected(false);
+                        try {   //removes previously highlighted
+                            removeMovementTiles();
+                        } catch (IndexOutOfBoundsException exc) {
+                        }
 
-        if (!hoverChanged) {
-            if (attackBtn1.getHover()) {
-                moveHover = 0;
-                showAttackTiles();
-                hoverChanged = true;
-            } else if (attackBtn2.getHover()) {
-                moveHover = 1;
-                showAttackTiles();
-                hoverChanged = true;
-            } else if (attackBtn3.getHover()) {
-                moveHover = 2;
-                showAttackTiles();
-                hoverChanged = true;
-            } else if (attackBtn4.getHover()) {
-                moveHover = 3;
-                showAttackTiles();
-                hoverChanged = true;
+                        //move Entity location
+                        bm.get(selectedEntity).boards.move(selectedEntity, new BoardPosition(t.getRow(), t.getColumn()));
+                        state.get(selectedEntity).canMove = false;
+                    }
+                }
             }
-        }
-        if (hoverChanged && !((attackBtn1.getHover() || attackBtn2.getHover() || attackBtn3.getHover() || attackBtn4.getHover()))) {
-            removeAttackTiles();
-            moveHover = -1;
-            hoverChanged = false;
-        }
 
-        if (selectedEntity != null) {
-            //show selected stats ---
-            if (!checkedStats) {
-                if (stm.has(selectedEntity)) {
-                    StatComponent stat = stm.get(selectedEntity);
-                    hpLabel.setText("Health : " + stat.hp + " / " + stat.maxHP);
-                    spLabel.setText("Skill : " + stat.sp + " / " + stat.maxSP);
-                    atkLabel.setText("Attack : " + stat.atk);
-                    defLabel.setText("Defense : " + stat.def);
-                    spdLabel.setText("Speed : " + stat.spd);
+            //updating attack squares
+            if (!mayAttack(selectedEntity) && attacksEnabled)
+                disableAttacks();
+            else if (mayAttack(selectedEntity) && !attacksEnabled)
+                enableAttacks();
+
+            if (!hoverChanged) {
+                if (attackBtn1.getHover()) {
+                    moveHover = 0;
+                    showAttackTiles();
+                    hoverChanged = true;
+                } else if (attackBtn2.getHover()) {
+                    moveHover = 1;
+                    showAttackTiles();
+                    hoverChanged = true;
+                } else if (attackBtn3.getHover()) {
+                    moveHover = 2;
+                    showAttackTiles();
+                    hoverChanged = true;
+                } else if (attackBtn4.getHover()) {
+                    moveHover = 3;
+                    showAttackTiles();
+                    hoverChanged = true;
+                }
+            }
+            if (hoverChanged && !((attackBtn1.getHover() || attackBtn2.getHover() || attackBtn3.getHover() || attackBtn4.getHover()))) {
+                removeAttackTiles();
+                moveHover = -1;
+                hoverChanged = false;
+            }
+
+            if (selectedEntity != null) {
+                //show selected stats ---
+                if (!checkedStats) {
+                    updateStatsAndMoves();
+                    checkedStats = true;
+                }
+            }
+
+            //playing current move animation
+            if (currentMove != null) {
+                if (currentMove.getVisuals().getIsPlaying()) {
+                    currentMove.updateVisuals(delta);
+                    currentMove.getVisuals().play();
                 } else {
-                    hpLabel.setText("Health : -- / --");
-                    spLabel.setText("Skill : -- / --");
-                    atkLabel.setText("Attack : --");
-                    defLabel.setText("Defense : --");
-                    spdLabel.setText("Speed : --");
+                    currentMove.getVisuals().reset();
+                    currentMove = null;
                 }
-                if (mvm.has(selectedEntity)) {
-                    MovesetComponent moves = mvm.get(selectedEntity);
-                    if (moves.moveList.size > 0 && moves.moveList.get(0) != null)
-                        attackBtn1.setText(moves.moveList.get(0).getName());
-                    else
-                        attackBtn1.setText("---");
-                    if (moves.moveList.size > 1 && moves.moveList.get(1) != null)
-                        attackBtn2.setText(moves.moveList.get(1).getName());
-                    else
-                        attackBtn2.setText("---");
-                    if (moves.moveList.size > 2 && moves.moveList.get(2) != null)
-                        attackBtn3.setText(moves.moveList.get(2).getName());
-                    else
-                        attackBtn3.setText("---");
-                    if (moves.moveList.size > 3 && moves.moveList.get(3) != null)
-                        attackBtn4.setText(moves.moveList.get(3).getName());
-                    else
-                        attackBtn4.setText("---");
-                } else {
-                    attackBtn1.setText("---");
-                    attackBtn2.setText("---");
-                    attackBtn3.setText("---");
-                    attackBtn4.setText("---");
-                }
-                if (nm.has(selectedEntity))
-                    nameLabel.setText(nm.get(selectedEntity).name);
-                else
-                    nameLabel.setText("???");
-
-                checkedStats = true;
-            }
-        }
-
-        //playing current move animation
-        if (currentMove != null) {
-            if (currentMove.getVisuals().getIsPlaying()) {
-                currentMove.updateVisuals(delta);
-                currentMove.getVisuals().play();
-            } else {
-                currentMove.getVisuals().reset();
-                currentMove = null;
             }
         }
 
@@ -493,9 +519,30 @@ public class BattleScreen implements Screen {
             }
         }
 
+        //check win conditions
+        if (rules.checkWinConditions() != null && currentMove == null) {
+            if (!gameHasEnded) {
+                infoLbl.setText("" + rules.checkWinConditions().getTeamName() + " has won!");
+                endTurnBtn.setDisabled(true);
+            }
+            gameHasEnded = true;
+        }
+
         //debug
         if (Visuals.visualsArePlaying < 0)
             throw (new IndexOutOfBoundsException("Visuals.visualsArePlaying is < 0"));
+        for (Team t : teams)
+            for (Entity e : t.getEntities()) {
+            if (status.has(e))
+                if (status.get(e).getTotalStatusEffects() < 0) {
+                    if (nm.has(e) && team.has(e))
+                        throw (new IndexOutOfBoundsException("An Entity, " + nm.get(e).name + ", on Team " + team.get(e).teamNumber + " has less than 0 status effects!"));
+                    else if (nm.has(e))
+                        throw (new IndexOutOfBoundsException("An Entity, " + nm.get(e).name + ", has less than 0 status effects!"));
+                    else
+                        throw (new IndexOutOfBoundsException("An unnamed Entity has less than 0 status effects!"));
+                }
+            }
 
     }
 
@@ -576,10 +623,10 @@ public class BattleScreen implements Screen {
      * @return null if it can't move or an {@code Array} of [@code Tile}s.
      */
     private Array<Tile> getMovableSquares(Entity e) {
-        if (!stm.has(e) || stm.get(e).spd == 0)
+        if (!stm.has(e) || stm.get(e).getModSpd(e) == 0)
             return null;
 
-        int spd = stm.get(e).spd;
+        int spd = stm.get(e).getModSpd(e);
         int newR; int newC;
         int entityRow = bm.get(e).pos.r;
         int entityCol = bm.get(e).pos.c;
@@ -606,12 +653,27 @@ public class BattleScreen implements Screen {
             am.get(e).actor.shade(Color.WHITE);
             return;
         }
+        //Normal Shading restrictions
         if (!state.get(e).canMove && !state.get(e).canAttack)
             am.get(e).actor.shade(Color.DARK_GRAY);
         else if (!state.get(e).canMove || !state.get(e).canAttack)
             am.get(e).actor.shade(Color.GRAY);
-        else
-            am.get(e).actor.shade(Color.WHITE);
+        //status effects
+        else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
+            if (status.get(e).isPoisoned())
+                am.get(e).actor.shade(StatusEffectComponent.poisonColor);
+            else if (status.get(e).isBurned())
+                am.get(e).actor.shade(StatusEffectComponent.burnColor);
+            else if (status.get(e).isParalyzed())
+                am.get(e).actor.shade(StatusEffectComponent.paralyzeColor);
+            else if (status.get(e).isPetrified())
+                am.get(e).actor.shade(StatusEffectComponent.petrifyColor);
+        } else { //defaults
+            if (team.get(e).teamNumber == rules.getCurrentTeamNumber())
+                am.get(e).actor.shade(rules.getCurrentTeam().getTeamColor());
+            else
+                am.get(e).actor.shade(Color.WHITE);
+        }
     }
 
     /**
@@ -624,12 +686,123 @@ public class BattleScreen implements Screen {
             return false;
 
 
-        if (!(state.get(e).canMove || state.get(e).canAttack))
+        if (!(state.get(e).canMove || state.get(e).canAttack)) //shading to show cant attack/move
             return am.get(e).actor.getColor() == Color.GRAY;
         else if (!state.get(e).canMove && !state.get(e).canAttack)
             return am.get(e).actor.getColor() == Color.DARK_GRAY;
+        else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) { //status effect
+            if (status.get(e).isPoisoned())
+                return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.poisonColor);
+            else if (status.get(e).isBurned())
+                return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.burnColor);
+            else if (status.get(e).isParalyzed())
+                return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.paralyzeColor);
+            else if (status.get(e).isPetrified())
+                return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.petrifyColor);
+
+        } else if (team.get(e).teamNumber == rules.getCurrentTeamNumber()) //defualts
+            return am.get(e).actor.getColor() == rules.getCurrentTeam().getTeamColor();
         else
             return am.get(e).actor.getColor() == Color.WHITE;
+
+        return false;
+    }
+
+    /**
+     * Returns the color an Entity would be if it was not selected
+     * @param e Entity
+     * @return Color that it would be. Can be a {@code LerpColor}
+     */
+    public static Color getShadeColorBasedOnState(Entity e) {
+        if (!state.has(e)) {
+            return Color.WHITE;
+        }
+        //Normal Shading restrictions
+        if (!state.get(e).canMove && !state.get(e).canAttack)
+            return Color.DARK_GRAY;
+        else if (!state.get(e).canMove || !state.get(e).canAttack)
+            return Color.GRAY;
+            //status effects
+        else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
+            if (status.get(e).isPoisoned())
+                return StatusEffectComponent.poisonColor;
+            else if (status.get(e).isBurned())
+                return StatusEffectComponent.burnColor;
+            else if (status.get(e).isParalyzed())
+                return StatusEffectComponent.paralyzeColor;
+            else if (status.get(e).isPetrified())
+                return StatusEffectComponent.petrifyColor;
+        } else { //defaults
+            if (team.get(e).teamNumber == rules.getCurrentTeamNumber())
+                return rules.getCurrentTeam().getTeamColor();
+            else
+              return Color.WHITE;
+        }
+
+        return null;
+    }
+
+    public void updateStatsAndMoves() {
+        if (stm.has(selectedEntity)) {
+            StatComponent stat = stm.get(selectedEntity);
+            hpLbl.setText("" + stat.hp + " / " + stat.getModMaxHp(selectedEntity));
+            spLbl.setText("" + stat.getModSp(selectedEntity) + " / " + stat.getModMaxSp(selectedEntity));
+            atkLbl.setText("" + stat.getModAtk(selectedEntity));
+            defLbl.setText("" + stat.getModDef(selectedEntity));
+            spdLbl.setText("" + stat.getModSpd(selectedEntity));
+
+            if (status.has(selectedEntity) && status.get(selectedEntity).getTotalStatusEffects() > 0) {
+                nameLbl.setColor(new Color(Color.PINK));
+                if (status.get(selectedEntity).isBurned())
+                    atkLbl.setColor(Color.RED);
+                if (status.get(selectedEntity).isParalyzed())
+                    spdLbl.setColor(Color.RED);
+                if (status.get(selectedEntity).isPetrified())
+                    defLbl.setColor(Color.RED);
+            } else {
+                nameLbl.setColor(Color.YELLOW);
+                hpLbl.setColor(Color.WHITE);
+                spLbl.setColor(Color.WHITE);
+                atkLbl.setColor(Color.WHITE);
+                defLbl.setColor(Color.WHITE);
+                spdLbl.setColor(Color.WHITE);
+            }
+        } else {
+            hpLbl.setText("-- / --");
+            spLbl.setText("-- / --");
+            atkLbl.setText("--");
+            defLbl.setText("--");
+            spdLbl.setText("--");
+        }
+
+        if (mvm.has(selectedEntity)) {
+            MovesetComponent moves = mvm.get(selectedEntity);
+            if (moves.moveList.size > 0 && moves.moveList.get(0) != null)
+                attackBtn1.setText(moves.moveList.get(0).getName());
+            else
+                attackBtn1.setText("---");
+            if (moves.moveList.size > 1 && moves.moveList.get(1) != null)
+                attackBtn2.setText(moves.moveList.get(1).getName());
+            else
+                attackBtn2.setText("---");
+            if (moves.moveList.size > 2 && moves.moveList.get(2) != null)
+                attackBtn3.setText(moves.moveList.get(2).getName());
+            else
+                attackBtn3.setText("---");
+            if (moves.moveList.size > 3 && moves.moveList.get(3) != null)
+                attackBtn4.setText(moves.moveList.get(3).getName());
+            else
+                attackBtn4.setText("---");
+        } else {
+            attackBtn1.setText("---");
+            attackBtn2.setText("---");
+            attackBtn3.setText("---");
+            attackBtn4.setText("---");
+        }
+        if (nm.has(selectedEntity))
+            nameLbl.setText(nm.get(selectedEntity).name);
+        else
+            nameLbl.setText("???");
     }
 
     /**
@@ -685,7 +858,7 @@ public class BattleScreen implements Screen {
      */
     public boolean mayAttack(Entity e) {
         return e != null && mvm.has(e) && state.has(e) && state.get(e).canAttack && team.has(e) &&
-                team.get(e).teamNumber == rules.getCurrentTeam();
+                team.get(e).teamNumber == rules.getCurrentTeamNumber() && !(status.has(selectedEntity) && status.get(selectedEntity).isPetrified());
     }
 
     /**
@@ -695,8 +868,8 @@ public class BattleScreen implements Screen {
      * @return true if it can move, false otherwise.
      */
     public boolean mayMove(Entity e) {
-        return stm.has(e) && stm.get(e).spd > 0 && state.has(e) &&
-                state.get(e).canMove && team.has(e) && team.get(e).teamNumber == rules.getCurrentTeam();
+        return stm.has(e) && stm.get(e).getModSpd(e) > 0 && state.has(e) &&
+                state.get(e).canMove && team.has(e) && team.get(e).teamNumber == rules.getCurrentTeamNumber();
     }
 
     @Override
@@ -728,14 +901,17 @@ public class BattleScreen implements Screen {
         return moveHover;
     }
 
-    public void setTeams(Array<Entity>... team) {
-        for (Array<Entity> t : team) {
+    public void setTeams(Team... team) {
+        for (Team t : team) {
             teams.add(t);
         }
 
-        for (Array<Entity> t : teams)
-            for (Entity e : t)
+        for (Team t : teams) {
+            for (Entity e : t.getEntities()) {
                 engine.addEntity(e);
+                if (am.has(e)) stage.addActor(am.get(e).actor);
+            }
+        }
 
         rules.calculateTotalTeams();
     }

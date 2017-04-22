@@ -15,6 +15,7 @@ import static com.mygdx.game.ComponentMappers.bm;
  */
 public class Move {
     private String name;
+    private String attackMessage;
     private Attack attack;
     private Visuals visuals;
     /**
@@ -31,6 +32,7 @@ public class Move {
     /**
      * Creates a move that can be used
      * @param name2 name
+     * @param message message that is displayed when move is used. {@code null} will show the defualt message.
      * @param usr user of move
      * @param rnge range
      * @param engne {@code Engine}
@@ -39,9 +41,10 @@ public class Move {
      * @param atk effect of attack
      * @param vis visual effect
      */
-    public Move(String name2, Entity usr, Array<BoardPosition> rnge, Engine engne, Stage stge, BoardManager board,
+    public Move(String name2, String message, Entity usr, Array<BoardPosition> rnge, Engine engne, Stage stge, BoardManager board,
                 Attack atk, Visuals vis) {
         name = name2;
+        attackMessage = message;
         user = usr;
         range = rnge;
         engine = engne;
@@ -67,8 +70,8 @@ public class Move {
             }
 
             attack.effect(user, bp, boards);
-            visuals.setPlaying(true, false);
         }
+        visuals.setPlaying(true, false);
     }
 
     /**
@@ -105,6 +108,10 @@ public class Move {
 
     public String getName() {
         return name;
+    }
+
+    public String getAttackMessage() {
+        return attackMessage;
     }
 
     public Array<BoardPosition> getRange() {

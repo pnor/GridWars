@@ -8,12 +8,14 @@ import com.mygdx.game.components.AnimationComponent;
 import com.mygdx.game.components.SpriteComponent;
 import com.mygdx.game.screens_ui.BackType;
 import com.mygdx.game.screens_ui.Background;
+import com.mygdx.game.screens_ui.LerpColor;
 
 import java.util.Comparator;
 
 import static com.mygdx.game.ComponentMappers.*;
 
 /**
+ * System in charge of drawing Entities (excluding those with actors)
  * @author pnore_000
  */
 public class DrawingSystem extends SortedIteratingSystem{
@@ -28,11 +30,15 @@ public class DrawingSystem extends SortedIteratingSystem{
     public void processEntity(Entity e, float deltaTime) {
         if (pm.has(e)) {
             if (sm.has(e)) {
+                if (sm.get(e).sprite.getColor() instanceof LerpColor)
+                    ((LerpColor) sm.get(e).sprite.getColor()).update(deltaTime);
                 sm.get(e).sprite.setPosition(pm.get(e).position.x, pm.get(e).position.y);
                 sm.get(e).sprite.setSize(pm.get(e).width, pm.get(e).height);
                 sm.get(e).sprite.setRotation(pm.get(e).rotation);
                 sm.get(e).draw(batch);
             } else {
+                if (animm.get(e).shadeColor instanceof LerpColor)
+                    ((LerpColor) animm.get(e).shadeColor).update(deltaTime);
                 animm.get(e).currentTime += deltaTime;
                 animm.get(e).setSpriteLocation(pm.get(e).position.x, pm.get(e).position.y);
                 animm.get(e).setSpriteSize(pm.get(e).height, pm.get(e).width);

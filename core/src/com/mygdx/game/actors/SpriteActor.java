@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.screens_ui.LerpColor;
 
 /**
  * Actor that displays a static sprite.
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class SpriteActor extends UIActor{
     private Sprite sprite;
+    private LerpColor lerpColor;
 
     /**
      * Creates a {@code UIActor} with height and width determined by sprite size
@@ -87,18 +89,42 @@ public class SpriteActor extends UIActor{
 
     @Override
     public void shade(Color tint) {
-        sprite.setColor(tint);
+        if (tint instanceof LerpColor)
+            lerpColor = (LerpColor) tint;
+        else if (lerpColor != null) {
+            sprite.setColor(tint);
+            lerpColor = null;
+        } else
+            sprite.setColor(tint);
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        if (lerpColor != null) {
+            lerpColor.update(delta);
+        }
     }
 
     @Override
     public Color getColor() {
-        return sprite.getColor();
+        if (lerpColor != null)
+            return lerpColor;
+        else
+            return sprite.getColor();
+    }
+
+    @Override
+    public void setColor(Color c) {
+        sprite.setColor(c);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         sprite.setPosition(getX(), getY());
         sprite.setScale(getScaleX());
+        if (lerpColor != null)
+            sprite.setColor(lerpColor);
         sprite.draw(batch, parentAlpha);
     }
 }

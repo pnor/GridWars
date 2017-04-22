@@ -27,6 +27,8 @@ public class ComponentMappers {
     public static ComponentMapper<VisualsComponent> vm = ComponentMapper.getFor(VisualsComponent.class);
     //stats
     public static ComponentMapper<StatComponent> stm = ComponentMapper.getFor(StatComponent.class);
+    //status effects
+    public static ComponentMapper<StatusEffectComponent> status = ComponentMapper.getFor(StatusEffectComponent.class);
     //moveset
     public static ComponentMapper<MovesetComponent> mvm = ComponentMapper.getFor(MovesetComponent.class);
     //team

@@ -36,6 +36,7 @@ public class MoveConstructor {
      * @return damage animation {@code Visuals}
      */
     public static Visuals damageAnimation(Entity user, Engine engine, Stage stage, BattleScreen screen) {
+
         VisualEvent initialRed = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
@@ -43,22 +44,22 @@ public class MoveConstructor {
             }
         }, .001f, 1);
 
-        VisualEvent returnToWhiteFirst = new VisualEvent(new VisualEffect() {
+        VisualEvent returnToNormalGradual = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
-                am.get(user).actor.shade(am.get(user).actor.getColor().lerp(Color.WHITE, .1f));
+                am.get(user).actor.shade(am.get(user).actor.getColor().lerp(BattleScreen.getShadeColorBasedOnState(user), .1f));
             }
-        }, .15f, 1);
+        }, .05f, 8);
 
-        VisualEvent returnToWhite = new VisualEvent(new VisualEffect() {
+        VisualEvent returnToNormal = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
-                am.get(user).actor.shade(am.get(user).actor.getColor().lerp(Color.WHITE, .1f));
+                am.get(user).actor.shade(BattleScreen.getShadeColorBasedOnState(user));
             }
-        }, .05f, 9);
+        }, .05f, 1);
 
         return new Visuals(screen, user, null,
-                new Array<VisualEvent>(new VisualEvent[]{initialRed, returnToWhiteFirst, returnToWhite}), false);
+                new Array<VisualEvent>(new VisualEvent[]{initialRed, returnToNormalGradual.copy(.15f, 1), returnToNormalGradual, returnToNormal}), false);
     }
 
     /**
@@ -91,17 +92,24 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
-        VisualEvent returnToWhite = new VisualEvent(new VisualEffect() {
+        VisualEvent returnToNormalGradual = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
-                am.get(user).actor.shade(am.get(user).actor.getColor().lerp(Color.WHITE, .1f));
+                am.get(user).actor.shade(am.get(user).actor.getColor().lerp(BattleScreen.getShadeColorBasedOnState(user), .1f));
             }
-        }, .02f, 10);
+        }, .02f, 9);
+
+        VisualEvent returnToNormal = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
+                am.get(user).actor.shade(BattleScreen.getShadeColorBasedOnState(user));
+            }
+        }, .02f, 1);
 
         return new Visuals(screen, user, null,
                 new Array<VisualEvent>(new VisualEvent[]{initialRed,
                         moveRight.copy(.001f, 1), moveLeft, moveRight, moveLeft.copy(), moveRight.copy(1),
-                        returnToWhite
+                        returnToNormalGradual, returnToNormal
                 }), false);
     }
 
@@ -155,13 +163,14 @@ public class MoveConstructor {
             }
         }, .2f, 4);
 
-        return new Move("Tackle", user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage, BoardComponent.boards,
+        return new Move("Tackle", null, user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage, BoardComponent.boards,
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp, BoardManager boards) {
                         Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
                         if (stm.has(enemy))
-                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).atk - stm.get(enemy).def, 0, 999);
+                           stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
+
                         if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
                     }
@@ -200,7 +209,7 @@ public class MoveConstructor {
             }
         }, 0f, 1);
 
-        return new Move("Star Spin", user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}), engine, stage, BoardComponent.boards,
+        return new Move("Star Spin", "Something spun around!", user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}), engine, stage, BoardComponent.boards,
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp, BoardManager boards) {

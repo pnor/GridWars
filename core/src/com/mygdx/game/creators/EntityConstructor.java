@@ -29,7 +29,8 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("Star"), true, true)));
         entity.add(new BoardComponent());
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity, engine, stage, screen)})));
-        entity.add(new StatComponent(1, 999, 7, 0, 8));
+        entity.add(new StatComponent(1, 999, 1, 0, 8));
+        entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
@@ -51,6 +52,7 @@ public class EntityConstructor {
         }, Animation.PlayMode.LOOP, 0.5f)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 7, 2, 1, 3));
+        entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;

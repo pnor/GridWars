@@ -22,14 +22,18 @@ public class HoverButton extends TextButton {
         this.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                hover = true;
-                HoverButton.super.setColor(highlightColor);
+                if (!isDisabled()) {
+                    hover = true;
+                    HoverButton.super.setColor(highlightColor);
+                }
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                hover = false;
-                setColor(defualtColor);
+                if (!isDisabled()) {
+                    hover = false;
+                    setColor(defualtColor);
+                }
             }
         });
     }
@@ -39,14 +43,18 @@ public class HoverButton extends TextButton {
         this.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                hover = true;
-                HoverButton.super.setColor(highlightColor);
+                if (!isDisabled()) {
+                    hover = true;
+                    HoverButton.super.setColor(highlightColor);
+                }
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                hover = false;
-                setColor(defualtColor);
+                if (!isDisabled()) {
+                    hover = false;
+                    setColor(defualtColor);
+                }
             }
         });
     }
@@ -60,14 +68,18 @@ public class HoverButton extends TextButton {
         this.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                hover = true;
-                HoverButton.super.setColor(highlightColor);
+                if (!isDisabled()) {
+                    hover = true;
+                    HoverButton.super.setColor(highlightColor);
+                }
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                hover = false;
-                setColor(defualtColor);
+                if (!isDisabled()) {
+                    hover = false;
+                    setColor(defualtColor);
+                }
             }
         });
     }

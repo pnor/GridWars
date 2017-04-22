@@ -12,7 +12,10 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.BoardComponent;
 import com.mygdx.game.creators.EntityConstructor;
+import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.screens_ui.BattleScreen;
+
+import static com.mygdx.game.ComponentMappers.status;
 
 public class GridWars extends Game {
 	public AssetManager assets = new AssetManager();
@@ -51,27 +54,32 @@ public class GridWars extends Game {
 		BattleScreen screen = new BattleScreen(this, 8,new Color(241f / 255, 201f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1));
 		setScreen(screen);
 
-		Array<Entity> teamA = new Array<Entity>();
-		teamA.add(EntityConstructor.testerChessPiece(0, screen, screen.getEngine(), screen.getStage()));
+		Array<Entity> a = new Array<Entity>();
+		a.add(EntityConstructor.testerChessPiece(0, screen, screen.getEngine(), screen.getStage()));
+		Team teamA = new Team(false, a);
+		status.get(a.get(0)).petrify(a.get(0));
 
-		Array<Entity> teamB = new Array<Entity>();
-		teamB.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
-		teamB.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
-		teamB.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
-		teamB.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
+		Array<Entity> b = new Array<Entity>();
+		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
+		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
+		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
+		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
+		status.get(b.get(3)).paralyze(b.get(3));
+		Team teamB = new Team("Team Blue", Color.CYAN, false, b);
 
-		Array<Entity> teamC = new Array<Entity>();
-		teamC.add(EntityConstructor.testerHole(-1, screen, screen.getEngine(), screen.getStage()));
+		Array<Entity> c = new Array<Entity>();
+		c.add(EntityConstructor.testerHole(-1, screen, screen.getEngine(), screen.getStage()));
+		Team teamC = new Team(false, c);
 
 		screen.setTeams(teamA, teamB, teamC);
 
-		BoardComponent.boards.add(teamA.get(0), new BoardPosition(0, 3));
+		BoardComponent.boards.add(a.get(0), new BoardPosition(0, 3));
 
-		BoardComponent.boards.add(teamB.get(0), new BoardPosition(3, 2));
-		BoardComponent.boards.add(teamB.get(1), new BoardPosition(3, 3));
-		BoardComponent.boards.add(teamB.get(2), new BoardPosition(3, 1));
-		BoardComponent.boards.add(teamB.get(3), new BoardPosition(2, 2));
+		BoardComponent.boards.add(b.get(0), new BoardPosition(3, 2));
+		BoardComponent.boards.add(b.get(1), new BoardPosition(3, 3));
+		BoardComponent.boards.add(b.get(2), new BoardPosition(3, 1));
+		BoardComponent.boards.add(b.get(3), new BoardPosition(2, 2));
 
-		BoardComponent.boards.add(teamC.get(0), new BoardPosition(1, 0));
+		BoardComponent.boards.add(c.get(0), new BoardPosition(1, 0));
 	}
 }

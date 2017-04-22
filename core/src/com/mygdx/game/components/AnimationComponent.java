@@ -21,6 +21,7 @@ public class AnimationComponent implements Component {
     private float height;
     private float rotation;
     public float currentTime;
+
     /**
      * z-index. Determines what things appear on top of others
      */

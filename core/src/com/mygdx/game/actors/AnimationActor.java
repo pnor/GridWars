@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.screens_ui.LerpColor;
 
 /**
  * Actor that displays an animation.
@@ -17,6 +18,7 @@ public class AnimationActor extends UIActor {
     private Sprite currentFrame;
     private Color shadeColor;
     private float time;
+    private boolean stopUpdating;
 
     /**
      * Creates an {@code AnimationActor} with a looping animation.
@@ -27,6 +29,7 @@ public class AnimationActor extends UIActor {
     public AnimationActor(float duration, TextureRegion[] s) {
         super(s[0].getRegionWidth(), s[0].getRegionHeight(), true);
         animation = new Animation(duration, new Array<TextureRegion>(s), Animation.PlayMode.LOOP);
+        currentFrame = new Sprite(animation.getKeyFrame(0));
     }
 
     /**
@@ -39,6 +42,7 @@ public class AnimationActor extends UIActor {
     public AnimationActor(float duration, TextureRegion[] s, Animation.PlayMode playType) {
         super(s[0].getRegionWidth(), s[0].getRegionHeight(), true);
         animation = new Animation(duration, new Array<TextureRegion>(s), playType);
+        currentFrame = new Sprite(animation.getKeyFrame(0));
     }
 
     /**
@@ -51,6 +55,15 @@ public class AnimationActor extends UIActor {
     public AnimationActor(TextureRegion[] s, Animation.PlayMode playType, float duration) {
         super(true, s[0].getRegionWidth(), s[0].getRegionHeight());
         animation = new Animation(duration, new Array<TextureRegion>(s), playType);
+        currentFrame = new Sprite(animation.getKeyFrame(0));
+    }
+
+    public boolean getStopUpdating() {
+        return stopUpdating;
+    }
+
+    public void setStopUpdating(boolean s) {
+        stopUpdating = s;
     }
 
     @Override
@@ -60,9 +73,14 @@ public class AnimationActor extends UIActor {
 
     @Override
     public void act(float delta) { //if this throws null pointer, its currentFrame. Give a defualt(?)
-        time += delta;
-        if (currentFrame != new Sprite(animation.getKeyFrame(time)))
-            currentFrame = new Sprite(animation.getKeyFrame(time));
+        if (!stopUpdating) {
+            time += delta;
+            if (currentFrame != new Sprite(animation.getKeyFrame(time)))
+                currentFrame = new Sprite(animation.getKeyFrame(time));
+        }
+
+        if (shadeColor instanceof LerpColor)
+            ((LerpColor) shadeColor).update(delta);
     }
 
     @Override
@@ -78,5 +96,4 @@ public class AnimationActor extends UIActor {
             currentFrame.setColor(shadeColor);
         currentFrame.draw(batch, parentAlpha);
     }
-
 }

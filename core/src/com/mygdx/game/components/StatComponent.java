@@ -1,6 +1,9 @@
 package com.mygdx.game.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
+
+import static com.mygdx.game.ComponentMappers.status;
 
 /**
  * Component representing the stats of an Entity on the board.
@@ -55,5 +58,83 @@ public class StatComponent implements Component {
         atk = attack;
         def = defense;
         spd = speed;
+    }
+
+    /**
+     * Max Hp value after status effects and other effects are applied
+     */
+    public int getModMaxHp(Entity e) {
+        int newMaxHp = maxHP;
+        if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
+            //...
+        }
+
+        return newMaxHp;
+    }
+
+    /**
+     * Sp value after status effects and other effects are applied
+     */
+    public int getModSp(Entity e) {
+        int newSp = sp;
+        if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
+            //...
+        }
+
+        return newSp;
+    }
+
+    /**
+     * Max Sp value after status effects and other effects are applied
+     */
+    public int getModMaxSp(Entity e) {
+        int newMaxSp = maxSP;
+        if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
+            //...
+        }
+
+        return newMaxSp;
+    }
+
+
+    /**
+     * Attack value after status effects and other effects are applied
+     */
+    public int getModAtk(Entity e) {
+        int newAtk = atk;
+        if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
+           if (status.get(e).isBurned())
+               newAtk /= 2;
+        }
+
+        return newAtk;
+    }
+
+    /**
+     * Defense value after status effects and other effects are applied
+     */
+    public int getModDef(Entity e) {
+        int newDef = def;
+        if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
+            if (status.get(e).isPetrified())
+                newDef *= 2;
+        }
+
+        return newDef;
+    }
+
+    /**
+     * Speed value after status effects and other effects are applied
+     */
+    public int getModSpd(Entity e) {
+        int newSpd = spd;
+        if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
+            if (status.get(e).isParalyzed())
+                newSpd /= 2;
+            if (status.get(e).isPetrified())
+                newSpd *= 0;
+        }
+
+        return newSpd;
     }
 }

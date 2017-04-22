@@ -21,8 +21,8 @@ public class VisualEvent {
 
     /**
      * @param effect visual effect
-     * @param time time till it triggers
-     * @param repeat amount of times it will repeat in a row(1 means it plays once)
+     * @param time time till it triggers (from the last event triggered)
+     * @param repeat amount of times it will repeat in a row(1 means it plays once, 2 means twice, and so on)
      */
     public VisualEvent(VisualEffect effect, float time, int repeat) {
         visualEffect = effect;

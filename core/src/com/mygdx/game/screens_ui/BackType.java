@@ -65,19 +65,15 @@ public enum BackType {
                 else if (progress <= 0)
                     progressIncreasing = true;
 
-                if (progressIncreasing) {
-                    sm.get(e).sprite.setColor(new Color(MathUtils.lerp(sm.get(e).sprite.getColor().r, destinationColor.r, deltaTime),
-                            MathUtils.lerp(sm.get(e).sprite.getColor().g, destinationColor.g, deltaTime),
-                            MathUtils.lerp(sm.get(e).sprite.getColor().b, destinationColor.b, deltaTime),
-                            MathUtils.lerp(sm.get(e).sprite.getColor().a, destinationColor.a, deltaTime)));
+                if (progressIncreasing)
                     progress += deltaTime;
-                } else {
-                    sm.get(e).sprite.setColor(new Color(MathUtils.lerp(sm.get(e).sprite.getColor().r, startColor.r, deltaTime),
-                            MathUtils.lerp(sm.get(e).sprite.getColor().g, startColor.g, deltaTime),
-                            MathUtils.lerp(sm.get(e).sprite.getColor().b, startColor.b, deltaTime),
-                            MathUtils.lerp(sm.get(e).sprite.getColor().a, startColor.a, deltaTime)));
+                else
                     progress -= deltaTime;
-                }
+
+                sm.get(e).sprite.setColor(new Color(MathUtils.lerp(startColor.r, destinationColor.r, progress / 10f),
+                        MathUtils.lerp(startColor.g, destinationColor.g, progress / 10f),
+                        MathUtils.lerp(startColor.b, destinationColor.b, progress / 10f),
+                        MathUtils.lerp(startColor.a, destinationColor.a, progress / 10f)));
                 break;
         }
     }
