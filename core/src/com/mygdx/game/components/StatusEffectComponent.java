@@ -147,7 +147,7 @@ public class StatusEffectComponent implements Component {
     public static final Color petrifyColor = new Color(214f / 255f, 82f / 255f, 0, 1);
 
     /**
-     * starts the paralyze effect on an Entity
+     * starts the petrify effect on an Entity
      */
     public void petrify(Entity e) {
         totalStatusEffects += 1;
@@ -159,7 +159,7 @@ public class StatusEffectComponent implements Component {
     }
 
     /**
-     * Applies the effects of paralyze. Called at the beginning of the entity's turn
+     * Applies the effects of petrify. Called at the beginning of the entity's turn
      * @param e Entity affected.
      */
     public static void petrifyTurnEffect(Entity e) {
@@ -173,7 +173,7 @@ public class StatusEffectComponent implements Component {
     }
 
     /**
-     * resets the paralyze effect
+     * resets the petrify effect
      * @param e Entity affected. (for the stop animation of this status effect)
      */
     public void resetPetrify(Entity e) {
@@ -184,7 +184,80 @@ public class StatusEffectComponent implements Component {
             ((AnimationActor) am.get(e).actor).setStopUpdating(false);
     }
 
-    public boolean isStill;
-    public int currentStillnessTurn;
+    private boolean isStill;
+    private int currentStillnessTurn;
     public static final int stillnessDuration = 3;
+    public static final Color stillnessColor = new LerpColor(Color.WHITE, new Color(0, 140f / 255f, 1f, 1f), .7f,  Interpolation.sine);
+    //new LerpColor(Color.WHITE, new Color(0, 140f / 255f, 1f, 1f), .7f,  Interpolation.sine);
+
+    /**
+     * starts the stillness effect on an Entity
+     */
+    public void still(Entity e) {
+        totalStatusEffects += 1;
+        isStill = true;
+        if (am.has(e))
+            am.get(e).actor.shade(stillnessColor);
+    }
+
+    /**
+     * Applies the effects of paralyze. Called at the beginning of the entity's turn
+     * @param e Entity affected.
+     */
+    public static void stillnessTurnEffect(Entity e) {
+        status.get(e).currentStillnessTurn += 1;
+        if (status.get(e).currentStillnessTurn >= StatusEffectComponent.stillnessDuration)
+            status.get(e).resetStillness();
+    }
+
+    public boolean isStill() {
+        return isStill;
+    }
+
+    /**
+     * resets the paralyze effect
+     */
+    public void resetStillness() {
+        totalStatusEffects -= 1;
+        currentStillnessTurn = 0;
+        isStill = false;
+    }
+
+    private boolean isCursed;
+    private int currentCurseTurn;
+    public static final int curseDuration = 3;
+    public static final Color curseColor = new LerpColor(Color.GRAY, Color.BLACK, .5f, Interpolation.fade);
+
+    /**
+     * starts the stillness effect on an Entity
+     */
+    public void curse(Entity e) {
+        totalStatusEffects += 1;
+        isCursed = true;
+        if (am.has(e))
+            am.get(e).actor.shade(curseColor);
+    }
+
+    /**
+     * Applies the effects of paralyze. Called at the beginning of the entity's turn
+     * @param e Entity affected.
+     */
+    public static void curseTurnEffect(Entity e) {
+        status.get(e).currentCurseTurn += 1;
+        if (status.get(e).currentCurseTurn >= StatusEffectComponent.curseDuration)
+            status.get(e).resetCurse();
+    }
+
+    public boolean isCursed() {
+        return isCursed;
+    }
+
+    /**
+     * resets the paralyze effect
+     */
+    public void resetCurse() {
+        totalStatusEffects -= 1;
+        currentCurseTurn = 0;
+        isCursed = false;
+    }
 }

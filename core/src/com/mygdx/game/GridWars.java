@@ -64,7 +64,8 @@ public class GridWars extends Game {
 		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
 		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
 		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
-		status.get(b.get(3)).paralyze(b.get(3));
+		status.get(b.get(3)).curse(b.get(3));
+		status.get(b.get(2)).still(b.get(2));
 		Team teamB = new Team("Team Blue", Color.CYAN, false, b);
 
 		Array<Entity> c = new Array<Entity>();

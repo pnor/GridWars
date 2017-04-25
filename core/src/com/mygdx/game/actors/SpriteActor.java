@@ -106,6 +106,10 @@ public class SpriteActor extends UIActor{
         }
     }
 
+    public Sprite getSprite() {
+        return sprite;
+    }
+
     @Override
     public Color getColor() {
         if (lerpColor != null)

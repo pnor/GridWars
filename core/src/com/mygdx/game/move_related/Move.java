@@ -16,6 +16,7 @@ import static com.mygdx.game.ComponentMappers.bm;
 public class Move {
     private String name;
     private String attackMessage;
+    private int spCost;
     private Attack attack;
     private Visuals visuals;
     /**
@@ -34,6 +35,7 @@ public class Move {
      * @param name2 name
      * @param message message that is displayed when move is used. {@code null} will show the defualt message.
      * @param usr user of move
+     * @param cost amount of sp to use the move
      * @param rnge range
      * @param engne {@code Engine}
      * @param stge {@code Stage}
@@ -41,11 +43,12 @@ public class Move {
      * @param atk effect of attack
      * @param vis visual effect
      */
-    public Move(String name2, String message, Entity usr, Array<BoardPosition> rnge, Engine engne, Stage stge, BoardManager board,
+    public Move(String name2, String message, Entity usr, int cost, Array<BoardPosition> rnge, Engine engne, Stage stge, BoardManager board,
                 Attack atk, Visuals vis) {
         name = name2;
         attackMessage = message;
         user = usr;
+        spCost = cost;
         range = rnge;
         engine = engne;
         stage = stge;
@@ -100,6 +103,10 @@ public class Move {
 
     public void updateVisuals(float dt) {
         visuals.updateTimer(dt);
+    }
+
+    public int spCost() {
+        return spCost;
     }
 
     public Visuals getVisuals() {

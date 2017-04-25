@@ -17,8 +17,10 @@ public abstract class Rules {
 
     protected BattleScreen screen;
     protected Array<Team> entities;
-    protected int currentTeamTurn;
+    protected int currentTeamTurn = 1;
     protected int totalTeams;
+
+    protected int turnCount;
 
     public Rules(BattleScreen s, Array<Team> teams) {
         screen = s;
@@ -37,6 +39,7 @@ public abstract class Rules {
      */
     public void nextTurn() {
         currentTeamTurn = (currentTeamTurn + 1) % totalTeams;
+        turnCount = currentTeamTurn == 0 ? turnCount + 1 : turnCount;
         if (screen.getSelectedEntity() != null)
             if (screen.getSelectedEntity() != null && stm.has(screen.getSelectedEntity()) && stm.get(screen.getSelectedEntity()).getModSpd(screen.getSelectedEntity()) > 0)
                 try {
@@ -55,7 +58,7 @@ public abstract class Rules {
         }
         //do affects and stats
         for (Entity e : entities.get(currentTeamTurn).getEntities()) {
-            if (stm.has(e) && !(stm.get(e).sp >= stm.get(e).maxSP))
+            if (stm.has(e) && !(stm.get(e).getModSp(e) >= stm.get(e).getModMaxSp(e)) && !(status.has(e) && status.get(e).isStill()))
                 stm.get(e).sp += 1;
 
             //status effects
@@ -68,9 +71,15 @@ public abstract class Rules {
                     StatusEffectComponent.paralyzeTurnEffect(e);
                 if (status.get(e).isPetrified())
                     StatusEffectComponent.petrifyTurnEffect(e);
+                if (status.get(e).isStill())
+                    StatusEffectComponent.stillnessTurnEffect(e);
+                if (status.get(e).isCursed())
+                    StatusEffectComponent.curseTurnEffect(e);
             }
-
         }
+        //update the team bar
+        screen.updateTeamBar();
+
         System.out.println("Current Turn : " + currentTeamTurn);
         System.out.println("Total team turn : " + totalTeams);
         System.out.println("--------------");
@@ -89,6 +98,10 @@ public abstract class Rules {
 
     public Team getCurrentTeam() {
         return entities.get(currentTeamTurn);
+    }
+
+    public int getTurnCount() {
+        return turnCount;
     }
 
     public int getTotalTeams() {

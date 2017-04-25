@@ -20,10 +20,15 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GridWars;
+import com.mygdx.game.actors.AnimationActor;
+import com.mygdx.game.actors.SpriteActor;
 import com.mygdx.game.actors.Tile;
+import com.mygdx.game.actors.UIActor;
 import com.mygdx.game.boards.Board;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
@@ -40,6 +45,7 @@ import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.systems.*;
 
 import static com.mygdx.game.ComponentMappers.*;
+import static com.mygdx.game.GridWars.atlas;
 
 /**
  * @author pnore_000
@@ -120,12 +126,17 @@ public class BattleScreen implements Screen {
      * Has data for the team. Has end turn button, and will have a icon of all the entities on a team
      */
     private Table teamTable;
+    private Image member1;
+    private Image member2;
+    private Image member3;
+    private Image member4;
     private HoverButton endTurnBtn;
     /**
      * The box that says the next team's turn has started.
      */
     private Table endTurnMessageTable;
     private Label endTurnMessageLbl;
+    private Label turnCountLbl;
 
 
     //debug values
@@ -271,15 +282,31 @@ public class BattleScreen implements Screen {
                 if (((Button) actor).isPressed()) {
                     if (mayAttack(selectedEntity)) {
                         if (actor == attackBtn1) {
+                            if (mvm.get(selectedEntity).moveList.get(0).spCost() > stm.get(selectedEntity).getModSp(selectedEntity)) {
+                                infoLbl.setText("Not enough SP!");
+                                return;
+                            }
                             mvm.get(selectedEntity).moveList.get(0).useAttack();
                             currentMove = mvm.get(selectedEntity).moveList.get(0);
                         } else if (actor == attackBtn2) {
+                            if (mvm.get(selectedEntity).moveList.get(1).spCost() > stm.get(selectedEntity).getModSp(selectedEntity)) {
+                                infoLbl.setText("Not enough SP!");
+                                return;
+                            }
                             mvm.get(selectedEntity).moveList.get(1).useAttack();
                             currentMove = mvm.get(selectedEntity).moveList.get(1);
                         } else if (actor == attackBtn3) {
+                            if (mvm.get(selectedEntity).moveList.get(2).spCost() > stm.get(selectedEntity).getModSp(selectedEntity)) {
+                                infoLbl.setText("Not enough SP!");
+                                return;
+                            }
                             mvm.get(selectedEntity).moveList.get(2).useAttack();
                             currentMove = mvm.get(selectedEntity).moveList.get(2);
                         } else if (actor == attackBtn4) {
+                            if (mvm.get(selectedEntity).moveList.get(3).spCost() > stm.get(selectedEntity).getModSp(selectedEntity)) {
+                                infoLbl.setText("Not enough SP!");
+                                return;
+                            }
                             mvm.get(selectedEntity).moveList.get(3).useAttack();
                             currentMove = mvm.get(selectedEntity).moveList.get(3);
                         }
@@ -312,11 +339,11 @@ public class BattleScreen implements Screen {
         attackBtn4.setName("Attack4");
 
         attackTitleLabel.setAlignment(Align.center);
-        attackTable.add(attackTitleLabel).center().size(175, 50).row();
-        attackTable.add(attackBtn1).size(175, 50).padBottom(15f).row();
-        attackTable.add(attackBtn2).size(175, 50).padBottom(15f).row();
-        attackTable.add(attackBtn3).size(175, 50).padBottom(15f).row();
-        attackTable.add(attackBtn4).size(175, 50).padBottom(15f).row();
+        attackTable.add(attackTitleLabel).center().size(140, 50).row();
+        attackTable.add(attackBtn1).size(140, 50).padBottom(15f).row();
+        attackTable.add(attackBtn2).size(140, 50).padBottom(15f).row();
+        attackTable.add(attackBtn3).size(140, 50).padBottom(15f).row();
+        attackTable.add(attackBtn4).size(140, 50).padBottom(15f).row();
         attackTable.setBackground(tableBackground);
         attackTable.pack();
         attackTable.setPosition(stage.getWidth() * .875f - (attackTable.getWidth() / 2), stage.getHeight() * .25f - (attackTable.getWidth() / 2));
@@ -334,33 +361,46 @@ public class BattleScreen implements Screen {
         endTurnBtn.addListener(new ChangeListener() {
            @Override
            public void changed(ChangeEvent event, Actor actor) {
-               if (((Button) actor).isPressed()) {
-                   rules.nextTurn();
-                   endTurnMessageLbl.setText("" + rules.getCurrentTeam().getTeamName() + " turn!");
-                   endTurnMessageTable.setColor(rules.getCurrentTeam().getTeamColor());
-                   SequenceAction sequence = new SequenceAction();
-                   sequence.addAction(Actions.fadeIn(.2f));
-                   sequence.addAction(Actions.delay(1f));
-                   sequence.addAction(Actions.fadeOut(.2f));
-                   endTurnMessageTable.addAction(sequence);
-               }
+           if (((Button) actor).isPressed()) {
+               rules.nextTurn();
+               endTurnMessageLbl.setText("" + rules.getCurrentTeam().getTeamName() + " turn!");
+               turnCountLbl.setText("Turn " + rules.getTurnCount());
+               turnCountLbl.setColor(new Color(1,1,1,1).lerp(Color.ORANGE, (float) rules.getTurnCount() / 100f));
+               endTurnMessageTable.setColor(rules.getCurrentTeam().getTeamColor());
+               endTurnMessageTable.clearActions();
+               SequenceAction sequence = new SequenceAction();
+               sequence.addAction(Actions.fadeIn(.2f));
+               sequence.addAction(Actions.delay(1f));
+               sequence.addAction(Actions.fadeOut(.2f));
+               endTurnMessageTable.addAction(sequence);
+           }
            }
         });
+        member1 = new Image(atlas.findRegion("Hole2"));
+        member2 = new Image(atlas.findRegion("Hole2"));
+        member3 = new Image(atlas.findRegion("Hole2"));
+        member4 = new Image(atlas.findRegion("Hole2"));
         teamTable.add(endTurnBtn).height(40).width(120);
+        teamTable.add(member1).size(48).padLeft(60f);
+        teamTable.add(member2).size(48).padLeft(60f);
+        teamTable.add(member3).size(48).padLeft(60f);
+        teamTable.add(member4).size(48).padLeft(60f);
         teamTable.setBackground(tableBackground);
         teamTable.pack();
-        teamTable.setSize(200, 90);
-        teamTable.setPosition(teamTable.getX() + teamTable.getOriginX(), stage.getHeight() * .01f);
+        teamTable.setSize(600, 90);
+        teamTable.setPosition(teamTable.getX() + teamTable.getOriginX() + 40, stage.getHeight() * .01f);
         //teamTable.debug();
 
         //set up endTurnMessageTable
         param.size = 25;
         endTurnMessageLbl = new Label("Team <Unset> Turn", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        turnCountLbl = new Label("Turn 1", skin);
         endTurnMessageTable.setBackground(tableBackground);
         endTurnMessageTable.pack();
         endTurnMessageTable.setSize(380, 120);
         endTurnMessageTable.setPosition(stage.getWidth() / 2 - endTurnMessageTable.getWidth() / 2, (stage.getHeight() / 2 - endTurnMessageTable.getHeight() / 2));
-        endTurnMessageTable.add(endTurnMessageLbl);
+        endTurnMessageTable.add(endTurnMessageLbl).padTop(20f).row();
+        endTurnMessageTable.add(turnCountLbl);
         endTurnMessageTable.setColor(Color.WHITE);
         endTurnMessageTable.addAction(Actions.fadeOut(0f));
 
@@ -547,11 +587,14 @@ public class BattleScreen implements Screen {
     }
 
     public void showMovementTiles() {
-        for (Tile t : getMovableSquares(selectedEntity))
+        for (Tile t : getMovableSquares(selectedEntity)) {
+            if (t.isOccupied())
+                continue;
             if (t != null && !t.getIsListening()) {
                 t.shadeTile(Color.CYAN);
                 t.startListening();
             }
+        }
     }
 
     /**
@@ -668,6 +711,10 @@ public class BattleScreen implements Screen {
                 am.get(e).actor.shade(StatusEffectComponent.paralyzeColor);
             else if (status.get(e).isPetrified())
                 am.get(e).actor.shade(StatusEffectComponent.petrifyColor);
+            else if (status.get(e).isStill())
+                am.get(e).actor.shade(StatusEffectComponent.stillnessColor);
+            else if (status.get(e).isCursed())
+                am.get(e).actor.shade(StatusEffectComponent.curseColor);
         } else { //defaults
             if (team.get(e).teamNumber == rules.getCurrentTeamNumber())
                 am.get(e).actor.shade(rules.getCurrentTeam().getTeamColor());
@@ -699,6 +746,10 @@ public class BattleScreen implements Screen {
                 return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.paralyzeColor);
             else if (status.get(e).isPetrified())
                 return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.petrifyColor);
+            else if (status.get(e).isStill())
+                return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.stillnessColor);
+            else if (status.get(e).isCursed())
+                return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.curseColor);
 
         } else if (team.get(e).teamNumber == rules.getCurrentTeamNumber()) //defualts
             return am.get(e).actor.getColor() == rules.getCurrentTeam().getTeamColor();
@@ -732,6 +783,11 @@ public class BattleScreen implements Screen {
                 return StatusEffectComponent.paralyzeColor;
             else if (status.get(e).isPetrified())
                 return StatusEffectComponent.petrifyColor;
+            else if (status.get(e).isStill())
+                return StatusEffectComponent.stillnessColor;
+            else if (status.get(e).isCursed())
+                return StatusEffectComponent.curseColor;
+
         } else { //defaults
             if (team.get(e).teamNumber == rules.getCurrentTeamNumber())
                 return rules.getCurrentTeam().getTeamColor();
@@ -742,6 +798,9 @@ public class BattleScreen implements Screen {
         return null;
     }
 
+    /**
+     * Updates the HUD display that shows the information for the stats and attacks of an entity.
+     */
     public void updateStatsAndMoves() {
         if (stm.has(selectedEntity)) {
             StatComponent stat = stm.get(selectedEntity);
@@ -753,12 +812,45 @@ public class BattleScreen implements Screen {
 
             if (status.has(selectedEntity) && status.get(selectedEntity).getTotalStatusEffects() > 0) {
                 nameLbl.setColor(new Color(Color.PINK));
-                if (status.get(selectedEntity).isBurned())
+                if (status.get(selectedEntity).isBurned()) {
+                    nameLbl.setColor(Color.YELLOW);
+                    hpLbl.setColor(Color.WHITE);
                     atkLbl.setColor(Color.RED);
-                if (status.get(selectedEntity).isParalyzed())
+                    defLbl.setColor(Color.WHITE);
+                    spdLbl.setColor(Color.WHITE);
+                }
+                if (status.get(selectedEntity).isParalyzed()) {
+                    nameLbl.setColor(Color.YELLOW);
+                    hpLbl.setColor(Color.WHITE);
+                    spLbl.setColor(Color.WHITE);
+                    atkLbl.setColor(Color.WHITE);
+                    defLbl.setColor(Color.WHITE);
                     spdLbl.setColor(Color.RED);
-                if (status.get(selectedEntity).isPetrified())
+                }
+                if (status.get(selectedEntity).isPetrified()) {
+                    nameLbl.setColor(Color.YELLOW);
+                    hpLbl.setColor(Color.WHITE);
+                    spLbl.setColor(Color.WHITE);
+                    atkLbl.setColor(Color.WHITE);
+                    defLbl.setColor(Color.CYAN);
+                    spdLbl.setColor(Color.RED);
+                }
+                if (status.get(selectedEntity).isStill()) {
+                    nameLbl.setColor(Color.YELLOW);
+                    hpLbl.setColor(Color.WHITE);
+                    spLbl.setColor(Color.RED);
+                    atkLbl.setColor(Color.WHITE);
+                    defLbl.setColor(Color.WHITE);
+                    spdLbl.setColor(Color.WHITE);
+                }
+                if (status.get(selectedEntity).isCursed()) {
+                    nameLbl.setColor(Color.YELLOW);
+                    hpLbl.setColor(Color.WHITE);
+                    spLbl.setColor(Color.WHITE);
+                    atkLbl.setColor(Color.RED);
                     defLbl.setColor(Color.RED);
+                    spdLbl.setColor(Color.RED);
+                }
             } else {
                 nameLbl.setColor(Color.YELLOW);
                 hpLbl.setColor(Color.WHITE);
@@ -777,20 +869,20 @@ public class BattleScreen implements Screen {
 
         if (mvm.has(selectedEntity)) {
             MovesetComponent moves = mvm.get(selectedEntity);
-            if (moves.moveList.size > 0 && moves.moveList.get(0) != null)
-                attackBtn1.setText(moves.moveList.get(0).getName());
-            else
+            if (moves.moveList.size > 0 && moves.moveList.get(0) != null) {
+                attackBtn1.setText(moves.moveList.get(0).getName() + " (" + moves.moveList.get(0).spCost() + ")");
+            } else
                 attackBtn1.setText("---");
             if (moves.moveList.size > 1 && moves.moveList.get(1) != null)
-                attackBtn2.setText(moves.moveList.get(1).getName());
+                attackBtn2.setText(moves.moveList.get(1).getName() + " (" + moves.moveList.get(1).spCost() + ")");
             else
                 attackBtn2.setText("---");
             if (moves.moveList.size > 2 && moves.moveList.get(2) != null)
-                attackBtn3.setText(moves.moveList.get(2).getName());
+                attackBtn3.setText(moves.moveList.get(2).getName() + " (" + moves.moveList.get(2).spCost() + ")");
             else
                 attackBtn3.setText("---");
             if (moves.moveList.size > 3 && moves.moveList.get(3) != null)
-                attackBtn4.setText(moves.moveList.get(3).getName());
+                attackBtn4.setText(moves.moveList.get(3).getName() + " (" + moves.moveList.get(0).spCost() + ")");
             else
                 attackBtn4.setText("---");
         } else {
@@ -803,6 +895,136 @@ public class BattleScreen implements Screen {
             nameLbl.setText(nm.get(selectedEntity).name);
         else
             nameLbl.setText("???");
+    }
+
+    /**
+     * Updates the bar with the icons of all the entities on a team.
+     */
+    public void updateTeamBar() {
+        UIActor actor;
+        Entity entity;
+        Sprite temp;
+        Image member;
+        for (int i = 1; i < 5; i++) {
+            switch (i) {
+                case 1:
+                    member = member1;
+                    break;
+                case 2:
+                    member = member2;
+                    break;
+                case 3:
+                    member = member3;
+                    break;
+                case 4:
+                    member = member4;
+                    break;
+                default:
+                    member = null;
+            }
+            if (rules.getCurrentTeam().getEntities().size < i || rules.getCurrentTeam().getEntities().get(i - 1) == null) {
+                member.setColor(Color.WHITE);
+                member.setDrawable(new TextureRegionDrawable(atlas.findRegion("Hole2")));
+                continue;
+            }
+            actor = am.get(rules.getCurrentTeam().getEntities().get(i - 1)).actor;
+            entity = rules.getCurrentTeam().getEntities().get(i - 1);
+
+            if (actor instanceof SpriteActor) {
+                temp = new Sprite(((SpriteActor) actor).getSprite());
+                temp.setColor(Color.WHITE);
+                member.setDrawable(new SpriteDrawable(temp));
+            } else if (actor instanceof AnimationActor)
+                member.setDrawable(new SpriteDrawable(((AnimationActor) actor).getInitialFrame()));
+
+            if (stm.has(entity) && !(status.has(entity) && status.get(entity).getTotalStatusEffects() > 0))
+                if (stm.get(entity).hp == 0)
+                    member.setColor(Color.BLACK);
+                else
+                    member.setColor(new Color(1, 1, 1, 1).lerp(Color.RED, 1f - (float) stm.get(entity).hp / (float) stm.get(entity).getModMaxHp(entity)));
+        }
+
+        /*
+        if (rules.getCurrentTeam().getEntities().size >= 1 && rules.getCurrentTeam().getEntities().get(0) != null) {
+            actor = am.get(rules.getCurrentTeam().getEntities().get(0)).actor;
+            entity = rules.getCurrentTeam().getEntities().get(0);
+            if (actor instanceof SpriteActor) {
+                temp = new Sprite(((SpriteActor) actor).getSprite());
+                temp.setColor(Color.WHITE);
+                member1.setDrawable(new SpriteDrawable(temp));
+            } else if (actor instanceof AnimationActor)
+                member1.setDrawable(new SpriteDrawable(((AnimationActor) actor).getInitialFrame()));
+
+            if (stm.has(entity) && !(status.has(entity) && status.get(entity).getTotalStatusEffects() > 0))
+                if (stm.get(entity).hp == 0)
+                    member1.setColor(Color.BLACK);
+                else
+                    member1.setColor(new Color(1, 1, 1, 1).lerp(Color.RED, 1f - (float) stm.get(entity).hp / (float) stm.get(entity).getModMaxHp(entity)));
+        } else {
+            member1.setColor(Color.WHITE);
+            member1.setDrawable(new TextureRegionDrawable(atlas.findRegion("Hole2")));
+        }
+
+        if (rules.getCurrentTeam().getEntities().size >= 2 && rules.getCurrentTeam().getEntities().get(1) != null) {
+            actor = am.get(rules.getCurrentTeam().getEntities().get(1)).actor;
+            entity = rules.getCurrentTeam().getEntities().get(1);
+            if (actor instanceof SpriteActor) {
+                temp = new Sprite(((SpriteActor) actor).getSprite());
+                temp.setColor(Color.WHITE);
+                member2.setDrawable(new SpriteDrawable(temp));
+            } else if (actor instanceof AnimationActor)
+                member2.setDrawable(new SpriteDrawable(((AnimationActor) actor).getInitialFrame()));
+
+            if (stm.has(entity) && !(status.has(entity) && status.get(entity).getTotalStatusEffects() > 0))
+                if (stm.get(entity).hp == 0)
+                    member2.setColor(Color.BLACK);
+                else
+                    member2.setColor(new Color(1, 1, 1, 1).lerp(Color.RED, 1f - (float) stm.get(entity).hp / (float) stm.get(entity).getModMaxHp(entity)));
+        } else {
+            member2.setColor(Color.WHITE);
+            member2.setDrawable(new TextureRegionDrawable(atlas.findRegion("Hole2")));
+        }
+
+        if (rules.getCurrentTeam().getEntities().size >= 3 && rules.getCurrentTeam().getEntities().get(2) != null) {
+            actor = am.get(rules.getCurrentTeam().getEntities().get(2)).actor;
+            entity = rules.getCurrentTeam().getEntities().get(2);
+            if (actor instanceof SpriteActor) {
+                temp = new Sprite(((SpriteActor) actor).getSprite());
+                temp.setColor(Color.WHITE);
+                member3.setDrawable(new SpriteDrawable(temp));
+            } else if (actor instanceof AnimationActor)
+                member3.setDrawable(new SpriteDrawable(((AnimationActor) actor).getInitialFrame()));
+
+            if (stm.has(entity) && !(status.has(entity) && status.get(entity).getTotalStatusEffects() > 0))
+                if (stm.get(entity).hp == 0)
+                    member3.setColor(Color.BLACK);
+                else
+                    member3.setColor(new Color(1, 1, 1, 1).lerp(Color.RED, 1f - (float) stm.get(entity).hp / (float) stm.get(entity).getModMaxHp(entity)));
+        } else {
+            member3.setColor(Color.WHITE);
+            member3.setDrawable(new TextureRegionDrawable(atlas.findRegion("Hole2")));
+        }
+
+        if (rules.getCurrentTeam().getEntities().size >= 4 && rules.getCurrentTeam().getEntities().get(3) != null) {
+            actor = am.get(rules.getCurrentTeam().getEntities().get(3)).actor;
+            entity = rules.getCurrentTeam().getEntities().get(3);
+            if (actor instanceof SpriteActor) {
+                temp = new Sprite(((SpriteActor) actor).getSprite());
+                temp.setColor(Color.WHITE);
+                member4.setDrawable(new SpriteDrawable(temp));
+            } else if (actor instanceof AnimationActor)
+                member4.setDrawable(new SpriteDrawable(((AnimationActor) actor).getInitialFrame()));
+
+            if (stm.has(entity) && !(status.has(entity) && status.get(entity).getTotalStatusEffects() > 0))
+                if (stm.get(entity).hp == 0)
+                    member4.setColor(Color.BLACK);
+                else
+                    member4.setColor(new Color(1, 1, 1, 1).lerp(Color.RED, 1f - (float) stm.get(entity).hp / (float) stm.get(entity).getModMaxHp(entity)));
+        } else {
+            member4.setColor(Color.WHITE);
+            member4.setDrawable(new TextureRegionDrawable(atlas.findRegion("Hole2")));
+        }
+        */
     }
 
     /**

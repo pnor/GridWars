@@ -105,6 +105,8 @@ public class StatComponent implements Component {
         if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
            if (status.get(e).isBurned())
                newAtk /= 2;
+           if (status.get(e).isCursed())
+               newAtk /= 2;
         }
 
         return newAtk;
@@ -118,6 +120,8 @@ public class StatComponent implements Component {
         if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
             if (status.get(e).isPetrified())
                 newDef *= 2;
+            if (status.get(e).isCursed())
+                newDef /= 2;
         }
 
         return newDef;
@@ -133,6 +137,8 @@ public class StatComponent implements Component {
                 newSpd /= 2;
             if (status.get(e).isPetrified())
                 newSpd *= 0;
+            if (status.get(e).isCursed())
+                newSpd /= 2;
         }
 
         return newSpd;

@@ -84,10 +84,20 @@ public class HoverButton extends TextButton {
         });
     }
 
+    /**
+     * Sets the defualt color (when not hovered over)
+     */
     @Override
     public void setColor(Color color) {
         super.setColor(color);
         defualtColor = color;
+    }
+
+    /**
+     * Sets the color when the mouse is hovered over this
+     */
+    public void setHighlightColor(Color color) {
+        highlightColor = color;
     }
 
     public boolean getHover() {

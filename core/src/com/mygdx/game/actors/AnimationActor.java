@@ -58,19 +58,6 @@ public class AnimationActor extends UIActor {
         currentFrame = new Sprite(animation.getKeyFrame(0));
     }
 
-    public boolean getStopUpdating() {
-        return stopUpdating;
-    }
-
-    public void setStopUpdating(boolean s) {
-        stopUpdating = s;
-    }
-
-    @Override
-    public void shade(Color c) {
-        shadeColor = c;
-    }
-
     @Override
     public void act(float delta) { //if this throws null pointer, its currentFrame. Give a defualt(?)
         if (!stopUpdating) {
@@ -84,16 +71,37 @@ public class AnimationActor extends UIActor {
     }
 
     @Override
-    public Color getColor() {
-        return shadeColor;
-    }
-
-    @Override
     public void draw(Batch batch, float parentAlpha) {
         currentFrame.setPosition(getX(), getY());
         currentFrame.setScale(getScaleX());
         if (shadeColor != null && currentFrame.getColor() != shadeColor)
             currentFrame.setColor(shadeColor);
         currentFrame.draw(batch, parentAlpha);
+    }
+
+    @Override
+    public Color getColor() {
+        return shadeColor;
+    }
+
+    public Sprite getCurrentFrame() {
+        return currentFrame;
+    }
+
+    public Sprite getInitialFrame() {
+        return new Sprite(animation.getKeyFrame(0));
+    }
+
+    public boolean getStopUpdating() {
+        return stopUpdating;
+    }
+
+    public void setStopUpdating(boolean s) {
+        stopUpdating = s;
+    }
+
+    @Override
+    public void shade(Color c) {
+        shadeColor = c;
     }
 }

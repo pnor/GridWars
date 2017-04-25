@@ -163,7 +163,7 @@ public class MoveConstructor {
             }
         }, .2f, 4);
 
-        return new Move("Tackle", null, user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage, BoardComponent.boards,
+        return new Move("Tackle", null, user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage, BoardComponent.boards,
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp, BoardManager boards) {
@@ -209,7 +209,7 @@ public class MoveConstructor {
             }
         }, 0f, 1);
 
-        return new Move("Star Spin", "Something spun around!", user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}), engine, stage, BoardComponent.boards,
+        return new Move("Star Spin", "Something spun around!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}), engine, stage, BoardComponent.boards,
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp, BoardManager boards) {

@@ -83,6 +83,13 @@ public class Tile extends Group {
     }
 
     /**
+     * @return whether this has any actors on it. True if it has 1 or more actors and false otherwise.
+     */
+    public boolean isOccupied() {
+        return getChildren().size >= 2;
+    }
+
+    /**
      * Colors the tile background of this Tile.
      * @param c Color
      */
