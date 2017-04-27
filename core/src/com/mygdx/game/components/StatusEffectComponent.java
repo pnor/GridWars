@@ -106,7 +106,7 @@ public class StatusEffectComponent implements Component {
     private boolean isParalyzed;
     private int currentParalyzedTurn;
     public static final int paralyzeDuration = 3;
-    public static final LerpColor paralyzeColor = new LerpColor(Color.GRAY, Color.YELLOW, .5f,  Interpolation.exp5In);
+    public static final LerpColor paralyzeColor = new LerpColor(Color.GRAY, Color.YELLOW, .4f, Interpolation.exp5In);
 
     /**
      * starts the paralyze effect on an Entity

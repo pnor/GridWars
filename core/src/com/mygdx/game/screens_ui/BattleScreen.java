@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.SpriteActor;
@@ -105,8 +106,8 @@ public class BattleScreen implements Screen {
             spLblID, spLbl,
             atkLblID, atkLbl,
             defLblID, defLbl,
-            spdLblID, spdLbl,
-            statusLbl;
+            spdLblID, spdLbl;
+    private NewsTickerLabel statusLbl;
 
     /**
      * Table with attack buttons
@@ -249,6 +250,8 @@ public class BattleScreen implements Screen {
         spdLblID = new Label("Speed", skin); //speed
         spdLbl = new Label("-", skin);
         spdLblID.setColor(Color.PINK);
+        param.size = 17;
+        statusLbl = new NewsTickerLabel(new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE), "Healthy", 12, .1f);
         statsTable.add().size(70, 0); statsTable.add().size(70, 0).row();
         statsTable.add(nameLbl).colspan(2).padBottom(10f).row(); //set up table
         nameLbl.setAlignment(Align.center);
@@ -262,10 +265,12 @@ public class BattleScreen implements Screen {
         statsTable.add(defLbl).row();
         statsTable.add(spdLblID).height(40);
         statsTable.add(spdLbl).row();
+        statsTable.add(statusLbl).colspan(2).size(120, 40);
+        statusLbl.setAlignment(Align.center);
             //statsTable.debug();
         statsTable.setBackground(tableBackground);
         statsTable.pack();
-        statsTable.setPosition(stage.getWidth() * .875f - (statsTable.getWidth() / 2), stage.getHeight() * .75f - (statsTable.getHeight() / 2));
+        statsTable.setPosition(stage.getWidth() * .875f - (statsTable.getWidth() / 2), stage.getHeight() * .725f - (statsTable.getHeight() / 2));
 
         //set up attack menu ui
         param.size = 20;
@@ -346,7 +351,7 @@ public class BattleScreen implements Screen {
         attackTable.add(attackBtn4).size(140, 50).padBottom(15f).row();
         attackTable.setBackground(tableBackground);
         attackTable.pack();
-        attackTable.setPosition(stage.getWidth() * .875f - (attackTable.getWidth() / 2), stage.getHeight() * .25f - (attackTable.getWidth() / 2));
+        attackTable.setPosition(stage.getWidth() * .875f - (attackTable.getWidth() / 2), stage.getHeight() * .225f - (attackTable.getWidth() / 2));
 
         //set up infoTable
         infoLbl = new GradualLabel(.001f, "---", skin);
@@ -399,7 +404,7 @@ public class BattleScreen implements Screen {
         endTurnMessageTable.pack();
         endTurnMessageTable.setSize(380, 120);
         endTurnMessageTable.setPosition(stage.getWidth() / 2 - endTurnMessageTable.getWidth() / 2, (stage.getHeight() / 2 - endTurnMessageTable.getHeight() / 2));
-        endTurnMessageTable.add(endTurnMessageLbl).padTop(20f).row();
+        endTurnMessageTable.add(endTurnMessageLbl).padBottom(5f).row();
         endTurnMessageTable.add(turnCountLbl);
         endTurnMessageTable.setColor(Color.WHITE);
         endTurnMessageTable.addAction(Actions.fadeOut(0f));
@@ -452,8 +457,7 @@ public class BattleScreen implements Screen {
                     }
 
                     if (Visuals.visualsArePlaying == 0 && selectedEntity != null) //stop orange highlight
-
-                        shadeBasedOnState(selectedEntity);
+                        shadeBasedOnState(selectedEntity); //TODO make a way to show multiple status effects well
 
                     selectedEntity = e; //selectedEntity changes to new entity here on
 
@@ -809,62 +813,73 @@ public class BattleScreen implements Screen {
             atkLbl.setText("" + stat.getModAtk(selectedEntity));
             defLbl.setText("" + stat.getModDef(selectedEntity));
             spdLbl.setText("" + stat.getModSpd(selectedEntity));
-
+            nameLbl.setColor(Color.YELLOW);
+            hpLbl.setColor(Color.WHITE);
+            atkLbl.setColor(Color.WHITE);
+            defLbl.setColor(Color.WHITE);
+            spdLbl.setColor(Color.WHITE);
+            statusLbl.setColor(Color.GREEN);
             if (status.has(selectedEntity) && status.get(selectedEntity).getTotalStatusEffects() > 0) {
-                nameLbl.setColor(new Color(Color.PINK));
-                if (status.get(selectedEntity).isBurned()) {
-                    nameLbl.setColor(Color.YELLOW);
-                    hpLbl.setColor(Color.WHITE);
+                /* TODO optimize so it doesn't shade labels again if the shade does not need to be changed. (not essential)
+                For example, switching from a burned entity to a cursed one will shade attack label red again.
+                 */
+                nameLbl.setColor(new Color(192f / 255f, 81f / 255, 1f, 1f));
+                statusLbl.setColor(Color.RED);
+                if (status.get(selectedEntity).isBurned())
                     atkLbl.setColor(Color.RED);
-                    defLbl.setColor(Color.WHITE);
-                    spdLbl.setColor(Color.WHITE);
-                }
-                if (status.get(selectedEntity).isParalyzed()) {
-                    nameLbl.setColor(Color.YELLOW);
-                    hpLbl.setColor(Color.WHITE);
-                    spLbl.setColor(Color.WHITE);
-                    atkLbl.setColor(Color.WHITE);
-                    defLbl.setColor(Color.WHITE);
+
+                if (status.get(selectedEntity).isParalyzed())
                     spdLbl.setColor(Color.RED);
-                }
+
                 if (status.get(selectedEntity).isPetrified()) {
-                    nameLbl.setColor(Color.YELLOW);
-                    hpLbl.setColor(Color.WHITE);
-                    spLbl.setColor(Color.WHITE);
-                    atkLbl.setColor(Color.WHITE);
                     defLbl.setColor(Color.CYAN);
                     spdLbl.setColor(Color.RED);
                 }
-                if (status.get(selectedEntity).isStill()) {
-                    nameLbl.setColor(Color.YELLOW);
-                    hpLbl.setColor(Color.WHITE);
+                if (status.get(selectedEntity).isStill())
                     spLbl.setColor(Color.RED);
-                    atkLbl.setColor(Color.WHITE);
-                    defLbl.setColor(Color.WHITE);
-                    spdLbl.setColor(Color.WHITE);
-                }
+
                 if (status.get(selectedEntity).isCursed()) {
-                    nameLbl.setColor(Color.YELLOW);
-                    hpLbl.setColor(Color.WHITE);
-                    spLbl.setColor(Color.WHITE);
                     atkLbl.setColor(Color.RED);
                     defLbl.setColor(Color.RED);
                     spdLbl.setColor(Color.RED);
                 }
-            } else {
-                nameLbl.setColor(Color.YELLOW);
-                hpLbl.setColor(Color.WHITE);
-                spLbl.setColor(Color.WHITE);
-                atkLbl.setColor(Color.WHITE);
-                defLbl.setColor(Color.WHITE);
-                spdLbl.setColor(Color.WHITE);
-            }
+                //status effect label
+                StringBuilder statusEffects = new StringBuilder();
+                if (status.get(selectedEntity).isPoisoned())
+                    statusEffects.append("Poisoned");
+                if (status.get(selectedEntity).isBurned())
+                    statusEffects.append("Burned");
+                if (status.get(selectedEntity).isParalyzed())
+                    statusEffects.append("Paralyzed");
+                if (status.get(selectedEntity).isPetrified())
+                    statusEffects.append("Petrified");
+                if (status.get(selectedEntity).isStill())
+                    statusEffects.append("Stillness");
+                if (status.get(selectedEntity).isCursed())
+                    statusEffects.append("Cursed");
+                for (int i = 1; i < statusEffects.length(); i++) {
+                    if (statusEffects.charAt(i) == statusEffects.toString().toUpperCase().charAt(i)) {
+                        statusEffects.insert(i, ", ");
+                        i += 2;
+                    }
+                }
+                statusLbl.reset();
+                statusLbl.setText(statusEffects.toString());
+            } else
+                statusLbl.setText("Healthy");
         } else {
             hpLbl.setText("-- / --");
             spLbl.setText("-- / --");
             atkLbl.setText("--");
             defLbl.setText("--");
             spdLbl.setText("--");
+            statusLbl.setText("---");
+            nameLbl.setColor(Color.YELLOW);
+            hpLbl.setColor(Color.WHITE);
+            atkLbl.setColor(Color.WHITE);
+            defLbl.setColor(Color.WHITE);
+            spdLbl.setColor(Color.WHITE);
+            statusLbl.setColor(Color.WHITE);
         }
 
         if (mvm.has(selectedEntity)) {
@@ -898,7 +913,7 @@ public class BattleScreen implements Screen {
     }
 
     /**
-     * Updates the bar with the icons of all the entities on a team.
+     * Updates the bar with the icons of all the entities on a team. Shades the icons based on health and status effects.
      */
     public void updateTeamBar() {
         UIActor actor;
@@ -922,6 +937,7 @@ public class BattleScreen implements Screen {
                 default:
                     member = null;
             }
+            //smaller than current loop iteration OR team member is null
             if (rules.getCurrentTeam().getEntities().size < i || rules.getCurrentTeam().getEntities().get(i - 1) == null) {
                 member.setColor(Color.WHITE);
                 member.setDrawable(new TextureRegionDrawable(atlas.findRegion("Hole2")));
@@ -930,101 +946,35 @@ public class BattleScreen implements Screen {
             actor = am.get(rules.getCurrentTeam().getEntities().get(i - 1)).actor;
             entity = rules.getCurrentTeam().getEntities().get(i - 1);
 
-            if (actor instanceof SpriteActor) {
+            if (actor instanceof SpriteActor) {  //set image
                 temp = new Sprite(((SpriteActor) actor).getSprite());
                 temp.setColor(Color.WHITE);
                 member.setDrawable(new SpriteDrawable(temp));
             } else if (actor instanceof AnimationActor)
                 member.setDrawable(new SpriteDrawable(((AnimationActor) actor).getInitialFrame()));
 
-            if (stm.has(entity) && !(status.has(entity) && status.get(entity).getTotalStatusEffects() > 0))
+            if (stm.has(entity) && stm.get(entity).hp <= 0 && !(status.has(entity) && status.get(entity).getTotalStatusEffects() > 0)) { //Shade based on health
                 if (stm.get(entity).hp == 0)
                     member.setColor(Color.BLACK);
                 else
                     member.setColor(new Color(1, 1, 1, 1).lerp(Color.RED, 1f - (float) stm.get(entity).hp / (float) stm.get(entity).getModMaxHp(entity)));
+            } else if (status.has(entity)) { //Shade based on status effect
+                if (status.get(entity).isPoisoned())
+                    member.setColor(Color.GREEN);
+                else if (status.get(entity).isBurned())
+                    member.setColor(Color.RED);
+                else if (status.get(entity).isParalyzed())
+                    member.setColor(Color.YELLOW);
+                else if (status.get(entity).isPetrified())
+                    member.setColor(new Color(122f / 255f, 104f / 255f, 87f / 255f, 1));
+                else if (status.get(entity).isStill())
+                    member.setColor(new Color(0, 140f / 255f, 1f, 1f));
+                else if (status.get(entity).isCursed())
+                    member.setColor(Color.DARK_GRAY);
+            } else {
+                member.setColor(Color.WHITE);
+            }
         }
-
-        /*
-        if (rules.getCurrentTeam().getEntities().size >= 1 && rules.getCurrentTeam().getEntities().get(0) != null) {
-            actor = am.get(rules.getCurrentTeam().getEntities().get(0)).actor;
-            entity = rules.getCurrentTeam().getEntities().get(0);
-            if (actor instanceof SpriteActor) {
-                temp = new Sprite(((SpriteActor) actor).getSprite());
-                temp.setColor(Color.WHITE);
-                member1.setDrawable(new SpriteDrawable(temp));
-            } else if (actor instanceof AnimationActor)
-                member1.setDrawable(new SpriteDrawable(((AnimationActor) actor).getInitialFrame()));
-
-            if (stm.has(entity) && !(status.has(entity) && status.get(entity).getTotalStatusEffects() > 0))
-                if (stm.get(entity).hp == 0)
-                    member1.setColor(Color.BLACK);
-                else
-                    member1.setColor(new Color(1, 1, 1, 1).lerp(Color.RED, 1f - (float) stm.get(entity).hp / (float) stm.get(entity).getModMaxHp(entity)));
-        } else {
-            member1.setColor(Color.WHITE);
-            member1.setDrawable(new TextureRegionDrawable(atlas.findRegion("Hole2")));
-        }
-
-        if (rules.getCurrentTeam().getEntities().size >= 2 && rules.getCurrentTeam().getEntities().get(1) != null) {
-            actor = am.get(rules.getCurrentTeam().getEntities().get(1)).actor;
-            entity = rules.getCurrentTeam().getEntities().get(1);
-            if (actor instanceof SpriteActor) {
-                temp = new Sprite(((SpriteActor) actor).getSprite());
-                temp.setColor(Color.WHITE);
-                member2.setDrawable(new SpriteDrawable(temp));
-            } else if (actor instanceof AnimationActor)
-                member2.setDrawable(new SpriteDrawable(((AnimationActor) actor).getInitialFrame()));
-
-            if (stm.has(entity) && !(status.has(entity) && status.get(entity).getTotalStatusEffects() > 0))
-                if (stm.get(entity).hp == 0)
-                    member2.setColor(Color.BLACK);
-                else
-                    member2.setColor(new Color(1, 1, 1, 1).lerp(Color.RED, 1f - (float) stm.get(entity).hp / (float) stm.get(entity).getModMaxHp(entity)));
-        } else {
-            member2.setColor(Color.WHITE);
-            member2.setDrawable(new TextureRegionDrawable(atlas.findRegion("Hole2")));
-        }
-
-        if (rules.getCurrentTeam().getEntities().size >= 3 && rules.getCurrentTeam().getEntities().get(2) != null) {
-            actor = am.get(rules.getCurrentTeam().getEntities().get(2)).actor;
-            entity = rules.getCurrentTeam().getEntities().get(2);
-            if (actor instanceof SpriteActor) {
-                temp = new Sprite(((SpriteActor) actor).getSprite());
-                temp.setColor(Color.WHITE);
-                member3.setDrawable(new SpriteDrawable(temp));
-            } else if (actor instanceof AnimationActor)
-                member3.setDrawable(new SpriteDrawable(((AnimationActor) actor).getInitialFrame()));
-
-            if (stm.has(entity) && !(status.has(entity) && status.get(entity).getTotalStatusEffects() > 0))
-                if (stm.get(entity).hp == 0)
-                    member3.setColor(Color.BLACK);
-                else
-                    member3.setColor(new Color(1, 1, 1, 1).lerp(Color.RED, 1f - (float) stm.get(entity).hp / (float) stm.get(entity).getModMaxHp(entity)));
-        } else {
-            member3.setColor(Color.WHITE);
-            member3.setDrawable(new TextureRegionDrawable(atlas.findRegion("Hole2")));
-        }
-
-        if (rules.getCurrentTeam().getEntities().size >= 4 && rules.getCurrentTeam().getEntities().get(3) != null) {
-            actor = am.get(rules.getCurrentTeam().getEntities().get(3)).actor;
-            entity = rules.getCurrentTeam().getEntities().get(3);
-            if (actor instanceof SpriteActor) {
-                temp = new Sprite(((SpriteActor) actor).getSprite());
-                temp.setColor(Color.WHITE);
-                member4.setDrawable(new SpriteDrawable(temp));
-            } else if (actor instanceof AnimationActor)
-                member4.setDrawable(new SpriteDrawable(((AnimationActor) actor).getInitialFrame()));
-
-            if (stm.has(entity) && !(status.has(entity) && status.get(entity).getTotalStatusEffects() > 0))
-                if (stm.get(entity).hp == 0)
-                    member4.setColor(Color.BLACK);
-                else
-                    member4.setColor(new Color(1, 1, 1, 1).lerp(Color.RED, 1f - (float) stm.get(entity).hp / (float) stm.get(entity).getModMaxHp(entity)));
-        } else {
-            member4.setColor(Color.WHITE);
-            member4.setDrawable(new TextureRegionDrawable(atlas.findRegion("Hole2")));
-        }
-        */
     }
 
     /**

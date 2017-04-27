@@ -10,6 +10,7 @@ import com.mygdx.game.components.SpriteComponent;
 
 
 /**
+ * Background class that has multiple animated layers.
  * @author Phillip O'Reggio
  */
 public class Background {

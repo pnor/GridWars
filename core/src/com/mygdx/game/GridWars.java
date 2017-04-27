@@ -51,7 +51,7 @@ public class GridWars extends Game {
 	}
 
 	public void createTesterBattleScreen() {
-		BattleScreen screen = new BattleScreen(this, 8,new Color(241f / 255, 201f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1));
+		BattleScreen screen = new BattleScreen(this, 7, new Color(241f / 255, 201f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1));
 		setScreen(screen);
 
 		Array<Entity> a = new Array<Entity>();
@@ -64,8 +64,13 @@ public class GridWars extends Game {
 		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
 		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
 		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
-		status.get(b.get(3)).curse(b.get(3));
-		status.get(b.get(2)).still(b.get(2));
+		status.get(b.get(3)).paralyze(b.get(3));
+		status.get(b.get(2)).poison(b.get(2));
+		status.get(b.get(1)).petrify(b.get(1));
+		status.get(b.get(0)).burn(b.get(0));
+		status.get(b.get(0)).paralyze(b.get(0));
+		status.get(b.get(0)).poison(b.get(0));
+		status.get(b.get(0)).still(b.get(0));
 		Team teamB = new Team("Team Blue", Color.CYAN, false, b);
 
 		Array<Entity> c = new Array<Entity>();

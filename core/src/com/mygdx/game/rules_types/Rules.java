@@ -17,10 +17,10 @@ public abstract class Rules {
 
     protected BattleScreen screen;
     protected Array<Team> entities;
-    protected int currentTeamTurn = 1;
+    protected int currentTeamTurn;
     protected int totalTeams;
 
-    protected int turnCount;
+    protected int turnCount = 1;
 
     public Rules(BattleScreen s, Array<Team> teams) {
         screen = s;
