@@ -175,15 +175,15 @@ public class BattleScreen implements Screen {
         attackTable = new Table();
         infoTable = new Table();
         teamTable = new Table();
-        helpTable = new Table();
         endTurnMessageTable = new Table();
+        //helpTable = new Table();
         stage.addActor(boardTable);
         stage.addActor(statsTable);
         stage.addActor(attackTable);
         stage.addActor(infoTable);
         stage.addActor(teamTable);
         stage.addActor(endTurnMessageTable);
-        stage.addActor(helpTable);
+        //stage.addActor(helpTable);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         backAtlas = new TextureAtlas(Gdx.files.internal("BackPack.pack"));
         uiatlas = new TextureAtlas("uiskin.atlas");
@@ -420,6 +420,7 @@ public class BattleScreen implements Screen {
         endTurnMessageTable.setColor(Color.WHITE);
         endTurnMessageTable.addAction(Actions.fadeOut(0f));
 
+       /*
         moveDescriptionLbl = new Label("88888888888", skin);
         closeHelpMenuBtn = new HoverButton("Close", skin, Color.WHITE, Color.CYAN);
         closeHelpMenuBtn.addListener(new ChangeListener() {
@@ -436,6 +437,7 @@ public class BattleScreen implements Screen {
         helpTable.pack();
         helpTable.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         helpTable.setSize(stage.getWidth() / 3f, stage.getHeight() / 3);
+        */
 
         fontGenerator.dispose();
     }
