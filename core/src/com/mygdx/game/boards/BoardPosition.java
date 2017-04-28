@@ -39,6 +39,15 @@ public class BoardPosition {
         c = newC;
     }
 
+    public boolean equals(Object o) {
+        if (!(o instanceof BoardPosition))
+            return false;
+        else
+            if (((BoardPosition) o).r == r && ((BoardPosition) o).c == c)
+                return true;
+        return false;
+    }
+
     /**
      * Creates a copy of this object
      * @return copy of this object

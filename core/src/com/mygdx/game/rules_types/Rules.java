@@ -16,15 +16,15 @@ import static com.mygdx.game.ComponentMappers.stm;
 public abstract class Rules {
 
     protected BattleScreen screen;
-    protected Array<Team> entities;
+    protected Array<Team> teams;
     protected int currentTeamTurn;
     protected int totalTeams;
 
     protected int turnCount = 1;
 
-    public Rules(BattleScreen s, Array<Team> teams) {
+    public Rules(BattleScreen s, Array<Team> t) {
         screen = s;
-        entities = teams;
+        teams = t;
         for (int i = 0; i< teams.size; i++)
             totalTeams += 1;
     }
@@ -46,8 +46,14 @@ public abstract class Rules {
                     screen.removeMovementTiles();
                 } catch (IndexOutOfBoundsException e) {}
 
+        //skip turn if al entities are dead
+        if (teams.get(currentTeamTurn).allDead()) {
+            currentTeamTurn = (currentTeamTurn + 1) % totalTeams;
+            turnCount = currentTeamTurn == 0 ? turnCount + 1 : turnCount;
+        }
+
         //toggle states
-        for (Team t : entities) {
+        for (Team t : teams) {
             for (Entity e : t.getEntities())
             if (state.has(e)) {
                 state.get(e).canAttack = true;
@@ -57,7 +63,7 @@ public abstract class Rules {
             }
         }
         //do affects and stats
-        for (Entity e : entities.get(currentTeamTurn).getEntities()) {
+        for (Entity e : teams.get(currentTeamTurn).getEntities()) {
             if (stm.has(e) && !(stm.get(e).getModSp(e) >= stm.get(e).getModMaxSp(e)) && !(status.has(e) && status.get(e).isStill()))
                 stm.get(e).sp += 1;
 
@@ -97,7 +103,7 @@ public abstract class Rules {
     }
 
     public Team getCurrentTeam() {
-        return entities.get(currentTeamTurn);
+        return teams.get(currentTeamTurn);
     }
 
     public int getTurnCount() {
@@ -110,7 +116,7 @@ public abstract class Rules {
 
     public void calculateTotalTeams() {
         totalTeams = 0;
-        for (int i = 0; i < entities.size; i++)
+        for (int i = 0; i < teams.size; i++)
             totalTeams += 1;
     }
 }

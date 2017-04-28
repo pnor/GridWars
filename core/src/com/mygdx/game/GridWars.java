@@ -13,6 +13,7 @@ import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.BoardComponent;
 import com.mygdx.game.creators.EntityConstructor;
 import com.mygdx.game.rules_types.Team;
+import com.mygdx.game.rules_types.ZoneRules;
 import com.mygdx.game.screens_ui.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.status;
@@ -56,16 +57,14 @@ public class GridWars extends Game {
 
 		Array<Entity> a = new Array<Entity>();
 		a.add(EntityConstructor.testerChessPiece(0, screen, screen.getEngine(), screen.getStage()));
-		Team teamA = new Team(false, a);
-		status.get(a.get(0)).petrify(a.get(0));
+		Team teamA = new Team("Star", Color.RED, false, a);
 
 		Array<Entity> b = new Array<Entity>();
 		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
 		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
 		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
 		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
-		status.get(b.get(3)).paralyze(b.get(3));
-		status.get(b.get(2)).poison(b.get(2));
+		status.get(b.get(3)).burn(b.get(3));
 		status.get(b.get(1)).petrify(b.get(1));
 		status.get(b.get(0)).burn(b.get(0));
 		status.get(b.get(0)).paralyze(b.get(0));
@@ -86,6 +85,8 @@ public class GridWars extends Game {
 		BoardComponent.boards.add(b.get(2), new BoardPosition(3, 1));
 		BoardComponent.boards.add(b.get(3), new BoardPosition(2, 2));
 
-		BoardComponent.boards.add(c.get(0), new BoardPosition(1, 0));
+		BoardComponent.boards.add(c.get(0), new BoardPosition(1, 1));
+		if (screen.getRules() instanceof ZoneRules)
+			((ZoneRules) screen.getRules()).colorZones();
 	}
 }

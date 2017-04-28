@@ -62,7 +62,7 @@ public class Tile extends Group {
         super();
         isDark = isItDark;
         color = c;
-        r = rPos;
+        this.r = rPos;
         this.c = cPos;
 
         UIActor tile;
@@ -150,6 +150,11 @@ public class Tile extends Group {
             return new Tile(rPos, cPos, isDark, getWidth());
         else
             return new Tile(rPos, cPos, isDark, color, getWidth());
+    }
+
+    public void setColor(Color c) {
+        color = c;
+        tileBack.shade(c);
     }
 
     public boolean getLastSelected() {

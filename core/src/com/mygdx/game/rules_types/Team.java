@@ -4,6 +4,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 
+import static com.mygdx.game.ComponentMappers.stm;
+
 /**
  * Represents a team of entities.
  * @author Phillip O'Reggio
@@ -26,6 +28,16 @@ public class Team {
         teamColor = new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f);
         AIControlled = isAIControlled;
         entities = e;
+    }
+
+    /**
+     * @return if all entities in a team's hp is <= 0. Entities with no StatComponent are considered dead
+     */
+    public boolean allDead() {
+        for (int i = 0; i < entities.size; i++)
+            if (stm.has(entities.get(i)) && !(stm.get(entities.get(i)).hp <= 0))
+                return false;
+        return true;
     }
 
     public Array<Entity> getEntities() {
