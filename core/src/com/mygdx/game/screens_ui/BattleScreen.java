@@ -40,9 +40,9 @@ import com.mygdx.game.components.StatComponent;
 import com.mygdx.game.components.StatusEffectComponent;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.Visuals;
-import com.mygdx.game.rules_types.Battle2PRules;
 import com.mygdx.game.rules_types.Rules;
 import com.mygdx.game.rules_types.Team;
+import com.mygdx.game.rules_types.ZoneRules;
 import com.mygdx.game.systems.*;
 
 import static com.mygdx.game.ComponentMappers.*;
@@ -138,6 +138,10 @@ public class BattleScreen implements Screen {
     private Table endTurnMessageTable;
     private Label endTurnMessageLbl;
     private Label turnCountLbl;
+    /** Pop up message that says the effects of a move. */
+    private Table helpTable;
+    private Label moveDescriptionLbl;
+    private HoverButton closeHelpMenuBtn;
 
 
     //debug values
@@ -171,6 +175,7 @@ public class BattleScreen implements Screen {
         attackTable = new Table();
         infoTable = new Table();
         teamTable = new Table();
+        helpTable = new Table();
         endTurnMessageTable = new Table();
         stage.addActor(boardTable);
         stage.addActor(statsTable);
@@ -178,13 +183,19 @@ public class BattleScreen implements Screen {
         stage.addActor(infoTable);
         stage.addActor(teamTable);
         stage.addActor(endTurnMessageTable);
+        stage.addActor(helpTable);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         backAtlas = new TextureAtlas(Gdx.files.internal("BackPack.pack"));
         uiatlas = new TextureAtlas("uiskin.atlas");
         skin.addRegions(uiatlas);
         battleInputProcessor = new BattleInputProcessor(this);
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, battleInputProcessor));
-        rules = new Battle2PRules(this, teams);
+        //rules = new Battle2PRules(this, teams);
+        Array<Array<BoardPosition>> zones = new Array<Array<BoardPosition>>();
+        Array<BoardPosition> team0Zones = new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0), new BoardPosition(1, 0)});
+        Array<BoardPosition> team1Zones = new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(6, 0), new BoardPosition(5, 0)});
+        zones.add(team0Zones); zones.add(team1Zones);
+        rules = new ZoneRules(this, teams, zones);
 
         //Set up Engine
         engine = new Engine();
@@ -408,6 +419,23 @@ public class BattleScreen implements Screen {
         endTurnMessageTable.add(turnCountLbl);
         endTurnMessageTable.setColor(Color.WHITE);
         endTurnMessageTable.addAction(Actions.fadeOut(0f));
+
+        moveDescriptionLbl = new Label("88888888888", skin);
+        closeHelpMenuBtn = new HoverButton("Close", skin, Color.WHITE, Color.CYAN);
+        closeHelpMenuBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (((Button) actor).isPressed()) {
+
+                }
+            }
+        });
+        helpTable.add(moveDescriptionLbl).padBottom(20f).row();
+        helpTable.add(closeHelpMenuBtn);
+        helpTable.setBackground(tableBackground);
+        helpTable.pack();
+        helpTable.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+        helpTable.setSize(stage.getWidth() / 3f, stage.getHeight() / 3);
 
         fontGenerator.dispose();
     }
@@ -637,22 +665,6 @@ public class BattleScreen implements Screen {
                 for (BoardPosition pos :  mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
                     try {
                         Tile currTile = board.getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c);
-                        /*
-                        if (currTile.getIsListening()) {
-                            for (Tile t : getMovableSquares(selectedEntity)) {
-                                if (t == currTile) {
-                                    wasBlue = true;
-                                    break;
-                                }
-                            }
-                            if (wasBlue)
-                                currTile.shadeTile(Color.CYAN);
-                            else
-                                currTile.revertTileColor();
-
-                        } else
-                            currTile.revertTileColor();
-                            */
                         if (currTile.getIsListening())
                             currTile.shadeTile(Color.CYAN);
                         else
@@ -815,6 +827,7 @@ public class BattleScreen implements Screen {
             spdLbl.setText("" + stat.getModSpd(selectedEntity));
             nameLbl.setColor(Color.YELLOW);
             hpLbl.setColor(Color.WHITE);
+            spLbl.setColor(Color.WHITE);
             atkLbl.setColor(Color.WHITE);
             defLbl.setColor(Color.WHITE);
             spdLbl.setColor(Color.WHITE);

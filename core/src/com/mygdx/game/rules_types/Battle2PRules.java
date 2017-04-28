@@ -1,10 +1,7 @@
 package com.mygdx.game.rules_types;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.screens_ui.BattleScreen;
-
-import static com.mygdx.game.ComponentMappers.stm;
 
 /**
  * Rules for regular battles with a total of 2 players. The win condition is to defeat everyone on the other team.
@@ -21,25 +18,19 @@ public class Battle2PRules extends Rules {
            */
     }
 
+    /**
+     * Checks which team won by seeing if all entities on a team is dead.
+     * @return winning team
+     */
     @Override
     public Team checkWinConditions() {
         //check if team at 1 won
-        boolean allDead = true;
-        for (Entity e : entities.get(0).getEntities()) {
-            if (stm.get(e).alive)
-                allDead = false;
-        }
-        if (allDead)
-            return entities.get(1);
+        if (teams.get(0).allDead())
+            return teams.get(1);
 
         //check if team at 0 won
-        allDead = true;
-        for (Entity e : entities.get(0).getEntities()) {
-            if (stm.get(e).alive)
-                allDead = false;
-        }
-        if (allDead)
-            return entities.get(2);
+        if (teams.get(1).allDead())
+            return teams.get(0);
 
         return null;
     }
