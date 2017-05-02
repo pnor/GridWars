@@ -1,7 +1,7 @@
 package com.mygdx.game.rules_types;
 
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.screens_ui.BattleScreen;
+import com.mygdx.game.screens_ui.screens.BattleScreen;
 
 /**
  * Rules for regular battles with a total of 2 players. The win condition is to defeat everyone on the other team.

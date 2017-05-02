@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GameTimer;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
-import com.mygdx.game.screens_ui.BattleScreen;
+import com.mygdx.game.screens_ui.screens.BattleScreen;
 
 /**
  * Represents the visual effect that plays when an attack is used.

@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.BoardComponent;
-import com.mygdx.game.screens_ui.BattleScreen;
+import com.mygdx.game.screens_ui.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.bm;
 

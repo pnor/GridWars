@@ -2,6 +2,7 @@ package com.mygdx.game.screens_ui;
 
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.game.move_related.Move;
+import com.mygdx.game.screens_ui.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.mvm;
 

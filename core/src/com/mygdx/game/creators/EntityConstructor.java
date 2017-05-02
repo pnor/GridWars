@@ -10,7 +10,7 @@ import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.SpriteActor;
 import com.mygdx.game.components.*;
 import com.mygdx.game.move_related.Move;
-import com.mygdx.game.screens_ui.BattleScreen;
+import com.mygdx.game.screens_ui.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.state;
 import static com.mygdx.game.GridWars.atlas;
@@ -20,6 +20,7 @@ import static com.mygdx.game.GridWars.atlas;
  * @author Phillip O'Reggio
  */
 public class EntityConstructor {
+
     //Testing purposes
     public static Entity testerChessPiece(int team, BattleScreen screen, Engine engine, Stage stage) {
         Entity entity = new Entity();

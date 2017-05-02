@@ -3,7 +3,7 @@ package com.mygdx.game.rules_types;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.components.StatusEffectComponent;
-import com.mygdx.game.screens_ui.BattleScreen;
+import com.mygdx.game.screens_ui.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.state;
 import static com.mygdx.game.ComponentMappers.status;

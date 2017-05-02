@@ -1,7 +1,8 @@
-package com.mygdx.game.screens_ui;
+package com.mygdx.game.screens_ui.screens;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -10,7 +11,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -43,19 +43,18 @@ import com.mygdx.game.move_related.Visuals;
 import com.mygdx.game.rules_types.Rules;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.rules_types.ZoneRules;
+import com.mygdx.game.screens_ui.*;
 import com.mygdx.game.systems.*;
 
 import static com.mygdx.game.ComponentMappers.*;
-import static com.mygdx.game.GridWars.atlas;
+import static com.mygdx.game.GridWars.*;
 
 /**
  * @author pnore_000
  */
 public class BattleScreen implements Screen {
 
-    private GridWars gridWars;
-    private Engine engine;
-    private Stage stage;
+    private final GridWars GRID_WARS;
     private BattleInputProcessor battleInputProcessor;
 
     //Background
@@ -90,9 +89,6 @@ public class BattleScreen implements Screen {
     public boolean attacksEnabled = true;
 
     //Ui Elements
-    private Skin skin;
-    private TextureAtlas uiatlas;
-    private TextureAtlas backAtlas;
     /**
      * Table with board tiles
      */
@@ -143,7 +139,6 @@ public class BattleScreen implements Screen {
     private Label moveDescriptionLbl;
     private HoverButton closeHelpMenuBtn;
 
-
     //debug values
     private float deltaTimeSums;
     private final int deltatimeIntervals = 10000;
@@ -151,7 +146,7 @@ public class BattleScreen implements Screen {
 
 
     public BattleScreen(GridWars game, int boardSize, Color darkBoardColor, Color lightBoardColor) {
-        gridWars = game;
+        GRID_WARS = game;
         if (boardSize <= 7) {
             board = new Board(boardSize, boardSize, darkBoardColor, lightBoardColor, 100);
             codeBoard = new CodeBoard(boardSize, boardSize);
@@ -165,11 +160,12 @@ public class BattleScreen implements Screen {
     public void show() {
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        stage.clear();
+        for (EntitySystem system : engine.getSystems()) {
+            engine.removeSystem(system);
+        }
 
         //set up assets
-        stage = new Stage();
-        stage.getViewport().setWorldSize(1000, 900);
-        stage.getViewport().setScreenSize(1000, 900);
         boardTable = new Table();
         statsTable = new Table();
         attackTable = new Table();
@@ -184,10 +180,6 @@ public class BattleScreen implements Screen {
         stage.addActor(teamTable);
         stage.addActor(endTurnMessageTable);
         //stage.addActor(helpTable);
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
-        backAtlas = new TextureAtlas(Gdx.files.internal("BackPack.pack"));
-        uiatlas = new TextureAtlas("uiskin.atlas");
-        skin.addRegions(uiatlas);
         battleInputProcessor = new BattleInputProcessor(this);
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, battleInputProcessor));
         //rules = new Battle2PRules(this, teams);
@@ -392,10 +384,10 @@ public class BattleScreen implements Screen {
            }
            }
         });
-        member1 = new Image(atlas.findRegion("Hole2"));
-        member2 = new Image(atlas.findRegion("Hole2"));
-        member3 = new Image(atlas.findRegion("Hole2"));
-        member4 = new Image(atlas.findRegion("Hole2"));
+        member1 = new Image(GRID_WARS.atlas.findRegion("Hole2"));
+        member2 = new Image(GRID_WARS.atlas.findRegion("Hole2"));
+        member3 = new Image(GRID_WARS.atlas.findRegion("Hole2"));
+        member4 = new Image(GRID_WARS.atlas.findRegion("Hole2"));
         teamTable.add(endTurnBtn).height(40).width(120);
         teamTable.add(member1).size(48).padLeft(60f);
         teamTable.add(member2).size(48).padLeft(60f);
@@ -577,7 +569,7 @@ public class BattleScreen implements Screen {
             }
         }
 
-        //update everything. (Graphics, engine, stage)
+        //update everything. (Graphics, engine, GRID_WARS.stage)
         background.update(delta);
         stage.act(delta);
         engine.getSystem(DrawingSystem.class).drawBackground(background, delta);
@@ -955,7 +947,7 @@ public class BattleScreen implements Screen {
             //smaller than current loop iteration OR team member is null
             if (rules.getCurrentTeam().getEntities().size < i || rules.getCurrentTeam().getEntities().get(i - 1) == null) {
                 member.setColor(Color.WHITE);
-                member.setDrawable(new TextureRegionDrawable(atlas.findRegion("Hole2")));
+                member.setDrawable(new TextureRegionDrawable(GRID_WARS.atlas.findRegion("Hole2")));
                 continue;
             }
             actor = am.get(rules.getCurrentTeam().getEntities().get(i - 1)).actor;
@@ -1111,7 +1103,7 @@ public class BattleScreen implements Screen {
         return engine;
     }
 
-    public Stage getStage() {
+    public Stage getstage() {
         return stage;
     }
 

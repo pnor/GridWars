@@ -1,54 +1,61 @@
 package com.mygdx.game;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.BoardComponent;
 import com.mygdx.game.creators.EntityConstructor;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.rules_types.ZoneRules;
-import com.mygdx.game.screens_ui.BattleScreen;
+import com.mygdx.game.screens_ui.screens.BattleScreen;
+import com.mygdx.game.screens_ui.screens.TitleScreen;
 
 import static com.mygdx.game.ComponentMappers.status;
 
 public class GridWars extends Game {
-	public AssetManager assets = new AssetManager();
-	public SpriteBatch batch;
-	public Texture img;
+	//public AssetManager assets = new AssetManager();
+	public static Stage stage;
+	public static Engine engine;
+	public static Skin skin;
 	public static TextureAtlas atlas;
-
+	public static TextureAtlas backAtlas;
 
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		stage = new Stage();
+		stage.getViewport().setWorldSize(1000, 900);
+		stage.getViewport().setScreenSize(1000, 900);
+		engine = new Engine();
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		skin.addRegions( new TextureAtlas("uiskin.atlas"));
 		atlas = new TextureAtlas(Gdx.files.internal("GDSprites.pack"));
-		createTesterBattleScreen();
+		backAtlas = new TextureAtlas(Gdx.files.internal("BackPack.pack"));
+		setScreen(new TitleScreen(this));
 	}
 
 	@Override
 	public void render () {
-		/*
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
-		*/
 		getScreen().render(Gdx.graphics.getDeltaTime());
+	}
+
+	@Override
+	public void setScreen(Screen screen) {
+		super.setScreen(screen);
 	}
 	
 	@Override
 	public void dispose () {
-		batch.dispose();
-		img.dispose();
+		stage.dispose();
+		//img.dispose();
 	}
 
 	public void createTesterBattleScreen() {
@@ -56,14 +63,14 @@ public class GridWars extends Game {
 		setScreen(screen);
 
 		Array<Entity> a = new Array<Entity>();
-		a.add(EntityConstructor.testerChessPiece(0, screen, screen.getEngine(), screen.getStage()));
+		a.add(EntityConstructor.testerChessPiece(0, screen, screen.getEngine(), stage));
 		Team teamA = new Team("Star", Color.RED, false, a);
 
 		Array<Entity> b = new Array<Entity>();
-		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
-		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
-		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
-		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), screen.getStage()));
+		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), stage));
+		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), stage));
+		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), stage));
+		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), stage));
 		status.get(b.get(3)).burn(b.get(3));
 		status.get(b.get(1)).petrify(b.get(1));
 		status.get(b.get(0)).burn(b.get(0));
@@ -73,7 +80,7 @@ public class GridWars extends Game {
 		Team teamB = new Team("Team Blue", Color.CYAN, false, b);
 
 		Array<Entity> c = new Array<Entity>();
-		c.add(EntityConstructor.testerHole(-1, screen, screen.getEngine(), screen.getStage()));
+		c.add(EntityConstructor.testerHole(-1, screen, screen.getEngine(), stage));
 		Team teamC = new Team(false, c);
 
 		screen.setTeams(teamA, teamB, teamC);
@@ -88,5 +95,9 @@ public class GridWars extends Game {
 		BoardComponent.boards.add(c.get(0), new BoardPosition(1, 1));
 		if (screen.getRules() instanceof ZoneRules)
 			((ZoneRules) screen.getRules()).colorZones();
+	}
+
+	public Batch getBatch() {
+		return stage.getBatch();
 	}
 }

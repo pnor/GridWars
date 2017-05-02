@@ -15,7 +15,7 @@ import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.*;
 import com.mygdx.game.move_related.*;
-import com.mygdx.game.screens_ui.BattleScreen;
+import com.mygdx.game.screens_ui.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.atlas;
