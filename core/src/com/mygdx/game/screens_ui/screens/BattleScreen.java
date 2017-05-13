@@ -384,10 +384,10 @@ public class BattleScreen implements Screen {
            }
            }
         });
-        member1 = new Image(GRID_WARS.atlas.findRegion("hole"));
-        member2 = new Image(GRID_WARS.atlas.findRegion("hole"));
-        member3 = new Image(GRID_WARS.atlas.findRegion("hole"));
-        member4 = new Image(GRID_WARS.atlas.findRegion("hole"));
+        member1 = new Image(GRID_WARS.atlas.findRegion("mystery"));
+        member2 = new Image(GRID_WARS.atlas.findRegion("mystery"));
+        member3 = new Image(GRID_WARS.atlas.findRegion("mystery"));
+        member4 = new Image(GRID_WARS.atlas.findRegion("mystery"));
         teamTable.add(endTurnBtn).height(40).width(120);
         teamTable.add(member1).size(48).padLeft(60f);
         teamTable.add(member2).size(48).padLeft(60f);
@@ -947,7 +947,7 @@ public class BattleScreen implements Screen {
             //smaller than current loop iteration OR team member is null
             if (rules.getCurrentTeam().getEntities().size < i || rules.getCurrentTeam().getEntities().get(i - 1) == null) {
                 member.setColor(Color.WHITE);
-                member.setDrawable(new TextureRegionDrawable(GRID_WARS.atlas.findRegion("hole")));
+                member.setDrawable(new TextureRegionDrawable(GRID_WARS.atlas.findRegion("mystery")));
                 continue;
             }
             actor = am.get(rules.getCurrentTeam().getEntities().get(i - 1)).actor;
@@ -959,13 +959,13 @@ public class BattleScreen implements Screen {
                 member.setDrawable(new SpriteDrawable(temp));
             } else if (actor instanceof AnimationActor)
                 member.setDrawable(new SpriteDrawable(((AnimationActor) actor).getInitialFrame()));
-
+            //color image
             if (stm.has(entity) && stm.get(entity).hp <= 0 && !(status.has(entity) && status.get(entity).getTotalStatusEffects() > 0)) { //Shade based on health
-                if (stm.get(entity).hp == 0)
+                if (stm.get(entity).hp <= 0)
                     member.setColor(Color.BLACK);
                 else
                     member.setColor(new Color(1, 1, 1, 1).lerp(Color.RED, 1f - (float) stm.get(entity).hp / (float) stm.get(entity).getModMaxHp(entity)));
-            } else if (status.has(entity)) { //Shade based on status effect
+            } else if (status.has(entity) && status.get(entity).getTotalStatusEffects() > 0) { //Shade based on status effect
                 if (status.get(entity).isPoisoned())
                     member.setColor(Color.GREEN);
                 else if (status.get(entity).isBurned())

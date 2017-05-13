@@ -129,212 +129,226 @@ cloud2
   orig: 64, 64
   offset: 0, 0
   index: -1
-firebull
+cube
   rotate: false
   xy: 733, 439
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-firebull2
+cubelight
   rotate: false
   xy: 799, 439
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fish
+firebull
   rotate: false
   xy: 865, 439
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fish2
+firebull2
   rotate: false
   xy: 931, 439
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fox
+fish
   rotate: false
-  xy: 205, 376
-  size: 64, 61
-  orig: 64, 61
+  xy: 169, 337
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
-fox2
+fish2
   rotate: false
-  xy: 271, 376
-  size: 64, 61
-  orig: 64, 61
+  xy: 169, 271
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 freeze1
   rotate: false
-  xy: 337, 373
+  xy: 169, 205
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 freeze2
   rotate: false
-  xy: 403, 373
+  xy: 67, 133
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 freeze3
   rotate: false
-  xy: 469, 373
+  xy: 67, 67
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 hole
   rotate: false
-  xy: 535, 373
+  xy: 67, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 icebird
   rotate: false
-  xy: 601, 373
+  xy: 133, 138
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 icebird2
   rotate: false
-  xy: 667, 373
+  xy: 133, 72
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 jellygirl
   rotate: false
-  xy: 733, 373
+  xy: 133, 6
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 jellygirl2
   rotate: false
-  xy: 799, 373
+  xy: 199, 139
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+mirrorman
+  rotate: false
+  xy: 199, 73
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+mirrorman2
+  rotate: false
+  xy: 199, 7
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 mummy
   rotate: false
-  xy: 865, 373
+  xy: 235, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 mummy2
   rotate: false
-  xy: 931, 373
+  xy: 235, 307
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+mystery
+  rotate: false
+  xy: 301, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 robot
   rotate: false
-  xy: 67, 133
+  xy: 235, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 robotghost2
   rotate: false
-  xy: 67, 67
+  xy: 301, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 spark1
   rotate: false
-  xy: 67, 1
+  xy: 367, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-robot2
-  rotate: false
-  xy: 133, 138
-  size: 63, 64
-  orig: 63, 64
-  offset: 0, 0
-  index: -1
 spark2
   rotate: false
-  xy: 133, 72
+  xy: 301, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 spark3
   rotate: false
-  xy: 133, 6
+  xy: 367, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 squid
   rotate: false
-  xy: 169, 310
+  xy: 433, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 squid2
   rotate: false
-  xy: 169, 244
+  xy: 367, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 steamdragon
   rotate: false
-  xy: 235, 310
+  xy: 433, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 steamdragon2
   rotate: false
-  xy: 235, 244
+  xy: 499, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tester
   rotate: false
-  xy: 301, 307
+  xy: 433, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 thunderdog
   rotate: false
-  xy: 367, 307
+  xy: 499, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 thunderdog2
   rotate: false
-  xy: 433, 307
+  xy: 565, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tree
   rotate: false
-  xy: 499, 307
+  xy: 499, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -348,23 +362,58 @@ turtle
   index: -1
 turtle2
   rotate: false
-  xy: 631, 307
+  xy: 631, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+vertslash1
+  rotate: false
+  xy: 205, 403
+  size: 28, 34
+  orig: 28, 34
+  offset: 0, 0
+  index: -1
+robot2
+  rotate: false
+  xy: 565, 241
+  size: 63, 64
+  orig: 63, 64
+  offset: 0, 0
+  index: -1
+fox
+  rotate: false
+  xy: 631, 310
+  size: 64, 61
+  orig: 64, 61
+  offset: 0, 0
+  index: -1
+fox2
+  rotate: false
+  xy: 697, 376
+  size: 64, 61
+  orig: 64, 61
+  offset: 0, 0
+  index: -1
 shuriken
   rotate: false
-  xy: 301, 251
+  xy: 697, 320
   size: 54, 54
   orig: 54, 54
   offset: 0, 0
   index: -1
 shuriken2
   rotate: false
-  xy: 697, 317
+  xy: 763, 383
   size: 54, 54
   orig: 54, 54
+  offset: 0, 0
+  index: -1
+vertslash2
+  rotate: false
+  xy: 235, 205
+  size: 28, 34
+  orig: 28, 34
   offset: 0, 0
   index: -1
 beam
@@ -376,70 +425,70 @@ beam
   index: -1
 blueslash1
   rotate: false
-  xy: 169, 207
+  xy: 265, 204
   size: 35, 35
   orig: 35, 35
   offset: 0, 0
   index: -1
 blueslash2
   rotate: false
-  xy: 357, 270
+  xy: 819, 402
   size: 35, 35
   orig: 35, 35
   offset: 0, 0
   index: -1
 blueslash3
   rotate: false
-  xy: 753, 336
+  xy: 265, 167
   size: 35, 35
   orig: 35, 35
   offset: 0, 0
   index: -1
 blueslash4
   rotate: false
-  xy: 206, 207
+  xy: 302, 204
   size: 35, 35
   orig: 35, 35
   offset: 0, 0
   index: -1
 boom
   rotate: false
-  xy: 394, 273
+  xy: 856, 405
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+canightIcon
+  rotate: false
+  xy: 265, 133
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 fist
   rotate: false
-  xy: 790, 339
+  xy: 302, 170
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-vertslash1
+foxIcon
   rotate: false
-  xy: 243, 208
-  size: 28, 34
-  orig: 28, 34
-  offset: 0, 0
-  index: -1
-vertslash2
-  rotate: false
-  xy: 428, 271
-  size: 28, 34
-  orig: 28, 34
+  xy: 339, 207
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1
 vertslash3
   rotate: false
-  xy: 458, 271
+  xy: 265, 97
   size: 28, 34
   orig: 28, 34
   offset: 0, 0
   index: -1
 vertslash4
   rotate: false
-  xy: 488, 271
+  xy: 265, 61
   size: 28, 34
   orig: 28, 34
   offset: 0, 0

@@ -74,8 +74,8 @@ public class EntityConstructor {
             entity.add(new TeamComponent(team));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("catdroid"),
-                atlas.findRegion("catdroid2")
+                atlas.findRegion("mirrorman"),
+                atlas.findRegion("mirrorman2")
         }, Animation.PlayMode.LOOP, 0.5f)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 10, 3, 0, 6));
