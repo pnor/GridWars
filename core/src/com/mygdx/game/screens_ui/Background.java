@@ -17,6 +17,14 @@ public class Background {
     private Entity backLayer;
     private Array<BackType> layers;
 
+    /**
+     * backTypes and frontLayer must be equal size.
+     * @param staticLayer non moving back sprite
+     * @param frontLayer sprites for top layers
+     * @param backTypes type of movement for each top layer (frontLayer[0] -> backTypes[0])
+     * @param startColor Start interpolation color for all fade color backTypes. Use {@code null} if there is none
+     * @param endColor End interpolation color for all fade color backTypes. Use {@code null} if there is none
+     */
     public Background(Sprite staticLayer, Sprite[] frontLayer, BackType[] backTypes, Color startColor, Color endColor) {
         if (frontLayer.length != backTypes.length)
             throw new ExceptionInInitializerError("Layers and BackTypes must be equal; they correspond to each other");
