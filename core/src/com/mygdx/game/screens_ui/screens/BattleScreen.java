@@ -384,10 +384,10 @@ public class BattleScreen implements Screen {
            }
            }
         });
-        member1 = new Image(GRID_WARS.atlas.findRegion("Hole2"));
-        member2 = new Image(GRID_WARS.atlas.findRegion("Hole2"));
-        member3 = new Image(GRID_WARS.atlas.findRegion("Hole2"));
-        member4 = new Image(GRID_WARS.atlas.findRegion("Hole2"));
+        member1 = new Image(GRID_WARS.atlas.findRegion("hole"));
+        member2 = new Image(GRID_WARS.atlas.findRegion("hole"));
+        member3 = new Image(GRID_WARS.atlas.findRegion("hole"));
+        member4 = new Image(GRID_WARS.atlas.findRegion("hole"));
         teamTable.add(endTurnBtn).height(40).width(120);
         teamTable.add(member1).size(48).padLeft(60f);
         teamTable.add(member2).size(48).padLeft(60f);
@@ -947,7 +947,7 @@ public class BattleScreen implements Screen {
             //smaller than current loop iteration OR team member is null
             if (rules.getCurrentTeam().getEntities().size < i || rules.getCurrentTeam().getEntities().get(i - 1) == null) {
                 member.setColor(Color.WHITE);
-                member.setDrawable(new TextureRegionDrawable(GRID_WARS.atlas.findRegion("Hole2")));
+                member.setDrawable(new TextureRegionDrawable(GRID_WARS.atlas.findRegion("hole")));
                 continue;
             }
             actor = am.get(rules.getCurrentTeam().getEntities().get(i - 1)).actor;

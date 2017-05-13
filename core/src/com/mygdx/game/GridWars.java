@@ -64,7 +64,8 @@ public class GridWars extends Game {
 
 		Array<Entity> a = new Array<Entity>();
 		a.add(EntityConstructor.testerChessPiece(0, screen, screen.getEngine(), stage));
-		Team teamA = new Team("Star", Color.RED, false, a);
+		a.add(EntityConstructor.testerPlaceHolder(0, screen, screen.getEngine(), stage));
+		Team teamA = new Team("Testers", new Color(.8f, .8f, 1, 1), false, a);
 
 		Array<Entity> b = new Array<Entity>();
 		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), stage));
@@ -86,6 +87,7 @@ public class GridWars extends Game {
 		screen.setTeams(teamA, teamB, teamC);
 
 		BoardComponent.boards.add(a.get(0), new BoardPosition(0, 3));
+		BoardComponent.boards.add(a.get(1), new BoardPosition(0, 1));
 
 		BoardComponent.boards.add(b.get(0), new BoardPosition(3, 2));
 		BoardComponent.boards.add(b.get(1), new BoardPosition(3, 3));

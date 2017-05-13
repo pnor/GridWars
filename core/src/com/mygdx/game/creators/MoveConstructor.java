@@ -157,8 +157,8 @@ public class MoveConstructor {
                 star.add(new PositionComponent(tilePosition.cpy().add((float) (Math.random() * 70) - 35, (float) (Math.random() * 70) - 35)
                         , 45 * boardManager.getBoard().getScale(), 45 * boardManager.getBoard().getScale(), (float) (Math.random() * 360)));
                 star.add(new LifetimeComponent(0, .6f));
-                star.add(new AnimationComponent(.3f, new TextureRegion[]{atlas.findRegion("Star1"),
-                        atlas.findRegion("Star2")}, Animation.PlayMode.LOOP));
+                star.add(new AnimationComponent(.3f, new TextureRegion[]{atlas.findRegion("boom"),
+                        atlas.findRegion("cloud")}, Animation.PlayMode.LOOP));
                 engine.addEntity(star);
             }
         }, .2f, 4);
@@ -197,8 +197,8 @@ public class MoveConstructor {
                         45 * boardManager.getBoard().getScale(),
                         0));
                 star.add(new LifetimeComponent(0, 1.2f));
-                star.add(new AnimationComponent(.3f, new TextureRegion[]{atlas.findRegion("Star1"),
-                        atlas.findRegion("Star2")}, Animation.PlayMode.LOOP));
+                star.add(new AnimationComponent(.3f, new TextureRegion[]{atlas.findRegion("boom"),
+                        atlas.findRegion("cloud")}, Animation.PlayMode.LOOP));
                 star.add(new EventComponent(.1f, 0f, true, true, new GameEvent() {
                     @Override
                     public void event(Entity e, Engine engine) {
