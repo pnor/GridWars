@@ -24,10 +24,25 @@ public class Team {
         entities = e;
     }
 
+    public Team(String name, Color color, boolean isAIControlled) {
+        teamName = name;
+        teamColor = color;
+        AIControlled = isAIControlled;
+        entities = new Array<Entity>();
+    }
+
     public Team(boolean isAIControlled, Array<Entity> e) {
         teamColor = new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f);
         AIControlled = isAIControlled;
         entities = e;
+    }
+
+    public void addEntity(Entity e) {
+        entities.add(e);
+    }
+
+    public void removeEntity(int i) {
+        entities.removeIndex(i);
     }
 
     /**
@@ -38,6 +53,10 @@ public class Team {
             if (stm.has(entities.get(i)) && !(stm.get(entities.get(i)).hp <= 0))
                 return false;
         return true;
+    }
+
+    public void setTeamName(String name) {
+        teamName = name;
     }
 
     public Array<Entity> getEntities() {

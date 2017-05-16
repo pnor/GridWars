@@ -20,12 +20,11 @@ import static com.mygdx.game.GridWars.skin;
 /**
  * @author Phillip O'Reggio
  */
-public class TitleScreen extends MenuScreen implements Screen {
-
+public class ModeSelectScreen extends MenuScreen implements Screen {
     private Label titleLbl;
-    private HoverButton startBtn;
+    private HoverButton twoPlayerDeathMatch, twoPlayerZones, fourPlayerZones;
 
-    public TitleScreen(GridWars gridWars) {
+    public ModeSelectScreen(GridWars gridWars) {
         super(gridWars);
     }
 
@@ -34,20 +33,21 @@ public class TitleScreen extends MenuScreen implements Screen {
         super.show();
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        param.size = 120;
-        param.color = Color.GREEN;
-        param.shadowOffsetX = -4;
-        param.shadowOffsetY = -4;
-        param.borderWidth = 5;
-        param.borderColor = Color.LIME;
-        titleLbl = new Label("Grid Wars", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
-        startBtn = new HoverButton("Start", skin, Color.WHITE, Color.DARK_GRAY);
+        param.size = 50;
+        titleLbl = new Label("Select A Game Mode", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        twoPlayerDeathMatch = new HoverButton("2-Player Death Match", skin, Color.CYAN, Color.DARK_GRAY);
+        twoPlayerZones = new HoverButton("2-Player Zone Match", skin, Color.GREEN, Color.DARK_GRAY);
+        fourPlayerZones = new HoverButton("4-Player Zone Match", skin, Color.RED, Color.DARK_GRAY);
         ChangeListener listener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
-                    if (actor == startBtn) {
-                        GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
+                    if (actor == twoPlayerDeathMatch) {
+                        GRID_WARS.setScreen(new TeamSelectScreen(2, false, GRID_WARS));
+                    } else if (actor == twoPlayerZones) {
+                        GRID_WARS.setScreen(new TeamSelectScreen(2, true, GRID_WARS));
+                    } else if (actor == fourPlayerZones) {
+                        GRID_WARS.setScreen(new TeamSelectScreen(4, true, GRID_WARS));
                     }
                 }
             }
@@ -55,13 +55,18 @@ public class TitleScreen extends MenuScreen implements Screen {
         Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
         backgroundLay.setColor(Color.GRAY);
         Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeOverlay")));
+        topLayer.setColor(new Color(1, 0, 0, .7f));
         background = new Background(backgroundLay,
                 new Sprite[]{topLayer},
-                new BackType[]{BackType.FADE_COLOR},
-                Color.WHITE, Color.CYAN);
+                new BackType[]{BackType.SCROLL_HORIZONTAL},
+                null, null);
 
-        startBtn.addListener(listener);
-        table.add(titleLbl).padBottom(80f).row();
-        table.add(startBtn).size(300, 90);
+        twoPlayerDeathMatch.addListener(listener);
+        twoPlayerZones.addListener(listener);
+        fourPlayerZones.addListener(listener);
+        table.add(titleLbl).padBottom(40).row();
+        table.add(twoPlayerDeathMatch).size(350, 90).padBottom(10f).row();
+        table.add(twoPlayerZones).size(350, 90).padBottom(10f).row();
+        table.add(fourPlayerZones).size(350, 90).padBottom(10f).row();
     }
 }
