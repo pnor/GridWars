@@ -115,12 +115,13 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == okBtn) {
-                        //GRID_WARS.createTesterBattleScreen();
                         if (teams.get(curTeam).getStrings().size <= 0) //empty team
                             return;
                         else if (curTeam >= MAX_ENTITY_PER_TEAM - 1) {//last team selected
                             GRID_WARS.createTesterBattleScreen();
                         } else { //else -> move to next team
+                            teamName.setText("");
+                            teamColor.setText("");
                             currentEntity = 0;
                             curTeam++;
                             for (int i = 0; i < characterPortraits.size; i++)
@@ -136,8 +137,14 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                     } else if (actor == lastTeamBtn) {
                         if (curTeam <= 0)
                             return;
+                        teamName.setText("");
+                        teamColor.setText("");
                         teams.get(curTeam).getStrings().clear();
+                        teams.get(curTeam).setTeamName("" + curTeam);
+                        teams.get(curTeam).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
                         teams.get(curTeam - 1).getStrings().clear();
+                        teams.get(curTeam - 1).setTeamName("" + (curTeam - 1));
+                        teams.get(curTeam - 1).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
                         for (int i = 0; i < characterPortraits.size; i++)
                             characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
                         curTeam--;
@@ -153,11 +160,29 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                 }
             }
         };
-        TextField.TextFieldListener textFieldListener = new TextField.TextFieldListener() {
+        TextField.TextFieldListener nameListener = new TextField.TextFieldListener() {
             @Override
             public void keyTyped(TextField textField, char c) {
                 String input = textField.getText().trim();
-
+                if (input.length() <= 0)
+                    return;
+                teams.get(curTeam).setTeamName(textField.getText());
+            }
+        };
+        TextField.TextFieldListener colorListener = new TextField.TextFieldListener() {
+            @Override
+            public void keyTyped(TextField textField, char c) {
+                String input = textField.getText().trim();
+                if (input.length() <= 1)
+                    return;
+                Color color = generateColor(input);
+                if (color != null) {
+                    textField.setColor(color);
+                    teams.get(curTeam).setTeamColor(color);
+                } else {
+                    teams.get(curTeam).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
+                    textField.setColor(Color.WHITE);
+                }
             }
         };
 
@@ -177,11 +202,16 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         lastTeamBtn.addListener(listener);
         for (int i = 0; i < characterBtns.size; i++)
             characterBtns.get(i).addListener(listener);
+        teamName.setTextFieldListener(nameListener);
+        teamColor.setTextFieldListener(colorListener);
 
 
         table.add(titleLbl).colspan(2).padBottom(40).row();
-        table.add(teamNameLbl).right().padRight(10f);
-        table.add(teamName).left().padBottom(30f).row();
+        teamCustomizeTable.add(teamNameLbl);
+        teamCustomizeTable.add(teamName);
+        teamCustomizeTable.add(teamColorLbl);
+        teamCustomizeTable.add(teamColor);
+        table.add(teamCustomizeTable).row();
         for (int i = 0; i < 2; i++) {
             for (int j = 1; j <= characterBtns.size / 2; j++) {
                 if (j == characterBtns.size / 2)
@@ -265,9 +295,9 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                 else if (s.equals("goldenrod"))
                     return Color.GOLDENROD;
                 else if (s.equals("green"))
-                    return Color.GRAY;
-                else (s.equals("green"))
                     return Color.GREEN;
+                else if (s.equals("gray"))
+                    return Color.GRAY;
                 break;
             case 'l' :
                 if (s.equals("lightgray"))
@@ -332,7 +362,8 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                     return Color.YELLOW;
                 break;
         }
-
+        //defualt
+        return null;
     }
 
     @Override
@@ -341,7 +372,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             System.out.println("----");
             for (int i = 0; i < teams.size; i++) {
-                System.out.println("Team " + teams.get(i).getTeamName() + "  " + teams.get(i).getStrings());
+                System.out.println("Team " + teams.get(i).getTeamName() + " Color: " + teams.get(i).getTeamColor() + "  " + teams.get(i).getStrings());
             }
         }
     }

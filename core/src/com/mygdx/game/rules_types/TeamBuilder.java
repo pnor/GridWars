@@ -27,6 +27,10 @@ public class TeamBuilder {
     public void removeEntity(int i) {
         strings.removeIndex(i);
     }
+
+    public void setTeamColor(Color c) {
+        teamColor = c;
+    }
     public void setTeamName(String name) {
         teamName = name;
     }
