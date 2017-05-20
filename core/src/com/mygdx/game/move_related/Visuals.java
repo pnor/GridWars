@@ -7,14 +7,12 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GameTimer;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
-import com.mygdx.game.screens_ui.screens.BattleScreen;
 
 /**
  * Represents the visual effect that plays when an attack is used.
  * @author Phillip O'Reggio
  */
 public class Visuals {
-    private BattleScreen battleScreen;
     public static Engine engine;
     public static Stage stage;
     public static BoardManager boardManager;
@@ -28,7 +26,6 @@ public class Visuals {
 
     private boolean isPlaying;
     private boolean autoReset;
-    public boolean effectsUI;
     /**
      * greater than 0 when any kind of visuals are playing
      */
@@ -36,14 +33,11 @@ public class Visuals {
 
     /**
      * Creates a {@code Visuals} object
-     * @param screen {@code BattleScreen}
      * @param u user
      * @param positions effected squares
      * @param visual Array of {@code VisualEvent} objects
-     * @param effectUI whether this will enable the UI on the {@code BattleScreen}
      */
-    public Visuals(BattleScreen screen, Entity u, Array<BoardPosition> positions, Array<VisualEvent> visual, boolean effectUI) {
-        battleScreen = screen;
+    public Visuals(Entity u, Array<BoardPosition> positions, Array<VisualEvent> visual) {
         user = u;
         targetPositions = positions;
 
@@ -54,7 +48,6 @@ public class Visuals {
         timer = new GameTimer(total + .03f);
 
         visuals = visual;
-        effectsUI = effectUI;
     }
 
     /**
@@ -79,8 +72,6 @@ public class Visuals {
         if (timer.checkIfFinished()) {
             isPlaying = false;
             Visuals.visualsArePlaying -= 1;
-            if (effectsUI)
-                battleScreen.enableUI();
             if (autoReset) {
                 autoReset = false;
                 reset();

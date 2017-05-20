@@ -59,6 +59,10 @@ public class Team {
         teamName = name;
     }
 
+    public void setTeamColor(Color color) {
+        teamColor = color;
+    }
+
     public Array<Entity> getEntities() {
         return entities;
     }

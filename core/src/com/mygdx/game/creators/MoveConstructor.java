@@ -35,7 +35,7 @@ public class MoveConstructor {
      * @param screen {@code BattleScreen}
      * @return damage animation {@code Visuals}
      */
-    public static Visuals damageAnimation(Entity user, Engine engine, Stage stage, BattleScreen screen) {
+    public static Visuals damageAnimation(Entity user, Engine engine, Stage stage) {
 
         VisualEvent initialRed = new VisualEvent(new VisualEffect() {
             @Override
@@ -58,8 +58,8 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Visuals(screen, user, null,
-                new Array<VisualEvent>(new VisualEvent[]{initialRed, returnToNormalGradual.copy(.15f, 1), returnToNormalGradual, returnToNormal}), false);
+        return new Visuals(user, null,
+                new Array<VisualEvent>(new VisualEvent[]{initialRed, returnToNormalGradual.copy(.15f, 1), returnToNormalGradual, returnToNormal}));
     }
 
     /**
@@ -70,7 +70,7 @@ public class MoveConstructor {
      * @param screen {@code BattleScreen}
      * @return damage animation {@code Visuals}
      */
-    public static Visuals heavyDamageAnimation(Entity user, Engine engine, Stage stage, BattleScreen screen) {
+    public static Visuals heavyDamageAnimation(Entity user, Engine engine, Stage stage) {
         VisualEvent initialRed = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
@@ -106,11 +106,11 @@ public class MoveConstructor {
             }
         }, .02f, 1);
 
-        return new Visuals(screen, user, null,
+        return new Visuals(user, null,
                 new Array<VisualEvent>(new VisualEvent[]{initialRed,
                         moveRight.copy(.001f, 1), moveLeft, moveRight, moveLeft.copy(), moveRight.copy(1),
                         returnToNormalGradual, returnToNormal
-                }), false);
+                }));
     }
 
     /**
@@ -120,7 +120,7 @@ public class MoveConstructor {
      * @param stage {@code Stage}
      * @return death animation {@code Visuals}
      */
-    public static Visuals deathAnimation(Entity user, Engine engine, Stage stage, BattleScreen screen) {
+    public static Visuals deathAnimation(Entity user, Engine engine, Stage stage) {
         VisualEvent initialRed = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
@@ -137,11 +137,11 @@ public class MoveConstructor {
             }
         }, .1f, 9);
 
-        return new Visuals(screen, user, null,
-                new Array<VisualEvent>(new VisualEvent[]{initialRed, fadeAndBlacken.copy(.275f, 1), fadeAndBlacken}), false);
+        return new Visuals(user, null,
+                new Array<VisualEvent>(new VisualEvent[]{initialRed, fadeAndBlacken.copy(.275f, 1), fadeAndBlacken}));
     }
 
-    public static Move Tackle(Entity user, Engine engine, Stage stage, BattleScreen screen) {
+    public static Move Tackle(Entity user, Engine engine, Stage stage) {
         VisualEvent TackleVis = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
@@ -174,11 +174,11 @@ public class MoveConstructor {
                         if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
                     }
-                }, new Visuals(screen, user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{TackleVis.copy(0.1f, 1), TackleVis}), true));
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{TackleVis.copy(0.1f, 1), TackleVis})));
     }
 
-    public static Move StarSpin(Entity user, Engine engine, Stage stage, BattleScreen screen) {
+    public static Move StarSpin(Entity user, Engine engine, Stage stage) {
         VisualEvent spin = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
@@ -223,7 +223,7 @@ public class MoveConstructor {
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
-                }, new Visuals(screen, user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
-                new Array<VisualEvent>(new VisualEvent[]{spin}), true));
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+                new Array<VisualEvent>(new VisualEvent[]{spin})));
     }
 }

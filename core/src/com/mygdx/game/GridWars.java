@@ -63,15 +63,15 @@ public class GridWars extends Game {
 		setScreen(screen);
 
 		Array<Entity> a = new Array<Entity>();
-		a.add(EntityConstructor.testerChessPiece(0, screen, screen.getEngine(), stage));
-		a.add(EntityConstructor.testerPlaceHolder(0, screen, screen.getEngine(), stage));
+		a.add(EntityConstructor.testerChessPiece(0, screen.getEngine(), stage));
+		a.add(EntityConstructor.testerPlaceHolder(0, screen.getEngine(), stage));
 		Team teamA = new Team("Testers", new Color(.8f, .8f, 1, 1), false, a);
 
 		Array<Entity> b = new Array<Entity>();
-		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), stage));
-		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), stage));
-		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), stage));
-		b.add(EntityConstructor.testerRobot(1, screen, screen.getEngine(), stage));
+		b.add(EntityConstructor.testerRobot(1, screen.getEngine(), stage));
+		b.add(EntityConstructor.testerRobot(1, screen.getEngine(), stage));
+		b.add(EntityConstructor.testerRobot(1, screen.getEngine(), stage));
+		b.add(EntityConstructor.testerRobot(1, screen.getEngine(), stage));
 		status.get(b.get(3)).burn(b.get(3));
 		status.get(b.get(1)).petrify(b.get(1));
 		status.get(b.get(0)).burn(b.get(0));
@@ -81,7 +81,7 @@ public class GridWars extends Game {
 		Team teamB = new Team("Team Blue", Color.CYAN, false, b);
 
 		Array<Entity> c = new Array<Entity>();
-		c.add(EntityConstructor.testerHole(-1, screen, screen.getEngine(), stage));
+		c.add(EntityConstructor.testerHole(-1, screen.getEngine(), stage));
 		Team teamC = new Team(false, c);
 
 		screen.setTeams(teamA, teamB, teamC);

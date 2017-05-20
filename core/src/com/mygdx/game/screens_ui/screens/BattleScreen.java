@@ -145,13 +145,30 @@ public class BattleScreen implements Screen {
     private int currentDeltaTime;
 
 
-    public BattleScreen(GridWars game, int boardSize, Color darkBoardColor, Color lightBoardColor) {
-        GRID_WARS = game;
-        if (boardSize <= 7) {
+    /*  if (boardSize <= 7) {
             board = new Board(boardSize, boardSize, darkBoardColor, lightBoardColor, 100);
             codeBoard = new CodeBoard(boardSize, boardSize);
         } else {
             board = new Board(boardSize, boardSize, darkBoardColor, lightBoardColor, 700 / boardSize);
+            codeBoard = new CodeBoard(boardSize, boardSize);
+        }*/
+
+    /*public BattleScreen(boolean isZones, Array<TeamBuilder> selectedTeams, String chosenBoard, GridWars game) {
+        GRID_WARS = game;
+        engine = new Engine();
+
+        for (Team t : teams)
+            for (Entity e : t.getEntities())
+                engine.addEntity(e);
+    }*/
+
+    public BattleScreen(GridWars game, int boardSize, Color c, Color c2) {
+        GRID_WARS = game;
+        if (boardSize <= 7) {
+            board = new Board(boardSize, boardSize, c, c2, 100);
+            codeBoard = new CodeBoard(boardSize, boardSize);
+        } else {
+            board = new Board(boardSize, boardSize, c, c2, 700 / boardSize);
             codeBoard = new CodeBoard(boardSize, boardSize);
         }
     }
@@ -190,7 +207,7 @@ public class BattleScreen implements Screen {
         rules = new ZoneRules(this, teams, zones);
 
         //Set up Engine
-        engine = new Engine();
+            engine = new Engine();
         engine.addSystem(new DrawingSystem(stage.getBatch()));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new EventSystem());
@@ -208,9 +225,9 @@ public class BattleScreen implements Screen {
                 Color.DARK_GRAY, Color.WHITE);
 
         //add to Engine
-        for (Team t : teams)
-            for (Entity e : t.getEntities())
-                engine.addEntity(e);
+                 for (Team t : teams)
+                    for (Entity e : t.getEntities())
+                        engine.addEntity(e);
 
         BoardComponent.setBoardManager(new BoardManager(board, codeBoard));
         Visuals.boardManager = BoardComponent.boards;
@@ -564,9 +581,11 @@ public class BattleScreen implements Screen {
                     currentMove.getVisuals().play();
                 } else {
                     currentMove.getVisuals().reset();
+                    enableUI();
                     currentMove = null;
                 }
             }
+
         }
 
         //update everything. (Graphics, engine, GRID_WARS.stage)
@@ -990,6 +1009,7 @@ public class BattleScreen implements Screen {
     public void disableUI() {
         battleInputProcessor.setDisabled(true);
         disableAttacks();
+        endTurnBtn.setTouchable(Touchable.disabled);
     }
 
     /**
@@ -998,6 +1018,7 @@ public class BattleScreen implements Screen {
     public void enableUI() {
         battleInputProcessor.setDisabled(false);
         enableAttacks();
+        endTurnBtn.setTouchable(Touchable.enabled);
     }
 
     /**

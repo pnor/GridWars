@@ -15,7 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GridWars;
-import com.mygdx.game.rules_types.TeamBuilder;
+import com.mygdx.game.creators.EntityConstructor;
+import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.screens_ui.BackType;
 import com.mygdx.game.screens_ui.Background;
 import com.mygdx.game.screens_ui.HoverButton;
@@ -55,7 +56,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     private int maxTeams, curTeam, currentEntity;
     private final int MAX_ENTITY_PER_TEAM = 4;
     private boolean zones;
-    private Array<TeamBuilder> teams;
+    private Array<Team> teams;
 
     /**
      * Creates a team selection screen
@@ -76,9 +77,9 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         NinePatch tableBack = new NinePatch(new Texture(Gdx.files.internal("TableBackground.png")), 33, 33, 33, 33);
         NinePatchDrawable tableBackground = new NinePatchDrawable(tableBack);
 
-        teams = new Array<TeamBuilder>();
+        teams = new Array<Team>();
         for (int i = 0; i < maxTeams; i++)
-            teams.add(new TeamBuilder(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f), Integer.toString(i), false));
+            teams.add(new Team(Integer.toString(i), new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f), false));
         characterBtnTable = new Table();
         portraitTable = new Table();
         menuBtnTable = new Table();
@@ -115,10 +116,10 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == okBtn) {
-                        if (teams.get(curTeam).getStrings().size <= 0) //empty team
+                        if (teams.get(curTeam).getEntities().size <= 0) //empty team
                             return;
-                        else if (curTeam >= MAX_ENTITY_PER_TEAM - 1) {//last team selected
-                            GRID_WARS.createTesterBattleScreen();
+                        else if (curTeam >= maxTeams - 1) {//last team selected
+                            GRID_WARS.setScreen(new BoardSelectScreen(maxTeams, zones, teams, GRID_WARS));
                         } else { //else -> move to next team
                             teamName.setText("");
                             teamColor.setText("");
@@ -130,7 +131,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                     } else if (actor == backBtn)
                         removeLastSelection();
                     else if (actor == clearBtn) {
-                        teams.get(curTeam).getStrings().clear();
+                        teams.get(curTeam).getEntities().clear();
                         for (int i = 0; i < characterPortraits.size; i++)
                             characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
                         currentEntity = 0;
@@ -139,10 +140,10 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                             return;
                         teamName.setText("");
                         teamColor.setText("");
-                        teams.get(curTeam).getStrings().clear();
+                        teams.get(curTeam).getEntities().clear();
                         teams.get(curTeam).setTeamName("" + curTeam);
                         teams.get(curTeam).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
-                        teams.get(curTeam - 1).getStrings().clear();
+                        teams.get(curTeam - 1).getEntities().clear();
                         teams.get(curTeam - 1).setTeamName("" + (curTeam - 1));
                         teams.get(curTeam - 1).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
                         for (int i = 0; i < characterPortraits.size; i++)
@@ -240,19 +241,19 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
 
     private void chooseEntity(TextureRegionDrawable teamIcon, String string) {
         characterPortraits.get(currentEntity).setDrawable(teamIcon);
-        teams.get(curTeam).getStrings().add(string);
+        teams.get(curTeam).getEntities().add(EntityConstructor.testerRobot(curTeam, engine, stage));
         currentEntity++;
     }
 
     private void removeLastSelection() {
-        if (currentEntity <= 0 || teams.get(curTeam).getStrings().size <= 0) {
+        if (currentEntity <= 0 || teams.get(curTeam).getEntities().size <= 0) {
             if (currentEntity <= 0) {
                 System.out.println("currentEntity <= 0  !!");
             }
             return;
         }
         characterPortraits.get(currentEntity - 1).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
-        teams.get(curTeam).getStrings().pop();
+        teams.get(curTeam).getEntities().pop();
         currentEntity--;
     }
 
@@ -372,7 +373,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             System.out.println("----");
             for (int i = 0; i < teams.size; i++) {
-                System.out.println("Team " + teams.get(i).getTeamName() + " Color: " + teams.get(i).getTeamColor() + "  " + teams.get(i).getStrings());
+                System.out.println("Team " + teams.get(i).getTeamName() + " Color: " + teams.get(i).getTeamColor() + "  " + teams.get(i).getEntities());
             }
         }
     }
