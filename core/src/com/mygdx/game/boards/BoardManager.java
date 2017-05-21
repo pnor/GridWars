@@ -17,6 +17,11 @@ public class BoardManager {
     private CodeBoard codeBoard;
 
     /**
+     * Makes a BoardManager with both types of board equal to null. {@code setBoards} should be called.
+     */
+    public BoardManager() { }
+
+    /**
      * Boards must be of the same size.
      * @param b board that this will sync
      * @param cb codeBoard that this will sync
@@ -24,6 +29,16 @@ public class BoardManager {
     public BoardManager(Board b, CodeBoard cb) {
         if (b.getRowSize() * b.getColumnSize() != cb.getRows() * cb.getColumns())
             throw new ExceptionInInitializerError("Boards of unequal size");
+        board = b;
+        codeBoard = cb;
+    }
+
+    /**
+     * Sets the {@code Board} and {@code CodeBoard}.
+     * @param b Board
+     * @param cb CodeBoard
+     */
+    public void setBoards(Board b, CodeBoard cb) {
         board = b;
         codeBoard = cb;
     }

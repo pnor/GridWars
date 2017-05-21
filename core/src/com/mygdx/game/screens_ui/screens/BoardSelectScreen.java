@@ -26,7 +26,12 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
     private int maxTeams;
     private boolean zoneRules;
     private Array<Team> teams;
-    private String board;
+    /**
+     * 1 : basic 2 player <p>
+     * 2 : basic zone 2 player <p>
+     * 3 : basic zone 4 player <p>
+     */
+    private int board;
 
     private Label titleLbl;
     private HoverButton basic;
@@ -51,13 +56,11 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == basic) {
-                        if (maxTeams == 2 && zoneRules)
-                            board = "basic2Z";
-                        else if (maxTeams == 2)
-                            board = "basic";
+                        if (maxTeams == 2)
+                            board = (zoneRules) ? 2 : 1;
                         else if (maxTeams == 4 && zoneRules)
-                            board = "basic4Z";
-                        GRID_WARS.createTesterBattleScreen();
+                            board = 3;
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, GRID_WARS));
                     }
                 }
             }

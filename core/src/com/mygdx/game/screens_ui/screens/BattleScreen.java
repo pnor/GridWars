@@ -3,6 +3,7 @@ package com.mygdx.game.screens_ui.screens;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -30,14 +31,14 @@ import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.SpriteActor;
 import com.mygdx.game.actors.Tile;
 import com.mygdx.game.actors.UIActor;
-import com.mygdx.game.boards.Board;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
-import com.mygdx.game.boards.CodeBoard;
 import com.mygdx.game.components.BoardComponent;
 import com.mygdx.game.components.MovesetComponent;
 import com.mygdx.game.components.StatComponent;
 import com.mygdx.game.components.StatusEffectComponent;
+import com.mygdx.game.creators.BackgroundConstructor;
+import com.mygdx.game.creators.BoardAndRuleConstructor;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.Visuals;
 import com.mygdx.game.rules_types.Rules;
@@ -65,8 +66,6 @@ public class BattleScreen implements Screen {
         /*7 is the basic size. Requires no scaling with anything below 7 size
         The math for scaling above 7 : 700 / size
         */
-    private final Board board;
-    private final CodeBoard codeBoard;
 
     //rules
     private static Rules rules;
@@ -144,34 +143,26 @@ public class BattleScreen implements Screen {
     private final int deltatimeIntervals = 10000;
     private int currentDeltaTime;
 
-
-    /*  if (boardSize <= 7) {
-            board = new Board(boardSize, boardSize, darkBoardColor, lightBoardColor, 100);
-            codeBoard = new CodeBoard(boardSize, boardSize);
-        } else {
-            board = new Board(boardSize, boardSize, darkBoardColor, lightBoardColor, 700 / boardSize);
-            codeBoard = new CodeBoard(boardSize, boardSize);
-        }*/
-
-    /*public BattleScreen(boolean isZones, Array<TeamBuilder> selectedTeams, String chosenBoard, GridWars game) {
+    public BattleScreen(Array<Team> selectedTeams, int boardIndex, GridWars game) {
         GRID_WARS = game;
-        engine = new Engine();
+        teams = selectedTeams;
+        if (BoardComponent.boards == null)
+            BoardComponent.boards = new BoardManager();
+        rules = BoardAndRuleConstructor.getBoardAndRules(boardIndex, this, teams, BoardComponent.boards);
+        background = BackgroundConstructor.getBackground(boardIndex);
+    }
 
-        for (Team t : teams)
-            for (Entity e : t.getEntities())
-                engine.addEntity(e);
-    }*/
 
+    /* OLD
     public BattleScreen(GridWars game, int boardSize, Color c, Color c2) {
         GRID_WARS = game;
         if (boardSize <= 7) {
-            board = new Board(boardSize, boardSize, c, c2, 100);
-            codeBoard = new CodeBoard(boardSize, boardSize);
+            BoardComponent.setBoardManager(new BoardManager(new Board(boardSize, boardSize, c, c2, 100), new CodeBoard(boardSize, boardSize)));
         } else {
-            board = new Board(boardSize, boardSize, c, c2, 700 / boardSize);
-            codeBoard = new CodeBoard(boardSize, boardSize);
+            BoardComponent.setBoardManager(new BoardManager(new Board(boardSize, boardSize, c, c2, 700 / boardSize), new CodeBoard(boardSize, boardSize)));
         }
     }
+    */
 
     @Override
     public void show() {
@@ -199,48 +190,40 @@ public class BattleScreen implements Screen {
         //stage.addActor(helpTable);
         battleInputProcessor = new BattleInputProcessor(this);
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, battleInputProcessor));
-        //rules = new Battle2PRules(this, teams);
         Array<Array<BoardPosition>> zones = new Array<Array<BoardPosition>>();
         Array<BoardPosition> team0Zones = new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0), new BoardPosition(1, 0)});
         Array<BoardPosition> team1Zones = new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(6, 0), new BoardPosition(5, 0)});
         zones.add(team0Zones); zones.add(team1Zones);
         rules = new ZoneRules(this, teams, zones);
 
+        //set up teams
+        for (Team t : teams)
+            for (Entity e : t.getEntities())
+                engine.addEntity(e);
+
         //Set up Engine
-            engine = new Engine();
         engine.addSystem(new DrawingSystem(stage.getBatch()));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new EventSystem());
         engine.addSystem(new LifetimeSystem());
-        engine.addSystem(new DamageDeathSystem(BoardComponent.boards));
+        engine.addSystem(new DamageDeathSystem());
+        System.out.println(engine.getEntitiesFor(Family.all(StatComponent.class).get()).size());
+        System.out.println(engine.getSystem(DamageDeathSystem.class).getEntities().size());
 
         //set up Background
-        Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
-        backgroundLay.setColor(new Color(121f / 255, 121f / 255f, 19f / 255f, 1));
-        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeOverlay")));
-        topLayer.setColor(new Color(181f / 255, 181f / 255f, 79f / 255f, 1));
-        background = new Background(backgroundLay,
-                new Sprite[]{new Sprite(backAtlas.findRegion("DiagStripeOverlay")), topLayer},
-                new BackType[]{BackType.FADE_COLOR, BackType.SCROLL_HORIZONTAL},
-                Color.DARK_GRAY, Color.WHITE);
 
-        //add to Engine
-                 for (Team t : teams)
-                    for (Entity e : t.getEntities())
-                        engine.addEntity(e);
 
-        BoardComponent.setBoardManager(new BoardManager(board, codeBoard));
-        Visuals.boardManager = BoardComponent.boards;
+        //Set up visuals
         Visuals.engine = engine;
         Visuals.stage = stage;
 
         //set up Board ui -----
-        for (int i = 0; i < board.getRowSize(); i++) {
-            for (int j = 0; j < board.getColumnSize(); j++) {
+        for (int i = 0; i < BoardComponent.boards.getBoard().getRowSize(); i++) {
+            for (int j = 0; j < BoardComponent.boards.getBoard().getColumnSize(); j++) {
                 if (i == 0)
-                    boardTable.add().width(board.getTiles().get(0).getWidth()).height(board.getTiles().get(0).getHeight());
+                    boardTable.add().width(BoardComponent.boards.getBoard().getTiles().get(0).getWidth()).height(BoardComponent.boards.getBoard().getTiles().get(0).getHeight());
                 else
-                    boardTable.add().height(board.getTiles().get(0).getHeight());
+                    boardTable.add().height(BoardComponent.boards.getBoard().getTiles().get(0).getHeight());
             }
             boardTable.row();
         }
@@ -471,14 +454,14 @@ public class BattleScreen implements Screen {
         }
 
         //sync code board and ui board ---
-        int rowSize = board.getRowSize();
-        int colSize = board.getColumnSize();
+        int rowSize = BoardComponent.boards.getBoard().getRowSize();
+        int colSize = BoardComponent.boards.getBoard().getColumnSize();
         int curRow = 0;
         int cur = 0;
         Array<Cell> cells = boardTable.getCells();
 
-        for (int i = 0; i < board.getRowSize() * board.getColumnSize(); i++) {
-            cells.get(i).setActor(board.getTile(curRow, cur % rowSize));
+        for (int i = 0; i < BoardComponent.boards.getBoard().getRowSize() * BoardComponent.boards.getBoard().getColumnSize(); i++) {
+            cells.get(i).setActor(BoardComponent.boards.getBoard().getTile(curRow, cur % rowSize));
             cur += 1;
             curRow = cur / colSize;
         }
@@ -498,7 +481,7 @@ public class BattleScreen implements Screen {
                     if (Visuals.visualsArePlaying == 0 && selectedEntity != null) //stop orange highlight
                         shadeBasedOnState(selectedEntity); //TODO make a way to show multiple status effects well
 
-                    selectedEntity = e; //selectedEntity changes to new entity here on
+                    selectedEntity = e; //selectedEntity changes to new entity from here on
 
                     if (Visuals.visualsArePlaying == 0)
                         am.get(selectedEntity).actor.shade(Color.ORANGE);
@@ -529,7 +512,7 @@ public class BattleScreen implements Screen {
                         }
 
                         //move Entity location
-                        bm.get(selectedEntity).boards.move(selectedEntity, new BoardPosition(t.getRow(), t.getColumn()));
+                        BoardComponent.boards.move(selectedEntity, new BoardPosition(t.getRow(), t.getColumn()));
                         state.get(selectedEntity).canMove = false;
                     }
                 }
@@ -662,7 +645,7 @@ public class BattleScreen implements Screen {
                 if (mvm.get(selectedEntity).moveList.size > moveHover) {
                     for (BoardPosition pos :  mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
                         try {
-                            bm.get(selectedEntity).boards.getBoard().getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c).shadeTile(Color.RED);
+                            BoardComponent.boards.getBoard().getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c).shadeTile(Color.RED);
                         } catch (IndexOutOfBoundsException e) { }
                     }
                 }
@@ -677,7 +660,7 @@ public class BattleScreen implements Screen {
                 //boolean wasBlue = false;
                 for (BoardPosition pos :  mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
                     try {
-                        Tile currTile = board.getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c);
+                        Tile currTile = BoardComponent.boards.getBoard().getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c);
                         if (currTile.getIsListening())
                             currTile.shadeTile(Color.CYAN);
                         else
@@ -708,9 +691,9 @@ public class BattleScreen implements Screen {
             for (int j = -(spd - Math.abs(i)); j <= (spd - Math.abs(i)); j++) {
                 newR = i + entityRow;
                 newC = j + entityCol;
-                if ((i == 0 && j == 0) || (newR < 0 || newC < 0 || newR >= codeBoard.getRows() || newC >= codeBoard.getColumns()))
+                if ((i == 0 && j == 0) || (newR < 0 || newC < 0 || newR >= BoardComponent.boards.getCodeBoard().getRows() || newC >= BoardComponent.boards.getCodeBoard().getColumns()))
                     continue;
-                tiles.add(board.getTile(newR, newC));
+                tiles.add(BoardComponent.boards.getBoard().getTile(newR, newC));
             }
         }
         return tiles;

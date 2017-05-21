@@ -1,25 +1,14 @@
 package com.mygdx.game;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.boards.BoardPosition;
-import com.mygdx.game.components.BoardComponent;
-import com.mygdx.game.creators.EntityConstructor;
-import com.mygdx.game.rules_types.Team;
-import com.mygdx.game.rules_types.ZoneRules;
-import com.mygdx.game.screens_ui.screens.BattleScreen;
 import com.mygdx.game.screens_ui.screens.TitleScreen;
-
-import static com.mygdx.game.ComponentMappers.status;
 
 public class GridWars extends Game {
 	//public AssetManager assets = new AssetManager();
@@ -49,15 +38,17 @@ public class GridWars extends Game {
 
 	@Override
 	public void setScreen(Screen screen) {
+		stage.clear();
+		engine.removeAllEntities();
 		super.setScreen(screen);
 	}
 	
 	@Override
 	public void dispose () {
 		stage.dispose();
-		//img.dispose();
 	}
 
+	/*
 	public void createTesterBattleScreen() {
 		BattleScreen screen = new BattleScreen(this, 7, new Color(241f / 255, 201f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1));
 		setScreen(screen);
@@ -98,6 +89,7 @@ public class GridWars extends Game {
 		if (screen.getRules() instanceof ZoneRules)
 			((ZoneRules) screen.getRules()).colorZones();
 	}
+	*/
 
 	public Batch getBatch() {
 		return stage.getBatch();

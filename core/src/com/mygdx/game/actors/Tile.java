@@ -15,7 +15,7 @@ import static com.mygdx.game.GridWars.atlas;
 public class Tile extends Group {
     private UIActor tileBack;
     private boolean isDark;
-    private Color color;
+    private Color color = Color.WHITE;
     private int r;
     private int c;
 

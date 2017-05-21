@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
 
 /**
@@ -30,8 +29,8 @@ public class VisualEvent {
         repeatAmount = repeat;
     }
 
-    public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage, BoardManager boardManager) {
-        visualEffect.doVisuals(user, targetPositions, engine, stage, boardManager);
+    public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+        visualEffect.doVisuals(user, targetPositions, engine, stage);
     }
 
     /**

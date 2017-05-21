@@ -3,7 +3,6 @@ package com.mygdx.game.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.components.StatComponent;
 import com.mygdx.game.move_related.Visuals;
 
@@ -15,7 +14,7 @@ import static com.mygdx.game.ComponentMappers.vm;
  */
 public class DamageDeathSystem extends IteratingSystem {
 
-    public DamageDeathSystem(BoardManager boards) {
+    public DamageDeathSystem() {
         super(Family.all(StatComponent.class).get());
     }
 

@@ -4,8 +4,8 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
+import com.mygdx.game.components.BoardComponent;
 
 import static com.mygdx.game.ComponentMappers.bm;
 
@@ -26,7 +26,6 @@ public class Move {
 
     private Entity user;
 
-    private BoardManager boards;
     private Stage stage;
     private Engine engine;
 
@@ -39,11 +38,10 @@ public class Move {
      * @param rnge range
      * @param engne {@code Engine}
      * @param stge {@code Stage}
-     * @param board {@code BoardManager}
      * @param atk effect of attack
      * @param vis visual effect
      */
-    public Move(String name2, String message, Entity usr, int cost, Array<BoardPosition> rnge, Engine engne, Stage stge, BoardManager board,
+    public Move(String name2, String message, Entity usr, int cost, Array<BoardPosition> rnge, Engine engne, Stage stge,
                 Attack atk, Visuals vis) {
         name = name2;
         attackMessage = message;
@@ -52,7 +50,6 @@ public class Move {
         range = rnge;
         engine = engne;
         stage = stge;
-        boards = board;
         attack  = atk;
         visuals = vis;
     }
@@ -66,13 +63,13 @@ public class Move {
             bp = bp.add(bm.get(user).pos.r, bm.get(user).pos.c);
             effectedPositions.add(bp.copy());
             try {
-                if (boards.getCodeBoard().get(bp.r, bp.c) == null)
+                if (BoardComponent.boards.getCodeBoard().get(bp.r, bp.c) == null)
                     continue;
             } catch (IndexOutOfBoundsException e) {
                 continue;
             }
 
-            attack.effect(user, bp, boards);
+            attack.effect(user, bp);
         }
         visuals.setPlaying(true, false);
     }

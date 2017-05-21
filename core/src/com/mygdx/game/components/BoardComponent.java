@@ -29,11 +29,11 @@ public class BoardComponent implements Component {
         boards = bm;
     }
 
+    /**
+     * Updates the position. Is called from BoardManager, so should not be called directly from an entity.
+     * @param bp new BoardPosition
+     */
     public void update(BoardPosition bp) {
         pos.set(bp.r, bp.c);
-    }
-
-    public static void setBoardManager(BoardManager bm) {
-        boards = bm;
     }
 }

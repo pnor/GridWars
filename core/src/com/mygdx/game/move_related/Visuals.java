@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GameTimer;
-import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
 
 /**
@@ -15,7 +14,6 @@ import com.mygdx.game.boards.BoardPosition;
 public class Visuals {
     public static Engine engine;
     public static Stage stage;
-    public static BoardManager boardManager;
 
     private Entity user;
     private Array<BoardPosition> targetPositions;
@@ -58,7 +56,7 @@ public class Visuals {
             return;
         if (timer.getTime() >= getNextTargetTime()) {
             VisualEvent cur = visuals.get(currentVisual);
-            cur.doVisuals(user, targetPositions, engine, stage, boardManager);
+            cur.doVisuals(user, targetPositions, engine, stage);
             cur.incrementRepeat(1);
             if (cur.getCurrentAmount() >= cur.getRepeatAmount())
                 currentVisual += 1;
