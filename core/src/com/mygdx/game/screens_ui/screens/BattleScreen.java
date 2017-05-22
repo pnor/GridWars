@@ -43,7 +43,6 @@ import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.Visuals;
 import com.mygdx.game.rules_types.Rules;
 import com.mygdx.game.rules_types.Team;
-import com.mygdx.game.rules_types.ZoneRules;
 import com.mygdx.game.screens_ui.*;
 import com.mygdx.game.systems.*;
 
@@ -190,11 +189,6 @@ public class BattleScreen implements Screen {
         //stage.addActor(helpTable);
         battleInputProcessor = new BattleInputProcessor(this);
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, battleInputProcessor));
-        Array<Array<BoardPosition>> zones = new Array<Array<BoardPosition>>();
-        Array<BoardPosition> team0Zones = new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0), new BoardPosition(1, 0)});
-        Array<BoardPosition> team1Zones = new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(6, 0), new BoardPosition(5, 0)});
-        zones.add(team0Zones); zones.add(team1Zones);
-        rules = new ZoneRules(this, teams, zones);
 
         //set up teams
         for (Team t : teams)
@@ -431,6 +425,19 @@ public class BattleScreen implements Screen {
         helpTable.setSize(stage.getWidth() / 3f, stage.getHeight() / 3);
         */
 
+        //Start first turn
+        endTurnMessageLbl.setText("" + rules.getCurrentTeam().getTeamName() + " turn!");
+        turnCountLbl.setText("Turn " + rules.getTurnCount());
+        turnCountLbl.setColor(new Color(1,1,1,1).lerp(Color.ORANGE, (float) rules.getTurnCount() / 100f));
+        endTurnMessageTable.setColor(rules.getCurrentTeam().getTeamColor());
+        endTurnMessageTable.clearActions();
+        SequenceAction sequence = new SequenceAction();
+        sequence.addAction(Actions.fadeIn(.2f));
+        sequence.addAction(Actions.delay(1.5f));
+        sequence.addAction(Actions.fadeOut(.2f));
+        endTurnMessageTable.addAction(sequence);
+        for (Entity e : rules.getCurrentTeam().getEntities())
+            shadeBasedOnState(e);
         fontGenerator.dispose();
     }
 
@@ -1084,21 +1091,6 @@ public class BattleScreen implements Screen {
         return moveHover;
     }
 
-    public void setTeams(Team... team) {
-        for (Team t : team) {
-            teams.add(t);
-        }
-
-        for (Team t : teams) {
-            for (Entity e : t.getEntities()) {
-                engine.addEntity(e);
-                if (am.has(e)) stage.addActor(am.get(e).actor);
-            }
-        }
-
-        rules.calculateTotalTeams();
-    }
-
     public Entity getSelectedEntity() {
         return selectedEntity;
     }
@@ -1107,7 +1099,7 @@ public class BattleScreen implements Screen {
         return engine;
     }
 
-    public Stage getstage() {
+    public Stage getStage() {
         return stage;
     }
 

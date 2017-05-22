@@ -79,7 +79,18 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
 
         teams = new Array<Team>();
         for (int i = 0; i < maxTeams; i++)
-            teams.add(new Team(Integer.toString(i), new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f), false));
+            teams.add(new Team("", new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f), false));
+        switch (maxTeams) { //Give default names
+            case 4 :
+                teams.get(3).setTeamName("Delta");
+            case 3 :
+                teams.get(2).setTeamName("Gamma");
+            case 2 :
+                teams.get(1).setTeamName("Beta");
+            case 1 :
+                teams.get(0).setTeamName("Alpha");
+        }
+        //UI stuff
         characterBtnTable = new Table();
         portraitTable = new Table();
         menuBtnTable = new Table();
@@ -115,41 +126,14 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
-                    if (actor == okBtn) {
-                        if (teams.get(curTeam).getEntities().size <= 0) //empty team
-                            return;
-                        else if (curTeam >= maxTeams - 1) {//last team selected
-                            GRID_WARS.setScreen(new BoardSelectScreen(maxTeams, zones, teams, GRID_WARS));
-                        } else { //else -> move to next team
-                            teamName.setText("");
-                            teamColor.setText("");
-                            currentEntity = 0;
-                            curTeam++;
-                            for (int i = 0; i < characterPortraits.size; i++)
-                                characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
-                        }
-                    } else if (actor == backBtn)
+                    if (actor == okBtn) { //OK Button
+                       confirmSelection();
+                    } else if (actor == backBtn) //Back Button
                         removeLastSelection();
                     else if (actor == clearBtn) {
-                        teams.get(curTeam).getEntities().clear();
-                        for (int i = 0; i < characterPortraits.size; i++)
-                            characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
-                        currentEntity = 0;
+                       clearSelection();
                     } else if (actor == lastTeamBtn) {
-                        if (curTeam <= 0)
-                            return;
-                        teamName.setText("");
-                        teamColor.setText("");
-                        teams.get(curTeam).getEntities().clear();
-                        teams.get(curTeam).setTeamName("" + curTeam);
-                        teams.get(curTeam).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
-                        teams.get(curTeam - 1).getEntities().clear();
-                        teams.get(curTeam - 1).setTeamName("" + (curTeam - 1));
-                        teams.get(curTeam - 1).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
-                        for (int i = 0; i < characterPortraits.size; i++)
-                            characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
-                        curTeam--;
-                        currentEntity = 0;
+                        goToLastTeam();
                     }
 
                     //character buttons
@@ -239,14 +223,42 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         portraitTable.debug();
     }
 
+    /**
+     * Choses the entity by placing its image into one of the Images, and adding the entitiy to the team.
+     * @param teamIcon {@code Image} that is being set
+     * @param string of the entity that is being chosen
+     */
     private void chooseEntity(TextureRegionDrawable teamIcon, String string) {
         characterPortraits.get(currentEntity).setDrawable(teamIcon);
         teams.get(curTeam).getEntities().add(EntityConstructor.testerRobot(curTeam, engine, stage));
         currentEntity++;
     }
 
+    /**
+     * Confirms the selection of a team. If the team is empty, it does nothing. If there is still teams to be chosen, it will change
+     * the current team and entity variables and clear the {@code Image}s, to allow the next team to be chosen. If the there
+     * is no more teams, it will move on to the {@code BoardSelectScreen}.
+     */
+    private void confirmSelection() {
+        if (teams.get(curTeam).getEntities().size <= 0) //empty team
+            return;
+        else if (curTeam >= maxTeams - 1) {//last team selected
+            GRID_WARS.setScreen(new BoardSelectScreen(maxTeams, zones, teams, GRID_WARS));
+        } else { //else -> move to next team
+            teamName.setText("");
+            teamColor.setText("");
+            currentEntity = 0;
+            curTeam++;
+            for (int i = 0; i < characterPortraits.size; i++)
+                characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
+        }
+    }
+
+    /**
+     * Removes the last entity selection.
+     */
     private void removeLastSelection() {
-        if (currentEntity <= 0 || teams.get(curTeam).getEntities().size <= 0) {
+        if (currentEntity <= 0 || teams.get(curTeam).getEntities().size <= 0) { //debug
             if (currentEntity <= 0) {
                 System.out.println("currentEntity <= 0  !!");
             }
@@ -255,6 +267,36 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         characterPortraits.get(currentEntity - 1).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
         teams.get(curTeam).getEntities().pop();
         currentEntity--;
+    }
+
+    /**
+     * Clears all the selected entities on a team.
+     */
+    private void clearSelection() {
+        teams.get(curTeam).getEntities().clear();
+        for (int i = 0; i < characterPortraits.size; i++)
+            characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
+        currentEntity = 0;
+    }
+
+    /**
+     * Goes back to the last team. Does this by clearing all data from the current team and the team before it.
+     */
+    private void goToLastTeam() {
+        if (curTeam <= 0)
+            return;
+        teamName.setText("");
+        teamColor.setText("");
+        teams.get(curTeam).getEntities().clear();
+        teams.get(curTeam).setTeamName("" + curTeam);
+        teams.get(curTeam).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
+        teams.get(curTeam - 1).getEntities().clear();
+        teams.get(curTeam - 1).setTeamName("" + (curTeam - 1));
+        teams.get(curTeam - 1).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
+        for (int i = 0; i < characterPortraits.size; i++)
+            characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
+        curTeam--;
+        currentEntity = 0;
     }
 
     /**

@@ -33,12 +33,11 @@ public class ZoneRules extends Rules {
                 continue;
             if (!teams.get(i).allDead())
                 break;
-            if (i == teams.size - 1)
-                return teams.get(currentTeamTurn);
+            return teams.get(currentTeamTurn);
         }
 
         //Check if in target zone
-        for (int i = 0; i < zones.size; i++) //team
+        for (int i = 0; i < zones.size; i++) //teams with zones
             for (Entity e : teams.get(i).getEntities()) { //entity
                 for (BoardPosition bp : zones.get(i)) { //zone place
                     if (bm.get(e).pos.equals(bp))

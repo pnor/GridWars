@@ -113,10 +113,10 @@ public abstract class Rules {
     public int getTotalTeams() {
         return totalTeams;
     }
-
+/*
     public void calculateTotalTeams() {
         totalTeams = 0;
         for (int i = 0; i < teams.size; i++)
             totalTeams += 1;
-    }
+    }*/
 }
