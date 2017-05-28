@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class HoverButton extends TextButton {
 
     private boolean hover;
-    private Color defualtColor = Color.WHITE;
+    private Color defaultColor = Color.WHITE;
     private Color highlightColor = Color.RED;
 
     public HoverButton(String text, Skin skin) {
@@ -32,7 +32,7 @@ public class HoverButton extends TextButton {
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 if (!isDisabled()) {
                     hover = false;
-                    setColor(defualtColor);
+                    setColor(defaultColor);
                 }
             }
         });
@@ -53,7 +53,7 @@ public class HoverButton extends TextButton {
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 if (!isDisabled()) {
                     hover = false;
-                    setColor(defualtColor);
+                    setColor(defaultColor);
                 }
             }
         });
@@ -61,7 +61,7 @@ public class HoverButton extends TextButton {
 
     public HoverButton(String text, Skin skin, Color defualtCol, Color highlightCol) {
         super(text, skin);
-        defualtColor = defualtCol;
+        defaultColor = defualtCol;
         super.setColor(defualtCol);
         highlightColor = highlightCol;
 
@@ -78,7 +78,7 @@ public class HoverButton extends TextButton {
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 if (!isDisabled()) {
                     hover = false;
-                    setColor(defualtColor);
+                    setColor(defaultColor);
                 }
             }
         });
@@ -90,7 +90,16 @@ public class HoverButton extends TextButton {
     @Override
     public void setColor(Color color) {
         super.setColor(color);
-        defualtColor = color;
+        defaultColor = color;
+    }
+
+    @Override
+    public void setDisabled(boolean isDisabled) {
+        super.setDisabled(isDisabled);
+        if (isDisabled)
+            super.setColor(Color.DARK_GRAY);
+        else
+            setColor(defaultColor);
     }
 
     /**
@@ -102,6 +111,14 @@ public class HoverButton extends TextButton {
 
     public boolean getHover() {
         return hover;
+    }
+
+    public Color getDefaultColor() {
+        return defaultColor;
+    }
+
+    public Color getHighlightColor() {
+        return highlightColor;
     }
 
     public void setHover(boolean value) {

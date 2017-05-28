@@ -48,49 +48,6 @@ public class GridWars extends Game {
 		stage.dispose();
 	}
 
-	/*
-	public void createTesterBattleScreen() {
-		BattleScreen screen = new BattleScreen(this, 7, new Color(241f / 255, 201f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1));
-		setScreen(screen);
-
-		Array<Entity> a = new Array<Entity>();
-		a.add(EntityConstructor.testerChessPiece(0, screen.getEngine(), stage));
-		a.add(EntityConstructor.testerPlaceHolder(0, screen.getEngine(), stage));
-		Team teamA = new Team("Testers", new Color(.8f, .8f, 1, 1), false, a);
-
-		Array<Entity> b = new Array<Entity>();
-		b.add(EntityConstructor.testerRobot(1, screen.getEngine(), stage));
-		b.add(EntityConstructor.testerRobot(1, screen.getEngine(), stage));
-		b.add(EntityConstructor.testerRobot(1, screen.getEngine(), stage));
-		b.add(EntityConstructor.testerRobot(1, screen.getEngine(), stage));
-		status.get(b.get(3)).burn(b.get(3));
-		status.get(b.get(1)).petrify(b.get(1));
-		status.get(b.get(0)).burn(b.get(0));
-		status.get(b.get(0)).paralyze(b.get(0));
-		status.get(b.get(0)).poison(b.get(0));
-		status.get(b.get(0)).still(b.get(0));
-		Team teamB = new Team("Team Blue", Color.CYAN, false, b);
-
-		Array<Entity> c = new Array<Entity>();
-		c.add(EntityConstructor.testerHole(-1, screen.getEngine(), stage));
-		Team teamC = new Team(false, c);
-
-		screen.setTeams(teamA, teamB, teamC);
-
-		BoardComponent.boards.add(a.get(0), new BoardPosition(0, 3));
-		BoardComponent.boards.add(a.get(1), new BoardPosition(0, 1));
-
-		BoardComponent.boards.add(b.get(0), new BoardPosition(3, 2));
-		BoardComponent.boards.add(b.get(1), new BoardPosition(3, 3));
-		BoardComponent.boards.add(b.get(2), new BoardPosition(3, 1));
-		BoardComponent.boards.add(b.get(3), new BoardPosition(2, 2));
-
-		BoardComponent.boards.add(c.get(0), new BoardPosition(1, 1));
-		if (screen.getRules() instanceof ZoneRules)
-			((ZoneRules) screen.getRules()).colorZones();
-	}
-	*/
-
 	public Batch getBatch() {
 		return stage.getBatch();
 	}

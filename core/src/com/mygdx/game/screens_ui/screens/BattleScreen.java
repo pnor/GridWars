@@ -3,8 +3,8 @@ package com.mygdx.game.screens_ui.screens;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -190,22 +190,16 @@ public class BattleScreen implements Screen {
         battleInputProcessor = new BattleInputProcessor(this);
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, battleInputProcessor));
 
-        //set up teams
-        for (Team t : teams)
-            for (Entity e : t.getEntities())
-                engine.addEntity(e);
-
         //Set up Engine
         engine.addSystem(new DrawingSystem(stage.getBatch()));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new EventSystem());
         engine.addSystem(new LifetimeSystem());
         engine.addSystem(new DamageDeathSystem());
-        System.out.println(engine.getEntitiesFor(Family.all(StatComponent.class).get()).size());
-        System.out.println(engine.getSystem(DamageDeathSystem.class).getEntities().size());
 
-        //set up Background
-
+        //Add all things on board to engine
+        for (Entity e : BoardComponent.boards.getAllEntities())
+            engine.addEntity(e);
 
         //Set up visuals
         Visuals.engine = engine;
@@ -368,7 +362,11 @@ public class BattleScreen implements Screen {
                endTurnMessageLbl.setText("" + rules.getCurrentTeam().getTeamName() + " turn!");
                turnCountLbl.setText("Turn " + rules.getTurnCount());
                turnCountLbl.setColor(new Color(1,1,1,1).lerp(Color.ORANGE, (float) rules.getTurnCount() / 100f));
-               endTurnMessageTable.setColor(rules.getCurrentTeam().getTeamColor());
+               Color teamColor = rules.getCurrentTeam().getTeamColor();
+               if (teamColor instanceof LerpColor)
+                   endTurnMessageTable.setColor(Color.WHITE);
+               else
+                    endTurnMessageTable.setColor(rules.getCurrentTeam().getTeamColor());
                endTurnMessageTable.clearActions();
                SequenceAction sequence = new SequenceAction();
                sequence.addAction(Actions.fadeIn(.2f));
@@ -477,9 +475,8 @@ public class BattleScreen implements Screen {
         if (!gameHasEnded) {
             //update last ENTITY selected ---
             for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
-                //if for actor component? if throwing ERRORS
                 if (am.get(e).actor.getLastSelected()) {
-                    try {   //removes previously highlighted
+                    try {   //removes previously highlighted tiles
                         if (selectedEntity != null && stm.has(selectedEntity) && stm.get(selectedEntity).getModSpd(selectedEntity) > 0)
                             removeMovementTiles();
                     } catch (IndexOutOfBoundsException exc) {
@@ -584,6 +581,10 @@ public class BattleScreen implements Screen {
         engine.getSystem(DrawingSystem.class).drawBackground(background, delta);
         stage.draw();
         engine.update(delta);
+        //update LerpColor of teams
+        for (Team t : teams)
+            if (t.getTeamColor() instanceof LerpColor)
+                ((LerpColor) t.getTeamColor()).update(delta);
 
         //Handling dead entities
         for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
@@ -606,18 +607,24 @@ public class BattleScreen implements Screen {
         //debug
         if (Visuals.visualsArePlaying < 0)
             throw (new IndexOutOfBoundsException("Visuals.visualsArePlaying is < 0"));
-        for (Team t : teams)
+        for (Team t : teams) {
             for (Entity e : t.getEntities()) {
-            if (status.has(e))
-                if (status.get(e).getTotalStatusEffects() < 0) {
-                    if (nm.has(e) && team.has(e))
-                        throw (new IndexOutOfBoundsException("An Entity, " + nm.get(e).name + ", on Team " + team.get(e).teamNumber + " has less than 0 status effects!"));
-                    else if (nm.has(e))
-                        throw (new IndexOutOfBoundsException("An Entity, " + nm.get(e).name + ", has less than 0 status effects!"));
-                    else
-                        throw (new IndexOutOfBoundsException("An unnamed Entity has less than 0 status effects!"));
-                }
+                if (status.has(e))
+                    if (status.get(e).getTotalStatusEffects() < 0) {
+                        if (nm.has(e) && team.has(e))
+                            throw (new IndexOutOfBoundsException("An Entity, " + nm.get(e).name + ", on Team " + team.get(e).teamNumber + " has less than 0 status effects!"));
+                        else if (nm.has(e))
+                            throw (new IndexOutOfBoundsException("An Entity, " + nm.get(e).name + ", has less than 0 status effects!"));
+                        else
+                            throw (new IndexOutOfBoundsException("An unnamed Entity has less than 0 status effects!"));
+                    }
             }
+        }
+        //debug: get values via key press
+        if (Gdx.input.isKeyJustPressed(Input.Keys.V))
+            System.out.println("Visuals.visualsArePlaying = " + Visuals.visualsArePlaying);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F))
+            System.out.println("Frames per Second: " + Gdx.graphics.getFramesPerSecond());
 
     }
 
@@ -828,7 +835,10 @@ public class BattleScreen implements Screen {
             atkLbl.setText("" + stat.getModAtk(selectedEntity));
             defLbl.setText("" + stat.getModDef(selectedEntity));
             spdLbl.setText("" + stat.getModSpd(selectedEntity));
-            nameLbl.setColor(Color.YELLOW);
+            if (team.has(selectedEntity))
+                nameLbl.setColor(teams.get(team.get(selectedEntity).teamNumber).getTeamColor());
+            else
+                nameLbl.setColor(Color.WHITE);
             hpLbl.setColor(Color.WHITE);
             spLbl.setColor(Color.WHITE);
             atkLbl.setColor(Color.WHITE);

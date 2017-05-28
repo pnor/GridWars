@@ -1,7 +1,9 @@
 package com.mygdx.game.creators;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.GridWars;
 import com.mygdx.game.boards.Board;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
@@ -26,7 +28,7 @@ public class BoardAndRuleConstructor {
      * 2-player match, the second being a 2-player zone match, and the third being a 4-player zone match.
      * @param boardIndex Index determining what board is created and what rules are returned. <p>
      *                   1-3 : Simple <p>
-     *                   4-6 : <p>
+     *                   4-6 : Complex <p>
      *                   7-9 : <p>
      * @return {@code Rules} that should be used in the BattleScreen.
      */
@@ -38,6 +40,8 @@ public class BoardAndRuleConstructor {
                 return makeSimple2PZone(screen, teams, boardManager);
             case 3 :
                 return makeSimple4PZone(screen, teams, boardManager);
+            case 4 :
+                return makeComplex2P(screen, teams, boardManager);
         }
         return null;
     }
@@ -50,6 +54,7 @@ public class BoardAndRuleConstructor {
        new Board(boardSize, boardSize, c, c2, 700 / boardSize
    */
 
+    //Simple
     public static Rules makeSimple2P(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
         boardManager.setBoards(new Board(7, 7, 100), new CodeBoard(7, 7));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
@@ -150,6 +155,68 @@ public class BoardAndRuleConstructor {
         for (Entity e : teams.get(3).getEntities()) {
             boardManager.add(e, new BoardPosition(row, maxSize));
             row++;
+        }
+
+        //color zones
+        rules.colorZones();
+
+        return rules;
+    }
+
+    //Complex
+    public static Rules makeComplex2P(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(7, 7, 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        int col = 1;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            col++;
+        }
+        col = 5;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            col--;
+        }
+        //place blocks
+        for (int i = 0; i < 8; i++) {
+            BoardPosition pos = new BoardPosition(MathUtils.random(1, 5), MathUtils.random(1, 5));
+            if (boardManager.getBoard().getTile(pos.r, pos.c).isOccupied()) {
+                i--;
+                continue;
+            }
+            boardManager.add(EntityConstructor.cube(GridWars.engine, GridWars.stage), pos);
+        }
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeComplex2PZone(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        //declare rules
+        boardManager.setBoards(new Board(7, 7, 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        ZoneRules rules = new ZoneRules(screen, teams, new Array<Array<BoardPosition>>(new Array[] {
+                new Array<BoardPosition>(new BoardPosition[]{
+                        new BoardPosition(maxSize, 5),
+                        new BoardPosition(maxSize, 4),
+                        new BoardPosition(maxSize, 3),
+                        new BoardPosition(maxSize, 2)}),
+                new Array<BoardPosition>(new BoardPosition[]{
+                        new BoardPosition(0, 1),
+                        new BoardPosition(0, 2),
+                        new BoardPosition(0, 3),
+                        new BoardPosition(0, 4)})
+        }));
+
+        //place entities
+        int col = 1;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            col++;
+        }
+        col = 5;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            col--;
         }
 
         //color zones

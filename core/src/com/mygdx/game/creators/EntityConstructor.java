@@ -21,7 +21,7 @@ import static com.mygdx.game.GridWars.atlas;
  */
 public class EntityConstructor {
 
-    //Testing purposes
+    //Testing purposes ----
     public static Entity testerChessPiece(int team, Engine engine, Stage stage) {
         Entity entity = new Entity();
         if (team > -1)
@@ -100,6 +100,247 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new SpriteActor(new Sprite(atlas.findRegion("hole")))));
         entity.add(new BoardComponent());
         entity.add(new NameComponent("Hole"));
+
+        return entity;
+    }
+
+    //Blockade Type Entity
+    public static Entity cube(Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(5, 0, 0, 0, 0));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("cube")), true, true)));
+        entity.add(new NameComponent("Cube"));
+
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+
+        return entity;
+    }
+
+    //Game Piece Entity ------------
+    public static Entity canight(int team, Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("Canight"),
+                atlas.findRegion("Canight2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 4, 2, 0, 3));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.StarSpin(entity, engine, stage)
+        })));
+        entity.add(new NameComponent("Canight"));
+
+        return entity;
+    }
+
+    public static Entity catdroid(int team, Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("catdroid"),
+                atlas.findRegion("catdroid2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 5, 2, 3, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.StarSpin(entity, engine, stage)
+        })));
+        entity.add(new NameComponent("Catdroid"));
+
+        return entity;
+    }
+
+    public static Entity pyrobull(int team, Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("firebull"),
+                atlas.findRegion("firebull2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(6, 3, 5, 1, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.StarSpin(entity, engine, stage)
+        })));
+        entity.add(new NameComponent("Pyrobull"));
+
+        return entity;
+    }
+
+    public static Entity freezird(int team, Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("icebird"),
+                atlas.findRegion("icebird2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 4, 2, 0, 3));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.StarSpin(entity, engine, stage)
+        })));
+        entity.add(new NameComponent("Freezird"));
+
+        return entity;
+    }
+
+    public static Entity medicarp(int team, Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("fish"),
+                atlas.findRegion("fish2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(8, 4, 1, 0, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.StarSpin(entity, engine, stage)
+        })));
+        entity.add(new NameComponent("Medicarp"));
+
+        return entity;
+    }
+
+    public static Entity thoughtoise(int team, Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("turtle"),
+                atlas.findRegion("turtle2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(2, 5, 3, 4, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.StarSpin(entity, engine, stage)
+        })));
+        entity.add(new NameComponent("Thoughtoise"));
+
+        return entity;
+    }
+
+    public static Entity vulpedge(int team, Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("fox"),
+                atlas.findRegion("fox2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 3, 2, 1, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.StarSpin(entity, engine, stage)
+        })));
+        entity.add(new NameComponent("Vulpedge"));
+
+        return entity;
+    }
+
+    public static Entity thundog(int team, Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("thunderdog"),
+                atlas.findRegion("thunderdog2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(5, 6, 3, 0, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.StarSpin(entity, engine, stage)
+        })));
+        entity.add(new NameComponent("Thundog"));
 
         return entity;
     }

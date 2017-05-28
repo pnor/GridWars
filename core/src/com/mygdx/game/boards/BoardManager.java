@@ -1,6 +1,7 @@
 package com.mygdx.game.boards;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
 
 import static com.mygdx.game.ComponentMappers.am;
 import static com.mygdx.game.ComponentMappers.bm;
@@ -124,6 +125,22 @@ public class BoardManager {
         board.move(am.get(codeBoard.get(bm.get(e).pos.r, bm.get(e).pos.c)).actor, bm.get(e).pos.r, bm.get(e).pos.c, bp.r, bp.c);
         codeBoard.move(e, bp);
         return true;
+    }
+
+    /**
+     * Checks if the space at the indicated position already has an entity on it.
+     * @param pos Position that is being checked
+     * @return whether the entity at the position is not null
+     */
+    public boolean isOccupied(BoardPosition pos) {
+        return !(codeBoard.get(pos.r, pos.c) == null);
+    }
+
+    /**
+     * @return All entities on the {@link CodeBoard}
+     */
+    public Array<Entity> getAllEntities() {
+        return codeBoard.getEntities();
     }
 
     /**

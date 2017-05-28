@@ -35,6 +35,7 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
 
     private Label titleLbl;
     private HoverButton basic;
+    private HoverButton complex;
 
     public BoardSelectScreen(int max, boolean isZones, Array<Team> selectedTeams, GridWars gridWars) {
         super(gridWars);
@@ -51,15 +52,21 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
         param.size = 50;
         titleLbl = new Label("Select A Board", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         basic = new HoverButton("Basic", skin, Color.WHITE, Color.DARK_GRAY);
+        complex = new HoverButton("Complex", skin, Color.WHITE, Color.DARK_GRAY);
+
         ChangeListener listener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                if (maxTeams == 2)
+                    board = (zoneRules) ? 2 : 1;
+                else if (maxTeams == 4 && zoneRules)
+                    board = 3;
+
                 if (((Button) actor).isPressed()) {
                     if (actor == basic) {
-                        if (maxTeams == 2)
-                            board = (zoneRules) ? 2 : 1;
-                        else if (maxTeams == 4 && zoneRules)
-                            board = 3;
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, GRID_WARS));
+                    } else if (actor == complex) {
+                        board += 3;
                         GRID_WARS.setScreen(new BattleScreen(teams, board, GRID_WARS));
                     }
                 }
@@ -75,7 +82,11 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
                 null, null);
 
         basic.addListener(listener);
+        complex.addListener(listener);
+
         table.add(titleLbl).padBottom(40).row();
         table.add(basic).size(350, 90).row();
+        table.add(complex).size(350, 90).row();
+
     }
 }
