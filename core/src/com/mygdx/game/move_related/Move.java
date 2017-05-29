@@ -30,7 +30,7 @@ public class Move {
     private Engine engine;
 
     /**
-     * Creates a move that can be used
+     * Creates a move that can be used. The move's attack message is displayed when it is used.
      * @param name2 name
      * @param message message that is displayed when move is used. {@code null} will show the defualt message.
      * @param usr user of move
@@ -45,6 +45,31 @@ public class Move {
                 Attack atk, Visuals vis) {
         name = name2;
         attackMessage = message;
+        user = usr;
+        spCost = cost;
+        range = rnge;
+        engine = engne;
+        stage = stge;
+        attack  = atk;
+        visuals = vis;
+    }
+
+    /**
+     * Creates a move that can be used. The generic message, "(move name) was used" or "(Entity name) used (move name)", is displayed
+     * when used
+     *
+     * @param name2 name
+     * @param usr user of move
+     * @param cost amount of sp to use the move
+     * @param rnge range
+     * @param engne {@code Engine}
+     * @param stge {@code Stage}
+     * @param atk effect of attack
+     * @param vis visual effect
+     */
+    public Move(String name2, Entity usr, int cost, Array<BoardPosition> rnge, Engine engne, Stage stge,
+                Attack atk, Visuals vis) {
+        name = name2;
         user = usr;
         spCost = cost;
         range = rnge;

@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.GameTimer;
+import com.mygdx.game.misc.GameTimer;
 import com.mygdx.game.boards.BoardPosition;
 
 /**

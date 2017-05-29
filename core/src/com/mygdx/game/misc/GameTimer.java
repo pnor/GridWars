@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.misc;
 
 /**
  * A timer that updates by passing in the delta time.

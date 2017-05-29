@@ -143,7 +143,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                 new Image(new TextureRegionDrawable(atlas.findRegion("cube"))), new Image(new TextureRegionDrawable(atlas.findRegion("cube")))});
 
         //listeners----------------
-        ChangeListener listener = new ChangeListener() {
+        ChangeListener teamSelectionListener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
@@ -158,28 +158,62 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                     } else if (actor == nextBtn) {
                         goToNextScreen();
                     }
-                    //character buttons
-                    else if (currentEntity <= 3) {
-                        if (actor == characterBtns.get(0))
-                            chooseEntity(new TextureRegionDrawable(atlas.findRegion("Canight")), "Canight");
-                        else if (actor == characterBtns.get(1))
-                            chooseEntity(new TextureRegionDrawable(atlas.findRegion("catdroid")), "Catdroid");
-                        else if (actor == characterBtns.get(2))
-                            chooseEntity(new TextureRegionDrawable(atlas.findRegion("firebull")), "Pyrobull");
-                        else if (actor == characterBtns.get(3))
-                            chooseEntity(new TextureRegionDrawable(atlas.findRegion("icebird")), "Freezird");
-                        else if (actor == characterBtns.get(4))
-                            chooseEntity(new TextureRegionDrawable(atlas.findRegion("fish")), "Medicarp");
-                        else if (actor == characterBtns.get(5))
-                            chooseEntity(new TextureRegionDrawable(atlas.findRegion("turtle")), "Thoughtoise");
-                        else if (actor == characterBtns.get(6))
-                            chooseEntity(new TextureRegionDrawable(atlas.findRegion("fox")), "Vulpedge");
-                        else if (actor == characterBtns.get(7))
-                            chooseEntity(new TextureRegionDrawable(atlas.findRegion("thunderdog")), "Thundog");
-                        else
-                            chooseEntity(new TextureRegionDrawable(atlas.findRegion("mystery")), "doesnt matter, default case");
-                    }
                 }
+            }
+        };
+        ChangeListener characterListener = new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+            //character buttons
+            if (currentEntity <= 3) {
+                if (actor != null) {
+                    if (actor == characterBtns.get(0)) {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("Canight")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.canight(curTeam, engine, stage));
+                    } else if (actor == characterBtns.get(1)) {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("catdroid")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.catdroid(curTeam, engine, stage));
+                    } else if (actor == characterBtns.get(2)) {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("firebull")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.pyrobull(curTeam, engine, stage));
+                    } else if (actor == characterBtns.get(3)) {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("icebird")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.freezird(curTeam, engine, stage));
+                    } else if (actor == characterBtns.get(4)) {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("fish")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.medicarp(curTeam, engine, stage));
+                    } else if (actor == characterBtns.get(5)) {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("turtle")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.thoughtoise(curTeam, engine, stage));
+                    } else if (actor == characterBtns.get(6)) {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("fox")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.vulpedge(curTeam, engine, stage));
+                    } else if (actor == characterBtns.get(7)) {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("thunderdog")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.thundog(curTeam, engine, stage));
+                    } else if (actor == characterBtns.get(8)) {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mummy")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.mummy(curTeam, engine, stage));
+                    } else if (actor == characterBtns.get(9)) {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("squid")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.squizerd(curTeam, engine, stage));
+                    } else if (actor == characterBtns.get(10)) {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("steamdragon")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.wyvrapor(curTeam, engine, stage));
+                    } else if (actor == characterBtns.get(11)) {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("jellygirl")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.jellymiss(curTeam, engine, stage));
+                    } else if (actor == characterBtns.get(12)) {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mirrorman")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.mirrorman(curTeam, engine, stage));
+                    } else {
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("robot")));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.testerRobot(curTeam, engine, stage));
+                    }
+
+                    currentEntity++;
+                }
+            }
             }
         };
         TextField.TextFieldListener nameListener = new TextField.TextFieldListener() {
@@ -219,13 +253,13 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                 null, null);
 
         //listeners
-        okBtn.addListener(listener);
-        backBtn.addListener(listener);
-        clearBtn.addListener(listener);
-        lastTeamBtn.addListener(listener);
-        nextBtn.addListener(listener);
+        okBtn.addListener(teamSelectionListener);
+        backBtn.addListener(teamSelectionListener);
+        clearBtn.addListener(teamSelectionListener);
+        lastTeamBtn.addListener(teamSelectionListener);
+        nextBtn.addListener(teamSelectionListener);
         for (int i = 0; i < characterBtns.size; i++)
-            characterBtns.get(i).addListener(listener);
+            characterBtns.get(i).addListener(characterListener);
         teamName.setTextFieldListener(nameListener);
         teamColor.setTextFieldListener(colorListener);
 
@@ -273,35 +307,6 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         table.debug();
         characterBtnTable.debug();
         //portraitTable.debug();
-    }
-
-    /**
-     * Choses the entity by placing its image into one of the Images, and adding the entitiy to the team.
-     * @param teamIcon {@code Image} that is being set
-     * @param string of the entity that is being chosen
-     */
-    private void chooseEntity(TextureRegionDrawable teamIcon, String string) {
-        characterPortraits.get(currentEntity).setDrawable(teamIcon);
-        //teams.get(curTeam).getEntities().add(EntityConstructor.testerRobot(curTeam, engine, stage));
-        if (string.equals( "Canight"))
-            teams.get(curTeam).getEntities().add(EntityConstructor.canight(curTeam, engine, stage));
-        else if (string.equals("Catdroid"))
-            teams.get(curTeam).getEntities().add(EntityConstructor.catdroid(curTeam, engine, stage));
-        else if (string.equals("Pyrobull"))
-            teams.get(curTeam).getEntities().add(EntityConstructor.pyrobull(curTeam, engine, stage));
-        else if (string.equals("Freezird"))
-            teams.get(curTeam).getEntities().add(EntityConstructor.freezird(curTeam, engine, stage));
-        else if (string.equals("Medicarp"))
-            teams.get(curTeam).getEntities().add(EntityConstructor.medicarp(curTeam, engine, stage));
-        else if (string.equals("Thoughtoise"))
-            teams.get(curTeam).getEntities().add(EntityConstructor.thoughtoise(curTeam, engine, stage));
-        else if (string.equals("Vulpedge"))
-            teams.get(curTeam).getEntities().add(EntityConstructor.vulpedge(curTeam, engine, stage));
-        else if (string.equals("Thundog"))
-            teams.get(curTeam).getEntities().add(EntityConstructor.thundog(curTeam, engine, stage));
-        else
-            teams.get(curTeam).getEntities().add(EntityConstructor.testerRobot(curTeam, engine, stage));
-        currentEntity++;
     }
 
     /**

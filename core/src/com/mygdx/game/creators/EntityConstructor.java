@@ -125,6 +125,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Canight"));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("Canight"),
@@ -141,10 +142,9 @@ public class EntityConstructor {
                 MoveConstructor.heavyDamageAnimation(entity, engine, stage),
                 MoveConstructor.deathAnimation(entity, engine, stage)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.swordSlice(entity, engine, stage),
                 MoveConstructor.StarSpin(entity, engine, stage)
         })));
-        entity.add(new NameComponent("Canight"));
 
         return entity;
     }
@@ -153,6 +153,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Catdroid"));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("catdroid"),
@@ -172,7 +173,6 @@ public class EntityConstructor {
                 MoveConstructor.Tackle(entity, engine, stage),
                 MoveConstructor.StarSpin(entity, engine, stage)
         })));
-        entity.add(new NameComponent("Catdroid"));
 
         return entity;
     }
@@ -181,11 +181,12 @@ public class EntityConstructor {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Pyrobull"));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("firebull"),
                 atlas.findRegion("firebull2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        }, Animation.PlayMode.LOOP, 0.2f)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 3, 5, 1, 1));
         entity.add(new StatusEffectComponent());
@@ -200,7 +201,6 @@ public class EntityConstructor {
                 MoveConstructor.Tackle(entity, engine, stage),
                 MoveConstructor.StarSpin(entity, engine, stage)
         })));
-        entity.add(new NameComponent("Pyrobull"));
 
         return entity;
     }
@@ -209,6 +209,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Freezird"));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("icebird"),
@@ -228,7 +229,6 @@ public class EntityConstructor {
                 MoveConstructor.Tackle(entity, engine, stage),
                 MoveConstructor.StarSpin(entity, engine, stage)
         })));
-        entity.add(new NameComponent("Freezird"));
 
         return entity;
     }
@@ -237,6 +237,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Medicarp"));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("fish"),
@@ -256,7 +257,6 @@ public class EntityConstructor {
                 MoveConstructor.Tackle(entity, engine, stage),
                 MoveConstructor.StarSpin(entity, engine, stage)
         })));
-        entity.add(new NameComponent("Medicarp"));
 
         return entity;
     }
@@ -265,11 +265,12 @@ public class EntityConstructor {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Thoughtoise"));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("turtle"),
                 atlas.findRegion("turtle2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        }, Animation.PlayMode.LOOP, 0.7f)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(2, 5, 3, 4, 1));
         entity.add(new StatusEffectComponent());
@@ -284,7 +285,6 @@ public class EntityConstructor {
                 MoveConstructor.Tackle(entity, engine, stage),
                 MoveConstructor.StarSpin(entity, engine, stage)
         })));
-        entity.add(new NameComponent("Thoughtoise"));
 
         return entity;
     }
@@ -293,6 +293,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Vulpedge"));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("fox"),
@@ -309,10 +310,9 @@ public class EntityConstructor {
                 MoveConstructor.heavyDamageAnimation(entity, engine, stage),
                 MoveConstructor.deathAnimation(entity, engine, stage)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)
+                MoveConstructor.swordSlice(entity, engine, stage),
+                MoveConstructor.pierceSwordSlice(entity, engine, stage)
         })));
-        entity.add(new NameComponent("Vulpedge"));
 
         return entity;
     }
@@ -321,11 +321,12 @@ public class EntityConstructor {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Thundog"));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("thunderdog"),
                 atlas.findRegion("thunderdog2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        }, Animation.PlayMode.LOOP, 0.2f)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 6, 3, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -340,7 +341,146 @@ public class EntityConstructor {
                 MoveConstructor.Tackle(entity, engine, stage),
                 MoveConstructor.StarSpin(entity, engine, stage)
         })));
-        entity.add(new NameComponent("Thundog"));
+
+        return entity;
+    }
+
+    public static Entity mummy(int team, Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Mummy"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("mummy"),
+                atlas.findRegion("mummy2")
+        }, Animation.PlayMode.LOOP, 0.3f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(5, 4, 2, 1, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.StarSpin(entity, engine, stage)
+        })));
+
+        return entity;
+    }
+
+    public static Entity squizerd(int team, Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Squizerd"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("squid"),
+                atlas.findRegion("squid2")
+        }, Animation.PlayMode.LOOP, 0.7f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 9, 2, 0, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.StarSpin(entity, engine, stage)
+        })));
+
+        return entity;
+    }
+
+    public static Entity wyvrapor(int team, Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Wyvrapor"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("steamdragon"),
+                atlas.findRegion("steamdragon2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(4, 4, 1, 0, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.StarSpin(entity, engine, stage)
+        })));
+
+        return entity;
+    }
+
+    public static Entity jellymiss(int team, Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Jellymiss"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("jellygirl"),
+                atlas.findRegion("jellygirl2")
+        }, Animation.PlayMode.LOOP, 0.7f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(4, 10, 1, 0, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.StarSpin(entity, engine, stage)
+        })));
+
+        return entity;
+    }
+
+    public static Entity mirrorman(int team, Engine engine, Stage stage) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Mirror Man"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("mirrorman"),
+                atlas.findRegion("mirrorman2")
+        }, Animation.PlayMode.LOOP, 0.3f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(5, 12, 1, 1, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity, engine, stage),
+                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
+                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity, engine, stage),
+                MoveConstructor.StarSpin(entity, engine, stage)
+        })));
 
         return entity;
     }

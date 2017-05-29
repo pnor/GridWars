@@ -23,16 +23,16 @@ public class BackgroundConstructor {
             case 4 :
             case 5 :
             case 6 :
-                return makeSimpleBack();
+                return makeComplexBack();
         }
         return null;
     }
 
     public static Background makeSimpleBack() {
         Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
-        back.setColor(new Color(.5f, .5f, .5f, 1));
-        Sprite overlay = new Sprite(backAtlas.findRegion("DiagStripeOverlay"));
         back.setColor(new Color(.7f, .7f, .7f, 1));
+        Sprite overlay = new Sprite(backAtlas.findRegion("DiagStripeOverlay"));
+        overlay.setColor(new Color(.7f, .7f, .7f, 1));
         return new Background(
                 back,
                 new Sprite[] {overlay},
@@ -42,9 +42,9 @@ public class BackgroundConstructor {
 
     public static Background makeComplexBack() {
         Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
-        back.setColor(new Color(.3f, .3f, .3f, 1));
+        back.setColor(new Color(.5f, .5f, .5f, 1));
         Sprite overlay = new Sprite(backAtlas.findRegion("DiagStripeOverlay"));
-        back.setColor(new Color(.6f, .6f, .6f, 1));
+        overlay.setColor(new Color(.5f, .5f, .5f, 1));
         return new Background(
                 back,
                 new Sprite[] {overlay},

@@ -28,13 +28,26 @@ public class AnimationComponent implements Component {
     public int z;
 
     /**
-     * Creates an [@code AnimationComponent}
-     * @param time time of animation. (0 if you want start)
+     * Creates an {@link AnimationComponent}
+     * @param time seconds per frame. Note that the first frame is shown at first at time = 0.
      * @param textureRegions images to show in animation
      * @param playMode how it plays
      */
     public AnimationComponent(float time, TextureRegion[] textureRegions, Animation.PlayMode playMode) {
         animation = new Animation(time, new Array<TextureRegion>(textureRegions), playMode);
+        animation.setPlayMode(playMode);
+    }
+
+    /**
+     * Creates an {@link AnimationComponent} with a specified shade color.
+     * @param time seconds per frame. Note that the first frame is shown at first at time = 0.
+     * @param textureRegions images to show in animation
+     * @param color Color that all the frames will be shaded with
+     * @param playMode how it plays
+     */
+    public AnimationComponent(float time, TextureRegion[] textureRegions, Color color, Animation.PlayMode playMode) {
+        animation = new Animation(time, new Array<TextureRegion>(textureRegions), playMode);
+        shadeColor = color;
         animation.setPlayMode(playMode);
     }
 

@@ -276,7 +276,7 @@ public class BattleScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
-                    if (mayAttack(selectedEntity)) {
+                    if (mayAttack(selectedEntity)) { //Use attack at button position or say they don't have enough SP
                         if (actor == attackBtn1) {
                             if (mvm.get(selectedEntity).moveList.get(0).spCost() > stm.get(selectedEntity).getModSp(selectedEntity)) {
                                 infoLbl.setText("Not enough SP!");
@@ -307,19 +307,24 @@ public class BattleScreen implements Screen {
                             currentMove = mvm.get(selectedEntity).moveList.get(3);
                         }
 
+                        //set canAttack state to false, and begin move's Visuals.
                         state.get(selectedEntity).canAttack = false;
                         currentMove.getVisuals().setPlaying(true, false);
                         disableUI();
-                        if (nm.has(selectedEntity))
-                            if (currentMove.getAttackMessage() != null)
-                                infoLbl.setText(currentMove.getAttackMessage());
-                            else
-                                infoLbl.setText(nm.get(selectedEntity).name + " used " + currentMove.getName() + "!");
-                        else
-                            if (currentMove.getAttackMessage() != null)
+                        //Attack message
+                        if (currentMove.getAttackMessage() == null || currentMove.getAttackMessage().trim().equals("")) { //defualt case
+                            if (nm.has(selectedEntity))
+                                if (currentMove.getAttackMessage() != null)
+                                    infoLbl.setText(currentMove.getAttackMessage());
+                                else
+                                    infoLbl.setText(nm.get(selectedEntity).name + " used " + currentMove.getName() + "!");
+                            else if (currentMove.getAttackMessage() != null)
                                 infoLbl.setText(currentMove.getAttackMessage());
                             else
                                 infoLbl.setText(currentMove.getName() + " was used!");
+                        } else {
+                            infoLbl.setText(currentMove.getAttackMessage());
+                        }
                     }
                 }
             }
