@@ -312,7 +312,7 @@ public class MoveConstructor {
                 Sprite glowSprite = atlas.createSprite("circle");
                 glowSprite.setColor(Color.RED);
                 glow.add(new SpriteComponent(glowSprite));
-                glow.add(new EventComponent(.1f, false, /*EventCompUtil.fadeIn(8)*/null));
+                glow.add(new EventComponent(.1f, false, null));
                 engine.addEntity(glow);
             }
 
@@ -321,7 +321,6 @@ public class MoveConstructor {
         VisualEvent sliceVis = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
-                /*
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
@@ -341,7 +340,6 @@ public class MoveConstructor {
                         Color.RED,
                         Animation.PlayMode.NORMAL));
                 engine.addEntity(slash);
-                */
             }
         }, .35f, 1);
 
@@ -401,7 +399,6 @@ public class MoveConstructor {
          * @param amount of times this needs to be called until it is fully transparent. (note: will not work as well
          *               colors that have a transparency of <1
          */
-        /*
         public static GameEvent fadeOut(int amount) {
             return (entity, engine) -> {
                 if (sm.has(entity)) { //sprite
@@ -421,14 +418,13 @@ public class MoveConstructor {
                 }
             };
         }
-        */
+
 
         /**
          * @return {@link GameEvent} that will become more opaque.
          * @param amount of times this needs to be called until it is fully opaque. (note: will not work as well
          *               colors that have a transparency of <1
          */
-        /*
         public static GameEvent fadeIn(int amount) {
             return (entity, engine) -> {
                 if (sm.has(entity)) { //sprite
@@ -448,7 +444,6 @@ public class MoveConstructor {
                 }
             };
         }
-        */
 
 
 
