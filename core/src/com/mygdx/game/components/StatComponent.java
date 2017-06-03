@@ -59,7 +59,7 @@ public class StatComponent implements Component {
         def = defense;
         spd = speed;
     }
-
+    //TODO no if statements for all these methods. StatusEffect object should have an object that tells it what stats it augments. Then this should cycle through those to compute final stat changes
     /**
      * Max Hp value after status effects and other effects are applied
      */
@@ -103,9 +103,9 @@ public class StatComponent implements Component {
     public int getModAtk(Entity e) {
         int newAtk = atk;
         if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-           if (status.get(e).isBurned())
+           if (status.get(e).statusEffects.containsKey("Burn"))
                newAtk /= 2;
-           if (status.get(e).isCursed())
+           if (status.get(e).statusEffects.containsKey("Curse"))
                newAtk /= 2;
         }
 
@@ -118,10 +118,12 @@ public class StatComponent implements Component {
     public int getModDef(Entity e) {
         int newDef = def;
         if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-            if (status.get(e).isPetrified())
+            if (status.get(e).statusEffects.containsKey("Petrify"))
                 newDef *= 2;
-            if (status.get(e).isCursed())
+            if (status.get(e).statusEffects.containsKey("Curse"))
                 newDef /= 2;
+            if (status.get(e).statusEffects.containsKey("Defenseless"))
+                newDef *= 0;
         }
 
         return newDef;
@@ -133,11 +135,11 @@ public class StatComponent implements Component {
     public int getModSpd(Entity e) {
         int newSpd = spd;
         if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-            if (status.get(e).isParalyzed())
+            if (status.get(e).statusEffects.containsKey("Paralyze"))
                 newSpd /= 2;
-            if (status.get(e).isPetrified())
+            if (status.get(e).statusEffects.containsKey("Petrify"))
                 newSpd *= 0;
-            if (status.get(e).isCursed())
+            if (status.get(e).statusEffects.containsKey("Curse"))
                 newSpd /= 2;
         }
 

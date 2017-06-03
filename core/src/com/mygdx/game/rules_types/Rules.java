@@ -2,12 +2,10 @@ package com.mygdx.game.rules_types;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.components.StatusEffectComponent;
+import com.mygdx.game.move_related.StatusEffect;
 import com.mygdx.game.screens_ui.screens.BattleScreen;
 
-import static com.mygdx.game.ComponentMappers.state;
-import static com.mygdx.game.ComponentMappers.status;
-import static com.mygdx.game.ComponentMappers.stm;
+import static com.mygdx.game.ComponentMappers.*;
 
 /**
  * Class for the rules of the game. Handles turns, and win criteria.
@@ -63,24 +61,17 @@ public abstract class Rules {
             }
         }
         //do affects and stats
-        for (Entity e : teams.get(currentTeamTurn).getEntities()) {
-            if (stm.has(e) && !(stm.get(e).getModSp(e) >= stm.get(e).getModMaxSp(e)) && !(status.has(e) && status.get(e).isStill()))
+        for (Entity e : teams.get(currentTeamTurn).getEntities()) { //increment sp
+            if (stm.has(e) && !(stm.get(e).getModSp(e) >= stm.get(e).getModMaxSp(e)) && !(status.has(e) && status.get(e).statusEffects.containsKey("stillness"))) //check if it can
                 stm.get(e).sp += 1;
 
             //status effects
             if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-                if (status.get(e).isPoisoned())
-                    StatusEffectComponent.poisonTurnEffect(e);
-                if (status.get(e).isBurned())
-                    StatusEffectComponent.burnTurnEffect(e);
-                if (status.get(e).isParalyzed())
-                    StatusEffectComponent.paralyzeTurnEffect(e);
-                if (status.get(e).isPetrified())
-                    StatusEffectComponent.petrifyTurnEffect(e);
-                if (status.get(e).isStill())
-                    StatusEffectComponent.stillnessTurnEffect(e);
-                if (status.get(e).isCursed())
-                    StatusEffectComponent.curseTurnEffect(e);
+                for (StatusEffect effect : status.get(e).statusEffects.values()) {
+                    effect.doTurnEffect(e);
+                    if (effect.getIsFinished())
+                        status.get(e).statusEffects.remove(effect.getName());
+                }
             }
         }
         //update the team bar

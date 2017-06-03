@@ -21,7 +21,7 @@ public class EventComponent implements Component{
      * @param current current time
      * @param repeatAfterTarget whether it keeps looping the animation after the target time is passed
      * @param isTicking whether the the time till event is ticking, or not
-     * @param event what happens when the time elapses
+     * @param gameEvent what happens when the time elapses
      */
     public EventComponent(float target, float current, boolean repeatAfterTarget, boolean isTicking, GameEvent gameEvent) {
         targetTime = target;

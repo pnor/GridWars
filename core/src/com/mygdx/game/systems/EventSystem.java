@@ -32,5 +32,4 @@ public class EventSystem extends IteratingSystem {
             }
         }
     }
-
 }

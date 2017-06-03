@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,6 +16,7 @@ import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.*;
 import com.mygdx.game.misc.GameEvent;
 import com.mygdx.game.move_related.*;
+import com.mygdx.game.screens_ui.LerpColor;
 import com.mygdx.game.screens_ui.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.*;
@@ -22,7 +24,7 @@ import static com.mygdx.game.GridWars.atlas;
 
 /**
  * Class that creates various moves to be used by Entities on the board. Also contains methods for certain
- * animations (like for dying and taking damage)
+ * animations ({@link Visuals} for dying and taking damage) and {@link StatusEffect}s.
  * @author Phillip O'Reggio
  */
 public class MoveConstructor {
@@ -140,7 +142,52 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{initialRed, fadeAndBlacken.copy(.275f, 1), fadeAndBlacken}));
     }
 
+    //Status Effects ------------
+    public static StatusEffect poison() {
+        return new StatusEffect("Poison", 3, new LerpColor(Color.GREEN, new Color(201f / 255f, 1f, 0f, 1f)), (e) -> {
+            stm.get(e).hp -= 1;
+            if (vm.has(e) && !vm.get(e).heavyDamageAnimation.getIsPlaying())
+                vm.get(e).heavyDamageAnimation.setPlaying(true, true);
+        });
+    }
+
+    public static StatusEffect burn() {
+        return new StatusEffect("Burn", 3, new LerpColor(Color.RED, new Color(1, 125f / 255f, 0f, 1f), .3f, Interpolation.sineOut), (e) -> {
+            if (stm.has(e) && MathUtils.randomBoolean()) {
+                stm.get(e).hp -= 1;
+                if (vm.has(e) && !vm.get(e).heavyDamageAnimation.getIsPlaying())
+                    vm.get(e).heavyDamageAnimation.setPlaying(true, true);
+            }
+        });
+    }
+
+    public static StatusEffect paralyze() {
+        return new StatusEffect("Paralyze", 3, new LerpColor(Color.RED, new LerpColor(Color.GRAY, Color.YELLOW, .4f, Interpolation.exp5In)), (e) -> {/*nothing*/});
+    }
+
+    public static StatusEffect petrify() {
+        return new StatusEffect("Petrify", 2, new Color(214f / 255f, 82f / 255f, 0, 1), (e) -> {/*nothing*/});
+    }
+
+    public static StatusEffect stillness() {
+        return new StatusEffect("Stillness", 2, new LerpColor(Color.WHITE, new Color(0, 140f / 255f, 1f, 1f), .7f,  Interpolation.sine), (e) -> {/*nothing*/});
+    }
+
+    public static StatusEffect curse() {
+        return new StatusEffect("Curse", 2, new LerpColor(Color.GRAY, Color.BLACK, .5f, Interpolation.fade), (e) -> {/*nothing*/});
+    }
+
+    public static StatusEffect defenseless() {
+        return new StatusEffect("Defenseless", 1, new LerpColor(Color.WHITE, Color.NAVY, .5f, Interpolation.fade), (e) -> {/*nothing*/});
+    }
+
     //Moves ------------
+
+    /*
+    Note : the line below
+        Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - (half sprite width), t.getHeight() / 2 - (half sprite height)));
+    Gets the position of the center of the tile, then subtracts half the size of the sprite being drawn from it.
+     */
 
     public static Move Tackle(Entity user, Engine engine, Stage stage) {
         VisualEvent TackleVis = new VisualEvent(new VisualEffect() {
@@ -264,6 +311,7 @@ public class MoveConstructor {
                     return;
                 }
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 22.5f, t.getHeight() / 2 - 22.5f));
+                tilePosition.x += t.getWidth() / 4; //Move rotated sprite to be aligned
                 Entity crossSlash = new Entity();
                 crossSlash.add(new PositionComponent(tilePosition, 45 * BoardComponent.boards.getBoard().getScale(), 45 * BoardComponent.boards.getBoard().getScale(), 90));
                 crossSlash.add(new LifetimeComponent(0, .4f));
@@ -305,18 +353,18 @@ public class MoveConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 22.5f, t.getHeight() / 2 - 22.5f));
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 30, t.getHeight() / 2 - 30));
                 Entity glow = new Entity();
-                glow.add(new PositionComponent(tilePosition, 45 * BoardComponent.boards.getBoard().getScale(), 45 * BoardComponent.boards.getBoard().getScale(), 0));
-                glow.add(new LifetimeComponent(0, .4f));
+                glow.add(new PositionComponent(tilePosition, 60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale(), 0));
+                glow.add(new LifetimeComponent(0, .5f));
                 Sprite glowSprite = atlas.createSprite("circle");
-                glowSprite.setColor(Color.RED);
+                glowSprite.setColor(new Color(1, 0, 0, 0));
                 glow.add(new SpriteComponent(glowSprite));
-                glow.add(new EventComponent(.1f, false, null));
+                glow.add(new EventComponent(.1f, true, EventCompUtil.fadeIn(6)));
                 engine.addEntity(glow);
             }
 
-        }, .4f, 1);
+        }, .6f, 1);
 
         VisualEvent sliceVis = new VisualEvent(new VisualEffect() {
             @Override
@@ -328,7 +376,7 @@ public class MoveConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 22.5f, t.getHeight() / 2 - 22.5f));
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 30, t.getHeight() / 2 - 30));
                 Entity slash = new Entity();
                 slash.add(new PositionComponent(tilePosition, 60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale(), 0));
                 slash.add(new LifetimeComponent(0, .4f));
@@ -341,7 +389,7 @@ public class MoveConstructor {
                         Animation.PlayMode.NORMAL));
                 engine.addEntity(slash);
             }
-        }, .35f, 1);
+        }, .01f, 1);
 
         VisualEvent crossSliceVis = new VisualEvent(new VisualEffect() {
             @Override
@@ -353,7 +401,8 @@ public class MoveConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 22.5f, t.getHeight() / 2 - 22.5f));
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 30, t.getHeight() / 2 - 30));
+                tilePosition.x += t.getWidth() / 4; //Move rotated sprite to be aligned
                 Entity crossSlash = new Entity();
                 crossSlash.add(new PositionComponent(tilePosition, 60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale(), 90));
                 crossSlash.add(new LifetimeComponent(0, .4f));
@@ -384,6 +433,114 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{glow ,sliceVis, crossSliceVis})));
     }
 
+    public static Move guardPiercer(Entity user, Engine engine, Stage stage) {
+        //Visuals---
+        VisualEvent circles = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2, t.getHeight() / 2));
+                Entity glow = new Entity();
+
+                glow.add(new PositionComponent(tileCenter.cpy().add((float) (Math.random() * 70) - 35, (float) (Math.random() * 70) - 35),
+                        60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale(), 0));
+
+                float directionTowardsCenter = MathUtils.degreesToRadians * MathUtils.atan2(
+                        tileCenter.y - (pm.get(glow).getCenter().y),
+                        tileCenter.x - (pm.get(glow).getCenter().x));
+                Vector2 movementToCenter = new Vector2(2, 0);
+                movementToCenter.setAngle(directionTowardsCenter);
+                System.out.println(directionTowardsCenter);
+                glow.add(new MovementComponent(movementToCenter));
+
+                glow.add(new LifetimeComponent(0, .5f));
+
+                Sprite glowSprite = atlas.createSprite("circle");
+                glowSprite.setColor(new Color(.3f, .3f, 1, 0f));
+                glow.add(new SpriteComponent(glowSprite));
+
+                glow.add(new EventComponent(.1f, true, EventCompUtil.fadeIn(6)));
+
+                engine.addEntity(glow);
+            }
+
+        }, .5f, 1);
+
+        VisualEvent sliceVis = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 30, t.getHeight() / 2 - 30));
+                Entity slash = new Entity();
+                slash.add(new PositionComponent(tilePosition, 60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale(), 0));
+                slash.add(new LifetimeComponent(0, .4f));
+                slash.add(new AnimationComponent(.1f,new TextureRegion[] {
+                        atlas.findRegion("vertslash1"),
+                        atlas.findRegion("vertslash2"),
+                        atlas.findRegion("vertslash3"),
+                        atlas.findRegion("vertslash4")},
+                        Color.BLUE,
+                        Animation.PlayMode.NORMAL));
+                engine.addEntity(slash);
+            }
+        }, .01f, 1);
+
+        VisualEvent crossSliceVis = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 30, t.getHeight() / 2 - 30));
+                tilePosition.x += t.getWidth() / 4; //Move rotated sprite to be aligned
+                Entity crossSlash = new Entity();
+                crossSlash.add(new PositionComponent(tilePosition, 60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale(), 90));
+                crossSlash.add(new LifetimeComponent(0, .4f));
+                crossSlash.add(new AnimationComponent(.1f, new TextureRegion[] {
+                        atlas.findRegion("vertslash1"),
+                        atlas.findRegion("vertslash2"),
+                        atlas.findRegion("vertslash3"),
+                        atlas.findRegion("vertslash4")},
+                        Color.BLUE,
+                        Animation.PlayMode.LOOP));
+                engine.addEntity(crossSlash);
+            }
+        }, .4f, 1);
+
+        //Move
+        return new Move("Piercing Slice", nm.get(user).name + " delivered a piercing blow!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage,
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                        if (stm.has(enemy))
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) * 1.5, 0, 999);
+
+                        if (status.has(enemy))
+                            status.get(enemy).addStatusEffect(defenseless(), enemy);
+
+                        if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
+                            vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{circles.copy(.1f, 5), circles ,sliceVis, crossSliceVis})));
+    }
 
 
 

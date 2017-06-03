@@ -36,10 +36,10 @@ import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.BoardComponent;
 import com.mygdx.game.components.MovesetComponent;
 import com.mygdx.game.components.StatComponent;
-import com.mygdx.game.components.StatusEffectComponent;
 import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.creators.BoardAndRuleConstructor;
 import com.mygdx.game.move_related.Move;
+import com.mygdx.game.move_related.StatusEffect;
 import com.mygdx.game.move_related.Visuals;
 import com.mygdx.game.rules_types.Rules;
 import com.mygdx.game.rules_types.Team;
@@ -734,18 +734,7 @@ public class BattleScreen implements Screen {
             am.get(e).actor.shade(Color.GRAY);
         //status effects
         else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-            if (status.get(e).isPoisoned())
-                am.get(e).actor.shade(StatusEffectComponent.poisonColor);
-            else if (status.get(e).isBurned())
-                am.get(e).actor.shade(StatusEffectComponent.burnColor);
-            else if (status.get(e).isParalyzed())
-                am.get(e).actor.shade(StatusEffectComponent.paralyzeColor);
-            else if (status.get(e).isPetrified())
-                am.get(e).actor.shade(StatusEffectComponent.petrifyColor);
-            else if (status.get(e).isStill())
-                am.get(e).actor.shade(StatusEffectComponent.stillnessColor);
-            else if (status.get(e).isCursed())
-                am.get(e).actor.shade(StatusEffectComponent.curseColor);
+            am.get(e).actor.shade(status.get(e).statusEffects.values().toArray().first().getColor());
         } else { //defaults
             if (team.get(e).teamNumber == rules.getCurrentTeamNumber())
                 am.get(e).actor.shade(rules.getCurrentTeam().getTeamColor());
@@ -768,26 +757,12 @@ public class BattleScreen implements Screen {
             return am.get(e).actor.getColor() == Color.GRAY;
         else if (!state.get(e).canMove && !state.get(e).canAttack)
             return am.get(e).actor.getColor() == Color.DARK_GRAY;
-        else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) { //status effect
-            if (status.get(e).isPoisoned())
-                return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.poisonColor);
-            else if (status.get(e).isBurned())
-                return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.burnColor);
-            else if (status.get(e).isParalyzed())
-                return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.paralyzeColor);
-            else if (status.get(e).isPetrified())
-                return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.petrifyColor);
-            else if (status.get(e).isStill())
-                return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.stillnessColor);
-            else if (status.get(e).isCursed())
-                return am.get(e).actor.getColor() instanceof LerpColor && am.get(e).actor.getColor().equals(StatusEffectComponent.curseColor);
-
-        } else if (team.get(e).teamNumber == rules.getCurrentTeamNumber()) //defualts
+        else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0)  //status effect
+            return am.get(e).actor.getColor().equals(status.get(e).statusEffects.values().toArray().first().getColor());
+        else if (team.get(e).teamNumber == rules.getCurrentTeamNumber()) //defualts
             return am.get(e).actor.getColor() == rules.getCurrentTeam().getTeamColor();
         else
             return am.get(e).actor.getColor() == Color.WHITE;
-
-        return false;
     }
 
     /**
@@ -805,28 +780,14 @@ public class BattleScreen implements Screen {
         else if (!state.get(e).canMove || !state.get(e).canAttack)
             return Color.GRAY;
             //status effects
-        else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-            if (status.get(e).isPoisoned())
-                return StatusEffectComponent.poisonColor;
-            else if (status.get(e).isBurned())
-                return StatusEffectComponent.burnColor;
-            else if (status.get(e).isParalyzed())
-                return StatusEffectComponent.paralyzeColor;
-            else if (status.get(e).isPetrified())
-                return StatusEffectComponent.petrifyColor;
-            else if (status.get(e).isStill())
-                return StatusEffectComponent.stillnessColor;
-            else if (status.get(e).isCursed())
-                return StatusEffectComponent.curseColor;
-
-        } else { //defaults
+        else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0)
+            return status.get(e).statusEffects.values().toArray().first().getColor();
+        else { //defaults
             if (team.get(e).teamNumber == rules.getCurrentTeamNumber())
                 return rules.getCurrentTeam().getTeamColor();
             else
               return Color.WHITE;
         }
-
-        return null;
     }
 
     /**
@@ -852,42 +813,39 @@ public class BattleScreen implements Screen {
             statusLbl.setColor(Color.GREEN);
             if (status.has(selectedEntity) && status.get(selectedEntity).getTotalStatusEffects() > 0) {
                 /* TODO optimize so it doesn't shade labels again if the shade does not need to be changed. (not essential)
+                TODO change to make it more modular (using StatusEffects in StatusEffectComponent to figure out what to shade
                 For example, switching from a burned entity to a cursed one will shade attack label red again.
                  */
                 nameLbl.setColor(new Color(192f / 255f, 81f / 255, 1f, 1f));
                 statusLbl.setColor(Color.RED);
-                if (status.get(selectedEntity).isBurned())
+                if (status.get(selectedEntity).statusEffects.containsKey("Burn"))
                     atkLbl.setColor(Color.RED);
 
-                if (status.get(selectedEntity).isParalyzed())
+                if (status.get(selectedEntity).statusEffects.containsKey("Paralyze"))
                     spdLbl.setColor(Color.RED);
 
-                if (status.get(selectedEntity).isPetrified()) {
+                if (status.get(selectedEntity).statusEffects.containsKey("Petrify")) {
                     defLbl.setColor(Color.CYAN);
                     spdLbl.setColor(Color.RED);
                 }
-                if (status.get(selectedEntity).isStill())
+
+                if (status.get(selectedEntity).statusEffects.containsKey("Defenseless")) {
+                    defLbl.setColor(Color.RED);
+                }
+
+                if (status.get(selectedEntity).statusEffects.containsKey("Stillness"))
                     spLbl.setColor(Color.RED);
 
-                if (status.get(selectedEntity).isCursed()) {
+                if (status.get(selectedEntity).statusEffects.containsKey("Curse")) {
                     atkLbl.setColor(Color.RED);
                     defLbl.setColor(Color.RED);
                     spdLbl.setColor(Color.RED);
                 }
                 //status effect label
                 StringBuilder statusEffects = new StringBuilder();
-                if (status.get(selectedEntity).isPoisoned())
-                    statusEffects.append("Poisoned");
-                if (status.get(selectedEntity).isBurned())
-                    statusEffects.append("Burned");
-                if (status.get(selectedEntity).isParalyzed())
-                    statusEffects.append("Paralyzed");
-                if (status.get(selectedEntity).isPetrified())
-                    statusEffects.append("Petrified");
-                if (status.get(selectedEntity).isStill())
-                    statusEffects.append("Stillness");
-                if (status.get(selectedEntity).isCursed())
-                    statusEffects.append("Cursed");
+                for (StatusEffect effect : status.get(selectedEntity).statusEffects.values())
+                    statusEffects.append(effect.getName());
+
                 for (int i = 1; i < statusEffects.length(); i++) {
                     if (statusEffects.charAt(i) == statusEffects.toString().toUpperCase().charAt(i)) {
                         statusEffects.insert(i, ", ");
@@ -990,17 +948,17 @@ public class BattleScreen implements Screen {
                 else
                     member.setColor(new Color(1, 1, 1, 1).lerp(Color.RED, 1f - (float) stm.get(entity).hp / (float) stm.get(entity).getModMaxHp(entity)));
             } else if (status.has(entity) && status.get(entity).getTotalStatusEffects() > 0) { //Shade based on status effect
-                if (status.get(entity).isPoisoned())
+                if (status.get(selectedEntity).statusEffects.containsKey("Poison"))
                     member.setColor(Color.GREEN);
-                else if (status.get(entity).isBurned())
+                else if (status.get(selectedEntity).statusEffects.containsKey("Burn"))
                     member.setColor(Color.RED);
-                else if (status.get(entity).isParalyzed())
+                else if (status.get(selectedEntity).statusEffects.containsKey("Paralyze"))
                     member.setColor(Color.YELLOW);
-                else if (status.get(entity).isPetrified())
+                else if (status.get(selectedEntity).statusEffects.containsKey("Petrify"))
                     member.setColor(new Color(122f / 255f, 104f / 255f, 87f / 255f, 1));
-                else if (status.get(entity).isStill())
+                else if (status.get(selectedEntity).statusEffects.containsKey("Stillness"))
                     member.setColor(new Color(0, 140f / 255f, 1f, 1f));
-                else if (status.get(entity).isCursed())
+                else if (status.get(selectedEntity).statusEffects.containsKey("Curse"))
                     member.setColor(Color.DARK_GRAY);
             } else {
                 member.setColor(Color.WHITE);
@@ -1063,7 +1021,7 @@ public class BattleScreen implements Screen {
      */
     public boolean mayAttack(Entity e) {
         return e != null && mvm.has(e) && state.has(e) && state.get(e).canAttack && team.has(e) &&
-                team.get(e).teamNumber == rules.getCurrentTeamNumber() && !(status.has(selectedEntity) && status.get(selectedEntity).isPetrified());
+                team.get(e).teamNumber == rules.getCurrentTeamNumber() && !(status.has(selectedEntity) && status.get(selectedEntity).statusEffects.containsKey("Petrify"));
     }
 
     /**

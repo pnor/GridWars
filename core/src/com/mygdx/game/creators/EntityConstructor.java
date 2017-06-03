@@ -311,7 +311,8 @@ public class EntityConstructor {
                 MoveConstructor.deathAnimation(entity, engine, stage)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.swordSlice(entity, engine, stage),
-                MoveConstructor.pierceSwordSlice(entity, engine, stage)
+                MoveConstructor.pierceSwordSlice(entity, engine, stage),
+                MoveConstructor.guardPiercer(entity, engine, stage)
         })));
 
         return entity;

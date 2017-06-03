@@ -32,8 +32,8 @@ public class PositionComponent implements Component {
     /**
      * @return coordinate of the center (in relation to the entire stage)
      */
-    public Point2D.Float getCenter() {
-        return new Point2D.Float(position.x + width, position.y + height);
+    public Vector2 getCenter() {
+        return new Vector2(position.x + width, position.y + height);
     }
 
     /**
