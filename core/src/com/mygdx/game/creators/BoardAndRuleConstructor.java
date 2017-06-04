@@ -73,6 +73,7 @@ public class BoardAndRuleConstructor {
             boardManager.add(e, new BoardPosition(maxSize, col));
             col--;
         }
+        System.out.println(boardManager.getBoard());
         return new Battle2PRules(screen, teams);
     }
 

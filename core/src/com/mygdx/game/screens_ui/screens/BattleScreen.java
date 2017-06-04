@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -53,6 +54,8 @@ import static com.mygdx.game.GridWars.*;
  * @author pnore_000
  */
 public class BattleScreen implements Screen {
+    //debug
+    final ShapeRenderer SHAPE = new ShapeRenderer();
 
     private final GridWars GRID_WARS;
     private BattleInputProcessor battleInputProcessor;
@@ -215,7 +218,9 @@ public class BattleScreen implements Screen {
             }
             boardTable.row();
         }
-        boardTable.setPosition(stage.getWidth() / 2.5f, stage.getHeight() / 2);
+        boardTable.pack();
+        boardTable.setPosition(stage.getWidth() / 2.5f - BoardComponent.boards.getBoard().getTiles().get(0).getWidth() * BoardComponent.boards.getBoard().getRowSize() / 2f,
+                stage.getHeight() / 2f - BoardComponent.boards.getBoard().getTiles().get(0).getHeight() * BoardComponent.boards.getBoard().getColumnSize() / 2f);
         NinePatch tableBack = new NinePatch(new Texture(Gdx.files.internal("TableBackground.png")), 33, 33, 33, 33);
         NinePatchDrawable tableBackground = new NinePatchDrawable(tableBack);
 
@@ -354,7 +359,7 @@ public class BattleScreen implements Screen {
         infoTable.add(infoLbl).height(25).center();
         infoTable.setBackground(tableBackground);
         infoTable.pack();
-        infoTable.setPosition(boardTable.getX() - 350, stage.getHeight() * .9f);
+        infoTable.setPosition(boardTable.getX(), stage.getHeight() * .9f);
         infoTable.setSize(700, 80);
 
         //set up team table

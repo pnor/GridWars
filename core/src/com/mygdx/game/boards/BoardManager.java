@@ -153,6 +153,20 @@ public class BoardManager {
                 am.get(e).actor.setScale(board.getScale());
     }
 
+    /**
+     * @return width of the first tile in the board.
+     */
+    public float getTileWidth() {
+        return board.getTile(0, 0).getWidth();
+    }
+
+    /**
+     * @return height of the first tile in the board.
+     */
+    public float getTileHeight() {
+        return board.getTile(0, 0).getWidth();
+    }
+
     public Board getBoard() {
         return board;
     }

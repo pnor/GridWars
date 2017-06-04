@@ -3,6 +3,7 @@ package com.mygdx.game.boards;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.mygdx.game.actors.Tile;
 import com.mygdx.game.actors.UIActor;
 
@@ -219,23 +220,25 @@ public class Board {
     }
 
     /**
-     * Prints out a text version of the board where Xs are objects and Os are empty spaces.
-     * {UNTESTED; MAY NOT WORK}
+     * Prints out a the board. XXX represent nothing
      *
-     * @return the board in print
+     * @return the board in text
      */
     public String toString() {
-        String output = "";
+        StringBuilder output = new StringBuilder();
+        Tile curTile;
         for (int i = 0; i < grid.size; i++) {
             for (int j = 0; j < grid.get(i).size; j++) {
-                if (!grid.get(i).get(j).swapActor(0, 1))
-                    output += "O - ";
+                curTile = grid.get(i).get(j);
+                if (curTile.isOccupied())
+                    output.append(curTile.getChildren().get(1));
                 else
-                    output += grid.get(i).get(j) + "X - ";
+                    output.append("XXX");
+                output.append("(" + curTile.getRow() + ", " + curTile.getColumn() + ") - ");
             }
-            output += "\n";
+            output.append("\n");
         }
 
-        return output;
+        return output.toString();
     }
 }
