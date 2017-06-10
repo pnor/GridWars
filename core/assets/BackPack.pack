@@ -3,16 +3,44 @@ BackPack.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-DiagStripeOverlay
+CirclesHoriz
+  rotate: false
+  xy: 1, 903
+  size: 2000, 900
+  orig: 2000, 900
+  offset: 0, 0
+  index: -1
+DiagStripeHoriz
   rotate: false
   xy: 1, 1
+  size: 2000, 900
+  orig: 2000, 900
+  offset: 0, 0
+  index: -1
+FadeHoriz
+  rotate: false
+  xy: 2003, 903
+  size: 2000, 900
+  orig: 2000, 900
+  offset: 0, 0
+  index: -1
+DiagStripeOverlay
+  rotate: false
+  xy: 4005, 453
   size: 1500, 1350
   orig: 1500, 1350
   offset: 0, 0
   index: -1
 BlankBackground
   rotate: false
-  xy: 1503, 451
+  xy: 2003, 1
+  size: 1000, 900
+  orig: 1000, 900
+  offset: 0, 0
+  index: -1
+WhiteDots
+  rotate: false
+  xy: 5507, 903
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0

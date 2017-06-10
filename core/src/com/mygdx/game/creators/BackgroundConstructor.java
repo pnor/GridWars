@@ -31,8 +31,8 @@ public class BackgroundConstructor {
     public static Background makeSimpleBack() {
         Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
         back.setColor(new Color(.7f, .7f, .7f, 1));
-        Sprite overlay = new Sprite(backAtlas.findRegion("DiagStripeOverlay"));
-        overlay.setColor(new Color(.7f, .7f, .7f, 1));
+        Sprite overlay = new Sprite(backAtlas.findRegion("DiagStripeHoriz"));
+        overlay.setColor(new Color(.5f, .5f, .5f, 1));
         return new Background(
                 back,
                 new Sprite[] {overlay},
@@ -43,8 +43,8 @@ public class BackgroundConstructor {
     public static Background makeComplexBack() {
         Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
         back.setColor(new Color(.5f, .5f, .5f, 1));
-        Sprite overlay = new Sprite(backAtlas.findRegion("DiagStripeOverlay"));
-        overlay.setColor(new Color(.5f, .5f, .5f, 1));
+        Sprite overlay = new Sprite(backAtlas.findRegion("DiagStripeHoriz"));
+        overlay.setColor(new Color(.3f, .3f, .3f, 1));
         return new Background(
                 back,
                 new Sprite[] {overlay},
@@ -55,7 +55,7 @@ public class BackgroundConstructor {
     public static Background makeDesertBack() {
         Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
         backgroundLay.setColor(new Color(121f / 255, 121f / 255f, 19f / 255f, 1));
-        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeOverlay")));
+        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeHoriz")));
         topLayer.setColor(new Color(181f / 255, 181f / 255f, 79f / 255f, 1));
         return new Background(backgroundLay,
                 new Sprite[]{new Sprite(backAtlas.findRegion("DiagStripeOverlay")), topLayer},

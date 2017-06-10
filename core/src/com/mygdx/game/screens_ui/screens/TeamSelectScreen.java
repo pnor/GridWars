@@ -245,7 +245,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         //backgrounds----------------
         Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
         backgroundLay.setColor(Color.DARK_GRAY);
-        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeOverlay")));
+        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeHoriz")));
         topLayer.setColor(Color.GRAY);
         background = new Background(backgroundLay,
                 new Sprite[]{topLayer},
