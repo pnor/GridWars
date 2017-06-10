@@ -247,7 +247,7 @@ public class BattleScreen implements Screen {
         spdLbl = new Label("-", skin);
         spdLblID.setColor(Color.PINK);
         param.size = 17;
-        statusLbl = new NewsTickerLabel(new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE), "Healthy", 12, .1f);
+        statusLbl = new NewsTickerLabel(new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE), "Healthy", 12, .05f, .3f);
         statsTable.add().size(70, 0); statsTable.add().size(70, 0).row();
         statsTable.add(nameLbl).colspan(2).padBottom(10f).row(); //set up table
         nameLbl.setAlignment(Align.center);
@@ -891,7 +891,7 @@ public class BattleScreen implements Screen {
             else
                 attackBtn3.setText("---");
             if (moves.moveList.size > 3 && moves.moveList.get(3) != null)
-                attackBtn4.setText(moves.moveList.get(3).getName() + " (" + moves.moveList.get(0).spCost() + ")");
+                attackBtn4.setText(moves.moveList.get(3).getName() + " (" + moves.moveList.get(3).spCost() + ")");
             else
                 attackBtn4.setText("---");
         } else {

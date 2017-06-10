@@ -2,7 +2,6 @@ package com.mygdx.game.move_related;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
-import com.mygdx.game.misc.TurnEffect;
 
 import static com.mygdx.game.ComponentMappers.am;
 
@@ -17,6 +16,7 @@ public class StatusEffect {
     private final Color COLOR;
     private boolean isFinished;
     private TurnEffect turnEffect;
+    private StatChanges statChanges;
 
     /**
      * Creates a {@link StatusEffect}.
@@ -52,6 +52,14 @@ public class StatusEffect {
         }
     }
 
+    public void setStatChanges(float maxHealth, float skill, float maxSkill, float attack, float defense, float speed) {
+        statChanges = new StatChanges(maxHealth, skill, maxSkill, attack, defense, speed);
+    }
+
+    public StatChanges getStatChanges() {
+        return statChanges;
+    }
+
     public String getName() {
         return name;
     }
@@ -62,5 +70,33 @@ public class StatusEffect {
 
     public boolean getIsFinished() {
         return isFinished;
+    }
+
+    /**
+     * Class for the stat changes a {@link StatusEffect} causes.
+     */
+    public class StatChanges {
+        /** Amount is multiplied to corresponding stat. Ex. : if hp in {@link StatChanges} is
+         * 2, that means that the entity's health is multiplied by 2.
+         */
+        public final float maxHP, sp, maxSP, atk, def, spd;
+
+        public StatChanges(float maxHealth, float skill, float maxSkill, float attack, float defense, float speed) {
+            maxHP = maxHealth;
+            sp = skill;
+            maxSP = maxSkill;
+            atk = attack;
+            def = defense;
+            spd = speed;
+        }
+    }
+
+    /**
+     * Turn Effect of a {@link com.mygdx.game.move_related.StatusEffect}.
+     *
+     * @author Phillip O'Reggio
+     */
+    public interface TurnEffect {
+        void doEffect(Entity e);
     }
 }

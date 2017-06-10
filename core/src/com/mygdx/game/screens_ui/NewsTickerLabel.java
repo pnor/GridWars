@@ -16,6 +16,7 @@ public class NewsTickerLabel extends Label {
     private float currentTime;
 
     private boolean direction = true;
+    private float endPauseTime;
     private boolean pausingAtEnd;
     private int currentIndex;
 
@@ -25,7 +26,7 @@ public class NewsTickerLabel extends Label {
      * @param characters amount of characters shown at once
      * @param tick time between letters
      */
-    public NewsTickerLabel(Skin skin, String displayedMessage, int characters, float tick) {
+    public NewsTickerLabel(Skin skin, String displayedMessage, int characters, float tick, float endPause) {
         super("", skin);
         if (characters <= 0)
             throw new IllegalArgumentException("Characters displayed at once can't be less than or equal to 0");
@@ -33,6 +34,7 @@ public class NewsTickerLabel extends Label {
         message = displayedMessage;
         charactersDisplayed = characters;
         tickSpeed = tick;
+        endPauseTime = endPause;
         if (message.length() > charactersDisplayed)
             super.setText(message.substring(0, charactersDisplayed - 1));
         else
@@ -45,7 +47,7 @@ public class NewsTickerLabel extends Label {
      * @param characters amount of characters shown at once
      * @param tick time between letters
      */
-    public NewsTickerLabel(LabelStyle style, String displayedMessage, int characters, float tick) {
+    public NewsTickerLabel(LabelStyle style, String displayedMessage, int characters, float tick, float endPause) {
         super("", style);
         if (characters <= 0)
             throw new IllegalArgumentException("Characters displayed at once can't be less than or equal to 0");
@@ -53,6 +55,7 @@ public class NewsTickerLabel extends Label {
         message = displayedMessage;
         charactersDisplayed = characters;
         tickSpeed = tick;
+        endPauseTime = endPause;
         if (message.length() > charactersDisplayed)
             super.setText(message.substring(0, charactersDisplayed - 1));
         else
@@ -67,7 +70,7 @@ public class NewsTickerLabel extends Label {
             currentTime += delta;
 
             if (pausingAtEnd) {
-                if (currentTime >= tickSpeed * 3) {
+                if (currentTime >= endPauseTime) {
                     pausingAtEnd = false;
                     currentTime = 0;
                     return;

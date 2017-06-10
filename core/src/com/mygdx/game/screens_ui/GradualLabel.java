@@ -45,6 +45,8 @@ public class GradualLabel extends Label {
     public void setText(CharSequence newText) {
         targetText = newText.toString();
         super.setText("");
+        currentTime = 0;
+        currentIndex = 0;
         writingText = true;
     }
 

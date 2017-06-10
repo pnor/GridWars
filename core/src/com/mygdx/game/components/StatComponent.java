@@ -2,6 +2,7 @@ package com.mygdx.game.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.mygdx.game.move_related.StatusEffect;
 
 import static com.mygdx.game.ComponentMappers.status;
 
@@ -65,8 +66,12 @@ public class StatComponent implements Component {
      */
     public int getModMaxHp(Entity e) {
         int newMaxHp = maxHP;
-        if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-            //...
+        if (!status.has(e))
+            return maxHP;
+
+        for (StatusEffect status : status.get(e).statusEffects.values()) {
+            if (status.getStatChanges() == null) continue;
+            newMaxHp = (int) (newMaxHp * status.getStatChanges().maxHP);
         }
 
         return newMaxHp;
@@ -77,8 +82,12 @@ public class StatComponent implements Component {
      */
     public int getModSp(Entity e) {
         int newSp = sp;
-        if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-            //...
+        if (!status.has(e))
+            return sp;
+
+        for (StatusEffect status : status.get(e).statusEffects.values()) {
+            if (status.getStatChanges() == null) continue;
+            newSp = (int) (newSp * status.getStatChanges().sp);
         }
 
         return newSp;
@@ -89,8 +98,12 @@ public class StatComponent implements Component {
      */
     public int getModMaxSp(Entity e) {
         int newMaxSp = maxSP;
-        if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-            //...
+        if (!status.has(e))
+            return maxSP;
+
+        for (StatusEffect status : status.get(e).statusEffects.values()) {
+            if (status.getStatChanges() == null) continue;
+            newMaxSp = (int) (newMaxSp * status.getStatChanges().maxSP);
         }
 
         return newMaxSp;
@@ -102,11 +115,12 @@ public class StatComponent implements Component {
      */
     public int getModAtk(Entity e) {
         int newAtk = atk;
-        if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-           if (status.get(e).statusEffects.containsKey("Burn"))
-               newAtk /= 2;
-           if (status.get(e).statusEffects.containsKey("Curse"))
-               newAtk /= 2;
+        if (!status.has(e))
+            return atk;
+
+        for (StatusEffect status : status.get(e).statusEffects.values()) {
+            if (status.getStatChanges() == null) continue;
+            newAtk = (int) (newAtk * status.getStatChanges().atk);
         }
 
         return newAtk;
@@ -117,13 +131,12 @@ public class StatComponent implements Component {
      */
     public int getModDef(Entity e) {
         int newDef = def;
-        if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-            if (status.get(e).statusEffects.containsKey("Petrify"))
-                newDef *= 2;
-            if (status.get(e).statusEffects.containsKey("Curse"))
-                newDef /= 2;
-            if (status.get(e).statusEffects.containsKey("Defenseless"))
-                newDef *= 0;
+        if (!status.has(e))
+            return maxHP;
+
+        for (StatusEffect status : status.get(e).statusEffects.values()) {
+            if (status.getStatChanges() == null) continue;
+            newDef = (int) (newDef * status.getStatChanges().def);
         }
 
         return newDef;
@@ -134,13 +147,12 @@ public class StatComponent implements Component {
      */
     public int getModSpd(Entity e) {
         int newSpd = spd;
-        if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-            if (status.get(e).statusEffects.containsKey("Paralyze"))
-                newSpd /= 2;
-            if (status.get(e).statusEffects.containsKey("Petrify"))
-                newSpd *= 0;
-            if (status.get(e).statusEffects.containsKey("Curse"))
-                newSpd /= 2;
+        if (!status.has(e))
+            return spd;
+
+        for (StatusEffect status : status.get(e).statusEffects.values()) {
+            if (status.getStatChanges() == null) continue;
+            newSpd = (int) (newSpd * status.getStatChanges().spd);
         }
 
         return newSpd;

@@ -143,7 +143,7 @@ public class EntityConstructor {
                 MoveConstructor.deathAnimation(entity, engine, stage)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.swordSlice(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)
+                MoveConstructor.chargedSlice(entity, engine, stage)
         })));
 
         return entity;
@@ -311,8 +311,9 @@ public class EntityConstructor {
                 MoveConstructor.deathAnimation(entity, engine, stage)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.swordSlice(entity, engine, stage),
+                MoveConstructor.guardPiercer(entity, engine, stage),
                 MoveConstructor.pierceSwordSlice(entity, engine, stage),
-                MoveConstructor.guardPiercer(entity, engine, stage)
+                MoveConstructor.poisonBlade(entity, engine, stage)
         })));
 
         return entity;

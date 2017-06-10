@@ -67,7 +67,7 @@ public abstract class Rules {
 
             //status effects
             if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-                for (StatusEffect effect : status.get(e).statusEffects.values()) {
+                for (StatusEffect effect : status.get(e).statusEffects.values().toArray()) {
                     effect.doTurnEffect(e);
                     if (effect.getIsFinished())
                         status.get(e).statusEffects.remove(effect.getName());
