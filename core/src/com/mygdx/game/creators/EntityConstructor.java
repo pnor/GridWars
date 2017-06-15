@@ -20,29 +20,57 @@ import static com.mygdx.game.GridWars.atlas;
  * @author Phillip O'Reggio
  */
 public class EntityConstructor {
+    private static boolean ready;
+    
+    private static Engine engine;
+    private static Stage stage;
+
+    /**
+     * Readies the EntityConstructor for use
+     * @param eng {@link Engine}
+     * @param stge {@link Stage}
+     */
+    public static void initialize(Engine eng, Stage stge) {
+        engine = eng;
+        stage = stge;
+        ready = true;
+    }
+
+    /**
+     * Clears static fields in EntityConstructor
+     */
+    public static void clear() {
+        engine = null;
+        stage = null;
+        ready = false;
+    }
+    
+    public static boolean isReady() {
+        return ready;
+    }
 
     //Testing purposes ----
-    public static Entity testerChessPiece(int team, Engine engine, Stage stage) {
+    public static Entity testerChessPiece(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
 
         entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("tester"), true, true)));
         entity.add(new BoardComponent());
-        entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity, engine, stage)})));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity)})));
         entity.add(new StatComponent(1, 999, 1, 0, 8));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
-        entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+        entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
 
         return entity;
     }
 
-    public static Entity testerRobot(int team, Engine engine, Stage stage) {
+    public static Entity testerRobot(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -57,17 +85,17 @@ public class EntityConstructor {
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
-        entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
-        entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)})));
+        entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity),
+                MoveConstructor.StarSpin(entity)})));
         entity.add(new NameComponent("Robo - Beta"));
 
         return entity;
     }
 
-    public static Entity testerPlaceHolder(int team, Engine engine, Stage stage) {
+    public static Entity testerPlaceHolder(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -82,17 +110,17 @@ public class EntityConstructor {
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
-        entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
-        entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)})));
+        entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity),
+                MoveConstructor.StarSpin(entity)})));
         entity.add(new NameComponent("anyone"));
 
         return entity;
     }
 
-    public static Entity testerHole(int team, Engine engine, Stage stage) {
+    public static Entity testerHole(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -105,7 +133,7 @@ public class EntityConstructor {
     }
 
     //Blockade Type Entity
-    public static Entity cube(Engine engine, Stage stage) {
+    public static Entity cube() {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 0, 0, 0, 0));
@@ -113,15 +141,15 @@ public class EntityConstructor {
         entity.add(new NameComponent("Cube"));
 
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
 
         return entity;
     }
 
     //Game Piece Entity ------------
-    public static Entity canight(int team, Engine engine, Stage stage) {
+    public static Entity canight(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -138,18 +166,19 @@ public class EntityConstructor {
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.swordSlice(entity, engine, stage),
-                MoveConstructor.chargedSlice(entity, engine, stage)
+                MoveConstructor.swordSlice(entity),
+                MoveConstructor.Bark(entity),
+                MoveConstructor.chargedSlice(entity)
         })));
 
         return entity;
     }
 
-    public static Entity catdroid(int team, Engine engine, Stage stage) {
+    public static Entity catdroid(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -166,18 +195,18 @@ public class EntityConstructor {
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)
+                MoveConstructor.metalClaw(entity),
+                MoveConstructor.StarSpin(entity)
         })));
 
         return entity;
     }
 
-    public static Entity pyrobull(int team, Engine engine, Stage stage) {
+    public static Entity pyrobull(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -194,18 +223,18 @@ public class EntityConstructor {
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)
+                MoveConstructor.Tackle(entity),
+                MoveConstructor.StarSpin(entity)
         })));
 
         return entity;
     }
 
-    public static Entity freezird(int team, Engine engine, Stage stage) {
+    public static Entity freezird(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -222,18 +251,18 @@ public class EntityConstructor {
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)
+                MoveConstructor.Tackle(entity),
+                MoveConstructor.StarSpin(entity)
         })));
 
         return entity;
     }
 
-    public static Entity medicarp(int team, Engine engine, Stage stage) {
+    public static Entity medicarp(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -250,18 +279,18 @@ public class EntityConstructor {
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)
+                MoveConstructor.Tackle(entity),
+                MoveConstructor.StarSpin(entity)
         })));
 
         return entity;
     }
 
-    public static Entity thoughtoise(int team, Engine engine, Stage stage) {
+    public static Entity thoughtoise(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -278,18 +307,18 @@ public class EntityConstructor {
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)
+                MoveConstructor.Tackle(entity),
+                MoveConstructor.StarSpin(entity)
         })));
 
         return entity;
     }
 
-    public static Entity vulpedge(int team, Engine engine, Stage stage) {
+    public static Entity vulpedge(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -306,20 +335,20 @@ public class EntityConstructor {
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.swordSlice(entity, engine, stage),
-                MoveConstructor.guardPiercer(entity, engine, stage),
-                MoveConstructor.pierceSwordSlice(entity, engine, stage),
-                MoveConstructor.poisonBlade(entity, engine, stage)
+                MoveConstructor.swordSlice(entity),
+                MoveConstructor.guardPiercer(entity),
+                MoveConstructor.pierceSwordSlice(entity),
+                MoveConstructor.poisonBlade(entity)
         })));
 
         return entity;
     }
 
-    public static Entity thundog(int team, Engine engine, Stage stage) {
+    public static Entity thundog(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -336,18 +365,18 @@ public class EntityConstructor {
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)
+                MoveConstructor.Tackle(entity),
+                MoveConstructor.StarSpin(entity)
         })));
 
         return entity;
     }
 
-    public static Entity mummy(int team, Engine engine, Stage stage) {
+    public static Entity mummy(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -364,18 +393,18 @@ public class EntityConstructor {
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)
+                MoveConstructor.Tackle(entity),
+                MoveConstructor.StarSpin(entity)
         })));
 
         return entity;
     }
 
-    public static Entity squizerd(int team, Engine engine, Stage stage) {
+    public static Entity squizerd(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -392,18 +421,18 @@ public class EntityConstructor {
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)
+                MoveConstructor.Tackle(entity),
+                MoveConstructor.StarSpin(entity)
         })));
 
         return entity;
     }
 
-    public static Entity wyvrapor(int team, Engine engine, Stage stage) {
+    public static Entity wyvrapor(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -420,18 +449,18 @@ public class EntityConstructor {
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)
+                MoveConstructor.Tackle(entity),
+                MoveConstructor.StarSpin(entity)
         })));
 
         return entity;
     }
 
-    public static Entity jellymiss(int team, Engine engine, Stage stage) {
+    public static Entity jellymiss(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -448,18 +477,18 @@ public class EntityConstructor {
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)
+                MoveConstructor.Tackle(entity),
+                MoveConstructor.StarSpin(entity)
         })));
 
         return entity;
     }
 
-    public static Entity mirrorman(int team, Engine engine, Stage stage) {
+    public static Entity mirrorman(int team) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -476,12 +505,12 @@ public class EntityConstructor {
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
-                MoveConstructor.damageAnimation(entity, engine, stage),
-                MoveConstructor.heavyDamageAnimation(entity, engine, stage),
-                MoveConstructor.deathAnimation(entity, engine, stage)));
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity, engine, stage),
-                MoveConstructor.StarSpin(entity, engine, stage)
+                MoveConstructor.Tackle(entity),
+                MoveConstructor.StarSpin(entity)
         })));
 
         return entity;

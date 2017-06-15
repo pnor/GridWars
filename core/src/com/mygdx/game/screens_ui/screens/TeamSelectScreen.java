@@ -89,6 +89,8 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     @Override
     public void show() {
         super.show();
+        EntityConstructor.initialize(engine, stage);
+
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         NinePatch tableBack = new NinePatch(new Texture(Gdx.files.internal("TableBackground.png")), 33, 33, 33, 33);
@@ -169,46 +171,46 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                 if (actor != null) {
                     if (actor == characterBtns.get(0)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("Canight")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.canight(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.canight(curTeam));
                     } else if (actor == characterBtns.get(1)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("catdroid")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.catdroid(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.catdroid(curTeam));
                     } else if (actor == characterBtns.get(2)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("firebull")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.pyrobull(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.pyrobull(curTeam));
                     } else if (actor == characterBtns.get(3)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("icebird")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.freezird(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.freezird(curTeam));
                     } else if (actor == characterBtns.get(4)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("fish")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.medicarp(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.medicarp(curTeam));
                     } else if (actor == characterBtns.get(5)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("turtle")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.thoughtoise(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.thoughtoise(curTeam));
                     } else if (actor == characterBtns.get(6)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("fox")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.vulpedge(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.vulpedge(curTeam));
                     } else if (actor == characterBtns.get(7)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("thunderdog")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.thundog(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.thundog(curTeam));
                     } else if (actor == characterBtns.get(8)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mummy")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.mummy(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.mummy(curTeam));
                     } else if (actor == characterBtns.get(9)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("squid")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.squizerd(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.squizerd(curTeam));
                     } else if (actor == characterBtns.get(10)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("steamdragon")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.wyvrapor(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.wyvrapor(curTeam));
                     } else if (actor == characterBtns.get(11)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("jellygirl")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.jellymiss(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.jellymiss(curTeam));
                     } else if (actor == characterBtns.get(12)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mirrorman")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.mirrorman(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.mirrorman(curTeam));
                     } else {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("robot")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.testerRobot(curTeam, engine, stage));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.testerRobot(curTeam));
                     }
 
                     currentEntity++;

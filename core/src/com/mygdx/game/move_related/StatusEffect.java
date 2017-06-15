@@ -11,6 +11,13 @@ import static com.mygdx.game.ComponentMappers.am;
  */
 public class StatusEffect {
     private String name;
+    /**
+     * Note: Since status effects turn count is incremented at the start of the holder's turn, this can make
+     * the turn order appear different based on when it is inflicted. Inflicted someone with a 1-turn effect
+     * BEFORE their turn will make it end when their turn comes. (Making it feel like less than a turn). Note that this
+     * DOES NOT affect effects that deal turn effects. Since the turn effect happens before the effect is removed, a
+     * 1-turn poison will hurt the holder once.
+     */
     public final int DURATION;
     private int currentTurn;
     private final Color COLOR;

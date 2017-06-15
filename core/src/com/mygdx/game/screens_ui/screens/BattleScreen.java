@@ -39,6 +39,7 @@ import com.mygdx.game.components.MovesetComponent;
 import com.mygdx.game.components.StatComponent;
 import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.creators.BoardAndRuleConstructor;
+import com.mygdx.game.creators.MoveConstructor;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.StatusEffect;
 import com.mygdx.game.move_related.Visuals;
@@ -152,6 +153,8 @@ public class BattleScreen implements Screen {
             BoardComponent.boards = new BoardManager();
         rules = BoardAndRuleConstructor.getBoardAndRules(boardIndex, this, teams, BoardComponent.boards);
         background = BackgroundConstructor.getBackground(boardIndex);
+
+        MoveConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, stage);
     }
 
 
@@ -369,6 +372,8 @@ public class BattleScreen implements Screen {
            public void changed(ChangeEvent event, Actor actor) {
            if (((Button) actor).isPressed()) {
                rules.nextTurn();
+
+               //show next turn message
                endTurnMessageLbl.setText("" + rules.getCurrentTeam().getTeamName() + " turn!");
                turnCountLbl.setText("Turn " + rules.getTurnCount());
                turnCountLbl.setColor(new Color(1,1,1,1).lerp(Color.ORANGE, (float) rules.getTurnCount() / 100f));
@@ -383,6 +388,11 @@ public class BattleScreen implements Screen {
                sequence.addAction(Actions.delay(1f));
                sequence.addAction(Actions.fadeOut(.2f));
                endTurnMessageTable.addAction(sequence);
+
+               //update entity appearance
+               for (Entity e : rules.getCurrentTeam().getEntities()) {
+                   shadeBasedOnState(e);
+               }
            }
            }
         });
@@ -836,6 +846,10 @@ public class BattleScreen implements Screen {
 
                 if (status.get(selectedEntity).statusEffects.containsKey("Defenseless")) {
                     defLbl.setColor(Color.RED);
+                }
+
+                if (status.get(selectedEntity).statusEffects.containsKey("Offenseless")) {
+                    atkLbl.setColor(Color.RED);
                 }
 
                 if (status.get(selectedEntity).statusEffects.containsKey("Stillness"))

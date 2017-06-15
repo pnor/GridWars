@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.actors.Tile;
+import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.*;
 import com.mygdx.game.misc.GameEvent;
@@ -28,33 +29,69 @@ import static com.mygdx.game.GridWars.atlas;
  * @author Phillip O'Reggio
  */
 public class MoveConstructor {
-    //Damage related animations ------------
+    private static boolean ready;
+
+    private static float scale;
+    private static BoardManager boards;
+    private static Engine engine;
+    private static Stage stage;
+
+    /**
+     * Readies the {@link MoveConstructor} for use.
+     * @param scaleFactor scale of board
+     * @param manager BoardManager
+     * @param eng Engine
+     * @param stge Stage
+     */
+    public static void initialize(float scaleFactor, BoardManager manager, Engine eng, Stage stge) {
+        scale = scaleFactor;
+        boards = manager;
+        engine = eng;
+        stage = stge;
+        ready = true;
+    }
+
+    /**
+     * Clears static fields in {@link MoveConstructor}
+     */
+    public static void clear() {
+        scale = 1;
+        boards = null;
+        engine = null;
+        stage = null;
+        ready = false;
+    }
+    
+    public static boolean isReady() {
+        return ready;
+    }
+
+
+    //region Damage related animations
     /**
      * Creates a generic damage animation
      * @param user Entity that is being damaged
-     * @param engine {@code Engine}
-     * @param stage {@code Stage}
      * @return damage animation {@code Visuals}
      */
-    public static Visuals damageAnimation(Entity user, Engine engine, Stage stage) {
+    public static Visuals damageAnimation(Entity user) {
 
         VisualEvent initialRed = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 am.get(user).actor.shade(new Color(.9f, .1f, .1f, 1));
             }
         }, .001f, 1);
 
         VisualEvent returnToNormalGradual = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 am.get(user).actor.shade(am.get(user).actor.getColor().lerp(BattleScreen.getShadeColorBasedOnState(user), .1f));
             }
         }, .05f, 8);
 
         VisualEvent returnToNormal = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 am.get(user).actor.shade(BattleScreen.getShadeColorBasedOnState(user));
             }
         }, .05f, 1);
@@ -66,42 +103,40 @@ public class MoveConstructor {
     /**
      * Creates a generic damage animation
      * @param user Entity that is being damaged
-     * @param engine {@code Engine}
-     * @param stage {@code Stage}
      * @return damage animation {@code Visuals}
      */
-    public static Visuals heavyDamageAnimation(Entity user, Engine engine, Stage stage) {
+    public static Visuals heavyDamageAnimation(Entity user) {
         VisualEvent initialRed = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                     am.get(user).actor.shade(new Color(.8f, 0, 0, 1));
             }
         }, .001f, 1);
 
         VisualEvent moveRight = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 am.get(user).actor.moveBy(3, 0);
             }
         }, .05f, 2);
 
         VisualEvent moveLeft = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 am.get(user).actor.moveBy(-3, 0);
             }
         }, .05f, 2);
 
         VisualEvent returnToNormalGradual = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 am.get(user).actor.shade(am.get(user).actor.getColor().lerp(BattleScreen.getShadeColorBasedOnState(user), .1f));
             }
         }, .02f, 9);
 
         VisualEvent returnToNormal = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 am.get(user).actor.shade(BattleScreen.getShadeColorBasedOnState(user));
             }
         }, .02f, 1);
@@ -116,21 +151,19 @@ public class MoveConstructor {
     /**
      * Creates the generic death animation
      * @param user Entity that is being killed
-     * @param engine {@code Engine}
-     * @param stage {@code Stage}
      * @return death animation {@code Visuals}
      */
-    public static Visuals deathAnimation(Entity user, Engine engine, Stage stage) {
+    public static Visuals deathAnimation(Entity user) {
         VisualEvent initialRed = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 am.get(user).actor.shade(Color.RED);
             }
         }, .001f, 1);
 
         VisualEvent fadeAndBlacken = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 am.get(user).actor.shade(
                         new Color(am.get(user).actor.getColor().r - .01f, am.get(user).actor.getColor().g - .1f,
                                 am.get(user).actor.getColor().b - .1f, am.get(user).actor.getColor().a - .1f));
@@ -140,8 +173,9 @@ public class MoveConstructor {
         return new Visuals(user, null,
                 new Array<VisualEvent>(new VisualEvent[]{initialRed, fadeAndBlacken.copy(.275f, 1), fadeAndBlacken}));
     }
+    //endregion
 
-    //Status Effects ------------
+    //region Status Effects
     public static StatusEffect poison() {
         return new StatusEffect("Poison", 3, new LerpColor(Color.GREEN, new Color(201f / 255f, 1f, 0f, 1f)), (e) -> {
             stm.get(e).hp -= 1;
@@ -190,7 +224,14 @@ public class MoveConstructor {
         return effect;
     }
 
-    //Moves ------------
+    public static StatusEffect offenseless() {
+        StatusEffect effect = new StatusEffect("Offenseless", 2, new LerpColor(Color.WHITE, Color.RED, .5f, Interpolation.fade), (e) -> {/*nothing*/});
+        effect.setStatChanges(1, 1, 1, .5f, 1, 1);
+        return effect;
+    }
+    //endregion
+
+    //region Moves
 
     /*
     Note : the line below
@@ -198,18 +239,18 @@ public class MoveConstructor {
     Gets the position of the center of the tile, then subtracts half the size of the sprite being drawn from it.
      */
 
-    public static Move Tackle(Entity user, Engine engine, Stage stage) {
+    public static Move Tackle(Entity user) {
         VisualEvent TackleVis = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 entitySize = new Vector2(60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
                 Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
 
                 Entity star = new Entity();
@@ -237,14 +278,14 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{TackleVis.copy(0.1f, 1), TackleVis})));
     }
 
-    public static Move StarSpin(Entity user, Engine engine, Stage stage) {
+    public static Move StarSpin(Entity user) {
         VisualEvent spin = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
@@ -253,8 +294,8 @@ public class MoveConstructor {
                 Entity star = new Entity();
                 star.add(new PositionComponent(new Vector2(tilePosition.cpy().x,
                         tilePosition.cpy().y),
-                        45 * BoardComponent.boards.getBoard().getScale(),
-                        45 * BoardComponent.boards.getBoard().getScale(),
+                        45 * scale,
+                        45 * scale,
                         0));
                 star.add(new LifetimeComponent(0, 1.2f));
                 star.add(new AnimationComponent(.3f, new TextureRegion[]{atlas.findRegion("boom"),
@@ -288,19 +329,19 @@ public class MoveConstructor {
     }
 
     //Vulpedge
-    public static Move swordSlice(Entity user, Engine engine, Stage stage) {
+    public static Move swordSlice(Entity user) {
         VisualEvent sliceVis = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
-                Vector2 entitySize = new Vector2(45 * BoardComponent.boards.getBoard().getScale(), 45 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(45 * scale, 45 * scale);
 
                 tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
                         BoardComponent.boards.getTileHeight() / 2 - entitySize.x / 2f);
@@ -319,15 +360,15 @@ public class MoveConstructor {
 
         VisualEvent crossSliceVis = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 entitySize = new Vector2(45 * BoardComponent.boards.getBoard().getScale(), 45 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(45 * scale, 45 * scale);
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - entitySize.x / 2f, t.getHeight() / 2 -entitySize.y / 2f));
                 tilePosition.x += t.getWidth() / 4; //Move rotated sprite to be aligned
 
@@ -352,27 +393,27 @@ public class MoveConstructor {
                         if (stm.has(enemy))
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
 
-                        if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
+                        if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{sliceVis, crossSliceVis})));
     }
 
-    public static Move pierceSwordSlice(Entity user, Engine engine, Stage stage) {
+    public static Move pierceSwordSlice(Entity user) {
         //Visuals---
         VisualEvent glow = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
 
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 entitySize = new Vector2(60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
                 Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
                 tileCenter.add(-entitySize.x / 2f, -entitySize.y / 2f);
 
@@ -390,15 +431,15 @@ public class MoveConstructor {
 
         VisualEvent sliceVis = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 entitySize = new Vector2(60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
                 Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
                 tileCenter.add(-entitySize.x / 2f, -entitySize.y / 2f);
 
@@ -418,15 +459,15 @@ public class MoveConstructor {
 
         VisualEvent crossSliceVis = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 entitySize = new Vector2(60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
                 Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
                 tileCenter.add(-entitySize.x / 2f, -entitySize.y / 2f);
 
@@ -454,26 +495,26 @@ public class MoveConstructor {
                         if (stm.has(enemy))
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) * 1.5, 0, 999);
 
-                        if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
+                        if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{glow ,sliceVis, crossSliceVis})));
     }
 
-    public static Move guardPiercer(Entity user, Engine engine, Stage stage) {
+    public static Move guardPiercer(Entity user) {
         //Visuals---
         VisualEvent circles = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 entitySize = new Vector2(70 * BoardComponent.boards.getBoard().getScale(), 70 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(70 * scale, 70 * scale);
                 //Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
                 Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
 
@@ -505,15 +546,15 @@ public class MoveConstructor {
 
         VisualEvent sliceVis = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 entitySize = new Vector2(60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
                 Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
                 tileCenter.add(-entitySize.x / 2f, -entitySize.y / 2f);
 
@@ -533,15 +574,15 @@ public class MoveConstructor {
 
         VisualEvent crossSliceVis = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 entitySize = new Vector2(60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
                 Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
                 tileCenter.add(-entitySize.x / 2f, -entitySize.y / 2f);
                 tileCenter.x += t.getWidth() / 4; //Move rotated sprite to be aligned
@@ -572,26 +613,26 @@ public class MoveConstructor {
                         if (status.has(enemy))
                             status.get(enemy).addStatusEffect(defenseless(), enemy);
 
-                        if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
+                        if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{circles.copy(.1f, 5), circles ,sliceVis, crossSliceVis})));
     }
 
-    public static Move poisonBlade(Entity user, Engine engine, Stage stage) {
+    public static Move poisonBlade(Entity user) {
         //Visuals---
         VisualEvent circles = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 entitySize = new Vector2(70 * BoardComponent.boards.getBoard().getScale(), 70 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(70 * scale, 70 * scale);
                 Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
 
                 Entity glow = new Entity();
@@ -622,16 +663,16 @@ public class MoveConstructor {
 
         VisualEvent sliceVis = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
 
-                Vector2 entitySize = new Vector2(70 * BoardComponent.boards.getBoard().getScale(), 70 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(70 * scale, 70 * scale);
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
                 tilePosition.add(BoardComponent.boards.getTileWidth() / 2f - (entitySize.x / 2f),
                         BoardComponent.boards.getTileHeight() / 2f - (entitySize.y / 2f));
@@ -651,18 +692,18 @@ public class MoveConstructor {
 
         VisualEvent crossSliceVis = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - 22.5f, t.getHeight() / 2 - 22.5f));
                 tilePosition.x += t.getWidth() / 4; //Move rotated sprite to be aligned
                 Entity crossSlash = new Entity();
-                crossSlash.add(new PositionComponent(tilePosition, 45 * BoardComponent.boards.getBoard().getScale(), 45 * BoardComponent.boards.getBoard().getScale(), 90));
+                crossSlash.add(new PositionComponent(tilePosition, 45 * scale, 45 * scale, 90));
                 crossSlash.add(new LifetimeComponent(0, .21f));
                 crossSlash.add(new AnimationComponent(.05f, new TextureRegion[] {
                         atlas.findRegion("vertslash1"),
@@ -687,26 +728,27 @@ public class MoveConstructor {
                         if (status.has(enemy))
                             status.get(enemy).addStatusEffect(poison(), enemy);
 
-                        if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
+                        if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{circles.copy(.1f, 5), circles, sliceVis, crossSliceVis})));
     }
+
     //Canight
-    public static Move chargedSlice(Entity user, Engine engine, Stage stage) {
+    public static Move chargedSlice(Entity user) {
         VisualEvent curveSliceVis = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
-                Vector2 entitySize = new Vector2(60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
 
                 tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
                         BoardComponent.boards.getTileHeight() / 2 - entitySize.x / 2f);
@@ -725,16 +767,16 @@ public class MoveConstructor {
 
         VisualEvent sliceVis = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
-                Vector2 entitySize = new Vector2(60 * BoardComponent.boards.getBoard().getScale(), 60 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
 
                 tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
                         BoardComponent.boards.getTileHeight() / 2 - entitySize.x / 2f);
@@ -754,15 +796,15 @@ public class MoveConstructor {
 
         VisualEvent crossSliceVis = new VisualEvent(new VisualEffect() {
             @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
                 Tile t;
                 try {
-                    t = BoardComponent.boards.getBoard().getTile(bp.r, bp.c);
+                    t = boards.getBoard().getTile(bp.r, bp.c);
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 entitySize = new Vector2(45 * BoardComponent.boards.getBoard().getScale(), 45 * BoardComponent.boards.getBoard().getScale());
+                Vector2 entitySize = new Vector2(45 * scale, 45 * scale);
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - entitySize.x / 2f, t.getHeight() / 2 - entitySize.x / 2f));
 
                 tilePosition.x += t.getWidth() / 4; //Move rotated sprite to be aligned
@@ -788,13 +830,141 @@ public class MoveConstructor {
                         if (stm.has(enemy))
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) * 2 - stm.get(enemy).getModDef(enemy), 0, 999);
 
-                        if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
+                        if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{curveSliceVis, crossSliceVis.copy(), sliceVis, crossSliceVis.copy(), curveSliceVis.copy(), sliceVis.copy()})));
     }
 
+    public static Move Bark(Entity user) {
+        //Visuals---
+        VisualEvent bark = new VisualEvent(new VisualEffect() {
+            BoardPosition bp;
+            Tile t;
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                System.out.println("Scale: " + scale);
+                Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
+                Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
+                tileCenter.add(-entitySize.x / 2f, -entitySize.y / 2f);
+
+                Entity zigzag = new Entity();
+                Sprite zig = new Sprite(atlas.findRegion("zigzag"));
+                zig.setColor(Color.ORANGE);
+                zigzag.add(new PositionComponent(tileCenter, entitySize.x, entitySize.y, 0));
+                zigzag.add(new LifetimeComponent(0, .49f));
+                zigzag.add(new SpriteComponent(zig));
+                zigzag.add(new EventComponent(.1f, true, (Entity e, Engine eng) -> {
+                    pm.get(e).position.add(new Vector2(MathUtils.random(-5 * scale, 5 * scale), MathUtils.random(-5 * scale, 5 * scale)));
+                }));
+                engine.addEntity(zigzag);
+            }
+        }, .01f, 1);
+
+        VisualEvent bark2 = new VisualEvent(new VisualEffect() {
+            BoardPosition bp;
+            Tile t;
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
+                Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
+                tileCenter.add(-entitySize.x / 2f, -entitySize.y / 2f);
+                tileCenter.x += t.getWidth() / 4; //Move rotated sprite to be aligned
+
+                Entity zigzag = new Entity();
+                Sprite zig = new Sprite(atlas.findRegion("zigzag"));
+                zig.setColor(Color.BLUE);
+                zigzag.add(new PositionComponent(tileCenter, entitySize.x, entitySize.y, 90));
+                zigzag.add(new LifetimeComponent(0, .49f));
+                zigzag.add(new SpriteComponent(zig));
+                zigzag.add(new EventComponent(.1f, true, (Entity e, Engine eng) -> {
+                    pm.get(e).position.add(new Vector2(MathUtils.random(-5 * scale, 5 * scale), MathUtils.random(-5 * scale, 5 * scale)));
+                }));
+                engine.addEntity(zigzag);
+            }
+        }, .5f, 1);
+
+        //Move
+        return new Move("Bark", nm.get(user).name + " barked intimidatingly!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}), engine, stage,
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+
+                        if (status.has(enemy))
+                            status.get(enemy).addStatusEffect(offenseless(), enemy);
+
+                        if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
+                            vm.get(enemy).damageAnimation.setPlaying(true, true);
+
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{bark.copy(.1f), bark2.copy(.1f), bark.copy(.1f), bark2.copy(.1f) ,bark, bark2})));
+    }
+
+    //Catdroid
+    public static Move metalClaw(Entity user) {
+        VisualEvent claw = new VisualEvent(new VisualEffect() {
+            BoardPosition bp;
+            Tile t;
+
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                 bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                Vector2 entitySize = new Vector2(64 * scale, 64 * scale);
+
+                tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        BoardComponent.boards.getTileHeight() / 2 - entitySize.x / 2f);
+
+                Entity claw = new Entity();
+                claw.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 0));
+                claw.add(new LifetimeComponent(0, .21f));
+                claw.add(new AnimationComponent(.05f,new TextureRegion[] {
+                        atlas.findRegion("claw"),
+                        atlas.findRegion("claw2"),
+                        atlas.findRegion("claw3"),
+                        atlas.findRegion("claw4"),
+                        atlas.findRegion("claw5")},
+                        Animation.PlayMode.NORMAL));
+                engine.addEntity(claw);
+            }
+        }, .21f, 1);
+
+        return new Move("Metal Claw", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage,
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                        if (stm.has(enemy))
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
+
+                        if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
+                            vm.get(enemy).damageAnimation.setPlaying(true, true);
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{claw})));
+    }
+
+    //endregion
 
 
     /**
@@ -802,7 +972,6 @@ public class MoveConstructor {
      *
      * @author Phillip O'Reggio
      */
-
     private static class EventCompUtil {
         /**
          * @return {@link GameEvent} that will become more transparent.

@@ -30,7 +30,7 @@ public class VisualEvent {
     }
 
     public void doVisuals(Entity user, Array<BoardPosition> targetPositions, Engine engine, Stage stage) {
-        visualEffect.doVisuals(user, targetPositions, engine, stage);
+        visualEffect.doVisuals(user, targetPositions);
     }
 
     /**

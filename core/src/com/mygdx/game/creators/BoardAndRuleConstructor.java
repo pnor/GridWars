@@ -3,7 +3,6 @@ package com.mygdx.game.creators;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.GridWars;
 import com.mygdx.game.boards.Board;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
@@ -73,7 +72,7 @@ public class BoardAndRuleConstructor {
             boardManager.add(e, new BoardPosition(maxSize, col));
             col--;
         }
-        System.out.println(boardManager.getBoard());
+
         return new Battle2PRules(screen, teams);
     }
 
@@ -190,7 +189,7 @@ public class BoardAndRuleConstructor {
                 i--;
                 continue;
             }
-            boardManager.add(EntityConstructor.cube(GridWars.engine, GridWars.stage), pos);
+            boardManager.add(EntityConstructor.cube(), pos);
         }
         return new Battle2PRules(screen, teams);
     }
@@ -231,7 +230,7 @@ public class BoardAndRuleConstructor {
                 i--;
                 continue;
             }
-            boardManager.add(EntityConstructor.cube(GridWars.engine, GridWars.stage), pos);
+            boardManager.add(EntityConstructor.cube(), pos);
         }
 
         //color zones
@@ -297,7 +296,7 @@ public class BoardAndRuleConstructor {
                 i--;
                 continue;
             }
-            boardManager.add(EntityConstructor.cube(GridWars.engine, GridWars.stage), pos);
+            boardManager.add(EntityConstructor.cube(), pos);
         }
 
         //color zones
