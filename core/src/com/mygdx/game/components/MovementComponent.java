@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class MovementComponent implements Component {
     /**
-     * Movement and direction in one variable
+     * Movement and direction in one variable. Moves the amount of the magnitude of the vector per second.
      */
     public Vector2 movement;
 

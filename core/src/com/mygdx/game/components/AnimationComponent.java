@@ -77,6 +77,7 @@ public class AnimationComponent implements Component {
         Sprite drawSprite = getSprite();
         drawSprite.setPosition(x, y);
         drawSprite.setSize(width, height);
+        drawSprite.setOriginCenter();
         drawSprite.setRotation(rotation);
         drawSprite.setColor(shadeColor);
 

@@ -132,7 +132,7 @@ public class StatComponent implements Component {
     public int getModDef(Entity e) {
         int newDef = def;
         if (!status.has(e))
-            return maxHP;
+            return newDef;
 
         for (StatusEffect status : status.get(e).statusEffects.values()) {
             if (status.getStatChanges() == null) continue;

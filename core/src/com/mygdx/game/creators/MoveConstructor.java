@@ -344,7 +344,7 @@ public class MoveConstructor {
                 Vector2 entitySize = new Vector2(45 * scale, 45 * scale);
 
                 tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
-                        BoardComponent.boards.getTileHeight() / 2 - entitySize.x / 2f);
+                        BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
                 Entity slash = new Entity();
                 slash.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 0));
                 slash.add(new LifetimeComponent(0, .21f));
@@ -370,7 +370,6 @@ public class MoveConstructor {
                 }
                 Vector2 entitySize = new Vector2(45 * scale, 45 * scale);
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - entitySize.x / 2f, t.getHeight() / 2 -entitySize.y / 2f));
-                tilePosition.x += t.getWidth() / 4; //Move rotated sprite to be aligned
 
                 Entity crossSlash = new Entity();
                 crossSlash.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 90));
@@ -471,7 +470,6 @@ public class MoveConstructor {
                 Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
                 tileCenter.add(-entitySize.x / 2f, -entitySize.y / 2f);
 
-                tileCenter.x += t.getWidth() / 4; //Move rotated sprite to be aligned
                 Entity crossSlash = new Entity();
                 crossSlash.add(new PositionComponent(tileCenter, entitySize.x, entitySize.y, 90));
                 crossSlash.add(new LifetimeComponent(0, .49f));
@@ -526,7 +524,7 @@ public class MoveConstructor {
                 float directionTowardsCenter = MathUtils.radiansToDegrees * MathUtils.atan2(
                         tileCenter.y - (pm.get(glow).getCenter().y),
                         tileCenter.x - (pm.get(glow).getCenter().x));
-                Vector2 movementToCenter = new Vector2(2, 0);
+                Vector2 movementToCenter = new Vector2(50, 0);
                 movementToCenter.setAngle(directionTowardsCenter);
                 System.out.println(directionTowardsCenter);
                 glow.add(new MovementComponent(movementToCenter));
@@ -585,7 +583,6 @@ public class MoveConstructor {
                 Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
                 Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
                 tileCenter.add(-entitySize.x / 2f, -entitySize.y / 2f);
-                tileCenter.x += t.getWidth() / 4; //Move rotated sprite to be aligned
 
                 Entity crossSlash = new Entity();
                 crossSlash.add(new PositionComponent(tileCenter, entitySize.x, entitySize.y, 90));
@@ -643,7 +640,7 @@ public class MoveConstructor {
                 float directionTowardsCenter = MathUtils.radiansToDegrees * MathUtils.atan2(
                         tileCenter.y - (pm.get(glow).getCenter().y),
                         tileCenter.x - (pm.get(glow).getCenter().x));
-                Vector2 movementToCenter = new Vector2(1f, 0);
+                Vector2 movementToCenter = new Vector2(50f, 0);
                 movementToCenter.setAngle(directionTowardsCenter);
                 System.out.println(directionTowardsCenter);
                 glow.add(new MovementComponent(movementToCenter));
@@ -751,7 +748,7 @@ public class MoveConstructor {
                 Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
 
                 tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
-                        BoardComponent.boards.getTileHeight() / 2 - entitySize.x / 2f);
+                        BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
                 Entity slash = new Entity();
                 slash.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 0));
                 slash.add(new LifetimeComponent(0, .11f));
@@ -779,7 +776,7 @@ public class MoveConstructor {
                 Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
 
                 tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
-                        BoardComponent.boards.getTileHeight() / 2 - entitySize.x / 2f);
+                        BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
                 Entity slash = new Entity();
                 slash.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 0));
                 slash.add(new LifetimeComponent(0, .11f));
@@ -805,7 +802,7 @@ public class MoveConstructor {
                     return;
                 }
                 Vector2 entitySize = new Vector2(45 * scale, 45 * scale);
-                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - entitySize.x / 2f, t.getHeight() / 2 - entitySize.x / 2f));
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - entitySize.x / 2f, t.getHeight() / 2 - entitySize.y / 2f));
 
                 tilePosition.x += t.getWidth() / 4; //Move rotated sprite to be aligned
                 Entity crossSlash = new Entity();
@@ -882,7 +879,6 @@ public class MoveConstructor {
                 Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
                 Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
                 tileCenter.add(-entitySize.x / 2f, -entitySize.y / 2f);
-                tileCenter.x += t.getWidth() / 4; //Move rotated sprite to be aligned
 
                 Entity zigzag = new Entity();
                 Sprite zig = new Sprite(atlas.findRegion("zigzag"));
@@ -933,7 +929,7 @@ public class MoveConstructor {
                 Vector2 entitySize = new Vector2(64 * scale, 64 * scale);
 
                 tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
-                        BoardComponent.boards.getTileHeight() / 2 - entitySize.x / 2f);
+                        BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
 
                 Entity claw = new Entity();
                 claw.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 0));
@@ -962,6 +958,72 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{claw})));
+    }
+
+    public static Move laserBeam(Entity user) {
+        VisualEvent laser = new VisualEvent(new VisualEffect() {
+            Tile startTile;
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                Vector2 startTilePosition;
+                Vector2 entitySize;
+                float direction = 0;
+
+                BoardPosition tempBp = targetPositions.first();
+                if (tempBp.r < 0)
+                    direction = 90;
+                else if (tempBp.c < 0)
+                    direction = 180;
+                else if (tempBp.r > 0)
+                    direction = 270;
+
+                entitySize = new Vector2(57 * scale, 17 * scale);
+
+                try { //check first tile
+                    startTile = boards.getBoard().getTile(bm.get(user).pos.r, bm.get(user).pos.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                startTilePosition = startTile.localToStageCoordinates(new Vector2(0, 0));
+                if (direction == 90)
+                    startTilePosition.add(boards.getTileWidth() / 2,
+                        boards.getTileHeight() / 2 - entitySize.y / 2f);
+                else if (direction == 180)
+                    startTilePosition.add(boards.getTileWidth() / 2 - entitySize.y / 2f,
+                            boards.getTileHeight() / 2);
+                else if (direction == 270)
+                    startTilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
+                            boards.getTileHeight() / 2 - entitySize.y / 2f);
+                else
+                    startTilePosition.add(boards.getTileWidth() / 2,
+                        boards.getTileHeight() / 2 - entitySize.y);
+
+                Entity beam = new Entity();
+                Sprite beamSprite = new Sprite(atlas.findRegion("beam"));
+                beamSprite.setOriginCenter();
+                beamSprite.setColor(Color.RED);
+                beam.add(new SpriteComponent(beamSprite));
+                beam.add(new PositionComponent(startTilePosition, entitySize.x, entitySize.y, direction - 90));
+                beam.add(new MovementComponent(new Vector2(1300 * scale, 0).setAngle(direction)));
+                beam.add(new LifetimeComponent(0, .26f));
+                beam.add(new EventComponent(0.02f, true, EventCompUtil.fadeOutAfter(7, 6)));
+                engine.addEntity(beam);
+            }
+        }, .03f, 12);
+
+        return new Move("Laser Beam", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}), engine, stage,
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                        if (stm.has(enemy))
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
+
+                        if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
+                            vm.get(enemy).damageAnimation.setPlaying(true, true);
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{laser})));
     }
 
     //endregion
@@ -998,7 +1060,6 @@ public class MoveConstructor {
             };
         }
 
-
         /**
          * @return {@link GameEvent} that will become more opaque.
          * @param amount of times this needs to be called until it is fully opaque. (note: will not work as well
@@ -1020,6 +1081,39 @@ public class MoveConstructor {
                             color.g,
                             color.b,
                             MathUtils.clamp(color.a + 1f / amount, 0, 1));
+                }
+            };
+        }
+
+        /**
+         * @return {@link GameEvent} that will become more transparent after a set amount of time
+         * @param timesUntilFade Amount of times this method will be called until it begins fading
+         * @param amount of times this needs to be called until it is fully transparent. (note: will not work as well
+         *               colors that have a transparency of <1
+         */
+        public static GameEvent fadeOutAfter(int timesUntilFade, int amount) {
+            return new GameEvent() {
+                private int timesCalled;
+                @Override
+                public void event(Entity e, Engine engine) {
+                    timesCalled++;
+                    if (timesCalled >= timesUntilFade) {
+                        if (sm.has(e)) { //sprite
+                            Sprite sprite = sm.get(e).sprite;
+                            sprite.setColor(
+                                    sprite.getColor().r,
+                                    sprite.getColor().g,
+                                    sprite.getColor().b,
+                                    MathUtils.clamp(sprite.getColor().a - 1f / amount, 0, 1));
+                        } else { //animation
+                            Color color = animm.get(e).shadeColor;
+                            color = new Color(
+                                    color.r,
+                                    color.g,
+                                    color.b,
+                                    MathUtils.clamp(color.a - 1f / amount, 0, 1));
+                        }
+                    }
                 }
             };
         }

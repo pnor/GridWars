@@ -148,6 +148,36 @@ public class EntityConstructor {
         return entity;
     }
 
+    public static Entity cactus() {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(4, 0, 0, 1, 0));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("Cactus")), true, true)));
+        entity.add(new NameComponent("Cactus"));
+
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
+
+        return entity;
+    }
+
+    public static Entity flowerCactus() {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(5, 0, 0, 0, 0));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("flowercactus")), true, true)));
+        entity.add(new NameComponent("Flower Cactus"));
+
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
+
+        return entity;
+    }
+
     //Game Piece Entity ------------
     public static Entity canight(int team) {
         Entity entity = new Entity();
@@ -200,7 +230,7 @@ public class EntityConstructor {
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.metalClaw(entity),
-                MoveConstructor.StarSpin(entity)
+                MoveConstructor.laserBeam(entity)
         })));
 
         return entity;

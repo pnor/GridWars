@@ -33,10 +33,6 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
      */
     private int board;
 
-    private Label titleLbl;
-    private HoverButton basic;
-    private HoverButton complex;
-
     public BoardSelectScreen(int max, boolean isZones, Array<Team> selectedTeams, GridWars gridWars) {
         super(gridWars);
         maxTeams = max;
@@ -50,9 +46,10 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
-        titleLbl = new Label("Select A Board", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
-        basic = new HoverButton("Basic", skin, Color.WHITE, Color.DARK_GRAY);
-        complex = new HoverButton("Complex", skin, Color.WHITE, Color.DARK_GRAY);
+        Label titleLbl = new Label("Select A Board", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        HoverButton basic = new HoverButton("Basic", skin, Color.WHITE, Color.DARK_GRAY);
+        HoverButton complex = new HoverButton("Complex", skin, Color.WHITE, Color.DARK_GRAY);
+        HoverButton desert = new HoverButton("Desert", skin, Color.WHITE, Color.DARK_GRAY);
 
         ChangeListener listener = new ChangeListener() {
             @Override
@@ -67,6 +64,9 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
                         GRID_WARS.setScreen(new BattleScreen(teams, board, GRID_WARS));
                     } else if (actor == complex) {
                         board += 3;
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, GRID_WARS));
+                    } else if (actor == desert) {
+                        board += 6;
                         GRID_WARS.setScreen(new BattleScreen(teams, board, GRID_WARS));
                     }
                 }
@@ -83,10 +83,13 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
 
         basic.addListener(listener);
         complex.addListener(listener);
+        desert.addListener(listener);
 
         table.add(titleLbl).padBottom(40).row();
         table.add(basic).size(350, 90).row();
         table.add(complex).size(350, 90).row();
+        table.add(desert).size(350, 90).row();
+
 
     }
 }

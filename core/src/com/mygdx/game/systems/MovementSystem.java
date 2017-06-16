@@ -21,6 +21,6 @@ public class MovementSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity e, float deltaTime) {
-        pm.get(e).position = new Vector2(pm.get(e).position.x + mm.get(e).movement.x, pm.get(e).position.y + mm.get(e).movement.y);
+        pm.get(e).position = new Vector2(pm.get(e).position.x + mm.get(e).movement.x * deltaTime, pm.get(e).position.y + mm.get(e).movement.y * deltaTime);
     }
 }
