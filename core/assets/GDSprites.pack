@@ -150,322 +150,322 @@ cubelight
   orig: 64, 64
   offset: 0, 0
   index: -1
-explode6
+explode
   rotate: false
   xy: 931, 439
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeBlue
+explode2
   rotate: false
   xy: 169, 337
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeBlue2
+explode3
   rotate: false
   xy: 169, 271
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeBlue3
+explode4
   rotate: false
   xy: 169, 205
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeBlue4
+explode5
   rotate: false
   xy: 67, 133
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeBlue5
+explode6
   rotate: false
   xy: 67, 67
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeBlue6
+explodeBlue
   rotate: false
   xy: 67, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-firebull
+explodeBlue2
   rotate: false
   xy: 133, 138
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-firebull2
+explodeBlue3
   rotate: false
   xy: 133, 72
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fish
+explodeBlue4
   rotate: false
   xy: 133, 6
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fish2
+explodeBlue5
   rotate: false
   xy: 199, 139
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-flame
+explodeBlue6
   rotate: false
   xy: 199, 73
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-flame2
+firebull
   rotate: false
   xy: 199, 7
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-flame3
+firebull2
   rotate: false
   xy: 235, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-floorSpike
+fish
   rotate: false
   xy: 235, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-flowercactus
+fish2
   rotate: false
   xy: 301, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-freeze1
+flame
   rotate: false
   xy: 235, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-freeze2
+flame2
   rotate: false
   xy: 301, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-freeze3
+flame3
   rotate: false
   xy: 367, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-hole
+floorSpike
   rotate: false
   xy: 301, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-icebird
+flowercactus
   rotate: false
   xy: 367, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-icebird2
+freeze1
   rotate: false
   xy: 433, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-iceSpike
+freeze2
   rotate: false
   xy: 367, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-jellygirl
+freeze3
   rotate: false
   xy: 433, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-jellygirl2
+hole
   rotate: false
   xy: 499, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mirrorman
+icebird
   rotate: false
   xy: 433, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mirrorman2
+icebird2
   rotate: false
   xy: 499, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mountainTree
+iceSpike
   rotate: false
   xy: 565, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mummy
+jellygirl
   rotate: false
   xy: 499, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mummy2
+jellygirl2
   rotate: false
   xy: 565, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mystery
+mirrorman
   rotate: false
   xy: 631, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-pierce
+mirrorman2
   rotate: false
   xy: 565, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-pierce2
+mountainTree
   rotate: false
   xy: 631, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-pyramid
+mummy
   rotate: false
   xy: 697, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-robot
+mummy2
   rotate: false
   xy: 631, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-robotghost2
+mystery
   rotate: false
   xy: 697, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-spark1
+pierce
   rotate: false
   xy: 763, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-spark2
+pierce2
   rotate: false
   xy: 697, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-spark3
+pyramid
   rotate: false
   xy: 763, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-squid
+robot
   rotate: false
   xy: 829, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-squid2
+robotghost2
   rotate: false
   xy: 763, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-steamdragon
+spark1
   rotate: false
   xy: 829, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-steamdragon2
+spark2
   rotate: false
   xy: 895, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-tester
+spark3
   rotate: false
   xy: 829, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-thunderdog
+squid
   rotate: false
   xy: 895, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-thunderdog2
+squid2
   rotate: false
   xy: 895, 241
   size: 64, 64
@@ -479,23 +479,58 @@ vertslash1
   orig: 28, 34
   offset: 0, 0
   index: -1
-tree
+steamdragon
   rotate: false
   xy: 265, 175
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-turtle
+steamdragon2
   rotate: false
   xy: 265, 109
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-turtle2
+tester
   rotate: false
   xy: 331, 175
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+thunderdog
+  rotate: false
+  xy: 265, 43
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+thunderdog2
+  rotate: false
+  xy: 331, 109
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tree
+  rotate: false
+  xy: 397, 175
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+turtle
+  rotate: false
+  xy: 331, 43
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+turtle2
+  rotate: false
+  xy: 397, 109
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -509,42 +544,42 @@ vertslash2
   index: -1
 robot2
   rotate: false
-  xy: 265, 43
+  xy: 463, 175
   size: 63, 64
   orig: 63, 64
   offset: 0, 0
   index: -1
 fox
   rotate: false
-  xy: 331, 112
+  xy: 397, 46
   size: 64, 61
   orig: 64, 61
   offset: 0, 0
   index: -1
 fox2
   rotate: false
-  xy: 397, 178
+  xy: 528, 178
   size: 64, 61
   orig: 64, 61
   offset: 0, 0
   index: -1
 rock
   rotate: false
-  xy: 397, 115
+  xy: 594, 178
   size: 64, 61
   orig: 64, 61
   offset: 0, 0
   index: -1
 shuriken
   rotate: false
-  xy: 463, 185
+  xy: 463, 119
   size: 54, 54
   orig: 54, 54
   offset: 0, 0
   index: -1
 shuriken2
   rotate: false
-  xy: 463, 129
+  xy: 660, 185
   size: 54, 54
   orig: 54, 54
   offset: 0, 0
@@ -558,28 +593,28 @@ beam
   index: -1
 blueslash1
   rotate: false
-  xy: 519, 204
+  xy: 463, 82
   size: 35, 35
   orig: 35, 35
   offset: 0, 0
   index: -1
 blueslash2
   rotate: false
-  xy: 519, 167
+  xy: 716, 204
   size: 35, 35
   orig: 35, 35
   offset: 0, 0
   index: -1
 blueslash3
   rotate: false
-  xy: 556, 204
+  xy: 753, 204
   size: 35, 35
   orig: 35, 35
   offset: 0, 0
   index: -1
 blueslash4
   rotate: false
-  xy: 519, 130
+  xy: 790, 204
   size: 35, 35
   orig: 35, 35
   offset: 0, 0
@@ -621,14 +656,14 @@ fist
   index: -1
 foxIcon
   rotate: false
-  xy: 556, 170
+  xy: 463, 48
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 shine
   rotate: false
-  xy: 593, 207
+  xy: 827, 207
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -642,14 +677,14 @@ spiral
   index: -1
 zigzag
   rotate: false
-  xy: 556, 136
+  xy: 861, 207
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 sparkle
   rotate: false
-  xy: 997, 487
+  xy: 324, 25
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

@@ -219,7 +219,7 @@ public class EntityConstructor {
                 atlas.findRegion("catdroid2")
         }, Animation.PlayMode.LOOP, 0.5f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(3, 5, 2, 3, 1));
+        entity.add(new StatComponent(3, 5, 2, 2, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -228,9 +228,11 @@ public class EntityConstructor {
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
                 MoveConstructor.deathAnimation(entity)));
-        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+        entity.add(new MovesetComponent(new Array<>(new Move[]{
                 MoveConstructor.metalClaw(entity),
-                MoveConstructor.laserBeam(entity)
+                MoveConstructor.laserBeam(entity),
+                MoveConstructor.electricalFire(entity),
+                MoveConstructor.laserSpray(entity)
         })));
 
         return entity;
@@ -247,7 +249,7 @@ public class EntityConstructor {
                 atlas.findRegion("firebull2")
         }, Animation.PlayMode.LOOP, 0.2f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(6, 3, 5, 1, 1));
+        entity.add(new StatComponent(5, 4, 5, 0, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -257,8 +259,9 @@ public class EntityConstructor {
                 MoveConstructor.heavyDamageAnimation(entity),
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity),
-                MoveConstructor.StarSpin(entity)
+                MoveConstructor.bodySlam(entity),
+                MoveConstructor.sear(entity),
+                MoveConstructor.wildFire(entity)
         })));
 
         return entity;

@@ -19,6 +19,11 @@ public class BoardPosition {
         c = c2;
     }
 
+    public BoardPosition(BoardPosition bp) {
+        r = bp.r;
+        c = bp.c;
+    }
+
     /**
      * Returns a modified copy of this object.
      * @param rNum amount to add to row

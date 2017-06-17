@@ -883,6 +883,7 @@ public class MoveConstructor {
                 Entity zigzag = new Entity();
                 Sprite zig = new Sprite(atlas.findRegion("zigzag"));
                 zig.setColor(Color.BLUE);
+                zig.setOrigin(30 * scale, 30 * scale);
                 zigzag.add(new PositionComponent(tileCenter, entitySize.x, entitySize.y, 90));
                 zigzag.add(new LifetimeComponent(0, .49f));
                 zigzag.add(new SpriteComponent(zig));
@@ -907,7 +908,7 @@ public class MoveConstructor {
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
 
                     }
-                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Array<VisualEvent>(new VisualEvent[]{bark.copy(.1f), bark2.copy(.1f), bark.copy(.1f), bark2.copy(.1f) ,bark, bark2})));
     }
 
@@ -963,6 +964,7 @@ public class MoveConstructor {
     public static Move laserBeam(Entity user) {
         VisualEvent laser = new VisualEvent(new VisualEffect() {
             Tile startTile;
+
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 Vector2 startTilePosition;
@@ -987,7 +989,7 @@ public class MoveConstructor {
                 startTilePosition = startTile.localToStageCoordinates(new Vector2(0, 0));
                 if (direction == 90)
                     startTilePosition.add(boards.getTileWidth() / 2,
-                        boards.getTileHeight() / 2 - entitySize.y / 2f);
+                            boards.getTileHeight() / 2 - entitySize.y / 2f);
                 else if (direction == 180)
                     startTilePosition.add(boards.getTileWidth() / 2 - entitySize.y / 2f,
                             boards.getTileHeight() / 2);
@@ -996,7 +998,7 @@ public class MoveConstructor {
                             boards.getTileHeight() / 2 - entitySize.y / 2f);
                 else
                     startTilePosition.add(boards.getTileWidth() / 2,
-                        boards.getTileHeight() / 2 - entitySize.y);
+                            boards.getTileHeight() / 2 - entitySize.y * 1.5f);
 
                 Entity beam = new Entity();
                 Sprite beamSprite = new Sprite(atlas.findRegion("beam"));
@@ -1011,7 +1013,7 @@ public class MoveConstructor {
             }
         }, .03f, 12);
 
-        return new Move("Laser Beam", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}), engine, stage,
+        return new Move("Laser Beam", nm.get(user).name + " shot a laser beam!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}), engine, stage,
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1025,6 +1027,352 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{laser})));
     }
+
+    public static Move electricalFire(Entity user) {
+        VisualEvent explosions = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(90 * scale, 90 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity boom = new Entity();
+                boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-50 * scale, 50 * scale), MathUtils.random(-50 * scale, 50 * scale))
+                        , entitySize.x, entitySize.y, 0));
+                boom.add(new LifetimeComponent(0, .16f));
+                boom.add(new AnimationComponent(.03f,
+                        new TextureRegion[]{atlas.findRegion("explode"),
+                        atlas.findRegion("explode2"),
+                        atlas.findRegion("explode3"),
+                        atlas.findRegion("explode4"),
+                        atlas.findRegion("explode5"),
+                        atlas.findRegion("explode6")},
+                        Animation.PlayMode.NORMAL));
+                boom.add(new EventComponent(.03f, true, EventCompUtil.fadeOut(5)));
+                engine.addEntity(boom);
+            }
+        }, .1f, 6);
+
+        VisualEvent fire = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(60 * scale, 60 * scale);
+                Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
+                tileCenter.add(-entitySize.x / 2f, -entitySize.y / 2f);
+
+                Entity flame = new Entity();
+                flame.add(new PositionComponent(tileCenter, entitySize.x, entitySize.y, 0));
+                flame.add(new LifetimeComponent(0, 1.2f));
+                flame.add(new AnimationComponent(.05f,
+                    new TextureRegion[]{atlas.findRegion("flame"),
+                            atlas.findRegion("flame2"),
+                            atlas.findRegion("flame3")},
+                    Animation.PlayMode.LOOP));
+                flame.add(new EventComponent(.1f, true, EventCompUtil.fadeOutAfter(6, 6)));
+
+                engine.addEntity(flame);
+            }
+        }, .1f, 1);
+
+        return new Move("Electrical Fire", null, user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}), engine, stage,
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                        if (stm.has(enemy))
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
+                        if (status.has(enemy))
+                            status.get(enemy).addStatusEffect(burn(), enemy);
+
+                        if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
+                            vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{explosions, fire})));
+    }
+
+    public static Move laserSpray(Entity user) {
+        VisualEvent laser = new VisualEvent(new VisualEffect() {
+            Tile startTile;
+            float offset = -45;
+            boolean sprayingBack;
+
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                Vector2 startTilePosition;
+                Vector2 entitySize;
+                float direction = 0;
+                //spraying code --
+                if (offset >= 45)
+                    sprayingBack = true;
+                if (!sprayingBack)
+                    offset += 7.5f;
+                else
+                    offset -= 7.5;
+                if (offset < -45) { //reset
+                    offset = -45;
+                    sprayingBack = false;
+                }
+
+                BoardPosition tempBp = targetPositions.first();
+                if (tempBp.r < 0)
+                    direction = 90;
+                else if (tempBp.c < 0)
+                    direction = 180;
+                else if (tempBp.r > 0)
+                    direction = 270;
+
+                entitySize = new Vector2(57 * scale, 17 * scale);
+
+                try { //check first tile
+                    startTile = boards.getBoard().getTile(bm.get(user).pos.r, bm.get(user).pos.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                startTilePosition = startTile.localToStageCoordinates(new Vector2(0, 0));
+                if (direction == 90)
+                    startTilePosition.add(boards.getTileWidth() / 2,
+                            boards.getTileHeight() / 2 - entitySize.y / 2f);
+                else if (direction == 180)
+                    startTilePosition.add(boards.getTileWidth() / 2 - entitySize.y / 2f,
+                            boards.getTileHeight() / 2);
+                else if (direction == 270)
+                    startTilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
+                            boards.getTileHeight() / 2 - entitySize.y / 2f);
+                else
+                    startTilePosition.add(boards.getTileWidth() / 2,
+                            boards.getTileHeight() / 2 - entitySize.y * 1.5f);
+
+                Entity beam = new Entity();
+                Sprite beamSprite = new Sprite(atlas.findRegion("beam"));
+                beamSprite.setOriginCenter();
+                beamSprite.setColor(Color.ORANGE);
+                beam.add(new SpriteComponent(beamSprite));
+                beam.add(new PositionComponent(startTilePosition, entitySize.x, entitySize.y, direction - 90 + offset));
+                beam.add(new MovementComponent(new Vector2(1300 * scale, 0).setAngle(direction + offset)));
+                beam.add(new LifetimeComponent(0, .26f));
+                beam.add(new EventComponent(0.02f, true, EventCompUtil.fadeOutAfter(7, 6)));
+                engine.addEntity(beam);
+            }
+        }, .03f, 28);
+
+        return new Move("Laser Spread", nm.get(user).name + " sprayed laser beams!", user, 4,
+                new Array<BoardPosition>(new BoardPosition[]{
+                        new BoardPosition(-1, 0),
+                        new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
+                        new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)
+                }),
+                engine, stage,
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                        if (stm.has(enemy))
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e)- stm.get(enemy).getModDef(enemy), 0, 999);
+
+                        if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
+                            vm.get(enemy).damageAnimation.setPlaying(true, true);
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{laser})));
+    }
+
+    //Pyrobull
+    public static Move bodySlam(Entity user) {
+        VisualEvent explode = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(100 * scale, 100 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity boom = new Entity();
+                boom.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 0));
+                boom.add(new LifetimeComponent(0, .16f));
+                boom.add(new AnimationComponent(.03f,
+                        new TextureRegion[]{atlas.findRegion("explode"),
+                                atlas.findRegion("explode2"),
+                                atlas.findRegion("explode3"),
+                                atlas.findRegion("explode4"),
+                                atlas.findRegion("explode5"),
+                                atlas.findRegion("explode6")},
+                        Animation.PlayMode.NORMAL));
+                boom.add(new EventComponent(.03f, true, EventCompUtil.fadeOut(5)));
+                engine.addEntity(boom);
+            }
+        }, .01f, 1);
+
+        VisualEvent bam = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(75 * scale, 75 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - entitySize.x / 2f, t.getHeight() / 2 -entitySize.y / 2f));
+
+                Entity bam = new Entity();
+                bam.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 0));
+                bam.add(new LifetimeComponent(0, .2f));
+                Sprite bamSprite = new Sprite(atlas.findRegion("boom"));
+                bamSprite.setOriginCenter();
+                bamSprite.setColor(Color.RED);
+                bam.add(new SpriteComponent(bamSprite));
+                bam.add(new EventComponent(.05f, true, EventCompUtil.fadeOut(4)));
+
+                engine.addEntity(bam);
+            }
+        }, .2f, 1);
+
+        return new Move("Body Slam", nm.get(user).name + " charged forward!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage,
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                        if (stm.has(enemy))
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
+
+                        if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
+                            vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{explode, bam})));
+    }
+
+    public static Move sear(Entity user) {
+        VisualEvent fire = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(30 * scale, 30 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity flame = new Entity();
+                flame.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-20 * scale, 20 * scale), MathUtils.random(-20 * scale, 20 * scale)),
+                        entitySize.x, entitySize.y, 0));
+                flame.add(new LifetimeComponent(0, 1.2f));
+                flame.add(new AnimationComponent(.05f, new TextureRegion[]{
+                        atlas.findRegion("flame"),
+                        atlas.findRegion("flame2"),
+                        atlas.findRegion("flame3")},
+                        Animation.PlayMode.LOOP));
+                flame.add(new EventComponent(.1f, true, EventCompUtil.fadeOutAfter(6, 6)));
+
+                engine.addEntity(flame);
+            }
+        }, .3f, 8);
+
+        return new Move("Sear", null, user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage,
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+
+                        if (status.has(enemy))
+                            status.get(enemy).addStatusEffect(burn(), enemy);
+
+                        if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
+                            vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{fire})));
+    }
+
+    public static Move wildFire(Entity user) {
+        VisualEvent explosions = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = bm.get(user).pos.copy(); //centered around self
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(120 * scale, 120 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity boom = new Entity();
+                boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-140 * scale, 140 * scale), MathUtils.random(-140 * scale, 140 * scale))
+                        , entitySize.x, entitySize.y, 0));
+                boom.add(new LifetimeComponent(0, .16f));
+                boom.add(new AnimationComponent(.03f,
+                        new TextureRegion[]{atlas.findRegion("explode"),
+                                atlas.findRegion("explode2"),
+                                atlas.findRegion("explode3"),
+                                atlas.findRegion("explode4"),
+                                atlas.findRegion("explode5"),
+                                atlas.findRegion("explode6")},
+                        Animation.PlayMode.NORMAL));
+                boom.add(new EventComponent(.03f, true, EventCompUtil.fadeOut(5)));
+                engine.addEntity(boom);
+            }
+        }, .03f, 30);
+
+        return new Move("Wild Fire", user, 4, new Array<BoardPosition>(new BoardPosition[]{
+                new BoardPosition(-1, -1), new BoardPosition(-1, 0),
+                new BoardPosition(-1, 1), new BoardPosition(0, 1),
+                new BoardPosition(1, 1), new BoardPosition(0, -1),
+                new BoardPosition(1, 0), new BoardPosition(1, -1)}),
+                engine, stage,
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                        if (stm.has(enemy))
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) / 2 - stm.get(enemy).getModDef(enemy), 0, 999);
+
+                        if (status.has(enemy) && MathUtils.randomBoolean(.7f))
+                            status.get(enemy).addStatusEffect(burn(), enemy);
+
+                        if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
+                            vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{}),
+                new Array<VisualEvent>(new VisualEvent[]{explosions})));
+    }
+
+    //Freezird
+
+
+
 
     //endregion
 
@@ -1112,6 +1460,8 @@ public class MoveConstructor {
                                     color.g,
                                     color.b,
                                     MathUtils.clamp(color.a - 1f / amount, 0, 1));
+                            animm.get(e).shadeColor = color;
+
                         }
                     }
                 }
