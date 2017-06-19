@@ -649,10 +649,10 @@ public class BattleScreen implements Screen {
     }
 
     public void showMovementTiles() {
-        for (Tile t : getMovableSquares(selectedEntity)) {
+        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity), new Array<>(), -1)) {
             if (t.isOccupied())
                 continue;
-            if (t != null && !t.getIsListening()) {
+            if (!t.getIsListening()) {
                 t.shadeTile(Color.CYAN);
                 t.startListening();
             }
@@ -664,11 +664,89 @@ public class BattleScreen implements Screen {
      * the board, so a try catch loop should be written around it.
      */
     public void removeMovementTiles() {
-        for (Tile t : getMovableSquares(selectedEntity))
+        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity), new Array<>(), -1))
             if (t != null) {
                 t.revertTileColor();
                 t.stopListening();
             }
+    }
+
+    /**
+     * Returns an array of all tiles that an entity can move on. Returns null if the entity doesn't have a {@code StatComponent}
+     * or its speed is = 0.
+     * @param e entity
+     * @return null if it can't move or an {@code Array} of [@code Tile}s.
+     */
+    /* //Old movement selection algorithm
+    private Array<Tile> getMovableSquaresRaw(Entity e) {
+        if (!stm.has(e) || stm.get(e).getModSpd(e) == 0)
+            return null;
+
+        int spd = stm.get(e).getModSpd(e);
+        int newR; int newC;
+        int entityRow = bm.get(e).pos.r;
+        int entityCol = bm.get(e).pos.c;
+        Array<Tile> tiles = new Array<Tile>();
+
+        for (int i = -spd; i <= spd; i++) {
+            for (int j = -(spd - Math.abs(i)); j <= (spd - Math.abs(i)); j++) {
+                newR = i + entityRow;
+                newC = j + entityCol;
+                if ((i == 0 && j == 0) || (newR < 0 || newC < 0 || newR >= BoardComponent.boards.getCodeBoard().getRows() || newC >= BoardComponent.boards.getCodeBoard().getColumns()))
+                    continue;
+                tiles.add(BoardComponent.boards.getBoard().getTile(newR, newC));
+            }
+        }
+        return tiles;
+    }
+    */
+
+    /**
+     * Recursive algorithm that returns all tiles that can be moved to based on speed. Takes into account barriers and blockades.
+     * @param bp Position that is being branched from
+     * @param spd remaining tiles the entity can move
+     * @param tiles {@link Array} of tiles that can be moved on
+     * @param directionCameFrom direction the previous tile came from. Eliminates the need to check if the next tile is already in the
+     *                          {@link Array}.
+     *                          <p>-1: No direction(starting)
+     *                          <p>0: top
+     *                          <p>1: left
+     *                          <p>2: bottom
+     *                          <p>3: right
+     *
+     * @return {@link Array} of {@link Tile}s.
+     */
+    private Array<Tile> getMovableSquares(BoardPosition bp, int spd, Array<Tile> tiles, int directionCameFrom) {
+        BoardPosition next = new BoardPosition(-1, -1);
+
+        if (spd == 0)
+            return tiles;
+
+        for (int i = 0; i < 4; i++) {
+            if (directionCameFrom == i) //Already checked tile -> skip!
+                continue;
+
+            if (i == 0) //set position
+                next.set(bp.r - 1, bp.c);
+            else if (i == 1)
+                next.set(bp.r, bp.c - 1);
+            else if (i == 2)
+                next.set(bp.r + 1, bp.c);
+            else if (i == 3)
+                next.set(bp.r, bp.c + 1);
+
+            //check if valid
+            if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
+                    || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
+                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
+                continue;
+
+            //recursively call other tiles
+            tiles.add(BoardComponent.boards.getBoard().getTile(next.r, next.c));
+            getMovableSquares(next, spd - 1, tiles, (i + 2) % 4);
+        }
+
+        return tiles;
     }
 
     public void showAttackTiles() {
@@ -703,34 +781,6 @@ public class BattleScreen implements Screen {
                 }
             }
         }
-    }
-
-    /**
-     * Returns an array of all tiles that an entity can move on. Returns null if the entity doesn't have a {@code StatComponent}
-     * or its speed is = 0.
-     * @param e entity
-     * @return null if it can't move or an {@code Array} of [@code Tile}s.
-     */
-    private Array<Tile> getMovableSquares(Entity e) {
-        if (!stm.has(e) || stm.get(e).getModSpd(e) == 0)
-            return null;
-
-        int spd = stm.get(e).getModSpd(e);
-        int newR; int newC;
-        int entityRow = bm.get(e).pos.r;
-        int entityCol = bm.get(e).pos.c;
-        Array<Tile> tiles = new Array<Tile>();
-
-        for (int i = -spd; i <= spd; i++) {
-            for (int j = -(spd - Math.abs(i)); j <= (spd - Math.abs(i)); j++) {
-                newR = i + entityRow;
-                newC = j + entityCol;
-                if ((i == 0 && j == 0) || (newR < 0 || newC < 0 || newR >= BoardComponent.boards.getCodeBoard().getRows() || newC >= BoardComponent.boards.getCodeBoard().getColumns()))
-                    continue;
-                tiles.add(BoardComponent.boards.getBoard().getTile(newR, newC));
-            }
-        }
-        return tiles;
     }
 
     /**
@@ -831,8 +881,21 @@ public class BattleScreen implements Screen {
                 TODO change to make it more modular (using StatusEffects in StatusEffectComponent to figure out what to shade
                 For example, switching from a burned entity to a cursed one will shade attack label red again.
                  */
-                nameLbl.setColor(new Color(192f / 255f, 81f / 255, 1f, 1f));
                 statusLbl.setColor(Color.RED);
+                //Positive
+                if (status.get(selectedEntity).statusEffects.containsKey("Quick")) {
+                    spdLbl.setColor(Color.GREEN);
+                }
+
+                if (status.get(selectedEntity).statusEffects.containsKey("Power")) {
+                    atkLbl.setColor(Color.GREEN);
+                }
+
+                if (status.get(selectedEntity).statusEffects.containsKey("Guard")) {
+                    defLbl.setColor(Color.GREEN);
+                }
+
+                //Negative
                 if (status.get(selectedEntity).statusEffects.containsKey("Burn"))
                     atkLbl.setColor(Color.RED);
 
@@ -842,6 +905,15 @@ public class BattleScreen implements Screen {
                 if (status.get(selectedEntity).statusEffects.containsKey("Petrify")) {
                     defLbl.setColor(Color.CYAN);
                     spdLbl.setColor(Color.RED);
+                }
+
+                if (status.get(selectedEntity).statusEffects.containsKey("Freeze")) {
+                    defLbl.setColor(Color.RED);
+                    spdLbl.setColor(Color.RED);
+                }
+
+                if (status.get(selectedEntity).statusEffects.containsKey("Shivers")) {
+                    spLbl.setColor(Color.RED);
                 }
 
                 if (status.get(selectedEntity).statusEffects.containsKey("Defenseless")) {

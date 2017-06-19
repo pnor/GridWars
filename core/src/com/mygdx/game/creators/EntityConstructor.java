@@ -278,7 +278,7 @@ public class EntityConstructor {
                 atlas.findRegion("icebird2")
         }, Animation.PlayMode.LOOP, 0.5f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(3, 4, 2, 0, 3));
+        entity.add(new StatComponent(3, 5, 2, 0, 3));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -288,8 +288,9 @@ public class EntityConstructor {
                 MoveConstructor.heavyDamageAnimation(entity),
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity),
-                MoveConstructor.StarSpin(entity)
+                MoveConstructor.freeze(entity),
+                MoveConstructor.tailwind(entity),
+                MoveConstructor.tornado(entity)
         })));
 
         return entity;

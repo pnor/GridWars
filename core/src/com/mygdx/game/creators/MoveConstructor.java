@@ -202,6 +202,18 @@ public class MoveConstructor {
         return effect;
     }
 
+    public static StatusEffect freeze() {
+        StatusEffect effect = new StatusEffect("Freeze", 2, new LerpColor(new Color(.8f, .8f, 1, 1), Color.CYAN), (e) -> {/*nothing*/});
+        effect.setStatChanges(1, 1, 1, 1, .5f, 0);
+        return effect;
+    }
+
+    public static StatusEffect shivers() {
+        StatusEffect effect = new StatusEffect("Shivers", 2, new LerpColor(new Color(.8f, .8f, 1, 1), Color.WHITE), (e) -> {/*nothing*/});
+        effect.setStatChanges(1, 1, .5f, 1, 1, 1);
+        return effect;
+    }
+
     public static StatusEffect petrify() {
         StatusEffect effect = new StatusEffect("Petrify", 2, new Color(214f / 255f, 82f / 255f, 0, 1), (e) -> {/*nothing*/});
         effect.setStatChanges(1, 1, 1, 2, 1, 0);
@@ -229,6 +241,25 @@ public class MoveConstructor {
         effect.setStatChanges(1, 1, 1, .5f, 1, 1);
         return effect;
     }
+
+    public static StatusEffect speedUp() {
+        StatusEffect effect = new StatusEffect("Quick", 1, new LerpColor(Color.WHITE, Color.CYAN, .5f, Interpolation.fade), (e) -> {/*nothing*/});
+        effect.setStatChanges(1, 1, 1, 1, 1, 2);
+        return effect;
+    }
+
+    public static StatusEffect attackUp() {
+        StatusEffect effect = new StatusEffect("Power", 1, new LerpColor(Color.WHITE, Color.ORANGE, .5f, Interpolation.fade), (e) -> {/*nothing*/});
+        effect.setStatChanges(1, 1, 1, 1.5f, 1, 1);
+        return effect;
+    }
+
+    public static StatusEffect guardUp() {
+        StatusEffect effect = new StatusEffect("Guard", 1, new LerpColor(Color.WHITE, Color.BLUE, .5f, Interpolation.fade), (e) -> {/*nothing*/});
+        effect.setStatChanges(1, 1, 1, 1, 2, 1);
+        return effect;
+    }
+
     //endregion
 
     //region Moves
@@ -263,7 +294,7 @@ public class MoveConstructor {
             }
         }, .2f, 4);
 
-        return new Move("Tackle", null, user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage,
+        return new Move("Tackle", null, user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -310,7 +341,7 @@ public class MoveConstructor {
             }
         }, 0f, 1);
 
-        return new Move("Star Spin", "Something spun around!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}), engine, stage,
+        return new Move("Star Spin", "Something spun around!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -384,7 +415,7 @@ public class MoveConstructor {
             }
         }, .21f, 1);
 
-        return new Move("Slice", nm.get(user).name + " sliced its blade!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage,
+        return new Move("Slice", nm.get(user).name + " sliced its blade!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -485,7 +516,7 @@ public class MoveConstructor {
         }, .5f, 1);
 
         //Move
-        return new Move("Piercing Slice", nm.get(user).name + " delivered a piercing blow!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage,
+        return new Move("Piercing Slice", nm.get(user).name + " delivered a piercing blow!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -599,7 +630,7 @@ public class MoveConstructor {
         }, .5f, 1);
 
         //Move
-        return new Move("Breaking Slice", nm.get(user).name + " delivered a crippling blow!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage,
+        return new Move("Breaking Slice", nm.get(user).name + " delivered a crippling blow!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -714,7 +745,7 @@ public class MoveConstructor {
         }, .21f, 1);
 
         //Move
-        return new Move("Poison Blade", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage,
+        return new Move("Poison Blade", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -819,7 +850,7 @@ public class MoveConstructor {
             }
         }, .11f, 1);
 
-        return new Move("Blade Flurry", nm.get(user).name + " let loose with a flurry of attacks!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage,
+        return new Move("Blade Flurry", nm.get(user).name + " let loose with a flurry of attacks!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -895,7 +926,7 @@ public class MoveConstructor {
         }, .5f, 1);
 
         //Move
-        return new Move("Bark", nm.get(user).name + " barked intimidatingly!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}), engine, stage,
+        return new Move("Bark", nm.get(user).name + " barked intimidatingly!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -946,7 +977,7 @@ public class MoveConstructor {
             }
         }, .21f, 1);
 
-        return new Move("Metal Claw", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage,
+        return new Move("Metal Claw", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1013,7 +1044,7 @@ public class MoveConstructor {
             }
         }, .03f, 12);
 
-        return new Move("Laser Beam", nm.get(user).name + " shot a laser beam!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}), engine, stage,
+        return new Move("Laser Beam", nm.get(user).name + " shot a laser beam!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1089,7 +1120,7 @@ public class MoveConstructor {
             }
         }, .1f, 1);
 
-        return new Move("Electrical Fire", null, user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}), engine, stage,
+        return new Move("Electrical Fire", null, user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1177,7 +1208,6 @@ public class MoveConstructor {
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
                         new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)
                 }),
-                engine, stage,
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1251,7 +1281,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        return new Move("Body Slam", nm.get(user).name + " charged forward!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage,
+        return new Move("Body Slam", nm.get(user).name + " charged forward!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1297,7 +1327,7 @@ public class MoveConstructor {
             }
         }, .3f, 8);
 
-        return new Move("Sear", null, user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}), engine, stage,
+        return new Move("Sear", null, user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1309,7 +1339,7 @@ public class MoveConstructor {
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
-                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{fire})));
     }
 
@@ -1351,7 +1381,6 @@ public class MoveConstructor {
                 new BoardPosition(-1, 1), new BoardPosition(0, 1),
                 new BoardPosition(1, 1), new BoardPosition(0, -1),
                 new BoardPosition(1, 0), new BoardPosition(1, -1)}),
-                engine, stage,
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1370,6 +1399,237 @@ public class MoveConstructor {
     }
 
     //Freezird
+    public static Move freeze(Entity user) {
+        VisualEvent freeze = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(100 * scale, 100 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity freeze = new Entity();
+                freeze.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 0));
+                freeze.add(new LifetimeComponent(0, .8f));
+                freeze.add(new AnimationComponent(.1f,
+                        new TextureRegion[]{atlas.findRegion("freeze1"),
+                                atlas.findRegion("freeze2"),
+                                atlas.findRegion("freeze3")},
+                        Animation.PlayMode.LOOP));
+                freeze.add(new EventComponent(.1f, true, EventCompUtil.rotate(45)));
+                engine.addEntity(freeze);
+            }
+        }, .01f, 1);
+
+        VisualEvent sparkle = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(30 * scale, 30 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity sparkle = new Entity();
+                sparkle.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-20 * scale, 20 * scale), MathUtils.random(-20 * scale, 20 * scale)),
+                        entitySize.x, entitySize.y, 0));
+                sparkle.add(new LifetimeComponent(0, 1.2f));
+                Sprite sprite = new Sprite(atlas.findRegion("sparkle"));
+                sprite.setOriginCenter();
+                sprite.setColor(new Color(.8f, .8f, 1, 1));
+                sparkle.add(new SpriteComponent(sprite));
+                sparkle.add(new EventComponent(.1f, true, EventCompUtil.fadeOutAfter(6, 6)));
+
+                engine.addEntity(sparkle);
+            }
+        }, .3f, 8);
+
+        return new Move("Freeze", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                        if (stm.has(enemy))
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
+
+                        if (status.has(enemy))
+                            status.get(enemy).addStatusEffect(shivers(), enemy);
+
+                        if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
+                            vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+                new Array<VisualEvent>(new VisualEvent[]{freeze, sparkle})));
+    }
+
+    public static Move tailwind(Entity user) {
+        VisualEvent largeSparkle = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(30 * scale, 30 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity sparkle = new Entity();
+                sparkle.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-50 * scale, -20 * scale), MathUtils.random(-30 * scale, 30 * scale)),
+                        entitySize.x, entitySize.y, 0));
+                sparkle.add(new MovementComponent(new Vector2(20 * scale, 0)));
+                sparkle.add(new LifetimeComponent(0, 1.2f));
+                Sprite sprite = new Sprite(atlas.findRegion("shine"));
+                sprite.setOriginCenter();
+                sprite.setColor(Color.CYAN);
+                sparkle.add(new SpriteComponent(sprite));
+                sparkle.add(new EventComponent(.1f, true, (entity, engine) -> {
+                    sprite.setColor(
+                            sprite.getColor().r,
+                            sprite.getColor().g,
+                            MathUtils.clamp(sprite.getColor().b + 1f / 24, 0, 1),
+                            MathUtils.clamp(sprite.getColor().a - 1f / 12, 0, 1));
+
+                    mm.get(entity).movement.add(15 * scale, 0);
+                }));
+
+                engine.addEntity(sparkle);
+            }
+        }, .2f, 2);
+
+        VisualEvent sparkle = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(30 * scale, 30 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity sparkle = new Entity();
+                sparkle.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-20 * scale, 20 * scale), MathUtils.random(-20 * scale, 20 * scale)),
+                        entitySize.x, entitySize.y, 0));
+                sparkle.add(new LifetimeComponent(0, .8f));
+                Sprite sprite = new Sprite(atlas.findRegion("sparkle"));
+                sprite.setOriginCenter();
+                sprite.setColor(Color.CYAN);
+                sparkle.add(new SpriteComponent(sprite));
+                sparkle.add(new EventComponent(.1f, true, EventCompUtil.fadeOut(8)));
+
+                engine.addEntity(sparkle);
+            }
+        }, .2f, 2);
+
+        return new Move("Tailwind", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+
+                        if (status.has(enemy))
+                            status.get(enemy).addStatusEffect(speedUp(), enemy);
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+                new Array<VisualEvent>(new VisualEvent[]{largeSparkle, sparkle, largeSparkle.copy(), sparkle.copy()})));
+    }
+
+    public static Move tornado(Entity user) {
+        VisualEvent shuriken = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(70 * scale, 70 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity shuriken = new Entity();
+                shuriken.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 0));
+                shuriken.add(new LifetimeComponent(0, 1.2f));
+                shuriken.add(new AnimationComponent(.1f,
+                        new TextureRegion[]{atlas.findRegion("shuriken"),
+                                atlas.findRegion("shuriken2")},
+                        new Color(.2f, 1f, .5f, 1),
+                        Animation.PlayMode.LOOP));
+                shuriken.add(new EventComponent(.005f, true, EventCompUtil.rotate(20)));
+
+                engine.addEntity(shuriken);
+            }
+        }, .2f, 2);
+
+        VisualEvent sparkle = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(30 * scale, 30 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity sparkle = new Entity();
+                sparkle.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-20 * scale, 20 * scale), MathUtils.random(-20 * scale, 20 * scale)),
+                        entitySize.x, entitySize.y, 0));
+                sparkle.add(new LifetimeComponent(0, .4f));
+                Sprite sprite = new Sprite(atlas.findRegion("sparkle"));
+                sprite.setOriginCenter();
+                sprite.setColor(Color.RED);
+                sparkle.add(new SpriteComponent(sprite));
+                sparkle.add(new EventComponent(.1f, true, EventCompUtil.fadeOut(4)));
+
+                engine.addEntity(sparkle);
+            }
+        }, .1f, 8);
+
+        return new Move("Tornado", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+
+                        if (stm.has(enemy))
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) * 1.5f - stm.get(enemy).getModDef(enemy), 0, 999);
+
+                        if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
+                            vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+                new Array<VisualEvent>(new VisualEvent[]{shuriken, sparkle})));
+    }
 
 
 
@@ -1465,6 +1725,16 @@ public class MoveConstructor {
                         }
                     }
                 }
+            };
+        }
+
+        /**
+         * @param amount degrees rotated per method call
+         * @return {@link GameEvent} that rotates the entity
+         */
+        public static GameEvent rotate(float amount) {
+            return (entity, engine) -> {
+                pm.get(entity).rotation += amount;
             };
         }
 

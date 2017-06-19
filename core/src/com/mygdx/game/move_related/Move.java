@@ -1,8 +1,6 @@
 package com.mygdx.game.move_related;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.BoardComponent;
@@ -26,30 +24,23 @@ public class Move {
 
     private Entity user;
 
-    private Stage stage;
-    private Engine engine;
-
     /**
      * Creates a move that can be used. The move's attack message is displayed when it is used.
      * @param name2 name
-     * @param message message that is displayed when move is used. {@code null} will show the defualt message.
+     * @param message message that is displayed when move is used. {@code null} will show the default message.
      * @param usr user of move
      * @param cost amount of sp to use the move
      * @param rnge range
-     * @param engne {@code Engine}
-     * @param stge {@code Stage}
      * @param atk effect of attack
      * @param vis visual effect
      */
-    public Move(String name2, String message, Entity usr, int cost, Array<BoardPosition> rnge, Engine engne, Stage stge,
+    public Move(String name2, String message, Entity usr, int cost, Array<BoardPosition> rnge,
                 Attack atk, Visuals vis) {
         name = name2;
         attackMessage = message;
         user = usr;
         spCost = cost;
         range = rnge;
-        engine = engne;
-        stage = stge;
         attack  = atk;
         visuals = vis;
     }
@@ -62,19 +53,14 @@ public class Move {
      * @param usr user of move
      * @param cost amount of sp to use the move
      * @param rnge range
-     * @param engne {@code Engine}
-     * @param stge {@code Stage}
      * @param atk effect of attack
      * @param vis visual effect
      */
-    public Move(String name2, Entity usr, int cost, Array<BoardPosition> rnge, Engine engne, Stage stge,
-                Attack atk, Visuals vis) {
+    public Move(String name2, Entity usr, int cost, Array<BoardPosition> rnge, Attack atk, Visuals vis) {
         name = name2;
         user = usr;
         spCost = cost;
         range = rnge;
-        engine = engne;
-        stage = stge;
         attack  = atk;
         visuals = vis;
     }
