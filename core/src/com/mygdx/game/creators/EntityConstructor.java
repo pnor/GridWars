@@ -342,7 +342,7 @@ public class EntityConstructor {
                 atlas.findRegion("turtle2")
         }, Animation.PlayMode.LOOP, 0.7f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(2, 5, 3, 4, 1));
+        entity.add(new StatComponent(2, 8, 3, 4, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -352,8 +352,10 @@ public class EntityConstructor {
                 MoveConstructor.heavyDamageAnimation(entity),
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity),
-                MoveConstructor.StarSpin(entity)
+                MoveConstructor.restMind(entity),
+                MoveConstructor.drench(entity),
+                MoveConstructor.electrocute(entity),
+                MoveConstructor.cometShower(entity)
         })));
 
         return entity;
@@ -410,7 +412,7 @@ public class EntityConstructor {
                 MoveConstructor.heavyDamageAnimation(entity),
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity),
+                MoveConstructor.shockClaw(entity),
                 MoveConstructor.StarSpin(entity)
         })));
 
