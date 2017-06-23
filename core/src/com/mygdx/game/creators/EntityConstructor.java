@@ -13,6 +13,7 @@ import com.mygdx.game.components.*;
 import com.mygdx.game.move_related.Move;
 
 import static com.mygdx.game.ComponentMappers.state;
+import static com.mygdx.game.ComponentMappers.stm;
 import static com.mygdx.game.GridWars.atlas;
 
 /**
@@ -85,7 +86,8 @@ public class EntityConstructor {
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
-        entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity),
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity),
@@ -101,11 +103,11 @@ public class EntityConstructor {
             entity.add(new TeamComponent(team));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("mirrorman"),
-                atlas.findRegion("mirrorman2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
-        entity.add(new BoardComponent());
-        entity.add(new StatComponent(3, 10, 3, 0, 6));
+                atlas.findRegion("robot"),
+                atlas.findRegion("robot2")
+        }, Animation.PlayMode.LOOP, 0.5f)));        entity.add(new BoardComponent());
+        entity.add(new StatComponent(1, 20, 20, 0, 14));
+        stm.get(entity).sp  = 20;
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -113,9 +115,12 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
                 MoveConstructor.deathAnimation(entity)));
-        entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity),
-                MoveConstructor.StarSpin(entity)})));
-        entity.add(new NameComponent("anyone"));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.Tackle(entity),
+                MoveConstructor.submerge(entity),
+                MoveConstructor.assist(entity),
+                MoveConstructor.wildFire(entity)})));
+        entity.add(new NameComponent("TESTER"));
 
         return entity;
     }
@@ -288,9 +293,10 @@ public class EntityConstructor {
                 MoveConstructor.heavyDamageAnimation(entity),
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.freeze(entity),
+                MoveConstructor.chill(entity),
                 MoveConstructor.tailwind(entity),
-                MoveConstructor.tornado(entity)
+                MoveConstructor.twister(entity),
+                MoveConstructor.freeze(entity)
         })));
 
         return entity;
@@ -317,8 +323,9 @@ public class EntityConstructor {
                 MoveConstructor.heavyDamageAnimation(entity),
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity),
-                MoveConstructor.StarSpin(entity)
+                MoveConstructor.assist(entity),
+                MoveConstructor.recover(entity),
+                MoveConstructor.submerge(entity)
         })));
 
         return entity;

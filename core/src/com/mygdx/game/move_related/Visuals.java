@@ -12,6 +12,8 @@ import com.mygdx.game.boards.BoardPosition;
  * @author Phillip O'Reggio
  */
 public class Visuals {
+    public String name;
+
     public static Engine engine;
     public static Stage stage;
 
@@ -135,5 +137,5 @@ public class Visuals {
     public void setTargetPositions(Array<BoardPosition> positions) {
         targetPositions = positions;
     }
-
+    
 }

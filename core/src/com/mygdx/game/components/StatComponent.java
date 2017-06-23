@@ -13,7 +13,6 @@ import static com.mygdx.game.ComponentMappers.status;
 public class StatComponent implements Component {
 
     public boolean alive = true;
-    public boolean canMove;
 
     /**
      * health

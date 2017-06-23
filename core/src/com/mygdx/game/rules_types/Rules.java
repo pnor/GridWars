@@ -70,7 +70,7 @@ public abstract class Rules {
                 for (StatusEffect effect : status.get(e).statusEffects.values().toArray()) {
                     effect.doTurnEffect(e);
                     if (effect.getIsFinished())
-                        status.get(e).statusEffects.remove(effect.getName());
+                        status.get(e).removeStatusEffect(e, effect.getName());
                 }
             }
         }

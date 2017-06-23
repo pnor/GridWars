@@ -9,8 +9,4 @@ import com.badlogic.ashley.core.Component;
 public class StateComponent implements Component {
     public boolean canAttack;
     public boolean canMove;
-    /**
-     * amount of status effects currently applied on the entity
-     */
-    public int amountOfStatusEffects;
 }

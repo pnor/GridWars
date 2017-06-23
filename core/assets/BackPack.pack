@@ -38,9 +38,23 @@ BlankBackground
   orig: 1000, 900
   offset: 0, 0
   index: -1
-WhiteDots
+darkShadeOverlay
   rotate: false
   xy: 5507, 903
+  size: 1000, 900
+  orig: 1000, 900
+  offset: 0, 0
+  index: -1
+shadeOverlay
+  rotate: false
+  xy: 6509, 903
+  size: 1000, 900
+  orig: 1000, 900
+  offset: 0, 0
+  index: -1
+WhiteDots
+  rotate: false
+  xy: 5507, 1
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0

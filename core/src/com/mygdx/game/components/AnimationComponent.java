@@ -15,12 +15,14 @@ import com.badlogic.gdx.utils.Array;
 public class AnimationComponent implements Component {
     public Animation animation;
     public Color shadeColor = Color.WHITE;
+    public float currentTime;
+    public boolean isAnimating = true;
+
     private float x;
     private float y;
     private float width;
     private float height;
     private float rotation;
-    public float currentTime;
 
     /**
      * z-index. Determines what things appear on top of others
@@ -52,7 +54,8 @@ public class AnimationComponent implements Component {
     }
 
     public void update(float delta) {
-        currentTime += delta;
+        if (isAnimating)
+            currentTime += delta;
     }
 
     public Sprite getSprite() {

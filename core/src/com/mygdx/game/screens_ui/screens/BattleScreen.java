@@ -317,7 +317,6 @@ public class BattleScreen implements Screen {
 
                         //set canAttack state to false, and begin move's Visuals.
                         state.get(selectedEntity).canAttack = false;
-                        currentMove.getVisuals().setPlaying(true, false);
                         disableUI();
                         //Attack message
                         if (currentMove.getAttackMessage() == null || currentMove.getAttackMessage().trim().equals("")) { //defualt case
@@ -802,7 +801,7 @@ public class BattleScreen implements Screen {
             am.get(e).actor.shade(status.get(e).statusEffects.values().toArray().first().getColor());
         } else { //defaults
             if (team.get(e).teamNumber == rules.getCurrentTeamNumber())
-                am.get(e).actor.shade(rules.getCurrentTeam().getTeamColor());
+                am.get(e).actor.shade(rules.getCurrentTeam().getTeamColor().cpy());
             else
                 am.get(e).actor.shade(Color.WHITE);
         }

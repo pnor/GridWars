@@ -2,6 +2,7 @@ package com.mygdx.game.move_related;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
+import com.mygdx.game.actors.AnimationActor;
 
 import static com.mygdx.game.ComponentMappers.am;
 
@@ -25,6 +26,8 @@ public class StatusEffect {
     private TurnEffect turnEffect;
     private StatChanges statChanges;
 
+    private boolean stopsAnimation;
+
     /**
      * Creates a {@link StatusEffect}.
      * @param n name. Is used as the key value in a {@link com.badlogic.gdx.utils.OrderedMap} so spelling matters! Is case-sensitive.
@@ -45,6 +48,8 @@ public class StatusEffect {
     public void doInitialEffect(Entity e) {
         if (am.has(e))
             am.get(e).actor.shade(COLOR);
+        if (am.get(e).actor instanceof AnimationActor && stopsAnimation)
+            ((AnimationActor) am.get(e).actor).setStopUpdating(true);
     }
 
     /**
@@ -59,8 +64,21 @@ public class StatusEffect {
         }
     }
 
+    public void doEndEffect(Entity e) {
+        if (am.get(e).actor instanceof AnimationActor && stopsAnimation)
+            ((AnimationActor) am.get(e).actor).setStopUpdating(false);
+    }
+
     public void setStatChanges(float maxHealth, float skill, float maxSkill, float attack, float defense, float speed) {
         statChanges = new StatChanges(maxHealth, skill, maxSkill, attack, defense, speed);
+    }
+
+    public void setStopsAnimation(boolean b) {
+        stopsAnimation = b;
+    }
+
+    public boolean stopsAnimation() {
+        return stopsAnimation;
     }
 
     public StatChanges getStatChanges() {

@@ -26,15 +26,19 @@ public class StatusEffectComponent implements Component {
     }
 
     public void removeStatusEffect(Entity e, String name) {
-        if (statusEffects.containsKey(name))
+        if (statusEffects.containsKey(name)) {
+            statusEffects.get(name).doEndEffect(e);
             statusEffects.remove(name);
+        }
     }
 
     public void removeStatusEffect(Entity e, String... statusEffectNames) {
         Array<String> names = new Array<String>(statusEffectNames);
         for (String s : names)
-            if (statusEffects.containsKey(s))
+            if (statusEffects.containsKey(s)) {
+                statusEffects.get(s).doEndEffect(e);
                 statusEffects.remove(s);
+            }
     }
 
     public void removeAll() {
