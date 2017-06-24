@@ -27,6 +27,10 @@ public class BackgroundConstructor {
             case 7 :
             case 8 :
             case 9 :
+                return makeCompactBack();
+            case 10 :
+            case 11 :
+            case 12 :
                 return makeDesertBack();
         }
         return null;
@@ -49,6 +53,18 @@ public class BackgroundConstructor {
         back.setColor(new Color(.5f, .5f, .5f, 1));
         Sprite overlay = new Sprite(backAtlas.findRegion("DiagStripeHoriz"));
         overlay.setColor(new Color(.3f, .3f, .3f, 1));
+        return new Background(
+                back,
+                new Sprite[] {overlay},
+                new BackType[] {BackType.SCROLL_HORIZONTAL},
+                null, null);
+    }
+
+    public static Background makeCompactBack() {
+        Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
+        back.setColor(Color.LIGHT_GRAY);
+        Sprite overlay = new Sprite(backAtlas.findRegion("FadeHoriz"));
+        overlay.setColor(Color.WHITE);
         return new Background(
                 back,
                 new Sprite[] {overlay},

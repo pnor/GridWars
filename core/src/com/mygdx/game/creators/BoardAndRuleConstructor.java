@@ -47,10 +47,16 @@ public class BoardAndRuleConstructor {
             case 6 :
                 return makeComplex4PZone(screen, teams, boardManager);
             case 7 : //fix
-                return makeDesert2P(screen, teams, boardManager);
+                return makeCompact2P(screen, teams, boardManager);
             case 8 :
-                return makeDesert2PZone(screen, teams, boardManager);
+                return makeCompact2PZone(screen, teams, boardManager);
             case 9 :
+                return makeCompact4PZone(screen, teams, boardManager);
+            case 10:
+                return makeDesert2P(screen, teams, boardManager);
+            case 11:
+                return makeDesert2PZone(screen, teams, boardManager);
+            case 12:
                 return makeDesert4PZone(screen, teams, boardManager);
         }
         return null;
@@ -64,7 +70,7 @@ public class BoardAndRuleConstructor {
        new Board(boardSize, boardSize, c, c2, 700 / boardSize
    */
 
-    //Simple
+    //region Simple
     public static Rules makeSimple2P(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
         boardManager.setBoards(new Board(7, 7, 100), new CodeBoard(7, 7));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
@@ -173,8 +179,9 @@ public class BoardAndRuleConstructor {
 
         return rules;
     }
+    //endregion
 
-    //Complex
+    //region Complex
     public static Rules makeComplex2P(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
         boardManager.setBoards(new Board(7, 7, 100), new CodeBoard(7, 7));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
@@ -311,6 +318,117 @@ public class BoardAndRuleConstructor {
 
         return rules;
     }
+    //endregion
+
+    //region Compact
+    public static Rules makeCompact2P(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(5, 5, Color.DARK_GRAY, Color.GRAY, 100), new CodeBoard(5, 5));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        int col = 0;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            col++;
+        }
+        col = 3;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            col--;
+        }
+
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeCompact2PZone(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        //declare rules
+        boardManager.setBoards(new Board(6, 6, Color.DARK_GRAY, Color.GRAY, 100), new CodeBoard(6, 6));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        ZoneRules rules = new ZoneRules(screen, teams, new Array<Array<BoardPosition>>(new Array[] {
+                new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(3, 3)}),
+                new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(2, 2)})
+                }));
+
+        //place entities
+        int col = 1;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            col++;
+        }
+        col = 5;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            col--;
+        }
+
+        //place blocks
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(1, 2));
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(2, 1));
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(2, 3));
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(3, 2));
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(3, 4));
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(4, 3));
+
+        //color zones
+        rules.colorZones();
+
+        return rules;
+    }
+
+    public static Rules makeCompact4PZone(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        //declare rules
+        boardManager.setBoards(new Board(7, 7, Color.DARK_GRAY, Color.GRAY, 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        ZoneRules rules = new ZoneRules(screen, teams, new Array<Array<BoardPosition>>(new Array[] {
+                new Array<BoardPosition>(new BoardPosition[]{
+                        new BoardPosition(2, 2)}),
+                new Array<BoardPosition>(new BoardPosition[]{
+                        new BoardPosition(4, 4)}),
+                new Array<BoardPosition>(new BoardPosition[]{
+                        new BoardPosition(2, 4)}),
+                new Array<BoardPosition>(new BoardPosition[]{
+                        new BoardPosition(4, 2)}),
+        }));
+
+        //place entities
+        int col, row;
+        col = 2;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            col++;
+        }
+        col = 5;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            col--;
+        }
+        row = 2;
+        for (Entity e : teams.get(2).getEntities()) {
+            boardManager.add(e, new BoardPosition(row, 0));
+            row++;
+        }
+        row = 1;
+        for (Entity e : teams.get(3).getEntities()) {
+            boardManager.add(e, new BoardPosition(row, maxSize));
+            row++;
+        }
+
+        //place blocks
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(1, 1));
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(2, 1));
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(3, 1));
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(3, 2));
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(3, 3));
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(3, 4));
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(3, 5));
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(4, 5));
+        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(5, 5));
+
+        //color zones
+        rules.colorZones();
+
+        return rules;
+    }
+    //endregion
 
     //region desert
     public static Rules makeDesert2P(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {

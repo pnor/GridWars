@@ -19,7 +19,7 @@ public class GridWars extends Game {
 	public static TextureAtlas backAtlas;
 
 	@Override
-	public void create () {
+	public void create() {
 		stage = new Stage();
 		stage.getViewport().setWorldSize(1000, 900);
 		stage.getViewport().setScreenSize(1000, 900);

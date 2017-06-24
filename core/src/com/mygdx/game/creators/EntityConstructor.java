@@ -137,13 +137,28 @@ public class EntityConstructor {
         return entity;
     }
 
-    //Blockade Type Entity
+    //region Blockade Type Entity
     public static Entity cube() {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 0, 0, 0, 0));
         entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("cube")), true, true)));
         entity.add(new NameComponent("Cube"));
+
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity)));
+
+        return entity;
+    }
+
+    public static Entity durableCube() {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(20, 0, 0, 0, 0));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("cubelight")), true, true)));
+        entity.add(new NameComponent("Durable Cube"));
 
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
@@ -182,6 +197,7 @@ public class EntityConstructor {
 
         return entity;
     }
+    //endregion
 
     //Game Piece Entity ------------
     public static Entity canight(int team) {
@@ -324,6 +340,7 @@ public class EntityConstructor {
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.assist(entity),
+                MoveConstructor.clear(entity),
                 MoveConstructor.recover(entity),
                 MoveConstructor.submerge(entity)
         })));
@@ -402,7 +419,7 @@ public class EntityConstructor {
                 atlas.findRegion("thunderdog2")
         }, Animation.PlayMode.LOOP, 0.2f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(5, 6, 3, 0, 1));
+        entity.add(new StatComponent(4, 4, 1, 0, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -413,7 +430,9 @@ public class EntityConstructor {
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.shockClaw(entity),
-                MoveConstructor.StarSpin(entity)
+                MoveConstructor.charge(entity),
+                MoveConstructor.superCharge(entity),
+                MoveConstructor.voltDeluge(entity)
         })));
 
         return entity;
@@ -430,7 +449,7 @@ public class EntityConstructor {
                 atlas.findRegion("mummy2")
         }, Animation.PlayMode.LOOP, 0.3f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(5, 4, 2, 1, 2));
+        entity.add(new StatComponent(4, 3, 2, 1, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -440,8 +459,8 @@ public class EntityConstructor {
                 MoveConstructor.heavyDamageAnimation(entity),
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity),
-                MoveConstructor.StarSpin(entity)
+                MoveConstructor.barrage(entity),
+                MoveConstructor.vulnerableStrike(entity)
         })));
 
         return entity;

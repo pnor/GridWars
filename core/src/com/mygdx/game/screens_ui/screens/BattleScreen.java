@@ -506,10 +506,11 @@ public class BattleScreen implements Screen {
 
                     selectedEntity = e; //selectedEntity changes to new entity from here on
 
-                    if (Visuals.visualsArePlaying == 0)
+                    if (Visuals.visualsArePlaying == 0) {
                         am.get(selectedEntity).actor.shade(Color.ORANGE);
-                    if (mayAttack(selectedEntity) && !attacksEnabled)
-                        enableAttacks();
+                        if (mayAttack(selectedEntity) && !attacksEnabled)
+                            enableAttacks();
+                    }
 
                     //check if has a speed > 0, and can move. Also if it is not on another team/has no team
                     if (mayMove(selectedEntity)) {
@@ -544,7 +545,7 @@ public class BattleScreen implements Screen {
             //updating attack squares
             if (!mayAttack(selectedEntity) && attacksEnabled)
                 disableAttacks();
-            else if (mayAttack(selectedEntity) && !attacksEnabled)
+            else if (mayAttack(selectedEntity) && !attacksEnabled && Visuals.visualsArePlaying == 0)
                 enableAttacks();
 
             if (!hoverChanged) {
@@ -588,6 +589,7 @@ public class BattleScreen implements Screen {
                 } else {
                     currentMove.getVisuals().reset();
                     enableUI();
+                    updateStatsAndMoves();
                     currentMove = null;
                 }
             }
@@ -892,6 +894,17 @@ public class BattleScreen implements Screen {
 
                 if (status.get(selectedEntity).statusEffects.containsKey("Guard")) {
                     defLbl.setColor(Color.GREEN);
+                }
+
+                if (status.get(selectedEntity).statusEffects.containsKey("Durability")) {
+                    hpLbl.setColor(Color.GREEN);
+                }
+
+                if (status.get(selectedEntity).statusEffects.containsKey("Charged") || status.get(selectedEntity).statusEffects.containsKey("Supercharged")) {
+                    hpLbl.setColor(Color.GREEN);
+                    spdLbl.setColor(Color.GREEN);
+                    atkLbl.setColor(Color.GREEN);
+                    spdLbl.setColor(Color.GREEN);
                 }
 
                 //Negative
