@@ -5,8 +5,8 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 
 /**
- * Color that oscillates between two values. The {@code update(float deltaTime)} method must be called
- * for the interlopation to happen
+ * Color that oscillates between two values. The {@link #update(float deltaTime)} method must be called
+ * for the interpolation to happen
  * @author Phillip O'Reggio
  */
 public class LerpColor extends Color {
@@ -68,17 +68,17 @@ public class LerpColor extends Color {
 
     @Override
     public float toFloatBits() {
+
         if (interpolation == null)  //defualt
-            return new Color(MathUtils.lerp(startColor.r, endColor.r, totalDelta / timeToChange),
-                MathUtils.lerp(startColor.g, endColor.g, totalDelta / timeToChange),
-                MathUtils.lerp(startColor.b, endColor.b, totalDelta / timeToChange),
-                MathUtils.lerp(startColor.a, endColor.a, totalDelta / timeToChange)).toFloatBits();
+            return new Color(startColor).lerp(endColor, totalDelta / timeToChange).toFloatBits();
         else {   //custom interpolation
             return new Color(interpolation.apply(startColor.r, endColor.r, totalDelta / timeToChange),
                     interpolation.apply(startColor.g, endColor.g, totalDelta / timeToChange),
                     interpolation.apply(startColor.b, endColor.b, totalDelta / timeToChange),
                     interpolation.apply(startColor.a, endColor.a, totalDelta / timeToChange)).toFloatBits();
         }
+
+
     }
 
     /*
@@ -106,6 +106,7 @@ public class LerpColor extends Color {
             this.b = interpolation.apply(startColor.b, endColor.b, totalDelta / timeToChange);
             this.a = interpolation.apply(startColor.a, endColor.a, totalDelta / timeToChange);
         }
+        //System.out.println("Lerp Color Balue (of a): " + this.a);
     }
 
     /**

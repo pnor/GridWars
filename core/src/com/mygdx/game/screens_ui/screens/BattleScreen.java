@@ -291,6 +291,7 @@ public class BattleScreen implements Screen {
                                 return;
                             }
                             mvm.get(selectedEntity).moveList.get(0).useAttack();
+                            stm.get(selectedEntity).sp -= mvm.get(selectedEntity).moveList.get(0).spCost();
                             currentMove = mvm.get(selectedEntity).moveList.get(0);
                         } else if (actor == attackBtn2) {
                             if (mvm.get(selectedEntity).moveList.get(1).spCost() > stm.get(selectedEntity).getModSp(selectedEntity)) {
@@ -298,6 +299,7 @@ public class BattleScreen implements Screen {
                                 return;
                             }
                             mvm.get(selectedEntity).moveList.get(1).useAttack();
+                            stm.get(selectedEntity).sp -= mvm.get(selectedEntity).moveList.get(1).spCost();
                             currentMove = mvm.get(selectedEntity).moveList.get(1);
                         } else if (actor == attackBtn3) {
                             if (mvm.get(selectedEntity).moveList.get(2).spCost() > stm.get(selectedEntity).getModSp(selectedEntity)) {
@@ -305,6 +307,7 @@ public class BattleScreen implements Screen {
                                 return;
                             }
                             mvm.get(selectedEntity).moveList.get(2).useAttack();
+                            stm.get(selectedEntity).sp -= mvm.get(selectedEntity).moveList.get(2).spCost();
                             currentMove = mvm.get(selectedEntity).moveList.get(2);
                         } else if (actor == attackBtn4) {
                             if (mvm.get(selectedEntity).moveList.get(3).spCost() > stm.get(selectedEntity).getModSp(selectedEntity)) {
@@ -312,6 +315,7 @@ public class BattleScreen implements Screen {
                                 return;
                             }
                             mvm.get(selectedEntity).moveList.get(3).useAttack();
+                            stm.get(selectedEntity).sp -= mvm.get(selectedEntity).moveList.get(3).spCost();
                             currentMove = mvm.get(selectedEntity).moveList.get(3);
                         }
 

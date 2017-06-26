@@ -32,14 +32,15 @@ public class TitleScreen extends MenuScreen implements Screen {
     @Override
     public void show() {
         super.show();
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("BEBAS.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 120;
-        param.color = Color.GREEN;
+        param.color = Color.CYAN;
         param.shadowOffsetX = -4;
         param.shadowOffsetY = -4;
+        param.shadowColor = Color.BLUE;
         param.borderWidth = 5;
-        param.borderColor = Color.LIME;
+        param.borderColor = Color.WHITE;
         titleLbl = new Label("Grid Wars", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         startBtn = new HoverButton("Start", skin, Color.WHITE, Color.DARK_GRAY);
         ChangeListener listener = new ChangeListener() {

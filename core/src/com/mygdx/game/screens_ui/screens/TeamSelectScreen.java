@@ -237,7 +237,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                 if (color != null) {
                     textField.setColor(color);
                     teams.get(curTeam).setTeamColor(color);
-                } else {
+                } else { //random color
                     teams.get(curTeam).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
                     textField.setColor(Color.WHITE);
                 }
@@ -492,7 +492,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     @Override
     public void render(float dt) {
         super.render(dt);
-        //LerpColors TODO make it work
+        //LerpColors TODO make it work !
         if (teamColor.getColor() instanceof LerpColor)
             ((LerpColor) teamColor.getColor()).update(dt);
         for (Image i : characterPortraits)

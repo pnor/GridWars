@@ -24,14 +24,20 @@ public class VisualsComponent implements Component {
     public Visuals heavyDamageAnimation;
 
     /**
+     * plays when the entity is affected by a turn effect of a status effect
+     */
+    public Visuals shuffleAnimation;
+
+    /**
      * Creates this object with preset values for damage and death animations
      * @param damageAnim damage animation
      * @param deathAnim death animation
      */
-    public VisualsComponent(Visuals damageAnim, Visuals heavyAnim, Visuals deathAnim) {
+    public VisualsComponent(Visuals damageAnim, Visuals heavyAnim, Visuals deathAnim, Visuals shuffleAnim) {
         damageAnimation = damageAnim;
         heavyDamageAnimation = heavyAnim;
         deathAnimation = deathAnim;
+        shuffleAnimation = shuffleAnim;
     }
 
 }

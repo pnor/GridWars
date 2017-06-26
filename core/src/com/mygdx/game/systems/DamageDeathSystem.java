@@ -44,7 +44,7 @@ public class DamageDeathSystem extends IteratingSystem {
                     }
                 }
             }
-            //damage
+            //damage and shuffling
             else {
                 if (vm.has(e)) {
                     if (vm.get(e).damageAnimation != null && vm.get(e).damageAnimation.getIsPlaying()) {
@@ -54,6 +54,10 @@ public class DamageDeathSystem extends IteratingSystem {
                     if (vm.get(e).heavyDamageAnimation != null && vm.get(e).heavyDamageAnimation.getIsPlaying()) {
                         vm.get(e).heavyDamageAnimation.updateTimer(deltaTime);
                         vm.get(e).heavyDamageAnimation.play();
+                    }
+                    if (vm.get(e).shuffleAnimation != null && vm.get(e).shuffleAnimation.getIsPlaying()) {
+                        vm.get(e).shuffleAnimation.updateTimer(deltaTime);
+                        vm.get(e).shuffleAnimation.play();
                     }
                 }
             }

@@ -66,7 +66,8 @@ public class EntityConstructor {
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
 
         return entity;
     }
@@ -89,7 +90,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity),
                 MoveConstructor.StarSpin(entity)})));
         entity.add(new NameComponent("Robo - Beta"));
@@ -114,7 +116,8 @@ public class EntityConstructor {
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.Tackle(entity),
                 MoveConstructor.submerge(entity),
@@ -148,7 +151,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
 
         return entity;
     }
@@ -163,7 +167,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
 
         return entity;
     }
@@ -178,7 +183,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
 
         return entity;
     }
@@ -193,7 +199,9 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)
+                ));
 
         return entity;
     }
@@ -219,7 +227,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.swordSlice(entity),
                 MoveConstructor.Bark(entity),
@@ -248,7 +257,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<>(new Move[]{
                 MoveConstructor.metalClaw(entity),
                 MoveConstructor.laserBeam(entity),
@@ -278,7 +288,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.bodySlam(entity),
                 MoveConstructor.sear(entity),
@@ -307,7 +318,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.chill(entity),
                 MoveConstructor.tailwind(entity),
@@ -337,7 +349,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.assist(entity),
                 MoveConstructor.clear(entity),
@@ -367,7 +380,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.restMind(entity),
                 MoveConstructor.drench(entity),
@@ -397,7 +411,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.swordSlice(entity),
                 MoveConstructor.guardPiercer(entity),
@@ -427,7 +442,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.shockClaw(entity),
                 MoveConstructor.charge(entity),
@@ -457,7 +473,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.barrage(entity),
                 MoveConstructor.feint(entity),
@@ -487,7 +504,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.restBody(entity),
                 MoveConstructor.ignite(entity),
@@ -517,7 +535,8 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.dragonBreath(entity),
                 MoveConstructor.toxicBreath(entity),
@@ -547,10 +566,13 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.restore(entity),
-                MoveConstructor.regen(entity)
+                MoveConstructor.regen(entity),
+                MoveConstructor.boost(entity),
+                MoveConstructor.transfer(entity)
         })));
 
         return entity;
@@ -575,9 +597,10 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimation(entity)));
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity),
+                MoveConstructor.reflectMove(entity),
                 MoveConstructor.StarSpin(entity)
         })));
 
