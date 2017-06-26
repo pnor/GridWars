@@ -38,5 +38,4 @@ public class ComponentMappers {
     //names
     public static ComponentMapper<NameComponent> nm = ComponentMapper.getFor(NameComponent.class);
 
-
 }

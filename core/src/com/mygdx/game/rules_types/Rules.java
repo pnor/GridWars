@@ -33,7 +33,7 @@ public abstract class Rules {
     public abstract Team checkWinConditions();
 
     /**
-     * Changes the turn to the next player. Applies effects cuased by turn shift as well.
+     * Changes the turn to the next player. Applies effects caused by turn shift as well.
      */
     public void nextTurn() {
         currentTeamTurn = (currentTeamTurn + 1) % totalTeams;
@@ -44,7 +44,7 @@ public abstract class Rules {
                     screen.removeMovementTiles();
                 } catch (IndexOutOfBoundsException e) {}
 
-        //skip turn if al entities are dead
+        //skip turn if all entities are dead
         if (teams.get(currentTeamTurn).allDead()) {
             currentTeamTurn = (currentTeamTurn + 1) % totalTeams;
             turnCount = currentTeamTurn == 0 ? turnCount + 1 : turnCount;
@@ -54,7 +54,10 @@ public abstract class Rules {
         for (Team t : teams) {
             for (Entity e : t.getEntities())
             if (state.has(e)) {
-                state.get(e).canAttack = true;
+                state.get(e).canAttack = true; //TODO make it not redundant
+                if (status.get(e).statusEffects.containsKey("Freeze") || status.get(e).statusEffects.containsKey("Petrify"))
+                    state.get(e).canAttack = false;
+
                 state.get(e).canMove = true;
                 if (!screen.checkShading(e));
                     screen.shadeBasedOnState(e);

@@ -460,7 +460,9 @@ public class EntityConstructor {
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.barrage(entity),
-                MoveConstructor.vulnerableStrike(entity)
+                MoveConstructor.feint(entity),
+                MoveConstructor.basiliskPunch(entity),
+                MoveConstructor.curse(entity)
         })));
 
         return entity;
@@ -477,7 +479,7 @@ public class EntityConstructor {
                 atlas.findRegion("squid2")
         }, Animation.PlayMode.LOOP, 0.7f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(3, 9, 2, 0, 2));
+        entity.add(new StatComponent(3, 9, 3, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -487,8 +489,10 @@ public class EntityConstructor {
                 MoveConstructor.heavyDamageAnimation(entity),
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity),
-                MoveConstructor.StarSpin(entity)
+                MoveConstructor.restBody(entity),
+                MoveConstructor.ignite(entity),
+                MoveConstructor.drench(entity), //TODO change probably
+                MoveConstructor.cometShowerClose(entity)
         })));
 
         return entity;
@@ -515,8 +519,10 @@ public class EntityConstructor {
                 MoveConstructor.heavyDamageAnimation(entity),
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity),
-                MoveConstructor.StarSpin(entity)
+                MoveConstructor.dragonBreath(entity),
+                MoveConstructor.toxicBreath(entity),
+                MoveConstructor.freshBreath(entity),
+                MoveConstructor.spaBreath(entity)
         })));
 
         return entity;
@@ -543,8 +549,8 @@ public class EntityConstructor {
                 MoveConstructor.heavyDamageAnimation(entity),
                 MoveConstructor.deathAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.Tackle(entity),
-                MoveConstructor.StarSpin(entity)
+                MoveConstructor.restore(entity),
+                MoveConstructor.regen(entity)
         })));
 
         return entity;

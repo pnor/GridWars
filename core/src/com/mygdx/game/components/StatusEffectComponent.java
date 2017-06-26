@@ -41,7 +41,9 @@ public class StatusEffectComponent implements Component {
             }
     }
 
-    public void removeAll() {
+    public void removeAll(Entity e) {
+        for (StatusEffect effect : statusEffects.values())
+            effect.doEndEffect(e);
         statusEffects.clear();
     }
 

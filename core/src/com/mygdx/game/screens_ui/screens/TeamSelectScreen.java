@@ -486,7 +486,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
      * @return {@code Color} that the string represents. Ex: "red" returns Color.RED
      */
     private Color getColorFromChoices(String s) {
-        return colorChoices.get(s);
+        return colorChoices.get(s.trim().toLowerCase());
     }
 
     @Override
