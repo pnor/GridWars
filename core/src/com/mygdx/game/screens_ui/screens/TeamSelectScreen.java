@@ -492,6 +492,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     @Override
     public void render(float dt) {
         super.render(dt);
+
         //LerpColors TODO make it work !
         if (teamColor.getColor() instanceof LerpColor)
             ((LerpColor) teamColor.getColor()).update(dt);

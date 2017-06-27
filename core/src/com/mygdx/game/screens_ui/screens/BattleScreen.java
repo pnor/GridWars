@@ -27,6 +27,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.mygdx.game.AI.ComputerPlayer;
+import com.mygdx.game.AI.Turn;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.SpriteActor;
@@ -57,6 +59,7 @@ import static com.mygdx.game.GridWars.*;
 public class BattleScreen implements Screen {
     //debug
     final ShapeRenderer SHAPE = new ShapeRenderer();
+    public static ComputerPlayer computer;
 
     private final GridWars GRID_WARS;
     private BattleInputProcessor battleInputProcessor;
@@ -89,6 +92,16 @@ public class BattleScreen implements Screen {
     private int moveHover = -1;
     private boolean hoverChanged;
     public boolean attacksEnabled = true;
+
+    //Computer Turn variables
+    private Array<Turn> computerTurns;
+    private boolean playingComputerTurn;
+    private float timeAfterMove;
+    private int currentComputerControlledEntity;
+    /**
+     * Waiting to... <p>
+     * 0 : move   1 : attack 2 : time after attack* 3 : waiting to end turn */
+    private int turnPhase;
 
     //Ui Elements
     /**
@@ -155,6 +168,8 @@ public class BattleScreen implements Screen {
         background = BackgroundConstructor.getBackground(boardIndex);
 
         MoveConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, stage);
+
+        computer = new ComputerPlayer(BoardComponent.boards, teams.get(1));
     }
 
 
@@ -319,23 +334,14 @@ public class BattleScreen implements Screen {
                             currentMove = mvm.get(selectedEntity).moveList.get(3);
                         }
 
-                        //set canAttack state to false, and begin move's Visuals.
+                        //set canAttack and canMove state to false, and begin move's Visuals.
                         state.get(selectedEntity).canAttack = false;
+                        state.get(selectedEntity).canMove = false;
+                        //disable UI stuff to stop moving after attacking
+                        removeMovementTiles();
                         disableUI();
-                        //Attack message
-                        if (currentMove.getAttackMessage() == null || currentMove.getAttackMessage().trim().equals("")) { //defualt case
-                            if (nm.has(selectedEntity))
-                                if (currentMove.getAttackMessage() != null)
-                                    infoLbl.setText(currentMove.getAttackMessage());
-                                else
-                                    infoLbl.setText(nm.get(selectedEntity).name + " used " + currentMove.getName() + "!");
-                            else if (currentMove.getAttackMessage() != null)
-                                infoLbl.setText(currentMove.getAttackMessage());
-                            else
-                                infoLbl.setText(currentMove.getName() + " was used!");
-                        } else {
-                            infoLbl.setText(currentMove.getAttackMessage());
-                        }
+
+                        showAttackMessage();
                     }
                 }
             }
@@ -373,30 +379,25 @@ public class BattleScreen implements Screen {
         endTurnBtn.addListener(new ChangeListener() {
            @Override
            public void changed(ChangeEvent event, Actor actor) {
-           if (((Button) actor).isPressed()) {
-               rules.nextTurn();
+               if (((Button) actor).isPressed()) {
+                   rules.nextTurn();
+                   showEndTurnDisplay();
+                   if (rules.getCurrentTeamNumber() == 1) { //debug, should actually figure out whos computer
+                       playingComputerTurn = true;
+                       computerTurns = computer.getAllTurns();
+                   } else
+                       playingComputerTurn = false;
 
-               //show next turn message
-               endTurnMessageLbl.setText("" + rules.getCurrentTeam().getTeamName() + " turn!");
-               turnCountLbl.setText("Turn " + rules.getTurnCount());
-               turnCountLbl.setColor(new Color(1,1,1,1).lerp(Color.ORANGE, (float) rules.getTurnCount() / 100f));
-               Color teamColor = rules.getCurrentTeam().getTeamColor();
-               if (teamColor instanceof LerpColor)
-                   endTurnMessageTable.setColor(Color.WHITE);
-               else
-                    endTurnMessageTable.setColor(rules.getCurrentTeam().getTeamColor());
-               endTurnMessageTable.clearActions();
-               SequenceAction sequence = new SequenceAction();
-               sequence.addAction(Actions.fadeIn(.2f));
-               sequence.addAction(Actions.delay(1f));
-               sequence.addAction(Actions.fadeOut(.2f));
-               endTurnMessageTable.addAction(sequence);
-
-               //update entity appearance
-               for (Entity e : rules.getCurrentTeam().getEntities()) {
-                   shadeBasedOnState(e);
+                   //DEBUG!!
+                  /*
+                   for (Entity e : turns.orderedKeys()) {
+                       BoardComponent.boards.move(e, turns.get(e).pos);
+                       mvm.get(selectedEntity).moveList.get(0).useAttack();
+                       stm.get(selectedEntity).sp -= mvm.get(selectedEntity).moveList.get(0).spCost();
+                       currentMove = mvm.get(selectedEntity).moveList.get(0);
+                   }
+                   */
                }
-           }
            }
         });
         member1 = new Image(GRID_WARS.atlas.findRegion("mystery"));
@@ -471,6 +472,7 @@ public class BattleScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //Debug
         if (!(currentDeltaTime >= deltatimeIntervals)) {
             deltaTimeSums += delta;
             currentDeltaTime += 1;
@@ -495,7 +497,8 @@ public class BattleScreen implements Screen {
         }
         boardTable.getCells();
 
-        if (!gameHasEnded) {
+        //region player input stuff (selection, attacks, etc.)
+        if (!gameHasEnded && !playingComputerTurn) {
             //update last ENTITY selected ---
             for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
                 if (am.get(e).actor.getLastSelected()) {
@@ -584,20 +587,65 @@ public class BattleScreen implements Screen {
                     checkedStats = true;
                 }
             }
+        }
+        //endregion
 
-            //playing current move animation
-            if (currentMove != null) {
-                if (currentMove.getVisuals().getIsPlaying()) {
-                    currentMove.updateVisuals(delta);
-                    currentMove.getVisuals().play();
+        //region computerTurn
+        if (playingComputerTurn) {
+            Array<Turn> turns = computer.getAllTurns();
+            Entity currentEntity;
+            timeAfterMove += delta;
+            if (timeAfterMove >= .3f && turnPhase == 0) { //Move
+                BoardComponent.boards.move(turns.get(currentComputerControlledEntity).entity, turns.get(currentComputerControlledEntity).pos);
+                turnPhase = 1;
+            } else if (timeAfterMove >= 1f && turnPhase == 1) { //use attack
+                currentEntity = turns.get(currentComputerControlledEntity).entity;
+                if (turns.get(currentComputerControlledEntity).attack != -1) {
+                    mvm.get(currentEntity).moveList.get(turns.get(currentComputerControlledEntity).attack).useAttack();
+                    stm.get(currentEntity).sp -= mvm.get(currentEntity).moveList.get(turns.get(currentComputerControlledEntity).attack).spCost();
+                    currentMove = mvm.get(currentEntity).moveList.get(turns.get(currentComputerControlledEntity).attack);
+                    showAttackMessage();
+                    turnPhase = 2;
                 } else {
-                    currentMove.getVisuals().reset();
-                    enableUI();
-                    updateStatsAndMoves();
-                    currentMove = null;
+                    currentComputerControlledEntity++;
+                    turnPhase = 0;
+                    timeAfterMove = 0;
                 }
+            } else if (currentMove == null && turnPhase == 2) { //next entity
+                timeAfterMove = 0;
+                turnPhase = 0;
+                currentComputerControlledEntity++;
             }
 
+            if (turnPhase == 3) {
+                timeAfterMove += delta;
+                if (timeAfterMove >= .5f) {
+                    timeAfterMove = 0;
+                    turnPhase = 0;
+                    currentComputerControlledEntity = 0;
+                    rules.nextTurn();
+                    showEndTurnDisplay();
+                    playingComputerTurn = false; //debug
+                }
+            } else if (currentComputerControlledEntity >= computer.getTeamSize()) { //wait to end turn
+                timeAfterMove = 0;
+                turnPhase = 3;
+            }
+        }
+        //endregion
+
+        //playing current move animation
+        if (currentMove != null) {
+            if (currentMove.getVisuals().getIsPlaying()) {
+                currentMove.updateVisuals(delta);
+                currentMove.getVisuals().play();
+            } else {
+                currentMove.getVisuals().reset();
+                enableUI();
+                if (selectedEntity != null)
+                    updateStatsAndMoves();
+                currentMove = null;
+            }
         }
 
         //update everything. (Graphics, engine, GRID_WARS.stage)
@@ -653,6 +701,51 @@ public class BattleScreen implements Screen {
 
     }
 
+    /**
+     * Shows the attack message of the Move stored in Current Move.
+     */
+    private void showAttackMessage() {
+        if (currentMove.getAttackMessage() == null || currentMove.getAttackMessage().trim().equals("")) { //default case
+            if (nm.has(selectedEntity))
+                if (currentMove.getAttackMessage() != null)
+                    infoLbl.setText(currentMove.getAttackMessage());
+                else
+                    infoLbl.setText(nm.get(selectedEntity).name + " used " + currentMove.getName() + "!");
+            else if (currentMove.getAttackMessage() != null)
+                infoLbl.setText(currentMove.getAttackMessage());
+            else
+                infoLbl.setText(currentMove.getName() + " was used!");
+        } else {
+            infoLbl.setText(currentMove.getAttackMessage());
+        }
+    }
+
+    /**
+     * Shows the window that displays who's turn it is.
+     */
+    public void showEndTurnDisplay() {
+        //show next turn message
+        endTurnMessageLbl.setText(rules.getCurrentTeam().getTeamName() + " turn!");
+        turnCountLbl.setText("Turn " + rules.getTurnCount());
+        turnCountLbl.setColor(new Color(1,1,1,1).lerp(Color.ORANGE, (float) rules.getTurnCount() / 100f));
+        Color teamColor = rules.getCurrentTeam().getTeamColor();
+        if (teamColor instanceof LerpColor)
+            endTurnMessageTable.setColor(Color.WHITE);
+        else
+            endTurnMessageTable.setColor(rules.getCurrentTeam().getTeamColor());
+        endTurnMessageTable.clearActions();
+        SequenceAction sequence = new SequenceAction();
+        sequence.addAction(Actions.fadeIn(.2f));
+        sequence.addAction(Actions.delay(1f));
+        sequence.addAction(Actions.fadeOut(.2f));
+        endTurnMessageTable.addAction(sequence);
+
+        //update entity appearance
+        for (Entity e : rules.getCurrentTeam().getEntities()) {
+            shadeBasedOnState(e);
+        }
+    }
+
     public void showMovementTiles() {
         for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity), new Array<>(), -1)) {
             if (t.isOccupied())
@@ -682,7 +775,7 @@ public class BattleScreen implements Screen {
      * @param e entity
      * @return null if it can't move or an {@code Array} of [@code Tile}s.
      */
-    /* //Old movement selection algorithm
+    //Old movement selection algorithm
     private Array<Tile> getMovableSquaresRaw(Entity e) {
         if (!stm.has(e) || stm.get(e).getModSpd(e) == 0)
             return null;
@@ -704,7 +797,6 @@ public class BattleScreen implements Screen {
         }
         return tiles;
     }
-    */
 
     /**
      * Recursive algorithm that returns all tiles that can be moved to based on speed. Takes into account barriers and blockades.

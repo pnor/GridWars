@@ -21,6 +21,7 @@ public abstract class Rules {
     protected int turnCount = 1;
 
     public Rules(BattleScreen s, Array<Team> t) {
+
         screen = s;
         teams = t;
         for (int i = 0; i< teams.size; i++)
