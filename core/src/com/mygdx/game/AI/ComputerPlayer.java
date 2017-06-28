@@ -8,9 +8,7 @@ import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.BoardComponent;
 import com.mygdx.game.rules_types.Team;
 
-import static com.mygdx.game.ComponentMappers.bm;
-import static com.mygdx.game.ComponentMappers.mvm;
-import static com.mygdx.game.ComponentMappers.stm;
+import static com.mygdx.game.ComponentMappers.*;
 
 /**
  * Class containing methods that a Computer Player would use.
@@ -31,15 +29,37 @@ public /*abstract*/ class ComputerPlayer {
         return null;
     }
 
-    private Turn getBestTurn() {
+    private Array<Turn> getBestTurns() {
+        for (Entity e : team.getEntities()) {
+
+        }
+
         return null;
     }
 
-    public Array<Turn> getAllTurns() {
+    /**
+     * @return Gets a random turn for all entities
+     */
+    public Array<Turn> getRandomTurns() {
         Array<Turn> turns = new Array<>();
 
+        // Not the best way to do this, but is a good dummy system
+        int numTries = 0; //to see if it can use an attack
+        int attackChoice = -1;
         for (Entity e : team.getEntities()) {
-            turns.add(new Turn(e, getPossiblePositions(bm.get(e).pos, stm.get(e).getModSpd(e), new Array<BoardPosition>(), -1).random(), MathUtils.random(-1, mvm.get(e).moveList.size - 1), 0));
+            if (!stm.get(e).alive) {
+                turns.add(null);
+                continue;
+            }
+            //decide if move is valid
+            while (numTries < 10) {
+                attackChoice = MathUtils.random(0, mvm.get(e).moveList.size - 1);
+                if (mvm.get(e).moveList.get(attackChoice).spCost() <= stm.get(e).sp)
+                    break;
+                else
+                    attackChoice = -1;
+            }
+            turns.add(new Turn(e, getPossiblePositions(bm.get(e).pos, stm.get(e).getModSpd(e), new Array<BoardPosition>(), -1).random(), attackChoice, 0));
         }
 
         return turns;

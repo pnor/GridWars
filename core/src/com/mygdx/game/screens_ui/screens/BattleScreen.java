@@ -384,7 +384,7 @@ public class BattleScreen implements Screen {
                    showEndTurnDisplay();
                    if (rules.getCurrentTeamNumber() == 1) { //debug, should actually figure out whos computer
                        playingComputerTurn = true;
-                       computerTurns = computer.getAllTurns();
+                       computerTurns = computer.getRandomTurns();
                    } else
                        playingComputerTurn = false;
 
@@ -592,18 +592,25 @@ public class BattleScreen implements Screen {
 
         //region computerTurn
         if (playingComputerTurn) {
-            Array<Turn> turns = computer.getAllTurns();
             Entity currentEntity;
             timeAfterMove += delta;
+
+            if (currentComputerControlledEntity < computerTurns.size && computerTurns.get(currentComputerControlledEntity) == null) {
+                //skip
+                currentComputerControlledEntity++;
+                turnPhase = 0;
+                timeAfterMove = 0;
+            }
+
             if (timeAfterMove >= .3f && turnPhase == 0) { //Move
-                BoardComponent.boards.move(turns.get(currentComputerControlledEntity).entity, turns.get(currentComputerControlledEntity).pos);
+                BoardComponent.boards.move(computerTurns.get(currentComputerControlledEntity).entity, computerTurns.get(currentComputerControlledEntity).pos);
                 turnPhase = 1;
             } else if (timeAfterMove >= 1f && turnPhase == 1) { //use attack
-                currentEntity = turns.get(currentComputerControlledEntity).entity;
-                if (turns.get(currentComputerControlledEntity).attack != -1) {
-                    mvm.get(currentEntity).moveList.get(turns.get(currentComputerControlledEntity).attack).useAttack();
-                    stm.get(currentEntity).sp -= mvm.get(currentEntity).moveList.get(turns.get(currentComputerControlledEntity).attack).spCost();
-                    currentMove = mvm.get(currentEntity).moveList.get(turns.get(currentComputerControlledEntity).attack);
+                currentEntity = computerTurns.get(currentComputerControlledEntity).entity;
+                if (computerTurns.get(currentComputerControlledEntity).attack != -1) {
+                    mvm.get(currentEntity).moveList.get(computerTurns.get(currentComputerControlledEntity).attack).useAttack();
+                    stm.get(currentEntity).sp -= mvm.get(currentEntity).moveList.get(computerTurns.get(currentComputerControlledEntity).attack).spCost();
+                    currentMove = mvm.get(currentEntity).moveList.get(computerTurns.get(currentComputerControlledEntity).attack);
                     showAttackMessage();
                     turnPhase = 2;
                 } else {
