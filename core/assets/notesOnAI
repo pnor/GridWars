@@ -1,3 +1,14 @@
+################### Issues with Current AI ########################################
+- Doesnt know status effects well (no real distinction between varying intensities of effects)
+- Doesn't account for effect durations
+- Doesnt account for healing sp
+- Turn Order not accounted for (not really)
+- Doesn't account for things not having status effect component
+
+
+
+
+
 Standard Winning Criteria ---
 
 Defeat all opponents
@@ -39,3 +50,6 @@ Objects Needed
     + capable of looking at Move Objects and the Board to determine best movement
 - Move Object (to represent each move)
     + get Array<Moves> to iterate through to get best
+
+
+

@@ -37,7 +37,7 @@ public class EntityValue implements Comparable {
     public int getValue() {
         int value = 100;
         value *= maxHp / hp;
-        value += statusEffect * 20;
+        value -= statusEffect * 20; //debug for now more is worse
         return value;
     }
 
@@ -49,5 +49,9 @@ public class EntityValue implements Comparable {
             return -1;
         else
             return 0;
+    }
+
+    public EntityValue copy() {
+        return new EntityValue(pos.copy(), team, hp, maxHp, sp, attack, defense, statusEffect);
     }
 }

@@ -169,7 +169,7 @@ public class BattleScreen implements Screen {
 
         MoveConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, stage);
 
-        computer = new ComputerPlayer(BoardComponent.boards, teams.get(1));
+        computer = new ComputerPlayer(BoardComponent.boards, teams, 1, 2);
     }
 
 
@@ -593,24 +593,28 @@ public class BattleScreen implements Screen {
         //region computerTurn
         if (playingComputerTurn) {
             Entity currentEntity;
+            Turn currentTurn =
+                    (currentComputerControlledEntity < computerTurns.size)? computerTurns.get(currentComputerControlledEntity) : null;
             timeAfterMove += delta;
 
-            if (currentComputerControlledEntity < computerTurns.size && computerTurns.get(currentComputerControlledEntity) == null) {
-                //skip
+            if (currentComputerControlledEntity < computerTurns.size && currentTurn == null) { //entity is dead/skip turn
                 currentComputerControlledEntity++;
                 turnPhase = 0;
                 timeAfterMove = 0;
             }
 
             if (timeAfterMove >= .3f && turnPhase == 0) { //Move
-                BoardComponent.boards.move(computerTurns.get(currentComputerControlledEntity).entity, computerTurns.get(currentComputerControlledEntity).pos);
+                BoardComponent.boards.move(currentTurn.entity, currentTurn.pos);
                 turnPhase = 1;
             } else if (timeAfterMove >= 1f && turnPhase == 1) { //use attack
-                currentEntity = computerTurns.get(currentComputerControlledEntity).entity;
-                if (computerTurns.get(currentComputerControlledEntity).attack != -1) {
-                    mvm.get(currentEntity).moveList.get(computerTurns.get(currentComputerControlledEntity).attack).useAttack();
-                    stm.get(currentEntity).sp -= mvm.get(currentEntity).moveList.get(computerTurns.get(currentComputerControlledEntity).attack).spCost();
-                    currentMove = mvm.get(currentEntity).moveList.get(computerTurns.get(currentComputerControlledEntity).attack);
+                currentEntity = currentTurn.entity;
+                if (currentTurn.attack != -1) {
+                    if (currentTurn.direction > 0)
+                        for (int i = 0; i < currentTurn.direction; i++)
+                            Move.orientAttack(true, mvm.get(currentEntity).moveList.get(currentTurn.attack));
+                    mvm.get(currentEntity).moveList.get(currentTurn.attack).useAttack();
+                    stm.get(currentEntity).sp -= mvm.get(currentEntity).moveList.get(currentTurn.attack).spCost();
+                    currentMove = mvm.get(currentEntity).moveList.get(currentTurn.attack);
                     showAttackMessage();
                     turnPhase = 2;
                 } else {
@@ -624,7 +628,7 @@ public class BattleScreen implements Screen {
                 currentComputerControlledEntity++;
             }
 
-            if (turnPhase == 3) {
+            if (turnPhase == 3) { //next turn
                 timeAfterMove += delta;
                 if (timeAfterMove >= .5f) {
                     timeAfterMove = 0;
@@ -754,7 +758,7 @@ public class BattleScreen implements Screen {
     }
 
     public void showMovementTiles() {
-        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity), new Array<>(), -1)) {
+        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity))) {
             if (t.isOccupied())
                 continue;
             if (!t.getIsListening()) {
@@ -769,7 +773,7 @@ public class BattleScreen implements Screen {
      * the board, so a try catch loop should be written around it.
      */
     public void removeMovementTiles() {
-        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity), new Array<>(), -1))
+        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity)))
             if (t != null) {
                 t.revertTileColor();
                 t.stopListening();
@@ -820,7 +824,8 @@ public class BattleScreen implements Screen {
      *
      * @return {@link Array} of {@link Tile}s.
      */
-    private Array<Tile> getMovableSquares(BoardPosition bp, int spd, Array<Tile> tiles, int directionCameFrom) {
+    //Old
+    private Array<Tile> getMovableSquaresMK2(BoardPosition bp, int spd, Array<Tile> tiles, int directionCameFrom) {
         BoardPosition next = new BoardPosition(-1, -1);
 
         if (spd == 0)
@@ -847,7 +852,136 @@ public class BattleScreen implements Screen {
 
             //recursively call other tiles
             tiles.add(BoardComponent.boards.getBoard().getTile(next.r, next.c));
-            getMovableSquares(next, spd - 1, tiles, (i + 2) % 4);
+            getMovableSquaresMK2(next, spd - 1, tiles, (i + 2) % 4);
+        }
+
+        return tiles;
+    }
+
+    /**
+     * Algorithm that returns all tiles that can be moved to based on speed. Calls a recursive method. Takes into account barriers and blockades, while
+     * avoiding duplicates of the same tile.
+     * @param bp Position that is being branched from
+     * @param spd remaining tiles the entity can move
+     * @return {@link Array} of {@link Tile}s.
+     */
+    private Array<Tile> getMovableSquares(BoardPosition bp, int spd) {
+        BoardPosition next = new BoardPosition(-1, -1);
+        Array<Tile> tiles = new Array<>();
+
+        if (spd == 0)
+            return tiles;
+
+        //get spread of tiles upwards
+        getMovableSquaresSpread(bp, spd, tiles, -1, 2);
+        //get spread of tiles downwards
+        getMovableSquaresSpread(bp, spd, tiles, -1, 0);
+
+        //fill in remaining line of unfilled spaces
+       getMovableSquaresLine(bp, spd, tiles, -1, false);
+
+        return tiles;
+    }
+
+    /**
+     * Recursive algorithm that returns all tiles in one direction that can be moved to based on speed. Takes into account barriers and blockades.
+     * @param bp Position that is being branched from
+     * @param spd remaining tiles the entity can move
+     * @param tiles {@link Array} of tiles that can be moved on
+     * @param directionCameFrom direction the previous tile came from. Eliminates the need to check if the next tile is already in the
+     *                          {@link Array}.
+     *                          <p>-1: No direction(starting)
+     *                          <p>0: top
+     *                          <p>1: left
+     *                          <p>2: bottom
+     *                          <p>3: right
+     * @param sourceDirection the direction it is branching from. This prevents the "U-Turns" that would overlap with other directions
+     *                        <p>-1: No direction(starting)
+     *                          <p>0: top
+     *                          <p>1: left
+     *                          <p>2: bottom
+     *                          <p>3: right
+     * @return {@link Array} of {@link Tile}s.
+     */
+    private Array<Tile> getMovableSquaresSpread(BoardPosition bp, int spd, Array<Tile> tiles, int directionCameFrom, int sourceDirection) {
+        BoardPosition next = new BoardPosition(-1, -1);
+
+        if (spd == 0)
+            return tiles;
+
+        for (int i = 0; i < 4; i++) {
+            if (directionCameFrom == i || sourceDirection == i) //Already checked tile -> skip!
+                continue;
+
+            if (i == 0) //set position
+                next.set(bp.r - 1, bp.c);
+            else if (i == 1)
+                next.set(bp.r, bp.c - 1);
+            else if (i == 2)
+                next.set(bp.r + 1, bp.c);
+            else if (i == 3)
+                next.set(bp.r, bp.c + 1);
+
+            //check if valid
+            if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
+                    || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
+                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
+                continue;
+
+            //recursively call other tiles
+            tiles.add(BoardComponent.boards.getBoard().getTile(next.r, next.c));
+            getMovableSquaresSpread(next, spd - 1, tiles, (i + 2) % 4, sourceDirection);
+        }
+
+        return tiles;
+    }
+
+    /**
+     * Recursive algorithm that returns all tiles in one direction and that are in a line. Takes into account barriers and blockades.
+     * @param bp Position that is being branched from
+     * @param spd remaining tiles the entity can move
+     * @param tiles {@link Array} of tiles that can be moved on
+     * @param directionCameFrom direction the previous tile came from. Eliminates the need to check if the next tile is already in the
+     *                          {@link Array}.
+     *                          <p>-1: No direction(starting)
+     *                          <p>0: top
+     *                          <p>1: left
+     *                          <p>2: bottom
+     *                          <p>3: right
+     * @return {@link Array} of {@link Tile}s.
+     */
+    private Array<Tile> getMovableSquaresLine(BoardPosition bp, int spd, Array<Tile> tiles, int directionCameFrom, boolean vertical) {
+        BoardPosition next = new BoardPosition(-1, -1);
+
+        if (spd == 0)
+            return tiles;
+
+        for (int i = 0; i < 2; i++) {
+            if (directionCameFrom == i) //Already checked tile -> skip!
+                continue;
+
+            //set position
+            if (i == 0) {
+                if (vertical)
+                    next.set(bp.r - 1, bp.c);
+                else
+                    next.set(bp.r, bp.c - 1);
+            } else if (i == 1) {
+                if (vertical)
+                    next.set(bp.r + 1, bp.c);
+                else
+                    next.set(bp.r, bp.c + 1);
+            }
+
+            //check if valid
+            if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
+                    || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
+                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
+                continue;
+
+            //recursively call other tiles
+            tiles.add(BoardComponent.boards.getBoard().getTile(next.r, next.c));
+            getMovableSquaresLine(next, spd - 1, tiles, (i + 1) % 2, vertical);
         }
 
         return tiles;

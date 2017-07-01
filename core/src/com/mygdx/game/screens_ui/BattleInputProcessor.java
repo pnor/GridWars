@@ -66,15 +66,13 @@ public class BattleInputProcessor implements InputProcessor {
             if (amount == 1) {
                 if (mvm.has(battleScreen.getSelectedEntity())) {
                     for (Move move : mvm.get(battleScreen.getSelectedEntity()).moveList) {
-                        Move.orientAttack(true, move.getRange());
-                        move.getVisuals().setTargetPositions(move.getRange());
+                        Move.orientAttack(true, move);
                     }
                 }
             } else if (amount == -1) {
                 if (mvm.has(battleScreen.getSelectedEntity())) {
                     for (Move move : mvm.get(battleScreen.getSelectedEntity()).moveList) {
-                        Move.orientAttack(false, move.getRange());
-                        move.getVisuals().setTargetPositions(move.getRange());
+                        Move.orientAttack(false, move);
                     }
                 }
             }

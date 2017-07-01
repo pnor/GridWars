@@ -24,6 +24,11 @@ public class Move {
 
     private Entity user;
 
+    //Information for AI processing
+    private int statusEffectChanges; //cuases status effects
+    private boolean pierces; //ignores defense
+    private float ampValue; //whether it multiplies attack
+
     /**
      * Creates a move that can be used. The move's attack message is displayed when it is used.
      * @param name2 name
@@ -35,7 +40,7 @@ public class Move {
      * @param vis visual effect
      */
     public Move(String name2, String message, Entity usr, int cost, Array<BoardPosition> rnge,
-                Attack atk, Visuals vis) {
+                Attack atk, Visuals vis, int AIStatusEffect, boolean AIPierces, float AIamp) {
         name = name2;
         attackMessage = message;
         user = usr;
@@ -43,6 +48,10 @@ public class Move {
         range = rnge;
         attack  = atk;
         visuals = vis;
+
+        statusEffectChanges = AIStatusEffect;
+        pierces = AIPierces;
+        ampValue = AIamp;
     }
 
     /**
@@ -56,13 +65,17 @@ public class Move {
      * @param atk effect of attack
      * @param vis visual effect
      */
-    public Move(String name2, Entity usr, int cost, Array<BoardPosition> rnge, Attack atk, Visuals vis) {
+    public Move(String name2, Entity usr, int cost, Array<BoardPosition> rnge, Attack atk, Visuals vis, int AIStatusEffect, boolean AIPierces, float AIamp) {
         name = name2;
         user = usr;
         spCost = cost;
         range = rnge;
         attack  = atk;
         visuals = vis;
+
+        statusEffectChanges = AIStatusEffect;
+        pierces = AIPierces;
+        ampValue = AIamp;
     }
 
     /**
@@ -89,9 +102,10 @@ public class Move {
      * Changes the effected squares of an attack based on direction. Note that this will change the range of an
      * Attack, not return a copy!
      * @param clockwise whether the range will be spun clockwise(true) or counterclockwise(false)
-     * @param boardPositions positions to be oriented
+     * @param move move to be oriented
      */
-    public static void orientAttack(boolean clockwise, Array<BoardPosition> boardPositions) {
+    public static void orientAttack(boolean clockwise, Move move) {
+        Array<BoardPosition> boardPositions = move.getRange();
         if (clockwise) {
             for (BoardPosition bp : boardPositions) {
                 //swap r and c
@@ -107,6 +121,8 @@ public class Move {
                 bp.c = temp;
             }
         }
+        move.getVisuals().setTargetPositions(move.getRange());
+
     }
 
     public void updateVisuals(float dt) {
@@ -132,4 +148,10 @@ public class Move {
     public Array<BoardPosition> getRange() {
         return range;
     }
+
+    public int getStatusEffectChanges() { return statusEffectChanges; }
+
+    public boolean getPierces() { return pierces; }
+
+    public float getAmpValue() { return ampValue; }
 }

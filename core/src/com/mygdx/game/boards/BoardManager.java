@@ -137,6 +137,14 @@ public class BoardManager {
     }
 
     /**
+     * @param pos position being checked
+     * @return whether the position is in the bounds of the board
+     */
+    public boolean containsPosition(BoardPosition pos) {
+        return !(pos.r < 0 || pos.c < 0 || pos.r >= board.getRowSize() || pos.c >= board.getColumnSize());
+    }
+
+    /**
      * @return All entities on the {@link CodeBoard}
      */
     public Array<Entity> getAllEntities() {

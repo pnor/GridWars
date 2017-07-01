@@ -17,24 +17,82 @@ import static com.mygdx.game.ComponentMappers.*;
  */
 public /*abstract*/ class ComputerPlayer {
     private BoardManager boards;
-    private Team team;
+    private BoardState boardState;
+    private Array<Team> teams;
+    private int teamControlled;
+    private int depthLevel;
 
-    public ComputerPlayer(BoardManager b, Team t) {
+    public ComputerPlayer(BoardManager b, Array<Team> t, int teamIndexControlled, int depth) {
         boards = b;
-        team = t;
-    }
-
-    private Array<Turn> getAllPossibleTurns(Entity e) {
-        //...
-        return null;
+        teams = t;
+        teamControlled = teamIndexControlled;
+        depthLevel = depth;
     }
 
     private Array<Turn> getBestTurns() {
-        for (Entity e : team.getEntities()) {
+        updateBoardState();
+        Array<Turn> turns;
 
+        for (Entity e : teams.get(teamControlled).getEntities()) {
+            int bestTurnVal = -9999999;
+            Array<Turn> allTurns = getAllPossibleTurns(e);
+            for (Turn t : allTurns)
+                bestTurnVal = Math.max(bestTurnVal, initialAlphaBeta(t, new BoardState(boards.getCodeBoard().getEntities()), depthLevel, true));
         }
 
         return null;
+    }
+
+    /**
+     * Gets the best turn by seeing Turn returns the highest heuristic value. Does not use recursion, so it only goes
+     * to a depth of 1.
+     * @return Array of the best turns for each entity.
+     */
+    public Array<Turn> simpleGetBestTurns() {
+        updateBoardState();
+        Array<Turn> turns = new Array<>();
+
+        for (Entity e : teams.get(teamControlled).getEntities()) {
+            int bestTurnVal = -9999999;
+            int curValue = 0;
+            Array<Turn> allTurns = getAllPossibleTurns(e);
+            Turn bestTurn = null;
+
+            for (Turn t : allTurns) {
+                curValue = boardState.copy().tryTurn(t).evaluate();
+                if (curValue > bestTurnVal) {
+                    bestTurnVal = curValue;
+                    bestTurn = t;
+                }
+            }
+            turns.add(bestTurn);
+        }
+
+        return turns;
+    }
+
+    private int initialAlphaBeta(Turn turn, BoardState board, int depth, boolean maximisingPlayer) {
+        return 0;
+    }
+
+    /**
+     * @return Gets the value of a move using alpha-beta pruning
+     */
+    private int alphabeta(BoardState board, int depth, int alpha, int beta, boolean maximisingPlayer) {
+        return 0;
+    }
+
+    private Array<Turn> getAllPossibleTurns(Entity e) {
+        Array<Turn> turns = new Array<>();
+        for (BoardPosition pos : getPossiblePositions(bm.get(e).pos, stm.get(e).getModSpd(e))) {
+            for (int i = 0; i < mvm.get(e).moveList.size; i++) {
+                for (int j = 1; j < 5; j++) {
+                    turns.add(new Turn(e, pos, i, j % 4));
+                }
+            }
+        }
+
+        return turns;
     }
 
     /**
@@ -46,33 +104,88 @@ public /*abstract*/ class ComputerPlayer {
         // Not the best way to do this, but is a good dummy system
         int numTries = 0; //to see if it can use an attack
         int attackChoice = -1;
-        for (Entity e : team.getEntities()) {
+        for (Entity e : teams.get(teamControlled).getEntities()) {
             if (!stm.get(e).alive) {
                 turns.add(null);
                 continue;
             }
             //decide if move is valid
-            while (numTries < 10) {
-                attackChoice = MathUtils.random(0, mvm.get(e).moveList.size - 1);
-                if (mvm.get(e).moveList.get(attackChoice).spCost() <= stm.get(e).sp)
-                    break;
-                else
-                    attackChoice = -1;
+            if (status.has(e) && state.get(e).canAttack) {
+                while (numTries < 10) {
+                    attackChoice = MathUtils.random(-1, mvm.get(e).moveList.size - 1);
+                    if (attackChoice == -1)
+                        break;
+                    if (mvm.get(e).moveList.get(attackChoice).spCost() <= stm.get(e).sp)
+                        break;
+                    else
+                        attackChoice = -1;
+                    numTries++;
+                }
             }
-            turns.add(new Turn(e, getPossiblePositions(bm.get(e).pos, stm.get(e).getModSpd(e), new Array<BoardPosition>(), -1).random(), attackChoice, 0));
+            //movement tiles
+            Array<BoardPosition> possibleTiles = getPossiblePositions(bm.get(e).pos, stm.get(e).getModSpd(e));
+            if (possibleTiles.size == 0 || !state.get(e).canMove)
+                turns.add(new Turn(e, bm.get(e).pos, attackChoice, MathUtils.random(0, 3)));
+            else
+                turns.add(new Turn(e, possibleTiles.random(), attackChoice, MathUtils.random(0, 3)));
         }
 
         return turns;
     }
 
-    private Array<BoardPosition> getPossiblePositions(BoardPosition bp, int spd, Array<BoardPosition> positions, int directionCameFrom) {
+    /**
+     * Algorithm that returns all positions that can be moved to based on speed. Calls a recursive method. Takes into account barriers and blockades, while
+     * avoiding duplicates of the same tile.
+     * @param bp Position that is being branched from
+     * @param spd remaining tiles the entity can move
+     * @return {@link Array} of {@link BoardPosition}s.
+     */
+    private Array<BoardPosition> getPossiblePositions(BoardPosition bp, int spd) {
+        BoardPosition next = new BoardPosition(-1, -1);
+        Array<BoardPosition> positions = new Array<>();
+
+        if (spd == 0)
+            return positions;
+
+        //get spread of tiles upwards
+        getPositionsSpread(bp, spd, positions, -1, 2);
+        //get spread of tiles downwards
+        getPositionsSpread(bp, spd, positions, -1, 0);
+
+        //fill in remaining line of unfilled spaces
+        getPositionsLine(bp, spd, positions, -1, false);
+
+        return positions;
+    }
+
+    /**
+     * Recursive algorithm that returns all positions in one direction that can be moved to based on speed. Takes into account barriers and blockades.
+     * @param bp Position that is being branched from
+     * @param spd remaining tiles the entity can move
+     * @param positions {@link Array} of tiles that can be moved on
+     * @param directionCameFrom direction the previous tile came from. Eliminates the need to check if the next tile is already in the
+     *                          {@link Array}.
+     *                          <p>-1: No direction(starting)
+     *                          <p>0: top
+     *                          <p>1: left
+     *                          <p>2: bottom
+     *                          <p>3: right
+     * @param sourceDirection the direction it is branching from. This prevents the "U-Turns" that would overlap with other directions
+     *                        <p>-1: No direction(starting)
+     *                          <p>0: top
+     *                          <p>1: left
+     *                          <p>2: bottom
+     *                          <p>3: right
+     * @return {@link Array} of {@link BoardPosition}s.
+     */
+    private Array<BoardPosition> getPositionsSpread(BoardPosition bp, int spd, Array<BoardPosition> positions, int directionCameFrom, int sourceDirection) {
         BoardPosition next = new BoardPosition(-1, -1);
 
         if (spd == 0)
             return positions;
 
         for (int i = 0; i < 4; i++) {
-            if (directionCameFrom == i) //Already checked tile -> skip!
+            if (directionCameFrom == i || sourceDirection == i) //Already checked tile -> skip!
                 continue;
 
             if (i == 0) //set position
@@ -92,11 +205,66 @@ public /*abstract*/ class ComputerPlayer {
 
             //recursively call other tiles
             positions.add(next.copy());
-            getPossiblePositions(next, spd - 1, positions, (i + 2) % 4);
+            getPositionsSpread(next, spd - 1, positions, (i + 2) % 4, sourceDirection);
         }
 
         return positions;
     }
 
-    public int getTeamSize() { return team.getEntities().size; }
+    /**
+     * Recursive algorithm that returns all tiles in one direction and that are in a line. Takes into account barriers and blockades.
+     * @param bp Position that is being branched from
+     * @param spd remaining tiles the entity can move
+     * @param positions {@link Array} of tiles that can be moved on
+     * @param directionCameFrom direction the previous tile came from. Eliminates the need to check if the next tile is already in the
+     *                          {@link Array}.
+     *                          <p>-1: No direction(starting)
+     *                          <p>0: top
+     *                          <p>1: left
+     *                          <p>2: bottom
+     *                          <p>3: right
+     * @return {@link Array} of {@link BoardPosition}s.
+     */
+    private Array<BoardPosition> getPositionsLine(BoardPosition bp, int spd, Array<BoardPosition> positions, int directionCameFrom, boolean vertical) {
+        BoardPosition next = new BoardPosition(-1, -1);
+
+        if (spd == 0)
+            return positions;
+
+        for (int i = 0; i < 2; i++) {
+            if (directionCameFrom == i) //Already checked tile -> skip!
+                continue;
+
+            //set position
+            if (i == 0) {
+                if (vertical)
+                    next.set(bp.r - 1, bp.c);
+                else
+                    next.set(bp.r, bp.c - 1);
+            } else if (i == 1) {
+                if (vertical)
+                    next.set(bp.r + 1, bp.c);
+                else
+                    next.set(bp.r, bp.c + 1);
+            }
+
+            //check if valid
+            if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
+                    || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
+                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
+                continue;
+
+            //recursively call other tiles
+            positions.add(next.copy());
+            getPositionsLine(next, spd - 1, positions, (i + 1) % 2, vertical);
+        }
+
+        return positions;
+    }
+
+    public void updateBoardState() {
+        boardState = new BoardState(boards.getCodeBoard().getEntities());
+    }
+
+    public int getTeamSize() { return teams.get(teamControlled).getEntities().size; }
 }

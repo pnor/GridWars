@@ -367,7 +367,7 @@ public class MoveConstructor {
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{TackleVis.copy(0.1f, 1), TackleVis})));
+                new Array<VisualEvent>(new VisualEvent[]{TackleVis.copy(0.1f, 1), TackleVis})), 0, false, 1);
     }
 
     public static Move StarSpin(Entity user) {
@@ -417,7 +417,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
-                new Array<VisualEvent>(new VisualEvent[]{spin})));
+                new Array<VisualEvent>(new VisualEvent[]{spin})), 0, false, 1);
     }
 
     //Vulpedge
@@ -488,7 +488,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{sliceVis, crossSliceVis})));
+                new Array<VisualEvent>(new VisualEvent[]{sliceVis, crossSliceVis})), 0, false, 1);
     }
 
     public static Move pierceSwordSlice(Entity user) {
@@ -589,7 +589,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{glow ,sliceVis, crossSliceVis})));
+                new Array<VisualEvent>(new VisualEvent[]{glow ,sliceVis, crossSliceVis})), 0, true, 1);
     }
 
     public static Move guardPiercer(Entity user) {
@@ -706,7 +706,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{circles.copy(.1f, 5), circles ,sliceVis, crossSliceVis})));
+                new Array<VisualEvent>(new VisualEvent[]{circles.copy(.1f, 5), circles ,sliceVis, crossSliceVis})), 1, false, 1);
     }
 
     public static Move poisonBlade(Entity user) {
@@ -821,7 +821,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{circles.copy(.1f, 5), circles, sliceVis, crossSliceVis})));
+                new Array<VisualEvent>(new VisualEvent[]{circles.copy(.1f, 5), circles, sliceVis, crossSliceVis})), 1, false, 1);
     }
 
     //Canight
@@ -923,7 +923,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{curveSliceVis, crossSliceVis.copy(), sliceVis, crossSliceVis.copy(), curveSliceVis.copy(), sliceVis.copy()})));
+                new Array<VisualEvent>(new VisualEvent[]{curveSliceVis, crossSliceVis.copy(), sliceVis, crossSliceVis.copy(), curveSliceVis.copy(), sliceVis.copy()})), 0, false, 2);
     }
 
     public static Move Bark(Entity user) {
@@ -1001,7 +1001,7 @@ public class MoveConstructor {
 
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
-                new Array<VisualEvent>(new VisualEvent[]{bark.copy(.1f), bark2.copy(.1f), bark.copy(.1f), bark2.copy(.1f) ,bark, bark2})));
+                new Array<VisualEvent>(new VisualEvent[]{bark.copy(.1f), bark2.copy(.1f), bark.copy(.1f), bark2.copy(.1f) ,bark, bark2})), 1, false, 0);
     }
 
     //Catdroid
@@ -1050,7 +1050,7 @@ public class MoveConstructor {
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{claw})));
+                new Array<VisualEvent>(new VisualEvent[]{claw})), 0, false, 1);
     }
 
     public static Move laserBeam(Entity user) {
@@ -1117,7 +1117,7 @@ public class MoveConstructor {
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{laser})));
+                new Array<VisualEvent>(new VisualEvent[]{laser})), 0, false, 1);
     }
 
     public static Move electricalFire(Entity user) {
@@ -1195,7 +1195,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{explosions, fire})));
+                new Array<VisualEvent>(new VisualEvent[]{explosions, fire})), 1, false, 1);
     }
 
     public static Move laserSpray(Entity user) {
@@ -1274,13 +1274,13 @@ public class MoveConstructor {
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
                         if (stm.has(enemy))
-                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e)- stm.get(enemy).getModDef(enemy), 0, 999);
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
 
                         if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{laser})));
+                new Array<VisualEvent>(new VisualEvent[]{laser})), 0, false, 1);
     }
 
     //Pyrobull
@@ -1354,7 +1354,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{explode, bam})));
+                new Array<VisualEvent>(new VisualEvent[]{explode, bam})), 0, false, 1);
     }
 
     public static Move sear(Entity user) {
@@ -1401,7 +1401,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{fire})));
+                new Array<VisualEvent>(new VisualEvent[]{fire})), 1, false, 0);
     }
 
     public static Move wildFire(Entity user) {
@@ -1456,7 +1456,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{}),
-                new Array<VisualEvent>(new VisualEvent[]{explosions})));
+                new Array<VisualEvent>(new VisualEvent[]{explosions})), 1, false, .5f);
     }
 
     //Freezird
@@ -1534,7 +1534,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
-                new Array<VisualEvent>(new VisualEvent[]{freeze, sparkle})));
+                new Array<VisualEvent>(new VisualEvent[]{freeze, sparkle})), 1, false, 1);
     }
 
     public static Move tailwind(Entity user) {
@@ -1615,7 +1615,7 @@ public class MoveConstructor {
                             status.get(enemy).addStatusEffect(speedUp(), enemy);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
-                new Array<VisualEvent>(new VisualEvent[]{largeSparkle, sparkle, largeSparkle.copy(), sparkle.copy()})));
+                new Array<VisualEvent>(new VisualEvent[]{largeSparkle, sparkle, largeSparkle.copy(), sparkle.copy()})), -1, false, 0);
     }
 
     public static Move twister(Entity user) {
@@ -1690,7 +1690,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
-                new Array<VisualEvent>(new VisualEvent[]{shuriken, sparkle})));
+                new Array<VisualEvent>(new VisualEvent[]{shuriken, sparkle})), 0, false, 1.5f);
     }
 
     public static Move freeze(Entity user) {
@@ -1760,7 +1760,7 @@ public class MoveConstructor {
                             status.get(enemy).addStatusEffect(freeze(), enemy);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
-                new Array<VisualEvent>(new VisualEvent[]{freeze, sparkle})));
+                new Array<VisualEvent>(new VisualEvent[]{freeze, sparkle})), 1, false, 0);
     }
 
     //Medicarp
@@ -1876,7 +1876,7 @@ public class MoveConstructor {
                             stm.get(enemy).hp = MathUtils.clamp(stm.get(enemy).hp + 2, 0, stm.get(enemy).getModMaxHp(enemy));
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{changeToGreen, sparkle, explode, returnToNormalGradual, returnToNormal})));
+                new Array<VisualEvent>(new VisualEvent[]{changeToGreen, sparkle, explode, returnToNormalGradual, returnToNormal})), 0, true, -2);
     }
 
     public static Move clear(Entity user) {
@@ -1991,7 +1991,7 @@ public class MoveConstructor {
                             status.get(enemy).removeAll(enemy);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{changeToBlue, sparkle, explode, returnToNormalGradual, returnToNormal})));
+                new Array<VisualEvent>(new VisualEvent[]{changeToBlue, sparkle, explode, returnToNormalGradual, returnToNormal})), 1, false, 0);
     }
 
     public static Move recover(Entity user) {
@@ -2058,7 +2058,7 @@ public class MoveConstructor {
                         stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + 3, 0, stm.get(e).getModMaxHp(e));
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{changeToGreen, sparkle, returnToNormalGradual, returnToNormal})));
+                new Array<VisualEvent>(new VisualEvent[]{changeToGreen, sparkle, returnToNormalGradual, returnToNormal})), 0, true, -2);
     }
 
     public static Move submerge(Entity user) {
@@ -2225,7 +2225,7 @@ public class MoveConstructor {
                             stm.get(enemy).hp = MathUtils.clamp(stm.get(enemy).hp - 3, 0, stm.get(enemy).getModMaxHp(enemy));
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{ripples, waterBall, changeToBlue, largeSparkle, returnToNormalGradual, returnToNormal})));
+                new Array<VisualEvent>(new VisualEvent[]{ripples, waterBall, changeToBlue, largeSparkle, returnToNormalGradual, returnToNormal})), 0, true, 2);
     }
 
     //Thoughtoise
@@ -2333,7 +2333,7 @@ public class MoveConstructor {
                             status.get(e).addStatusEffect(defenseless(), e);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{sparkle, explode,  returnToNormalGradual, returnToNormal})));
+                new Array<VisualEvent>(new VisualEvent[]{sparkle, explode,  returnToNormalGradual, returnToNormal})), 1, true, -.5f);
     }
 
     public static Move drench(Entity user) {
@@ -2478,7 +2478,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{bubble, sparkle, ripple, largeSparkle})));
+                new Array<VisualEvent>(new VisualEvent[]{bubble, sparkle, ripple, largeSparkle})), 0, false, 1);
     }
 
     public static Move electrocute(Entity user) {
@@ -2635,7 +2635,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{spinning, ripple, shock, largeSparkle})));
+                new Array<VisualEvent>(new VisualEvent[]{spinning, ripple, shock, largeSparkle})), 1, false, .5f);
     }
 
     public static Move cometShower(Entity user) {
@@ -2769,7 +2769,7 @@ public class MoveConstructor {
                     new BoardPosition(-4, 1),  new BoardPosition(1, -4),  new BoardPosition(3, -1), new BoardPosition(1, 3)}),
                 new Array<VisualEvent>(new VisualEvent[]{
                         preSparkles.copy(), preBooms.copy(), preSparkles.copy(), preBooms.copy(),
-                        comets.copy(), ripple.copy(), comets.copy(), ripple.copy(), comets.copy(), ripple, comets, preBooms.copy(), preBooms})));
+                        comets.copy(), ripple.copy(), comets.copy(), ripple.copy(), comets.copy(), ripple, comets, preBooms.copy(), preBooms})), 0, false, 1);
     }
 
     //Thundog
@@ -2858,7 +2858,7 @@ public class MoveConstructor {
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{shock, claw})));
+                new Array<VisualEvent>(new VisualEvent[]{shock, claw})), 1, false, 1);
     }
 
     public static Move charge(Entity user) {
@@ -2967,7 +2967,7 @@ public class MoveConstructor {
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{changeToBlack, charges, largeSparkle, returnToNormalGradual, returnToNormal})));
+                new Array<VisualEvent>(new VisualEvent[]{changeToBlack, charges, largeSparkle, returnToNormalGradual, returnToNormal})), -2, false, 0);
     }
 
     public static Move superCharge(Entity user) {
@@ -3072,7 +3072,7 @@ public class MoveConstructor {
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{changeToBlack, charges, largeSparkle, returnToNormalGradual, returnToNormal})));
+                new Array<VisualEvent>(new VisualEvent[]{changeToBlack, charges, largeSparkle, returnToNormalGradual, returnToNormal})), -4, false, 0);
     }
 
     public static Move voltDeluge(Entity user) {
@@ -3201,7 +3201,7 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{
                 new BoardPosition(-1, 1), new BoardPosition(-1, -1),  new BoardPosition(-2, 0),  new BoardPosition(-3, 1), new BoardPosition(-3, -1)}),
                 new Array<VisualEvent>(new VisualEvent[]{
-                        ions, doNothing, rippleOut.copy(), shocking.copy(), rippleOut, shocking})));
+                        ions, doNothing, rippleOut.copy(), shocking.copy(), rippleOut, shocking})), 1, false, 1);
     }
 
     //Mummy
@@ -3247,7 +3247,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{barrage})));
+                new Array<VisualEvent>(new VisualEvent[]{barrage})), 0, false, 1);
     }
 
     public static Move feint(Entity user) {
@@ -3329,7 +3329,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{explode.copy(), barrage.copy(), explode.copy(), barrage.copy(), explode, barrage})));
+                new Array<VisualEvent>(new VisualEvent[]{explode.copy(), barrage.copy(), explode.copy(), barrage.copy(), explode, barrage})), 0, true, 1);
     }
 
     public static Move basiliskPunch(Entity user) {
@@ -3443,7 +3443,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{barrage, doNothing, sparkle.copy(), bubble.copy(), sparkle, bubble})));
+                new Array<VisualEvent>(new VisualEvent[]{barrage, doNothing, sparkle.copy(), bubble.copy(), sparkle, bubble})), 1, false, 1);
     }
 
     public static Move curse(Entity user) {
@@ -3573,7 +3573,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{fire, spinningDiamond.copy(), sparkle.copy(), spinningDiamond, sparkle})));
+                new Array<VisualEvent>(new VisualEvent[]{fire, spinningDiamond.copy(), sparkle.copy(), spinningDiamond, sparkle})), 2, false, 0);
     }
 
     //squizzerd
@@ -3681,7 +3681,7 @@ public class MoveConstructor {
                             status.get(e).removeAll(e);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{sparkle, explode,  returnToNormalGradual, returnToNormal})));
+                new Array<VisualEvent>(new VisualEvent[]{sparkle, explode,  returnToNormalGradual, returnToNormal})), 1, true, .5f);
     }
 
     public static Move ignite(Entity user) {
@@ -3857,7 +3857,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{redSparkleOut, explode, smallBooms, explodeBig, largerRadiusBooms})));
+                new Array<VisualEvent>(new VisualEvent[]{redSparkleOut, explode, smallBooms, explodeBig, largerRadiusBooms})), 0, false, 1);
     }
 
     public static Move cometShowerClose(Entity user) {
@@ -3991,7 +3991,7 @@ public class MoveConstructor {
                 new BoardPosition(1, 0),  new BoardPosition(1, -1),  new BoardPosition(1, 1)}),
                 new Array<VisualEvent>(new VisualEvent[]{
                         preSparkles.copy(), preBooms.copy(), preSparkles.copy(), preBooms.copy(),
-                        comets.copy(), ripple.copy(), comets.copy(), ripple.copy(), comets.copy(), ripple, comets, preBooms.copy(), preBooms})));
+                        comets.copy(), ripple.copy(), comets.copy(), ripple.copy(), comets.copy(), ripple, comets, preBooms.copy(), preBooms})), 0, true, 1);
     }
 
     //wyvrapor
@@ -4134,7 +4134,7 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{breath, fires})));
+                new Array<VisualEvent>(new VisualEvent[]{breath, fires})), 0, false, 1);
     }
 
     public static Move toxicBreath(Entity user) {
@@ -4269,7 +4269,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0),
                 new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)}),
-                new Array<VisualEvent>(new VisualEvent[]{breath, ripples})));
+                new Array<VisualEvent>(new VisualEvent[]{breath, ripples})), 1, false, 0);
     }
 
     public static Move freshBreath(Entity user) {
@@ -4442,7 +4442,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0),
                 new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)}),
-                new Array<VisualEvent>(new VisualEvent[]{breath, ripples, ripplesLarge})));
+                new Array<VisualEvent>(new VisualEvent[]{breath, ripples, ripplesLarge})), -1, false, 0);
     }
 
     public static Move spaBreath(Entity user) {
@@ -4612,7 +4612,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0),
                 new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)}),
-                new Array<VisualEvent>(new VisualEvent[]{breath, ripples, ripplesLarge})));
+                new Array<VisualEvent>(new VisualEvent[]{breath, ripples, ripplesLarge})), 0, false, -1);
     }
 
     //jellymiss
@@ -4704,12 +4704,13 @@ public class MoveConstructor {
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
 
-                if (!boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                if (!boards.containsPosition(bp) && !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
                     return;
                 progress = MathUtils.clamp(progress + .1f, 0, 1);
 
                 Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
-                am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLUE, progress));
+                if (enemy != null)
+                    am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLUE, progress));
             }
         }, .05f, 10);
 
@@ -4735,7 +4736,7 @@ public class MoveConstructor {
                             stm.get(enemy).hp = MathUtils.clamp(stm.get(enemy).hp += stm.get(enemy).getModMaxHp(enemy) / 2, 0, stm.get(enemy).getModMaxHp(enemy));
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{changeToBlue, largeSparkle, circles, returnToNormalGradual, returnToNormal})));
+                new Array<VisualEvent>(new VisualEvent[]{changeToBlue, largeSparkle, circles, returnToNormalGradual, returnToNormal})), 0, true, -1);
     }
 
     public static Move regen(Entity user) {
@@ -4865,7 +4866,7 @@ public class MoveConstructor {
                             status.get(enemy).addStatusEffect(regeneration(), enemy);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{changeToGreen, regenParticles1, regenParticles2, returnToNormalGradual, returnToNormal})));
+                new Array<VisualEvent>(new VisualEvent[]{changeToGreen, regenParticles1, regenParticles2, returnToNormalGradual, returnToNormal})), -1, true, 0);
     }
 
     public static Move boost(Entity user) {
@@ -5063,7 +5064,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{changeToBlack, ripple.copy(), regenParticles1, ripple.copy(), regenParticles2, ripple.copy(),
-                        returnToNormalGradual, returnToNormal, rippleGold})));
+                        returnToNormalGradual, returnToNormal, rippleGold})), -3, false, 0);
     }
 
     public static Move transfer(Entity user) {
@@ -5181,7 +5182,7 @@ public class MoveConstructor {
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{changeToBlack, rippleSelf, rippleOther, returnToNormalGradual, returnToNormal})));
+                new Array<VisualEvent>(new VisualEvent[]{changeToBlack, rippleSelf, rippleOther, returnToNormalGradual, returnToNormal})), 0, false, -1);
     }
 
     //mirrorman
@@ -5262,7 +5263,7 @@ public class MoveConstructor {
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})));
+                new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})), -4, true, 101);
     }
 
 

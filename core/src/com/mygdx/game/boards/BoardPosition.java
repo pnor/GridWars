@@ -62,6 +62,6 @@ public class BoardPosition {
     }
 
     public String toString() {
-        return "row: " + r + " col: " + c;
+        return "[Row: " + r + " Col: " + c + "]";
     }
 }
