@@ -80,10 +80,6 @@ public abstract class Rules {
         }
         //update the team bar
         screen.updateTeamBar();
-
-        System.out.println("Current Turn : " + currentTeamTurn);
-        System.out.println("Total team turn : " + totalTeams);
-        System.out.println("--------------");
     }
 
     /**

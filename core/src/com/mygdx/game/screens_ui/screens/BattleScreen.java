@@ -384,7 +384,7 @@ public class BattleScreen implements Screen {
                    showEndTurnDisplay();
                    if (rules.getCurrentTeamNumber() == 1) { //debug, should actually figure out whos computer
                        playingComputerTurn = true;
-                       computerTurns = computer.getRandomTurns();
+                       computerTurns = computer.simpleGetBestTurns();
                    } else
                        playingComputerTurn = false;
 
@@ -778,84 +778,6 @@ public class BattleScreen implements Screen {
                 t.revertTileColor();
                 t.stopListening();
             }
-    }
-
-    /**
-     * Returns an array of all tiles that an entity can move on. Returns null if the entity doesn't have a {@code StatComponent}
-     * or its speed is = 0.
-     * @param e entity
-     * @return null if it can't move or an {@code Array} of [@code Tile}s.
-     */
-    //Old movement selection algorithm
-    private Array<Tile> getMovableSquaresRaw(Entity e) {
-        if (!stm.has(e) || stm.get(e).getModSpd(e) == 0)
-            return null;
-
-        int spd = stm.get(e).getModSpd(e);
-        int newR; int newC;
-        int entityRow = bm.get(e).pos.r;
-        int entityCol = bm.get(e).pos.c;
-        Array<Tile> tiles = new Array<Tile>();
-
-        for (int i = -spd; i <= spd; i++) {
-            for (int j = -(spd - Math.abs(i)); j <= (spd - Math.abs(i)); j++) {
-                newR = i + entityRow;
-                newC = j + entityCol;
-                if ((i == 0 && j == 0) || (newR < 0 || newC < 0 || newR >= BoardComponent.boards.getCodeBoard().getRows() || newC >= BoardComponent.boards.getCodeBoard().getColumns()))
-                    continue;
-                tiles.add(BoardComponent.boards.getBoard().getTile(newR, newC));
-            }
-        }
-        return tiles;
-    }
-
-    /**
-     * Recursive algorithm that returns all tiles that can be moved to based on speed. Takes into account barriers and blockades.
-     * @param bp Position that is being branched from
-     * @param spd remaining tiles the entity can move
-     * @param tiles {@link Array} of tiles that can be moved on
-     * @param directionCameFrom direction the previous tile came from. Eliminates the need to check if the next tile is already in the
-     *                          {@link Array}.
-     *                          <p>-1: No direction(starting)
-     *                          <p>0: top
-     *                          <p>1: left
-     *                          <p>2: bottom
-     *                          <p>3: right
-     *
-     * @return {@link Array} of {@link Tile}s.
-     */
-    //Old
-    private Array<Tile> getMovableSquaresMK2(BoardPosition bp, int spd, Array<Tile> tiles, int directionCameFrom) {
-        BoardPosition next = new BoardPosition(-1, -1);
-
-        if (spd == 0)
-            return tiles;
-
-        for (int i = 0; i < 4; i++) {
-            if (directionCameFrom == i) //Already checked tile -> skip!
-                continue;
-
-            if (i == 0) //set position
-                next.set(bp.r - 1, bp.c);
-            else if (i == 1)
-                next.set(bp.r, bp.c - 1);
-            else if (i == 2)
-                next.set(bp.r + 1, bp.c);
-            else if (i == 3)
-                next.set(bp.r, bp.c + 1);
-
-            //check if valid
-            if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
-                    || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
-                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
-                continue;
-
-            //recursively call other tiles
-            tiles.add(BoardComponent.boards.getBoard().getTile(next.r, next.c));
-            getMovableSquaresMK2(next, spd - 1, tiles, (i + 2) % 4);
-        }
-
-        return tiles;
     }
 
     /**

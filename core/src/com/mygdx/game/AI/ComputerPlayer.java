@@ -54,17 +54,26 @@ public /*abstract*/ class ComputerPlayer {
 
         for (Entity e : teams.get(teamControlled).getEntities()) {
             int bestTurnVal = -9999999;
+            int worstValue = 999;
             int curValue = 0;
             Array<Turn> allTurns = getAllPossibleTurns(e);
             Turn bestTurn = null;
 
             for (Turn t : allTurns) {
-                curValue = boardState.copy().tryTurn(t).evaluate();
+                curValue = boardState.copy().tryTurn(t).evaluate(teamControlled);
+                worstValue = Math.min(curValue, worstValue);
                 if (curValue > bestTurnVal) {
+                    System.out.print("!");
                     bestTurnVal = curValue;
                     bestTurn = t;
                 }
+                System.out.print(curValue + ", ");
+
             }
+            System.out.println("\nWorst: " + worstValue);
+            System.out.println("Best: " + bestTurnVal);
+            System.out.println("Best Turn: " + bestTurn);
+            System.out.println("-----------------------------------------------");
             turns.add(bestTurn);
         }
 
@@ -84,11 +93,15 @@ public /*abstract*/ class ComputerPlayer {
 
     private Array<Turn> getAllPossibleTurns(Entity e) {
         Array<Turn> turns = new Array<>();
-        for (BoardPosition pos : getPossiblePositions(bm.get(e).pos, stm.get(e).getModSpd(e))) {
+        Array<BoardPosition> possiblePositions = getPossiblePositions(bm.get(e).pos, stm.get(e).getModSpd(e));
+        possiblePositions.add(bm.get(e).pos.copy()); //no movement
+        for (BoardPosition pos : possiblePositions) {
+            turns.add(new Turn(e, pos, -1, 0)); //no attack
             for (int i = 0; i < mvm.get(e).moveList.size; i++) {
-                for (int j = 1; j < 5; j++) {
-                    turns.add(new Turn(e, pos, i, j % 4));
-                }
+                if (mvm.get(e).moveList.get(i).spCost() > stm.get(e).sp) //if it doesnt have enough sp, skip
+                    continue;
+                for (int j = 0; j < 4; j++) //All directions of attacj
+                        turns.add(new Turn(e, pos, i, j));
             }
         }
 

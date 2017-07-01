@@ -3,6 +3,8 @@ package com.mygdx.game.AI;
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.game.boards.BoardPosition;
 
+import static com.mygdx.game.ComponentMappers.nm;
+
 /**
  * @author Phillip O'Reggio
  */
@@ -21,5 +23,14 @@ public class Turn {
         pos = newPosition;
         attack = attackNo;
         direction = directionNo;
+    }
+
+    public String toString() {
+        return
+                "Turn :\t \n" +
+                        "\t Entity : " + nm.get(entity).name + "  || " + entity.toString() + "\n" +
+                        "\t BoardPosition : " + pos + "\n" +
+                        "\t Attack Index : " + attack +
+                        "\t Direction of Attack : " + direction + " (from last attack)";
     }
 }

@@ -33,19 +33,31 @@ public class EntityValue implements Comparable {
 
     /**
      * Gets the value of the {@link com.badlogic.ashley.core.Entity}.
+     * @param homeTeam value that is treated as the its own team. Being on the homeTeam is treated as addition, while not being on it is treated as
+     *                 subtraction.
+     *
      */
-    public int getValue() {
-        int value = 100;
-        value *= maxHp / hp;
-        value -= statusEffect * 20; //debug for now more is worse
+    public int getValue(int homeTeam) {
+        int value = 0;
+        value += (hp / maxHp) * 100;
+        value += sp * 5;
+        value -= statusEffect * 10; //debug for now more is worse
+
+
+        if (team == -1) //no team -> treat as weak enemy
+            value /= 10;
+
+        if (team != homeTeam)
+            value *= -1;
+
         return value;
     }
 
     @Override
     public int compareTo(Object o) {
-        if (getValue() > ((EntityValue) o).getValue())
+        if (getValue(-1) > ((EntityValue) o).getValue(-1))
             return 1;
-        else if (getValue() < ((EntityValue) o).getValue())
+        else if (getValue(-1) < ((EntityValue) o).getValue(-1))
             return -1;
         else
             return 0;
@@ -53,5 +65,19 @@ public class EntityValue implements Comparable {
 
     public EntityValue copy() {
         return new EntityValue(pos.copy(), team, hp, maxHp, sp, attack, defense, statusEffect);
+    }
+
+    @Override
+    public String toString() {
+        return "EntityValue{" +
+                "team=" + team +
+                ", hp=" + hp +
+                ", maxHp=" + maxHp +
+                ", sp=" + sp +
+                ", attack=" + attack +
+                ", defense=" + defense +
+                ", statusEffect=" + statusEffect +
+                ", pos=" + pos +
+                '}';
     }
 }

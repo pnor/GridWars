@@ -3,7 +3,7 @@ package com.mygdx.game.AI;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ArrayMap;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.move_related.Move;
 
@@ -15,44 +15,32 @@ import static com.mygdx.game.ComponentMappers.*;
  * @author Phillip O'Reggio
  */
 public class BoardState {
-    private ObjectMap<BoardPosition, EntityValue> entities;
+    private ArrayMap<BoardPosition, EntityValue> entities;
 
     public BoardState(Array<Entity> e) {
-        entities = new ObjectMap<>();
+        entities = new ArrayMap<>();
         for (Entity entity : e) {
-            EntityValue value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, stm.get(entity).hp,
-                    stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).getModAtk(entity), stm.get(entity).getModDef(entity), 0);
+            EntityValue value;
+            if (stm.has(entity) && stm.get(entity).alive) {
+                if (team.has(entity))
+                    value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, stm.get(entity).hp,
+                            stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).getModAtk(entity), stm.get(entity).getModDef(entity), 0);
+                else {
+                    value = new EntityValue(bm.get(entity).pos, -1, stm.get(entity).hp,
+                            stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).getModAtk(entity), stm.get(entity).getModDef(entity), 0);
+                }
+            } else continue;
+
             // ... determine good vs bad status effects...
             //for now :
-            value.statusEffect = status.get(entity).statusEffects.size;
+            if (status.has(entity))
+                value.statusEffect = status.get(entity).statusEffects.size;
             entities.put(bm.get(entity).pos, value);
         }
     }
 
-    public BoardState(ObjectMap<BoardPosition, EntityValue> entityMap) {
+    public BoardState(ArrayMap<BoardPosition, EntityValue> entityMap) {
         entities = entityMap;
-    }
-
-    public BoardState tryAttack(BoardPosition userPos, Array<BoardPosition> range, int power, int statusEffectChange, boolean pierce) {
-        for (BoardPosition pos : range) {
-            pos.add(userPos.r, userPos.c);
-            if (entities.containsKey(pos)) {
-                EntityValue e = entities.get(pos);
-                if (pierce)
-                    e.hp = MathUtils.clamp(e.hp - power, 0, 999);
-                else
-                    e.hp = MathUtils.clamp(e.hp - (MathUtils.clamp(power - e.defense, 0, 999)), 0, 999);
-                e.statusEffect += statusEffectChange;
-            }
-        }
-        return this;
-    }
-
-    public BoardState moveEntity(BoardPosition oldPos, BoardPosition newPos) {
-        if (entities.containsKey(oldPos))
-            entities.put(newPos, entities.remove(oldPos));
-
-        return this;
     }
 
     /**
@@ -62,14 +50,15 @@ public class BoardState {
      */
     public BoardState tryTurn(Turn t) {
         //movement
+        /*
         System.out.println("Contains key: " + entities.containsKey(new BoardPosition(6, 5)));
         System.out.println("Contains key  using array: " + entities.keys().toArray().contains(new BoardPosition(6, 5), false));
-        System.out.println("equals : " + bm.get(t.entity).pos.equals(new BoardPosition(6, 5)));
-
+        System.out.println("is position same equals : " + bm.get(t.entity).pos.equals(new BoardPosition(6, 5)));
+            */
         //System.out.println(entities);
         if (!t.pos.equals(bm.get(t.entity).pos))
             if (entities.containsKey(bm.get(t.entity).pos))
-                entities.put(t.pos, entities.remove(bm.get(t.entity).pos));
+                entities.put(t.pos, entities.removeKey(bm.get(t.entity).pos));
         //System.out.println(entities);
 
         //attack
@@ -77,21 +66,23 @@ public class BoardState {
             Move move = mvm.get(t.entity).moveList.get(t.attack);
 
             //deduct sp cost
-            EntityValue ea = entities.get(bm.get(t.entity).pos);
-            EntityValue eaa = entities.get(t.pos);
-            /*
-            System.out.println(bm.get(t.entity).pos);
-            System.out.println(t.pos);
-            System.out.println(entities.containsKey(bm.get(t.entity).pos));
-            System.out.println("ewuals" +bm.get(t.entity).pos.equals(new BoardPosition(6, 5)));
-            */
+            try {
+                entities.get(t.pos).sp -= move.spCost();
+            } catch (Exception e) {
+                if (e instanceof NullPointerException) {
+                    System.out.println("Pos :" + t.pos);
+                    System.out.println("move :" + move);
+                    System.out.println("entities :" + entities.get(t.pos));
 
-            //entities.get(bm.get(t.entity).pos).sp -= move.spCost();
+                }
+            }
 
             for (BoardPosition pos : move.getRange()) {
-                pos.add(bm.get(t.entity).pos.r, bm.get(t.entity).pos.c);
-                if (entities.containsKey(pos)) {
-                    EntityValue e = entities.get(pos);
+                BoardPosition newPos = pos.add(t.pos.r, t.pos.c);
+
+                if (entities.containsKey(newPos)) {
+                    EntityValue e = entities.get(newPos);
+                    //System.out.println(e);
                     if (move.getPierces())
                         e.hp = MathUtils.clamp(e.hp - (int) (move.getAmpValue() * stm.get(t.entity).getModAtk(t.entity)), 0, 999);
                     else
@@ -99,20 +90,21 @@ public class BoardState {
                     e.statusEffect += move.getStatusEffectChanges();
                 }
             }
+
         }
 
         return this;
     }
 
-    public int evaluate() {
+    public int evaluate(int homeTeam) {
         int val = 0;
         for (EntityValue e : entities.values())
-            val += e.getValue();
+            val += e.getValue(homeTeam);
         return val;
     }
 
     public BoardState copy() {
-        ObjectMap<BoardPosition, EntityValue> map = new ObjectMap<>();
+        ArrayMap<BoardPosition, EntityValue> map = new ArrayMap<>();
         for (EntityValue e : entities.values())
             map.put(e.pos.copy(), e.copy());
 
