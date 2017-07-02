@@ -125,6 +125,48 @@ public class Move {
 
     }
 
+    /**
+     * Changes the effected squares of an attack based on direction. Note that this will change the range of an
+     * Attack, not return a copy!
+     * @param relativeDirection direction that it will be spun.
+     *                          <p> 0 : No rotation; same as before
+     *                          <p> 1 : 90 Degrees clockwise
+     *                          <p> 2 : 180 Degrees
+     *                          <p> 0 : 270 Degree clockwise
+     *
+     * @param move move to be oriented
+     */
+    public Array<BoardPosition> getOrientedAttackPositions(int relativeDirection, Move move) {
+        Array<BoardPosition> boardPositions = new Array<>();
+        for (BoardPosition bp : move.getRange())
+            boardPositions.add(bp.copy());
+
+        relativeDirection %= 4;
+        if (relativeDirection == 0) {
+            return boardPositions;
+        } else if (relativeDirection == 1) {
+            for (BoardPosition bp : boardPositions) {
+                //swap r and c
+                int temp = bp.r;
+                bp.r = bp.c;
+                bp.c = -temp;
+            }
+        } else if (relativeDirection == 2) {
+            for (BoardPosition bp : boardPositions) {
+                bp.r *= -1;
+                bp.c *= -1;
+            }
+        } else {
+            for (BoardPosition bp : boardPositions) {
+                int temp = bp.r;
+                bp.r = -bp.c;
+                bp.c = temp;
+            }
+        }
+
+        return boardPositions;
+    }
+
     public void updateVisuals(float dt) {
         visuals.updateTimer(dt);
     }

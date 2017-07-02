@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.mygdx.game.AI.BoardState;
 import com.mygdx.game.AI.ComputerPlayer;
 import com.mygdx.game.AI.Turn;
 import com.mygdx.game.GridWars;
@@ -384,7 +385,7 @@ public class BattleScreen implements Screen {
                    showEndTurnDisplay();
                    if (rules.getCurrentTeamNumber() == 1) { //debug, should actually figure out whos computer
                        playingComputerTurn = true;
-                       computerTurns = computer.simpleGetBestTurns();
+                       computerTurns = computer.simpleGetBestTurns(new BoardState(BoardComponent.boards.getCodeBoard().getEntities()), computer.getTeamControlled());
                    } else
                        playingComputerTurn = false;
 
@@ -590,60 +591,9 @@ public class BattleScreen implements Screen {
         }
         //endregion
 
-        //region computerTurn
-        if (playingComputerTurn) {
-            Entity currentEntity;
-            Turn currentTurn =
-                    (currentComputerControlledEntity < computerTurns.size)? computerTurns.get(currentComputerControlledEntity) : null;
-            timeAfterMove += delta;
-
-            if (currentComputerControlledEntity < computerTurns.size && currentTurn == null) { //entity is dead/skip turn
-                currentComputerControlledEntity++;
-                turnPhase = 0;
-                timeAfterMove = 0;
-            }
-
-            if (timeAfterMove >= .3f && turnPhase == 0) { //Move
-                BoardComponent.boards.move(currentTurn.entity, currentTurn.pos);
-                turnPhase = 1;
-            } else if (timeAfterMove >= 1f && turnPhase == 1) { //use attack
-                currentEntity = currentTurn.entity;
-                if (currentTurn.attack != -1) {
-                    if (currentTurn.direction > 0)
-                        for (int i = 0; i < currentTurn.direction; i++)
-                            Move.orientAttack(true, mvm.get(currentEntity).moveList.get(currentTurn.attack));
-                    mvm.get(currentEntity).moveList.get(currentTurn.attack).useAttack();
-                    stm.get(currentEntity).sp -= mvm.get(currentEntity).moveList.get(currentTurn.attack).spCost();
-                    currentMove = mvm.get(currentEntity).moveList.get(currentTurn.attack);
-                    showAttackMessage();
-                    turnPhase = 2;
-                } else {
-                    currentComputerControlledEntity++;
-                    turnPhase = 0;
-                    timeAfterMove = 0;
-                }
-            } else if (currentMove == null && turnPhase == 2) { //next entity
-                timeAfterMove = 0;
-                turnPhase = 0;
-                currentComputerControlledEntity++;
-            }
-
-            if (turnPhase == 3) { //next turn
-                timeAfterMove += delta;
-                if (timeAfterMove >= .5f) {
-                    timeAfterMove = 0;
-                    turnPhase = 0;
-                    currentComputerControlledEntity = 0;
-                    rules.nextTurn();
-                    showEndTurnDisplay();
-                    playingComputerTurn = false; //debug
-                }
-            } else if (currentComputerControlledEntity >= computer.getTeamSize()) { //wait to end turn
-                timeAfterMove = 0;
-                turnPhase = 3;
-            }
-        }
-        //endregion
+        //computer Turn
+        if (playingComputerTurn)
+            processComputerTurn(delta);
 
         //playing current move animation
         if (currentMove != null) {
@@ -710,6 +660,70 @@ public class BattleScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.F))
             System.out.println("Frames per Second: " + Gdx.graphics.getFramesPerSecond());
 
+    }
+
+    private void processComputerTurn(float delta) {
+        //Getting the Turn. Null if dead.
+        Entity currentEntity;
+        Turn currentTurn =
+                (currentComputerControlledEntity < computerTurns.size)? computerTurns.get(currentComputerControlledEntity) : null;
+        timeAfterMove += delta;
+
+        if (currentComputerControlledEntity < computerTurns.size && currentTurn == null) { //entity is dead/skip turn
+            currentComputerControlledEntity++;
+            turnPhase = 0;
+            timeAfterMove = 0;
+        }
+
+        //Playing out the Turn
+        if (timeAfterMove >= .3f && turnPhase == 0) { //Move
+            try {
+                BoardComponent.boards.move(currentTurn.entity, currentTurn.pos);
+            } catch (Exception e) {
+                System.out.println("\n \n --------------------------------" +
+                        "\n Exception! " +
+                        "\n currentTurn = " + currentTurn +
+                        "\n currentTurn.entity = " + currentTurn.entity +
+                        "\n currentTurn.pos = " + currentTurn.pos);
+            }
+            turnPhase = 1;
+        } else if (timeAfterMove >= 1f && turnPhase == 1) { //use attack
+            currentEntity = currentTurn.entity;
+            if (currentTurn.attack != -1) {
+                if (currentTurn.direction > 0)
+                    for (int i = 0; i < currentTurn.direction; i++)
+                        Move.orientAttack(true, mvm.get(currentEntity).moveList.get(currentTurn.attack));
+                mvm.get(currentEntity).moveList.get(currentTurn.attack).useAttack();
+                stm.get(currentEntity).sp -= mvm.get(currentEntity).moveList.get(currentTurn.attack).spCost();
+                currentMove = mvm.get(currentEntity).moveList.get(currentTurn.attack);
+                showAttackMessage();
+                turnPhase = 2;
+            } else {
+                currentComputerControlledEntity++;
+                turnPhase = 0;
+                timeAfterMove = 0;
+            }
+        } else if (currentMove == null && turnPhase == 2) { //next entity
+            timeAfterMove = 0;
+            turnPhase = 0;
+            currentComputerControlledEntity++;
+        }
+
+        //Next turn or end the turn
+        if (turnPhase == 3) { //next turn
+            timeAfterMove += delta;
+            if (timeAfterMove >= .75f) { //wait to end turn
+                timeAfterMove = 0;
+                turnPhase = 0;
+                currentComputerControlledEntity = 0;
+                rules.nextTurn();
+                showEndTurnDisplay();
+                playingComputerTurn = false; //debug
+            }
+        } else if (currentComputerControlledEntity >= computer.getTeamSize()) { //Check if ran through all turns
+            timeAfterMove = 0;
+            turnPhase = 3;
+        }
     }
 
     /**
@@ -1209,22 +1223,8 @@ public class BattleScreen implements Screen {
                     member.setColor(Color.BLACK);
                 else
                     member.setColor(new Color(1, 1, 1, 1).lerp(Color.RED, 1f - (float) stm.get(entity).hp / (float) stm.get(entity).getModMaxHp(entity)));
-            } else if (status.has(entity) && status.get(entity).getTotalStatusEffects() > 0) { //Shade based on status effect
-                if (status.get(selectedEntity).statusEffects.containsKey("Poison"))
-                    member.setColor(Color.GREEN);
-                else if (status.get(selectedEntity).statusEffects.containsKey("Burn"))
-                    member.setColor(Color.RED);
-                else if (status.get(selectedEntity).statusEffects.containsKey("Paralyze"))
-                    member.setColor(Color.YELLOW);
-                else if (status.get(selectedEntity).statusEffects.containsKey("Petrify"))
-                    member.setColor(new Color(122f / 255f, 104f / 255f, 87f / 255f, 1));
-                else if (status.get(selectedEntity).statusEffects.containsKey("Stillness"))
-                    member.setColor(new Color(0, 140f / 255f, 1f, 1f));
-                else if (status.get(selectedEntity).statusEffects.containsKey("Curse"))
-                    member.setColor(Color.DARK_GRAY);
-            } else {
+            } else
                 member.setColor(Color.WHITE);
-            }
         }
     }
 

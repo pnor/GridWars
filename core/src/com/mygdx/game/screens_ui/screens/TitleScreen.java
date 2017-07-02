@@ -32,15 +32,13 @@ public class TitleScreen extends MenuScreen implements Screen {
     @Override
     public void show() {
         super.show();
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("BEBAS.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 120;
-        param.color = Color.CYAN;
+        param.color = Color.RED;
         param.shadowOffsetX = -4;
         param.shadowOffsetY = -4;
-        param.shadowColor = Color.BLUE;
-        param.borderWidth = 5;
-        param.borderColor = Color.WHITE;
+        param.shadowColor = Color.BLACK;
         titleLbl = new Label("Grid Wars", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         startBtn = new HoverButton("Start", skin, Color.WHITE, Color.DARK_GRAY);
         ChangeListener listener = new ChangeListener() {
@@ -54,12 +52,12 @@ public class TitleScreen extends MenuScreen implements Screen {
             }
         };
         Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
-        backgroundLay.setColor(Color.GRAY);
+        backgroundLay.setColor(Color.DARK_GRAY);
         Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeOverlay")));
         background = new Background(backgroundLay,
                 new Sprite[]{topLayer},
                 new BackType[]{BackType.FADE_COLOR},
-                Color.WHITE, Color.CYAN);
+                Color.BLACK, Color.CYAN);
 
         startBtn.addListener(listener);
         table.add(titleLbl).padBottom(80f).row();

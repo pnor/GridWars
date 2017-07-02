@@ -1991,7 +1991,7 @@ public class MoveConstructor {
                             status.get(enemy).removeAll(enemy);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{changeToBlue, sparkle, explode, returnToNormalGradual, returnToNormal})), 1, false, 0);
+                new Array<VisualEvent>(new VisualEvent[]{changeToBlue, sparkle, explode, returnToNormalGradual, returnToNormal})), -1, false, 0);
     }
 
     public static Move recover(Entity user) {
@@ -4690,7 +4690,7 @@ public class MoveConstructor {
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
 
-                if (!boards.containsPosition(bp) && !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
                     return;
 
                 Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
@@ -4704,7 +4704,7 @@ public class MoveConstructor {
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
 
-                if (!boards.containsPosition(bp) && !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
                     return;
                 progress = MathUtils.clamp(progress + .1f, 0, 1);
 
@@ -4719,7 +4719,7 @@ public class MoveConstructor {
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
 
-                if (!boards.containsPosition(bp) && !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
                     return;
 
                 Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
@@ -4821,7 +4821,7 @@ public class MoveConstructor {
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
 
-                if (!boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
                     return;
 
                 Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
@@ -4849,7 +4849,7 @@ public class MoveConstructor {
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
 
-                if (!boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
                     return;
 
                 Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
@@ -5136,7 +5136,7 @@ public class MoveConstructor {
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
 
-                if (!boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
                     return;
 
                 Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
@@ -5164,7 +5164,7 @@ public class MoveConstructor {
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
 
-                if (!boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
                     return;
 
                 Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);

@@ -5,6 +5,9 @@
 - Turn Order not accounted for (not really)
 - Doesn't account for things not having status effect component
 
+Possible Suggestions
+~ Make it choose 2nd or 3rd best move occasionally
+
 
 
 
@@ -50,6 +53,24 @@ Objects Needed
     + capable of looking at Move Objects and the Board to determine best movement
 - Move Object (to represent each move)
     + get Array<Moves> to iterate through to get best
+
+
+
+
+ Drafting for the Recursive Algorithm
+
+ simpleBest ->
+ 	for (each entity)
+ 		get All Turns for it
+ 		Try all turns ->
+ 			Try turn
+ 			if (can go deeper) {
+ 			simpleBest on resulting boardState
+ 			try resulting turns from simpleBest
+ 			} else
+ 			evaluate
+
+ 		see which returns highest
 
 
 

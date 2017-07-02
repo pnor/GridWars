@@ -39,7 +39,10 @@ public class EntityValue implements Comparable {
      */
     public int getValue(int homeTeam) {
         int value = 0;
-        value += (hp / maxHp) * 100;
+        if (hp > 0)
+            value += (hp / maxHp) * 100;
+        else
+            value -= 50;
         value += sp * 5;
         value -= statusEffect * 10; //debug for now more is worse
 

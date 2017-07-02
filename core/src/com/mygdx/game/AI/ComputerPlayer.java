@@ -17,7 +17,6 @@ import static com.mygdx.game.ComponentMappers.*;
  */
 public /*abstract*/ class ComputerPlayer {
     private BoardManager boards;
-    private BoardState boardState;
     private Array<Team> teams;
     private int teamControlled;
     private int depthLevel;
@@ -30,7 +29,6 @@ public /*abstract*/ class ComputerPlayer {
     }
 
     private Array<Turn> getBestTurns() {
-        updateBoardState();
         Array<Turn> turns;
 
         for (Entity e : teams.get(teamControlled).getEntities()) {
@@ -48,11 +46,15 @@ public /*abstract*/ class ComputerPlayer {
      * to a depth of 1.
      * @return Array of the best turns for each entity.
      */
-    public Array<Turn> simpleGetBestTurns() {
-        updateBoardState();
+    public Array<Turn> simpleGetBestTurns(BoardState board, int team) {
         Array<Turn> turns = new Array<>();
 
-        for (Entity e : teams.get(teamControlled).getEntities()) {
+        for (Entity e : teams.get(team).getEntities()) {
+            if (!stm.get(e).alive) {
+                turns.add(null);
+                continue;
+            }
+
             int bestTurnVal = -9999999;
             int worstValue = 999;
             int curValue = 0;
@@ -60,7 +62,7 @@ public /*abstract*/ class ComputerPlayer {
             Turn bestTurn = null;
 
             for (Turn t : allTurns) {
-                curValue = boardState.copy().tryTurn(t).evaluate(teamControlled);
+                curValue = board.copy().tryTurn(t).evaluate(team);
                 worstValue = Math.min(curValue, worstValue);
                 if (curValue > bestTurnVal) {
                     System.out.print("!");
@@ -74,7 +76,10 @@ public /*abstract*/ class ComputerPlayer {
             System.out.println("Best: " + bestTurnVal);
             System.out.println("Best Turn: " + bestTurn);
             System.out.println("-----------------------------------------------");
+
             turns.add(bestTurn);
+            //update BoardState with last Entity's action
+            board.tryTurn(bestTurn);
         }
 
         return turns;
@@ -100,8 +105,8 @@ public /*abstract*/ class ComputerPlayer {
             for (int i = 0; i < mvm.get(e).moveList.size; i++) {
                 if (mvm.get(e).moveList.get(i).spCost() > stm.get(e).sp) //if it doesnt have enough sp, skip
                     continue;
-                for (int j = 0; j < 4; j++) //All directions of attacj
-                        turns.add(new Turn(e, pos, i, j));
+                for (int j = 0; j < 4; j++) //All directions of attack
+                    turns.add(new Turn(e, pos, i, j));
             }
         }
 
@@ -275,9 +280,7 @@ public /*abstract*/ class ComputerPlayer {
         return positions;
     }
 
-    public void updateBoardState() {
-        boardState = new BoardState(boards.getCodeBoard().getEntities());
-    }
-
     public int getTeamSize() { return teams.get(teamControlled).getEntities().size; }
+
+    public int getTeamControlled() { return teamControlled; }
 }

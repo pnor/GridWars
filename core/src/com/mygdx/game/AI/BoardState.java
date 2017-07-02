@@ -77,7 +77,7 @@ public class BoardState {
                 }
             }
 
-            for (BoardPosition pos : move.getRange()) {
+            for (BoardPosition pos : move.getOrientedAttackPositions(t.direction, move)) {
                 BoardPosition newPos = pos.add(t.pos.r, t.pos.c);
 
                 if (entities.containsKey(newPos)) {
