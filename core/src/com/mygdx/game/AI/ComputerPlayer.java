@@ -84,6 +84,13 @@ public /*abstract*/ class ComputerPlayer {
         return turns;
     }
 
+    /**
+     * Retrieves the best turns for an entire team by using a minimax algorithm to look ahead several turns.
+     * @param board {@link BoardState} of the current board
+     * @param team team that is having turns generated for
+     * @param depth amount of turns deep  it goes. Should not be <= 0! 1 represents 1 turn deep, so the team's turn, then the enemy's likely turn.
+     * @return {@link Array} of the best turns for the team
+     */
     public Array<Turn> getBestTurnsMinimax(BoardState board, int team, int depth) {
         Array<Turn> turns = new Array<>();
         Array<Entity> entities = teams.get(team).getEntities();
@@ -130,6 +137,15 @@ public /*abstract*/ class ComputerPlayer {
         return turns;
     }
 
+    /**
+     * Ranks each turn with an integer. Each turn is explored several turns deep, bsaed on the value of depth using a minimax algorithm.
+     * @param turn Turn being ranked
+     * @param board current {@link BoardState}
+     * @param teamNo Which team's turn is being processed
+     * @param originalTeam team of the stem turn.
+     * @param depth amount of turns deep  it goes. Should not be <= 0! 1 represents 1 turn deep, so the team's turn, then the enemy's likely turn.
+     * @return integer ranking of the turn
+     */
     private int getTurnValueMinimax(Turn turn, BoardState board, int teamNo, int originalTeam, int depth) {
         BoardState newBoardState = board.copy().tryTurn(turn);
         Array<Turn> bestTurns = getBestTurns(newBoardState.tryTurn(turn), teamNo);
@@ -153,6 +169,13 @@ public /*abstract*/ class ComputerPlayer {
         }
     }
 
+    /**
+     * Retrieves the best turns for an entire team by using a alpha-beta pruning algorithm to look ahead several turns.
+     * @param board {@link BoardState} of the current board
+     * @param team team that is having turns generated for
+     * @param depth amount of turns deep  it goes. Should not be <= 0! 1 represents 1 turn deep, so the team's turn, then the enemy's likely turn.
+     * @return {@link Array} of the best turns for the team
+     */
     public Array<Turn> getBestTurnsAlphaBetaPruning(BoardState board, int team, int depth) {
         Array<Turn> turns = new Array<>();
         Array<Entity> entities = teams.get(team).getEntities();
@@ -197,6 +220,18 @@ public /*abstract*/ class ComputerPlayer {
         return turns;
     }
 
+    /**
+     * Ranks each turn with an integer. Each turn is explored several turns deep, bsaed on the value of depth using a minimax algorithm.
+     * @param turn Turn being ranked
+     * @param board current {@link BoardState}
+     * @param teamNo Which team's turn is being processed
+     * @param originalTeam team of the stem turn.
+     * @param alpha max value used for alpha-beta pruning
+     * @param beta min value used for alpha-beta pruning
+     * @param maximising whether it trying to get the highest possible value or the lowest possible value
+     * @param depth amount of turns deep  it goes. Should not be <= 0! 1 represents 1 turn deep, so the team's turn, then the enemy's likely turn.
+     * @return integer ranking of the turn
+     */
     private int getTurnValueAlphaBetaPruning(Turn turn, BoardState board, int teamNo, int originalTeam, boolean maximising, int alpha, int beta, int depth) {
         BoardState newBoardState = board.copy().tryTurn(turn);
         Array<Turn> bestTurns = getBestTurns(newBoardState.tryTurn(turn), teamNo);
@@ -248,6 +283,11 @@ public /*abstract*/ class ComputerPlayer {
         }
     }
 
+    /**
+     * Retrieves all possible turns an {@link Entity} can make on the board.
+     * @param e Entity
+     * @return {@link Array} of all possible moves for one Entity
+     */
     private Array<Turn> getAllPossibleTurns(Entity e) {
         if (status.get(e).statusEffects.containsKey("Petrify") || status.get(e).statusEffects.containsKey("Freeze")) //handle petrify/freeze
             return new Array<Turn>(new Turn[]{new Turn(e, bm.get(e).pos.copy(), -1, 0)});

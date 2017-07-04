@@ -342,7 +342,7 @@ public class BattleScreen implements Screen {
                         removeMovementTiles();
                         disableUI();
 
-                        showAttackMessage();
+                        showAttackMessage(nm.get(selectedEntity).name, currentMove);
                     }
                 }
             }
@@ -700,7 +700,7 @@ public class BattleScreen implements Screen {
                 mvm.get(currentEntity).moveList.get(currentTurn.attack).useAttack();
                 stm.get(currentEntity).sp -= mvm.get(currentEntity).moveList.get(currentTurn.attack).spCost();
                 currentMove = mvm.get(currentEntity).moveList.get(currentTurn.attack);
-                showAttackMessage();
+                showAttackMessage(nm.get(currentEntity).name, mvm.get(currentEntity).moveList.get(currentTurn.attack));
                 turnPhase = 2;
             } else {
                 currentComputerControlledEntity++;
@@ -733,19 +733,19 @@ public class BattleScreen implements Screen {
     /**
      * Shows the attack message of the Move stored in Current Move.
      */
-    private void showAttackMessage() {
-        if (currentMove.getAttackMessage() == null || currentMove.getAttackMessage().trim().equals("")) { //default case
-            if (nm.has(selectedEntity))
-                if (currentMove.getAttackMessage() != null)
-                    infoLbl.setText(currentMove.getAttackMessage());
+    private void showAttackMessage(String name, Move move) {
+        if (move.getAttackMessage() == null || move.getAttackMessage().trim().equals("")) { //default case
+            if (name != null)
+                if (move.getAttackMessage() != null)
+                    infoLbl.setText(move.getAttackMessage());
                 else
-                    infoLbl.setText(nm.get(selectedEntity).name + " used " + currentMove.getName() + "!");
-            else if (currentMove.getAttackMessage() != null)
-                infoLbl.setText(currentMove.getAttackMessage());
+                    infoLbl.setText(name + " used " + move.getName() + "!");
+            else if (move.getAttackMessage() != null)
+                infoLbl.setText(move.getAttackMessage());
             else
-                infoLbl.setText(currentMove.getName() + " was used!");
+                infoLbl.setText(move.getName() + " was used!");
         } else {
-            infoLbl.setText(currentMove.getAttackMessage());
+            infoLbl.setText(move.getAttackMessage());
         }
     }
 

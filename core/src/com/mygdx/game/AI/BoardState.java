@@ -18,6 +18,11 @@ import static com.mygdx.game.ComponentMappers.*;
 public class BoardState {
     private ArrayMap<BoardPosition, EntityValue> entities;
 
+    /**
+     * Creates a {@link BoardState} using entities and their teams.
+     * @param e Array of Entities
+     * @param teams Teams used for an {@link EntityValue}'s checkIdentity method
+     */
     public BoardState(Array<Entity> e, Array<Team> teams) {
         entities = new ArrayMap<>();
         for (Entity entity : e) {
@@ -45,9 +50,9 @@ public class BoardState {
     }
 
     /**
-     *
-     * @param t
-     * @return
+     * Changes the state of the {@link BoardState} based on the effects of the {@link Turn}.
+     * @param t Turn
+     * @return The {@link BoardState} for chaining
      */
     public BoardState tryTurn(Turn t) {
         //movement
@@ -101,8 +106,11 @@ public class BoardState {
         return this;
     }
 
-
-
+    /**
+     * Evaulates the state of the board
+     * @param homeTeam The team's prespective. Entities on that team will be added, while others are subtracted.
+     * @return integer representing the value of all {@link EntityValue}s added together
+     */
     public int evaluate(int homeTeam) {
         int val = 0;
         for (EntityValue e : entities.values())
@@ -110,6 +118,9 @@ public class BoardState {
         return val;
     }
 
+    /**
+     * @return A copy of this object
+     */
     public BoardState copy() {
         ArrayMap<BoardPosition, EntityValue> map = new ArrayMap<>();
         for (EntityValue e : entities.values())
