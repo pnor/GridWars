@@ -17,6 +17,8 @@ import static com.mygdx.game.ComponentMappers.*;
  * @author Phillip O'Reggio
  */
 public /*abstract*/ class ComputerPlayer {
+    public int DEBUG_TURNS_PROCESSED = 0;
+
     private BoardManager boards;
     private Array<Team> teams;
     private int teamControlled;
@@ -134,6 +136,8 @@ public /*abstract*/ class ComputerPlayer {
         if (depth > 0) {
             int best = -999999;
             for (Turn t : bestTurns) {
+                DEBUG_TURNS_PROCESSED++;
+
                 if (t == null)
                     continue;
                 best = Math.max(best, getTurnValueMinimax(turn, newBoardState.tryTurn(t), (teamNo + 1) % teams.size, originalTeam, depth - 1));
@@ -168,7 +172,7 @@ public /*abstract*/ class ComputerPlayer {
             Turn bestTurn = null;
 
             for (Turn t : allTurns) {
-                curValue = getTurnValueMinimax(t, board, (team + 1) % teams.size, team, depth);
+                curValue = getTurnValueAlphaBetaPruning(t, board, (team + 1) % teams.size, team, false, -99999, 99999, depth);
                 worstValue = Math.min(curValue, worstValue);
                 if (curValue > bestTurnVal) {
                     System.out.print("!!!");
@@ -193,25 +197,54 @@ public /*abstract*/ class ComputerPlayer {
         return turns;
     }
 
-    private int getTurnValueAlphaBetaPruning(Turn turn, BoardState board, int teamNo, int originalTeam, int alpha, int beta, int depth) {
+    private int getTurnValueAlphaBetaPruning(Turn turn, BoardState board, int teamNo, int originalTeam, boolean maximising, int alpha, int beta, int depth) {
         BoardState newBoardState = board.copy().tryTurn(turn);
         Array<Turn> bestTurns = getBestTurns(newBoardState.tryTurn(turn), teamNo);
-        if (depth > 0) {
-            int best = -999999;
-            for (Turn t : bestTurns) {
-                if (t == null)
-                    continue;
-                best = Math.max(best, getTurnValueMinimax(turn, newBoardState.tryTurn(t), (teamNo + 1) % teams.size, originalTeam, depth - 1));
+        int best;
+        if (maximising) {
+            if (depth > 0) {
+                best = -999999;
+                for (Turn t : bestTurns) {
+                    DEBUG_TURNS_PROCESSED++;
+
+                    if (t == null)
+                        continue;
+                    best = Math.max(best, getTurnValueAlphaBetaPruning(turn, newBoardState.tryTurn(t), (teamNo + 1) % teams.size, originalTeam, !maximising, alpha, beta, depth - 1));
+                    alpha = Math.max(best, alpha);
+                    if (beta <= alpha)
+                        break;
+                }
+                return best;
+            } else {
+                for (Turn t : bestTurns) {
+                    if (t == null)
+                        continue;
+                    newBoardState.tryTurn(t);
+                }
+                return board.evaluate(originalTeam);
             }
-            return best;
         } else {
-            BoardState newBoard = board.copy();
-            for (Turn t : bestTurns) {
-                if (t == null)
-                    continue;
-                newBoard.copy().tryTurn(t);
+            if (depth > 0) {
+                best = 999999;
+                for (Turn t : bestTurns) {
+                    DEBUG_TURNS_PROCESSED++;
+
+                    if (t == null)
+                        continue;
+                    best = Math.min(best, getTurnValueMinimax(turn, newBoardState.tryTurn(t), (teamNo + 1) % teams.size, originalTeam, depth - 1));
+                    beta = Math.min(best, alpha);
+                    if (beta <= alpha)
+                        break;
+                }
+                return best;
+            } else {
+                for (Turn t : bestTurns) {
+                    if (t == null)
+                        continue;
+                    newBoardState.tryTurn(t);
+                }
+                return board.evaluate(teamNo);
             }
-            return board.evaluate(originalTeam);
         }
     }
 
