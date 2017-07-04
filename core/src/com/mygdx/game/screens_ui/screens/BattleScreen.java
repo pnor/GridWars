@@ -385,7 +385,8 @@ public class BattleScreen implements Screen {
                    showEndTurnDisplay();
                    if (rules.getCurrentTeamNumber() == 1) { //debug, should actually figure out whos computer
                        playingComputerTurn = true;
-                       computerTurns = computer.simpleGetBestTurns(new BoardState(BoardComponent.boards.getCodeBoard().getEntities()), computer.getTeamControlled());
+                       //computerTurns = computer.getBestTurns(new BoardState(BoardComponent.boards.getCodeBoard().getEntities()), computer.getTeamControlled());
+                       computerTurns = computer.getBestTurnsMinimax(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), teams), computer.getTeamControlled(), 2);
                    } else
                        playingComputerTurn = false;
 

@@ -254,7 +254,7 @@ public class MoveConstructor {
     }
 
     public static StatusEffect curse() {
-        StatusEffect effect = new StatusEffect("Curse", 2, new LerpColor(Color.GRAY, Color.BLACK, .5f, Interpolation.fade), (e) -> {/*nothing*/});
+        StatusEffect effect = new StatusEffect("Curse", 4, new LerpColor(Color.GRAY, Color.BLACK, .5f, Interpolation.fade), (e) -> {/*nothing*/});
         effect.setStatChanges(1, 1, 1, .5f, .5f, .5f);
         return effect;
     }
@@ -2333,7 +2333,7 @@ public class MoveConstructor {
                             status.get(e).addStatusEffect(defenseless(), e);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{sparkle, explode,  returnToNormalGradual, returnToNormal})), 1, true, -.5f);
+                new Array<VisualEvent>(new VisualEvent[]{sparkle, explode,  returnToNormalGradual, returnToNormal})), 2, true, -.5f);
     }
 
     public static Move drench(Entity user) {

@@ -1,6 +1,9 @@
 package com.mygdx.game.AI;
 
+import com.badlogic.ashley.core.Entity;
+import com.mygdx.game.ComponentMappers;
 import com.mygdx.game.boards.BoardPosition;
+import com.mygdx.game.rules_types.Team;
 
 /**
  * Class representing a simplified form of entities on the board. Only contains values relating to an Entity's value, such
@@ -10,6 +13,7 @@ import com.mygdx.game.boards.BoardPosition;
  */
 public class EntityValue implements Comparable {
     public int team;
+    public int indexInTeam; //For identity purposes
 
     public int hp;
     public int maxHp;
@@ -19,9 +23,10 @@ public class EntityValue implements Comparable {
     public int statusEffect;
     public BoardPosition pos;
 
-    public EntityValue(BoardPosition position, int teamNo, int health, int maxHealth, int skill, int atk, int def, int effectValue) {
+    public EntityValue(BoardPosition position, int teamNo, int indexWithinTeam, int health, int maxHealth, int skill, int atk, int def, int effectValue) {
         pos = position;
         team = teamNo;
+        indexInTeam = indexWithinTeam;
 
         hp = health;
         sp = skill;
@@ -39,21 +44,31 @@ public class EntityValue implements Comparable {
      */
     public int getValue(int homeTeam) {
         int value = 0;
+
         if (hp > 0)
-            value += (hp / maxHp) * 100;
-        else
-            value -= 50;
-        value += sp * 5;
-        value -= statusEffect * 10; //debug for now more is worse
+            value += 200 + (hp / maxHp) * 150;
+
+        //value += sp * 15;
+        value -= statusEffect * 20; //debug for now more is worse
 
 
         if (team == -1) //no team -> treat as weak enemy
-            value /= 10;
+            value /= 25;
 
         if (team != homeTeam)
             value *= -1;
 
         return value;
+    }
+
+    /**
+     * Checks whether this {@link EntityValue} is the one generated from the {@link Entity} parameter. Does this
+     * by comparing team, and the Entity's index in its team.
+     * @param e Entity being compared
+     * @return True, if they represent the same Entity. False otherwise.
+     */
+    public boolean checkIdentity(Entity e, Team t) {
+        return ComponentMappers.team.get(e).teamNumber == team && t.getEntities().indexOf(e, true) == indexInTeam;
     }
 
     @Override
@@ -67,13 +82,14 @@ public class EntityValue implements Comparable {
     }
 
     public EntityValue copy() {
-        return new EntityValue(pos.copy(), team, hp, maxHp, sp, attack, defense, statusEffect);
+        return new EntityValue(pos.copy(), team, indexInTeam, hp, maxHp, sp, attack, defense, statusEffect);
     }
 
     @Override
     public String toString() {
         return "EntityValue{" +
                 "team=" + team +
+                ", indexInTeam=" + indexInTeam +
                 ", hp=" + hp +
                 ", maxHp=" + maxHp +
                 ", sp=" + sp +

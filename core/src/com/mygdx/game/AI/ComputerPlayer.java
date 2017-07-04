@@ -3,6 +3,7 @@ package com.mygdx.game.AI;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.ComponentMappers;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.BoardComponent;
@@ -28,29 +29,24 @@ public /*abstract*/ class ComputerPlayer {
         depthLevel = depth;
     }
 
-    private Array<Turn> getBestTurns() {
-        Array<Turn> turns;
-
-        for (Entity e : teams.get(teamControlled).getEntities()) {
-            int bestTurnVal = -9999999;
-            Array<Turn> allTurns = getAllPossibleTurns(e);
-            for (Turn t : allTurns)
-                bestTurnVal = Math.max(bestTurnVal, initialAlphaBeta(t, new BoardState(boards.getCodeBoard().getEntities()), depthLevel, true));
-        }
-
-        return null;
-    }
-
     /**
      * Gets the best turn by seeing Turn returns the highest heuristic value. Does not use recursion, so it only goes
      * to a depth of 1.
      * @return Array of the best turns for each entity.
      */
-    public Array<Turn> simpleGetBestTurns(BoardState board, int team) {
+    public Array<Turn> getBestTurns(BoardState board, int team) {
         Array<Turn> turns = new Array<>();
 
         for (Entity e : teams.get(team).getEntities()) {
-            if (!stm.get(e).alive) {
+
+            //recursion check
+            boolean inBoard = false;
+            for (EntityValue value : board.getEntities().values()) {
+                if (value.checkIdentity(e, teams.get(ComponentMappers.team.get(e).teamNumber)))
+                    inBoard = true;
+            }
+
+            if (!stm.get(e).alive && inBoard) { //is alive check
                 turns.add(null);
                 continue;
             }
@@ -65,17 +61,18 @@ public /*abstract*/ class ComputerPlayer {
                 curValue = board.copy().tryTurn(t).evaluate(team);
                 worstValue = Math.min(curValue, worstValue);
                 if (curValue > bestTurnVal) {
-                    System.out.print("!");
+                    //System.out.print("!");
                     bestTurnVal = curValue;
                     bestTurn = t;
                 }
-                System.out.print(curValue + ", ");
-
+                //System.out.print(curValue + ", ");
             }
+            /*
             System.out.println("\nWorst: " + worstValue);
             System.out.println("Best: " + bestTurnVal);
             System.out.println("Best Turn: " + bestTurn);
             System.out.println("-----------------------------------------------");
+            */
 
             turns.add(bestTurn);
             //update BoardState with last Entity's action
@@ -85,18 +82,143 @@ public /*abstract*/ class ComputerPlayer {
         return turns;
     }
 
-    private int initialAlphaBeta(Turn turn, BoardState board, int depth, boolean maximisingPlayer) {
-        return 0;
+    public Array<Turn> getBestTurnsMinimax(BoardState board, int team, int depth) {
+        Array<Turn> turns = new Array<>();
+        Array<Entity> entities = teams.get(team).getEntities();
+
+        for (int i = 0; i < entities.size; i++) {
+            Entity e = entities.get(i);
+
+            if (!stm.get(e).alive) {
+                turns.add(null);
+                continue;
+            }
+
+            int bestTurnVal = -9999999;
+            int worstValue = 999;
+            int curValue = 0;
+            Array<Turn> allTurns = getAllPossibleTurns(e);
+            Turn bestTurn = null;
+
+            for (Turn t : allTurns) {
+                curValue = getTurnValueMinimax(t, board, (team + 1) % teams.size, team, depth);
+                worstValue = Math.min(curValue, worstValue);
+                if (curValue > bestTurnVal) {
+                    System.out.print("!!!");
+                    bestTurnVal = curValue;
+                    bestTurn = t;
+                }
+
+                System.out.print(t.toStringCondensed() + ": ");
+                System.out.print(curValue + ", " + "\n");
+                //System.out.print(curValue + ", ");
+            }
+
+            System.out.println("\nWorst: " + worstValue);
+            System.out.println("Best: " + bestTurnVal);
+            System.out.println("Best Turn: " + bestTurn);
+            System.out.println("-----------------------------------------------");
+
+
+            turns.add(bestTurn);
+            //update BoardState with last Entity's action
+            board.tryTurn(bestTurn);
+        }
+
+        return turns;
     }
 
-    /**
-     * @return Gets the value of a move using alpha-beta pruning
-     */
-    private int alphabeta(BoardState board, int depth, int alpha, int beta, boolean maximisingPlayer) {
-        return 0;
+    private int getTurnValueMinimax(Turn turn, BoardState board, int teamNo, int originalTeam, int depth) {
+        BoardState newBoardState = board.copy().tryTurn(turn);
+        Array<Turn> bestTurns = getBestTurns(newBoardState.tryTurn(turn), teamNo);
+        if (depth > 0) {
+            int best = -999999;
+            for (Turn t : bestTurns) {
+                if (t == null)
+                    continue;
+                best = Math.max(best, getTurnValueMinimax(turn, newBoardState.tryTurn(t), (teamNo + 1) % teams.size, originalTeam, depth - 1));
+            }
+            return best;
+        } else {
+            for (Turn t : bestTurns) {
+                if (t == null)
+                    continue;
+                newBoardState.tryTurn(t);
+            }
+            return newBoardState.evaluate(originalTeam);
+        }
+    }
+
+    public Array<Turn> getBestTurnsAlphaBetaPruning(BoardState board, int team, int depth) {
+        Array<Turn> turns = new Array<>();
+        Array<Entity> entities = teams.get(team).getEntities();
+
+        for (int i = 0; i < entities.size; i++) {
+            Entity e = entities.get(i);
+
+            if (!stm.get(e).alive) {
+                turns.add(null);
+                continue;
+            }
+
+            int bestTurnVal = -9999999;
+            int worstValue = 999;
+            int curValue = 0;
+            Array<Turn> allTurns = getAllPossibleTurns(e);
+            Turn bestTurn = null;
+
+            for (Turn t : allTurns) {
+                curValue = getTurnValueMinimax(t, board, (team + 1) % teams.size, team, depth);
+                worstValue = Math.min(curValue, worstValue);
+                if (curValue > bestTurnVal) {
+                    System.out.print("!!!");
+                    bestTurnVal = curValue;
+                    bestTurn = t;
+                }
+                System.out.print(t.toStringCondensed() + ": ");
+                System.out.print(curValue + ", " + "\n");
+            }
+
+            System.out.println("\nWorst: " + worstValue);
+            System.out.println("Best: " + bestTurnVal);
+            System.out.println("Best Turn: " + bestTurn);
+            System.out.println("-----------------------------------------------");
+
+
+            turns.add(bestTurn);
+            //update BoardState with last Entity's action
+            board.tryTurn(bestTurn);
+        }
+
+        return turns;
+    }
+
+    private int getTurnValueAlphaBetaPruning(Turn turn, BoardState board, int teamNo, int originalTeam, int alpha, int beta, int depth) {
+        BoardState newBoardState = board.copy().tryTurn(turn);
+        Array<Turn> bestTurns = getBestTurns(newBoardState.tryTurn(turn), teamNo);
+        if (depth > 0) {
+            int best = -999999;
+            for (Turn t : bestTurns) {
+                if (t == null)
+                    continue;
+                best = Math.max(best, getTurnValueMinimax(turn, newBoardState.tryTurn(t), (teamNo + 1) % teams.size, originalTeam, depth - 1));
+            }
+            return best;
+        } else {
+            BoardState newBoard = board.copy();
+            for (Turn t : bestTurns) {
+                if (t == null)
+                    continue;
+                newBoard.copy().tryTurn(t);
+            }
+            return board.evaluate(originalTeam);
+        }
     }
 
     private Array<Turn> getAllPossibleTurns(Entity e) {
+        if (status.get(e).statusEffects.containsKey("Petrify") || status.get(e).statusEffects.containsKey("Freeze")) //handle petrify/freeze
+            return new Array<Turn>(new Turn[]{new Turn(e, bm.get(e).pos.copy(), -1, 0)});
+
         Array<Turn> turns = new Array<>();
         Array<BoardPosition> possiblePositions = getPossiblePositions(bm.get(e).pos, stm.get(e).getModSpd(e));
         possiblePositions.add(bm.get(e).pos.copy()); //no movement

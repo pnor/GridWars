@@ -82,7 +82,7 @@ public class EntityConstructor {
                 atlas.findRegion("robot2")
         }, Animation.PlayMode.LOOP, 0.5f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(5, 7, 2, 1, 3));
+        entity.add(new StatComponent(5, 5, 1, 1, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -93,7 +93,7 @@ public class EntityConstructor {
                 MoveConstructor.deathAnimation(entity),
                 MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity),
-                MoveConstructor.StarSpin(entity)})));
+                MoveConstructor.bodySlam(entity)})));
         entity.add(new NameComponent("Robo - Beta"));
 
         return entity;
@@ -124,6 +124,35 @@ public class EntityConstructor {
                 MoveConstructor.assist(entity),
                 MoveConstructor.wildFire(entity)})));
         entity.add(new NameComponent("TESTER"));
+
+        return entity;
+    }
+
+    public static Entity AITester(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("AI tester"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("floorSpike"),
+                atlas.findRegion("iceSpike")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(5, 5, 1, 0, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.swordSlice(entity)
+                //--,
+        })));
 
         return entity;
     }

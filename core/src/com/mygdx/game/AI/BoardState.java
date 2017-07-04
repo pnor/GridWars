@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.move_related.Move;
+import com.mygdx.game.rules_types.Team;
 
 import static com.mygdx.game.ComponentMappers.*;
 
@@ -17,16 +18,16 @@ import static com.mygdx.game.ComponentMappers.*;
 public class BoardState {
     private ArrayMap<BoardPosition, EntityValue> entities;
 
-    public BoardState(Array<Entity> e) {
+    public BoardState(Array<Entity> e, Array<Team> teams) {
         entities = new ArrayMap<>();
         for (Entity entity : e) {
             EntityValue value;
             if (stm.has(entity) && stm.get(entity).alive) {
                 if (team.has(entity))
-                    value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, stm.get(entity).hp,
+                    value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, teams.get(team.get(entity).teamNumber).getEntities().indexOf(entity, true), stm.get(entity).hp,
                             stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).getModAtk(entity), stm.get(entity).getModDef(entity), 0);
                 else {
-                    value = new EntityValue(bm.get(entity).pos, -1, stm.get(entity).hp,
+                    value = new EntityValue(bm.get(entity).pos, -1, -1, stm.get(entity).hp,
                             stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).getModAtk(entity), stm.get(entity).getModDef(entity), 0);
                 }
             } else continue;
@@ -50,11 +51,7 @@ public class BoardState {
      */
     public BoardState tryTurn(Turn t) {
         //movement
-        /*
-        System.out.println("Contains key: " + entities.containsKey(new BoardPosition(6, 5)));
-        System.out.println("Contains key  using array: " + entities.keys().toArray().contains(new BoardPosition(6, 5), false));
-        System.out.println("is position same equals : " + bm.get(t.entity).pos.equals(new BoardPosition(6, 5)));
-            */
+
         //System.out.println(entities);
         if (!t.pos.equals(bm.get(t.entity).pos))
             if (entities.containsKey(bm.get(t.entity).pos))
@@ -70,10 +67,12 @@ public class BoardState {
                 entities.get(t.pos).sp -= move.spCost();
             } catch (Exception e) {
                 if (e instanceof NullPointerException) {
+                    /*
                     System.out.println("Pos :" + t.pos);
                     System.out.println("move :" + move);
                     System.out.println("entities :" + entities.get(t.pos));
-
+                    */
+                    //System.out.println("No Entity where there should be an entity in BoardState Hashmap.");
                 }
             }
 
@@ -82,11 +81,17 @@ public class BoardState {
 
                 if (entities.containsKey(newPos)) {
                     EntityValue e = entities.get(newPos);
-                    //System.out.println(e);
                     if (move.getPierces())
                         e.hp = MathUtils.clamp(e.hp - (int) (move.getAmpValue() * stm.get(t.entity).getModAtk(t.entity)), 0, 999);
                     else
                         e.hp = MathUtils.clamp(e.hp - (MathUtils.clamp((int) (move.getAmpValue() * stm.get(t.entity).getModAtk(t.entity)) - e.defense, 0, 999)), 0, 999);
+
+                    //remove dead
+
+                    if (e.hp <= 0) {
+                        entities.removeKey(newPos);
+                    }
+
                     e.statusEffect += move.getStatusEffectChanges();
                 }
             }
@@ -95,6 +100,8 @@ public class BoardState {
 
         return this;
     }
+
+
 
     public int evaluate(int homeTeam) {
         int val = 0;
@@ -109,5 +116,9 @@ public class BoardState {
             map.put(e.pos.copy(), e.copy());
 
         return new BoardState(map);
+    }
+
+    public ArrayMap<BoardPosition, EntityValue> getEntities() {
+        return entities;
     }
 }

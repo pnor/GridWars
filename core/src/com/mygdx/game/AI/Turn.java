@@ -26,11 +26,14 @@ public class Turn {
     }
 
     public String toString() {
-        return
-                "Turn :\t \n" +
+        return "Turn :\t \n" +
                         "\t Entity : " + nm.get(entity).name + "  || " + entity.toString() + "\n" +
                         "\t BoardPosition : " + pos + "\n" +
                         "\t Attack Index : " + attack +
                         "\t Direction of Attack : " + direction + " (from last attack)";
+    }
+
+    public String toStringCondensed() {
+        return "Attack# " + attack + " || Direction: " + direction;
     }
 }

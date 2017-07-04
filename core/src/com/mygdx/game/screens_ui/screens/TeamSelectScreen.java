@@ -210,7 +210,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                         teams.get(curTeam).getEntities().add(EntityConstructor.mirrorman(curTeam));
                     } else {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("tester")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.testerPlaceHolder(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.AITester(curTeam));
                     }
 
                     currentEntity++;
