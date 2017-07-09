@@ -195,7 +195,7 @@ public /*abstract*/ class ComputerPlayer {
             Turn bestTurn = null;
 
             for (Turn t : allTurns) {
-                curValue = getTurnValueAlphaBetaPruning(t, board, (team + 1) % teams.size, team, false, -99999, 99999, depth);
+                curValue = getTurnValueAlphaBetaPruning(board.tryTurn(t), (team + 1) % teams.size, team, false, -99999, 99999, depth);
                 worstValue = Math.min(curValue, worstValue);
                 if (curValue > bestTurnVal) {
                     System.out.print("!!!");
@@ -222,7 +222,6 @@ public /*abstract*/ class ComputerPlayer {
 
     /**
      * Ranks each turn with an integer. Each turn is explored several turns deep, bsaed on the value of depth using a minimax algorithm.
-     * @param turn Turn being ranked
      * @param board current {@link BoardState}
      * @param teamNo Which team's turn is being processed
      * @param originalTeam team of the stem turn.
@@ -232,10 +231,10 @@ public /*abstract*/ class ComputerPlayer {
      * @param depth amount of turns deep  it goes. Should not be <= 0! 1 represents 1 turn deep, so the team's turn, then the enemy's likely turn.
      * @return integer ranking of the turn
      */
-    private int getTurnValueAlphaBetaPruning(Turn turn, BoardState board, int teamNo, int originalTeam, boolean maximising, int alpha, int beta, int depth) {
-        BoardState newBoardState = board.copy().tryTurn(turn); //should it be doing this?? come back
+    private int getTurnValueAlphaBetaPruning(BoardState board, int teamNo, int originalTeam, boolean maximising, int alpha, int beta, int depth) {
+        BoardState newBoardState = board.copy(); //should it be doing this?? come back
         newBoardState.doTurnEffects(teamNo);
-        Array<Turn> bestTurns = getBestTurns(newBoardState.tryTurn(turn), teamNo);
+        Array<Turn> bestTurns = getBestTurns(newBoardState, teamNo);
         int best;
         if (maximising) {
             if (depth > 0) {
@@ -245,7 +244,7 @@ public /*abstract*/ class ComputerPlayer {
 
                     if (t == null)
                         continue;
-                    best = Math.max(best, getTurnValueAlphaBetaPruning(turn, newBoardState.tryTurn(t), (teamNo + 1) % teams.size, originalTeam, !maximising, alpha, beta, depth - 1));
+                    best = Math.max(best, getTurnValueAlphaBetaPruning(newBoardState.tryTurn(t), (teamNo + 1) % teams.size, originalTeam, !maximising, alpha, beta, depth - 1));
                     alpha = Math.max(best, alpha);
                     if (beta <= alpha)
                         break;
@@ -267,7 +266,7 @@ public /*abstract*/ class ComputerPlayer {
 
                     if (t == null)
                         continue;
-                    best = Math.min(best, getTurnValueMinimax(turn, newBoardState.tryTurn(t), (teamNo + 1) % teams.size, originalTeam, depth - 1));
+                    best = Math.min(best, getTurnValueAlphaBetaPruning(newBoardState.tryTurn(t), (teamNo + 1) % teams.size, originalTeam, !maximising, alpha, beta, depth - 1));
                     beta = Math.min(best, alpha);
                     if (beta <= alpha)
                         break;

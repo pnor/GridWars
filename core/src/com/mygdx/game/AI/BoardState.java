@@ -18,20 +18,22 @@ import static com.mygdx.game.ComponentMappers.*;
  */
 public class BoardState {
     private ArrayMap<BoardPosition, EntityValue> entities;
+    private Array<Team> teams;
 
     /**
      * Creates a {@link BoardState} using entities and their teams.
      * @param e Array of Entities
-     * @param teams Teams used for an {@link EntityValue}'s checkIdentity method
+     * @param teamArray Teams used for an {@link EntityValue}'s checkIdentity method
      */
-    public BoardState(Array<Entity> e, Array<Team> teams) {
+    public BoardState(Array<Entity> e, Array<Team> teamArray) {
+        teams = teamArray;
         entities = new ArrayMap<>();
         for (Entity entity : e) {
             EntityValue value;
             if (stm.has(entity) && stm.get(entity).alive) {
                 if (team.has(entity)) //on a team
                     if (!status.has(entity)) { //does not have status effect
-                        value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, teams.get(team.get(entity).teamNumber).getEntities().indexOf(entity, true), stm.get(entity).hp,
+                        value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, teamArray.get(team.get(entity).teamNumber).getEntities().indexOf(entity, true), stm.get(entity).hp,
                                 stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def);
                     } else { //does have status effect
                         Array<StatusEffect> currentStatusEffects = status.get(entity).statusEffects.values().toArray();
@@ -39,7 +41,7 @@ public class BoardState {
                         for (int i = 0; i < currentStatusEffects.size; i++)
                             statusInfos[i] = currentStatusEffects.get(i).createStatusEffectInfo();
 
-                        value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, teams.get(team.get(entity).teamNumber).getEntities().indexOf(entity, true), stm.get(entity).hp,
+                        value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, teamArray.get(team.get(entity).teamNumber).getEntities().indexOf(entity, true), stm.get(entity).hp,
                             stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, statusInfos);
                     }
                 else { //not on a team
@@ -72,20 +74,27 @@ public class BoardState {
      * @return The {@link BoardState} for chaining
      */
     public BoardState tryTurn(Turn t) {
+        EntityValue effectedEntity = null; //entity value representing entity affected by turn
+
+        //get User
+        for (EntityValue ev : entities.values().toArray())
+            if (ev.checkIdentity(t.entity, teams.get(team.get(t.entity).teamNumber)))
+                effectedEntity = ev;
+
+
         //movement
-        if (!t.pos.equals(bm.get(t.entity).pos))
-            if (entities.containsKey(bm.get(t.entity).pos))
-                entities.put(t.pos, entities.removeKey(bm.get(t.entity).pos));
+        if (!t.pos.equals(effectedEntity.pos))
+            if (entities.containsKey(effectedEntity.pos))
+                entities.put(t.pos, entities.removeKey(effectedEntity.pos));
 
         //attack
         if (t.attack != -1) {
-            EntityValue user = entities.get(t.pos);
             Move move = mvm.get(t.entity).moveList.get(t.attack);
 
             //deduct sp cost
             try {
                 System.out.println("Entity : " + entities.get(t.pos));
-                entities.get(t.pos).sp -= move.spCost();
+                effectedEntity.sp -= move.spCost();
             } catch (Exception e) {
                 if (e instanceof NullPointerException) {
                     System.out.println("!");
@@ -105,9 +114,9 @@ public class BoardState {
                     EntityValue e = entities.get(newPos);
                     //damage
                     if (move.moveInfo().pierces)
-                        e.hp = MathUtils.clamp(e.hp - (int) (move.moveInfo().ampValue * user.getModAtk()), 0, e.maxHp);
+                        e.hp = MathUtils.clamp(e.hp - (int) (move.moveInfo().ampValue * effectedEntity.getModAtk()), 0, e.maxHp);
                     else
-                        e.hp = MathUtils.clamp(e.hp - (MathUtils.clamp((int) (move.moveInfo().ampValue * user.getModAtk()) - e.getModDef(), 0, 999)), 0, e.maxHp);
+                        e.hp = MathUtils.clamp(e.hp - (MathUtils.clamp((int) (move.moveInfo().ampValue * effectedEntity.getModAtk()) - e.getModDef(), 0, 999)), 0, e.maxHp);
 
                     //status
                     if (move.moveInfo().statusEffects != null && e.acceptsStatusEffects)
