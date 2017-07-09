@@ -2,6 +2,7 @@ package com.mygdx.game.move_related;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
+import com.mygdx.game.AI.StatusEffectInfo;
 import com.mygdx.game.actors.AnimationActor;
 
 import static com.mygdx.game.ComponentMappers.am;
@@ -25,21 +26,24 @@ public class StatusEffect {
     private boolean isFinished;
     private TurnEffect turnEffect;
     private StatChanges statChanges;
+    private StatusEffectInfo.TurnEffectInfo turnEffectInfo;
 
     private boolean stopsAnimation;
 
     /**
      * Creates a {@link StatusEffect}.
-     * @param n name. Is used as the key value in a {@link com.badlogic.gdx.utils.OrderedMap} so spelling matters! Is case-sensitive.
+     *
+     * @param n        name. Is used as the key value in a {@link com.badlogic.gdx.utils.OrderedMap} so spelling matters! Is case-sensitive.
      * @param duration length of turn duration
-     * @param color of the entity when inflicted with the condition
-     * @param effect that happens when on each turn
+     * @param color    of the entity when inflicted with the condition
+     * @param effect   that happens when on each turn
      */
-    public StatusEffect(String n, int duration, Color color, TurnEffect effect) {
+    public StatusEffect(String n, int duration, Color color, TurnEffect effect, StatusEffectInfo.TurnEffectInfo turnInfo) {
         name = n;
         DURATION = duration;
         COLOR = color;
         turnEffect = effect;
+        turnEffectInfo = turnInfo;
     }
 
     /**
@@ -54,6 +58,7 @@ public class StatusEffect {
 
     /**
      * Applies the effects of the status effect by calling {@link TurnEffect}. Called at the beginning of the entity's turn
+     *
      * @param e Entity affected
      */
     public void doTurnEffect(Entity e) {
@@ -71,6 +76,10 @@ public class StatusEffect {
 
     public void setStatChanges(float maxHealth, float skill, float maxSkill, float attack, float defense, float speed) {
         statChanges = new StatChanges(maxHealth, skill, maxSkill, attack, defense, speed);
+    }
+
+    public StatusEffectInfo createStatusEffectInfo() {
+        return new StatusEffectInfo(name, statChanges, turnEffectInfo);
     }
 
     public void setStopsAnimation(boolean b) {
@@ -101,7 +110,8 @@ public class StatusEffect {
      * Class for the stat changes a {@link StatusEffect} causes.
      */
     public class StatChanges {
-        /** Amount is multiplied to corresponding stat. Ex. : if hp in {@link StatChanges} is
+        /**
+         * Amount is multiplied to corresponding stat. Ex. : if hp in {@link StatChanges} is
          * 2, that means that the entity's health is multiplied by 2.
          */
         public final float maxHP, sp, maxSP, atk, def, spd;

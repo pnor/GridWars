@@ -59,7 +59,7 @@ public class StatComponent implements Component {
         def = defense;
         spd = speed;
     }
-    //TODO no if statements for all these methods. StatusEffect object should have an object that tells it what stats it augments. Then this should cycle through those to compute final stat changes
+
     /**
      * Max Hp value after status effects and other effects are applied
      */

@@ -2,6 +2,7 @@ package com.mygdx.game.move_related;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.AI.MoveInfo;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.BoardComponent;
 
@@ -24,10 +25,7 @@ public class Move {
 
     private Entity user;
 
-    //Information for AI processing
-    private int statusEffectChanges; //cuases status effects
-    private boolean pierces; //ignores defense
-    private float ampValue; //whether it multiplies attack
+    private MoveInfo moveInfo; //for AI
 
     /**
      * Creates a move that can be used. The move's attack message is displayed when it is used.
@@ -40,7 +38,7 @@ public class Move {
      * @param vis visual effect
      */
     public Move(String name2, String message, Entity usr, int cost, Array<BoardPosition> rnge,
-                Attack atk, Visuals vis, int AIStatusEffect, boolean AIPierces, float AIamp) {
+                Attack atk, Visuals vis, MoveInfo info) {
         name = name2;
         attackMessage = message;
         user = usr;
@@ -48,10 +46,7 @@ public class Move {
         range = rnge;
         attack  = atk;
         visuals = vis;
-
-        statusEffectChanges = AIStatusEffect;
-        pierces = AIPierces;
-        ampValue = AIamp;
+        moveInfo = info;
     }
 
     /**
@@ -65,17 +60,14 @@ public class Move {
      * @param atk effect of attack
      * @param vis visual effect
      */
-    public Move(String name2, Entity usr, int cost, Array<BoardPosition> rnge, Attack atk, Visuals vis, int AIStatusEffect, boolean AIPierces, float AIamp) {
+    public Move(String name2, Entity usr, int cost, Array<BoardPosition> rnge, Attack atk, Visuals vis, MoveInfo info) {
         name = name2;
         user = usr;
         spCost = cost;
         range = rnge;
         attack  = atk;
         visuals = vis;
-
-        statusEffectChanges = AIStatusEffect;
-        pierces = AIPierces;
-        ampValue = AIamp;
+        moveInfo = info;
     }
 
     /**
@@ -191,9 +183,5 @@ public class Move {
         return range;
     }
 
-    public int getStatusEffectChanges() { return statusEffectChanges; }
-
-    public boolean getPierces() { return pierces; }
-
-    public float getAmpValue() { return ampValue; }
+    public MoveInfo moveInfo() { return moveInfo;}
 }

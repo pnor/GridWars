@@ -1,6 +1,7 @@
 package com.mygdx.game.AI;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.ComponentMappers;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.rules_types.Team;
@@ -20,10 +21,24 @@ public class EntityValue implements Comparable {
     public int sp;
     public int attack;
     public int defense;
-    public int statusEffect;
+
+    public boolean acceptsStatusEffects;
+    public Array<StatusEffectInfo> statusEffectInfos;
+
     public BoardPosition pos;
 
-    public EntityValue(BoardPosition position, int teamNo, int indexWithinTeam, int health, int maxHealth, int skill, int atk, int def, int effectValue) {
+    /**
+     * Creates an {@link EntityValue} based off an Entity that cannot receive a status effect.
+     * @param position position of the Entity
+     * @param teamNo Entity's team number
+     * @param indexWithinTeam Index location of the Entity within its team. (Used for identity purposes)
+     * @param health Entity's health
+     * @param maxHealth Entity's max health
+     * @param skill Entity's skill points
+     * @param atk Entity's attack value
+     * @param def Entity's defense value
+     */
+    public EntityValue(BoardPosition position, int teamNo, int indexWithinTeam, int health, int maxHealth, int skill, int atk, int def) {
         pos = position;
         team = teamNo;
         indexInTeam = indexWithinTeam;
@@ -33,7 +48,22 @@ public class EntityValue implements Comparable {
         maxHp = maxHealth;
         attack = atk;
         defense = def;
-        statusEffect = effectValue;
+        acceptsStatusEffects = false;
+    }
+
+    public EntityValue(BoardPosition position, int teamNo, int indexWithinTeam, int health, int maxHealth, int skill, int atk, int def, StatusEffectInfo[] statusEffects) {
+        pos = position;
+        team = teamNo;
+        indexInTeam = indexWithinTeam;
+
+        hp = health;
+        sp = skill;
+        maxHp = maxHealth;
+        attack = atk;
+        defense = def;
+
+        acceptsStatusEffects = true;
+        statusEffectInfos = new Array<>(statusEffects);
     }
 
     /**
@@ -49,8 +79,7 @@ public class EntityValue implements Comparable {
             value += 200 + (hp / maxHp) * 150;
 
         //value += sp * 15;
-        value -= statusEffect * 20; //debug for now more is worse
-
+        //value -= statusEffect * 20;
 
         if (team == -1) //no team -> treat as weak enemy
             value /= 25;
@@ -82,7 +111,63 @@ public class EntityValue implements Comparable {
     }
 
     public EntityValue copy() {
-        return new EntityValue(pos.copy(), team, indexInTeam, hp, maxHp, sp, attack, defense, statusEffect);
+        if (statusEffectInfos == null)
+            return new EntityValue(pos.copy(), team, indexInTeam, hp, maxHp, sp, attack, defense, null);
+        else {
+            //copy status effects
+            StatusEffectInfo[] copyStatus = new StatusEffectInfo[statusEffectInfos.size];
+            for (int i = 0; i < statusEffectInfos.size; i++)
+                copyStatus[i] = statusEffectInfos.get(i).copy();
+            return new EntityValue(pos.copy(), team, indexInTeam, hp, maxHp, sp, attack, defense, copyStatus);
+        }
+    }
+
+    /**
+     * Sp value after status effects and other effects are applied
+     */
+    public int getModSp() {
+        int newSp = sp;
+        if (statusEffectInfos == null)
+            return sp;
+
+        for (StatusEffectInfo status : statusEffectInfos) {
+            if (status.statChanges == null) continue;
+            newSp = (int) (newSp * status.statChanges.sp);
+        }
+
+        return newSp;
+    }
+
+    /**
+     * Attack value after status effects and other effects are applied
+     */
+    public int getModAtk() {
+        int atk = attack;
+        if (statusEffectInfos == null)
+            return sp;
+
+        for (StatusEffectInfo status : statusEffectInfos) {
+            if (status.statChanges == null) continue;
+            atk = (int) (atk * status.statChanges.atk);
+        }
+
+        return atk;
+    }
+
+    /**
+     * Defense value after status effects and other effects are applied
+     */
+    public int getModDef() {
+        int def = defense;
+        if (statusEffectInfos == null)
+            return sp;
+
+        for (StatusEffectInfo status : statusEffectInfos) {
+            if (status.statChanges == null) continue;
+            def = (int) (def * status.statChanges.def);
+        }
+
+        return def;
     }
 
     @Override
@@ -95,7 +180,7 @@ public class EntityValue implements Comparable {
                 ", sp=" + sp +
                 ", attack=" + attack +
                 ", defense=" + defense +
-                ", statusEffect=" + statusEffect +
+                ", accepts Status Effect=" + acceptsStatusEffects +
                 ", pos=" + pos +
                 '}';
     }

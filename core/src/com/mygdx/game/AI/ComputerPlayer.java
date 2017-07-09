@@ -233,7 +233,8 @@ public /*abstract*/ class ComputerPlayer {
      * @return integer ranking of the turn
      */
     private int getTurnValueAlphaBetaPruning(Turn turn, BoardState board, int teamNo, int originalTeam, boolean maximising, int alpha, int beta, int depth) {
-        BoardState newBoardState = board.copy().tryTurn(turn);
+        BoardState newBoardState = board.copy().tryTurn(turn); //should it be doing this?? come back
+        newBoardState.doTurnEffects(teamNo);
         Array<Turn> bestTurns = getBestTurns(newBoardState.tryTurn(turn), teamNo);
         int best;
         if (maximising) {
@@ -294,6 +295,45 @@ public /*abstract*/ class ComputerPlayer {
 
         Array<Turn> turns = new Array<>();
         Array<BoardPosition> possiblePositions = getPossiblePositions(bm.get(e).pos, stm.get(e).getModSpd(e));
+        possiblePositions.add(bm.get(e).pos.copy()); //no movement
+        for (BoardPosition pos : possiblePositions) {
+            turns.add(new Turn(e, pos, -1, 0)); //no attack
+            for (int i = 0; i < mvm.get(e).moveList.size; i++) {
+                if (mvm.get(e).moveList.get(i).spCost() > stm.get(e).sp) //if it doesnt have enough sp, skip
+                    continue;
+                for (int j = 0; j < 4; j++) //All directions of attack
+                    turns.add(new Turn(e, pos, i, j));
+            }
+        }
+
+        return turns;
+    }
+
+    /**
+     * Retrieves all possible turns an {@link Entity} can make on the board.
+     * @param e Entity. Used for Moves from moveset
+     * @param ev EntityValue. Used for getting stats affected by Statuses, etc.
+     * @return {@link Array} of all possible moves for one Entity
+     */
+    private Array<Turn> getAllPossibleTurns(Entity e, EntityValue ev) {
+        boolean hasNonMovingStatus = false;
+        for (StatusEffectInfo s : ev.statusEffectInfos)
+            if (s.name.equals("Petrify") || s.name.equals("Freeze"))
+                hasNonMovingStatus = true;
+
+        if (hasNonMovingStatus) //handle petrify/freeze
+            return new Array<Turn>(new Turn[]{new Turn(e, bm.get(e).pos.copy(), -1, 0)});
+
+        Array<Turn> turns = new Array<>();
+        int speedVal = stm.get(e).spd;
+        if (ev.statusEffectInfos != null) {
+            for (StatusEffectInfo status : ev.statusEffectInfos) {
+                if (status.statChanges == null) continue;
+                speedVal = (int) (speedVal * status.statChanges.spd);
+            }
+        }
+
+        Array<BoardPosition> possiblePositions = getPossiblePositions(bm.get(e).pos, speedVal);
         possiblePositions.add(bm.get(e).pos.copy()); //no movement
         for (BoardPosition pos : possiblePositions) {
             turns.add(new Turn(e, pos, -1, 0)); //no attack
