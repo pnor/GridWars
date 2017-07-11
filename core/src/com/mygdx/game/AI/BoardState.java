@@ -64,8 +64,9 @@ public class BoardState {
         }
     }
 
-    public BoardState(ArrayMap<BoardPosition, EntityValue> entityMap) {
+    public BoardState(ArrayMap<BoardPosition, EntityValue> entityMap, Array<Team> t) {
         entities = entityMap;
+        teams = t;
     }
 
     /**
@@ -74,18 +75,29 @@ public class BoardState {
      * @return The {@link BoardState} for chaining
      */
     public BoardState tryTurn(Turn t) {
-        EntityValue effectedEntity = null; //entity value representing entity affected by turn
+        EntityValue effectedEntity = null; //entity value representing entity playing out turn
 
         //get User
-        for (EntityValue ev : entities.values().toArray())
-            if (ev.checkIdentity(t.entity, teams.get(team.get(t.entity).teamNumber)))
-                effectedEntity = ev;
+        Array<EntityValue> entityValues = entities.values().toArray();
+        for (int i = 0; i < entityValues.size; i++)
+            if (entityValues.get(i).checkIdentity(t.entity, teams.get(team.get(t.entity).teamNumber)))
+                effectedEntity = entityValues.get(i);
 
+        if (effectedEntity == null) {
+            System.out.println("Position : " + t.pos + "   Entity : " + nm.get(t.entity).name);
+            System.out.println("Entity actual index : " + teams.get(team.get(t.entity).teamNumber).getEntities().indexOf(t.entity, true));
+            System.out.println("All entity value size : " + entityValues.size);
+            System.out.println("All entity value indeces : ");
+            for (EntityValue ev : entityValues)
+                System.out.println(ev.indexInTeam);
+            System.out.println("null!");
+        }
 
         //movement
         if (!t.pos.equals(effectedEntity.pos))
             if (entities.containsKey(effectedEntity.pos))
                 entities.put(t.pos, entities.removeKey(effectedEntity.pos));
+
 
         //attack
         if (t.attack != -1) {
@@ -97,7 +109,7 @@ public class BoardState {
                 effectedEntity.sp -= move.spCost();
             } catch (Exception e) {
                 if (e instanceof NullPointerException) {
-                    System.out.println("!");
+                    //System.out.println("!");
                     /*
                     System.out.println("Pos :" + t.pos);
                     System.out.println("move :" + move);
@@ -129,7 +141,7 @@ public class BoardState {
                     //remove dead
 
                     if (e.hp <= 0) {
-                        entities.removeKey(newPos);
+                        //entities.removeKey(newPos);
                     }
                 }
             }
@@ -145,16 +157,21 @@ public class BoardState {
      */
     public void doTurnEffects(int team) {
         Array<EntityValue> entityValues = entities.values().toArray();
-        for (EntityValue e : entityValues) {
-            if (e.team == team && e.statusEffectInfos != null && e.statusEffectInfos.size > 0)
-                for (StatusEffectInfo s : e.statusEffectInfos)
-                    s.turnEffectInfo.doTurnEffect(e);
+        try {
+            for (EntityValue e : entityValues) {
+                if (e.team == team && e.statusEffectInfos != null && e.statusEffectInfos.size > 0)
+                    for (StatusEffectInfo s : e.statusEffectInfos)
+                        s.turnEffectInfo.doTurnEffect(e);
+            }
+        } catch (Exception e) {
+            System.out.println("\n -----------------Entity Values : " + entityValues);
+            System.out.println("");
         }
     }
 
     /**
-     * Evaulates the state of the board
-     * @param homeTeam The team's prespective. Entities on that team will be added, while others are subtracted.
+     * Evaluates the state of the board
+     * @param homeTeam The team's perspective. Entities on that team will be added, while others are subtracted.
      * @return integer representing the value of all {@link EntityValue}s added together
      */
     public int evaluate(int homeTeam) {
@@ -172,7 +189,7 @@ public class BoardState {
         for (EntityValue e : entities.values())
             map.put(e.pos.copy(), e.copy());
 
-        return new BoardState(map);
+        return new BoardState(map, teams);
     }
 
     public ArrayMap<BoardPosition, EntityValue> getEntities() {

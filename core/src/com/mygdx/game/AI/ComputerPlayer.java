@@ -332,8 +332,8 @@ public /*abstract*/ class ComputerPlayer {
             }
         }
 
-        Array<BoardPosition> possiblePositions = getPossiblePositions(bm.get(e).pos, speedVal);
-        possiblePositions.add(bm.get(e).pos.copy()); //no movement
+        Array<BoardPosition> possiblePositions = getPossiblePositions(ev.pos, speedVal);
+        possiblePositions.add(ev.pos.copy()); //no movement
         for (BoardPosition pos : possiblePositions) {
             turns.add(new Turn(e, pos, -1, 0)); //no attack
             for (int i = 0; i < mvm.get(e).moveList.size; i++) {

@@ -12,6 +12,10 @@ import com.mygdx.game.boards.CodeBoard;
  */
 public class BoardComponent implements Component {
     public static BoardManager boards;
+    /*
+    Used for giving each Entity a unique ID
+     */
+    private static int currentIDnumber;
     /**
      * if r and c are -1, means its not on the board
      */
