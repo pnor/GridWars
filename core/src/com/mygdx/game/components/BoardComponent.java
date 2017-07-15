@@ -1,10 +1,8 @@
 package com.mygdx.game.components;
 
 import com.badlogic.ashley.core.Component;
-import com.mygdx.game.boards.Board;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
-import com.mygdx.game.boards.CodeBoard;
 
 /**
  * Represents a location and orientation on the board.
@@ -15,23 +13,20 @@ public class BoardComponent implements Component {
     /*
     Used for giving each Entity a unique ID
      */
-    private static int currentIDnumber;
+    private static int currentIDNumberAssigned;
+    /**
+     * Unique ID index to tell entities apart from one another.
+     */
+    public final int BOARD_ENTITY_ID;
     /**
      * if r and c are -1, means its not on the board
      */
     public BoardPosition pos = new BoardPosition(-1, -1);
 
     public BoardComponent() {
-        super();
+        BOARD_ENTITY_ID = currentIDNumberAssigned++;
     }
 
-    public BoardComponent(Board b, CodeBoard cb) {
-        boards = new BoardManager(b, cb);
-    }
-
-    public BoardComponent(BoardManager bm) {
-        boards = bm;
-    }
 
     /**
      * Updates the position. Is called from BoardManager, so should not be called directly from an entity.

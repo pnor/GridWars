@@ -3,7 +3,6 @@ package com.mygdx.game.AI;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.ComponentMappers;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.BoardComponent;
@@ -38,25 +37,31 @@ public /*abstract*/ class ComputerPlayer {
      */
     public Array<Turn> getBestTurns(BoardState board, int team) {
         Array<Turn> turns = new Array<>();
+        EntityValue entityValue = null;
 
         for (Entity e : teams.get(team).getEntities()) {
+            //System.out.println("+++++++++++++++++++++++++ Next Entity in getBestTurns +++++++++++++++++++++++++++++ ******************************");
 
-            //recursion check
+            //recursion check -> if it dies in a later turn
             boolean inBoard = false;
             for (EntityValue value : board.getEntities().values()) {
-                if (value.checkIdentity(e, teams.get(ComponentMappers.team.get(e).teamNumber)))
+                if (value.checkIdentity(e)) {
                     inBoard = true;
+                    entityValue = value;
+                    break;
+                }
             }
 
-            if (!stm.get(e).alive && inBoard) { //is alive check
+            if (!stm.get(e).alive || !inBoard) { //is alive check
                 turns.add(null);
                 continue;
             }
 
             int bestTurnVal = -9999999;
-            int worstValue = 999;
+            int worstValue = 999999;
             int curValue = 0;
-            Array<Turn> allTurns = getAllPossibleTurns(e);
+            //Array<Turn> allTurns = getAllPossibleTurns(e);
+            Array<Turn> allTurns = getAllPossibleTurns(e, entityValue);
             Turn bestTurn = null;
 
             for (Turn t : allTurns) {
@@ -183,7 +188,7 @@ public /*abstract*/ class ComputerPlayer {
         for (int i = 0; i < entities.size; i++) {
             Entity e = entities.get(i);
 
-            if (!stm.get(e).alive) {
+            if (!stm.get(e).alive) { //is alive check
                 turns.add(null);
                 continue;
             }
@@ -232,9 +237,9 @@ public /*abstract*/ class ComputerPlayer {
      * @return integer ranking of the turn
      */
     private int getTurnValueAlphaBetaPruning(BoardState board, int teamNo, int originalTeam, boolean maximising, int alpha, int beta, int depth) {
-        BoardState newBoardState = board.copy(); //should it be doing this?? come back
+        BoardState newBoardState = board.copy();
         newBoardState.doTurnEffects(teamNo);
-        Array<Turn> bestTurns = getBestTurns(newBoardState, teamNo);
+        Array<Turn> bestTurns = getBestTurns(newBoardState.copy(), teamNo);
         int best;
         if (maximising) {
             if (depth > 0) {

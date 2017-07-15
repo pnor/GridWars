@@ -388,7 +388,7 @@ public class BattleScreen implements Screen {
                        computer.DEBUG_TURNS_PROCESSED = 0;
                        //computerTurns = computer.getBestTurns(new BoardState(BoardComponent.boards.getCodeBoard().getEntities()), computer.getTeamControlled());
                        //computerTurns = computer.getBestTurnsMinimax(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), teams), computer.getTeamControlled(), 2);
-                       computerTurns = computer.getBestTurnsAlphaBetaPruning(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), teams), computer.getTeamControlled(), 1);
+                       computerTurns = computer.getBestTurnsAlphaBetaPruning(new BoardState(BoardComponent.boards.getCodeBoard().getEntities()), computer.getTeamControlled(), 3);
                         System.out.println("\n TURNS PROCESSED : " + computer.DEBUG_TURNS_PROCESSED);
                    } else
                        playingComputerTurn = false;

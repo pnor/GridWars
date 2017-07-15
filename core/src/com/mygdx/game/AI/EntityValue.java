@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.ComponentMappers;
 import com.mygdx.game.boards.BoardPosition;
-import com.mygdx.game.rules_types.Team;
 
 /**
  * Class representing a simplified form of entities on the board. Only contains values relating to an Entity's value, such
@@ -14,7 +13,7 @@ import com.mygdx.game.rules_types.Team;
  */
 public class EntityValue implements Comparable {
     public int team;
-    public int indexInTeam; //For identity purposes
+    public final int BOARD_ENTITY_ID;
 
     public int hp;
     public int maxHp;
@@ -38,10 +37,10 @@ public class EntityValue implements Comparable {
      * @param atk Entity's attack value
      * @param def Entity's defense value
      */
-    public EntityValue(BoardPosition position, int teamNo, int indexWithinTeam, int health, int maxHealth, int skill, int atk, int def) {
+    public EntityValue(BoardPosition position, int teamNo, int boardEntityID, int health, int maxHealth, int skill, int atk, int def) {
         pos = position;
         team = teamNo;
-        indexInTeam = indexWithinTeam;
+        BOARD_ENTITY_ID = boardEntityID;
 
         hp = health;
         sp = skill;
@@ -51,10 +50,10 @@ public class EntityValue implements Comparable {
         acceptsStatusEffects = false;
     }
 
-    public EntityValue(BoardPosition position, int teamNo, int indexWithinTeam, int health, int maxHealth, int skill, int atk, int def, StatusEffectInfo[] statusEffects) {
+    public EntityValue(BoardPosition position, int teamNo, int boardEntityID, int health, int maxHealth, int skill, int atk, int def, StatusEffectInfo[] statusEffects) {
         pos = position;
         team = teamNo;
-        indexInTeam = indexWithinTeam;
+        BOARD_ENTITY_ID = boardEntityID;
 
         hp = health;
         sp = skill;
@@ -91,13 +90,12 @@ public class EntityValue implements Comparable {
     }
 
     /**
-     * Checks whether this {@link EntityValue} is the one generated from the {@link Entity} parameter. Does this
-     * by comparing team, and the Entity's index in its team.
+     * Checks whether this {@link EntityValue} is the one generated from the {@link Entity} parameter.
      * @param e Entity being compared
      * @return True, if they represent the same Entity. False otherwise.
      */
-    public boolean checkIdentity(Entity e, Team t) {
-        return ComponentMappers.team.get(e).teamNumber == team && t.getEntities().indexOf(e, true) == indexInTeam;
+    public boolean checkIdentity(Entity e) {
+        return ComponentMappers.bm.get(e).BOARD_ENTITY_ID == BOARD_ENTITY_ID;
     }
 
     @Override
@@ -112,13 +110,13 @@ public class EntityValue implements Comparable {
 
     public EntityValue copy() {
         if (statusEffectInfos == null)
-            return new EntityValue(pos.copy(), team, indexInTeam, hp, maxHp, sp, attack, defense, null);
+            return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, attack, defense, null);
         else {
             //copy status effects
             StatusEffectInfo[] copyStatus = new StatusEffectInfo[statusEffectInfos.size];
             for (int i = 0; i < statusEffectInfos.size; i++)
                 copyStatus[i] = statusEffectInfos.get(i).copy();
-            return new EntityValue(pos.copy(), team, indexInTeam, hp, maxHp, sp, attack, defense, copyStatus);
+            return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, attack, defense, copyStatus);
         }
     }
 
@@ -174,7 +172,7 @@ public class EntityValue implements Comparable {
     public String toString() {
         return "EntityValue{" +
                 "team=" + team +
-                ", indexInTeam=" + indexInTeam +
+                ", board Entity ID=" + BOARD_ENTITY_ID +
                 ", hp=" + hp +
                 ", maxHp=" + maxHp +
                 ", sp=" + sp +

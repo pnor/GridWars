@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.ArrayMap;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.StatusEffect;
-import com.mygdx.game.rules_types.Team;
 
 import static com.mygdx.game.ComponentMappers.*;
 
@@ -18,22 +17,19 @@ import static com.mygdx.game.ComponentMappers.*;
  */
 public class BoardState {
     private ArrayMap<BoardPosition, EntityValue> entities;
-    private Array<Team> teams;
 
     /**
      * Creates a {@link BoardState} using entities and their teams.
      * @param e Array of Entities
-     * @param teamArray Teams used for an {@link EntityValue}'s checkIdentity method
      */
-    public BoardState(Array<Entity> e, Array<Team> teamArray) {
-        teams = teamArray;
+    public BoardState(Array<Entity> e) {
         entities = new ArrayMap<>();
         for (Entity entity : e) {
             EntityValue value;
             if (stm.has(entity) && stm.get(entity).alive) {
                 if (team.has(entity)) //on a team
                     if (!status.has(entity)) { //does not have status effect
-                        value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, teamArray.get(team.get(entity).teamNumber).getEntities().indexOf(entity, true), stm.get(entity).hp,
+                        value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, bm.get(entity).BOARD_ENTITY_ID, stm.get(entity).hp,
                                 stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def);
                     } else { //does have status effect
                         Array<StatusEffect> currentStatusEffects = status.get(entity).statusEffects.values().toArray();
@@ -41,7 +37,7 @@ public class BoardState {
                         for (int i = 0; i < currentStatusEffects.size; i++)
                             statusInfos[i] = currentStatusEffects.get(i).createStatusEffectInfo();
 
-                        value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, teamArray.get(team.get(entity).teamNumber).getEntities().indexOf(entity, true), stm.get(entity).hp,
+                        value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, bm.get(entity).BOARD_ENTITY_ID, stm.get(entity).hp,
                             stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, statusInfos);
                     }
                 else { //not on a team
@@ -64,9 +60,8 @@ public class BoardState {
         }
     }
 
-    public BoardState(ArrayMap<BoardPosition, EntityValue> entityMap, Array<Team> t) {
+    public BoardState(ArrayMap<BoardPosition, EntityValue> entityMap) {
         entities = entityMap;
-        teams = t;
     }
 
     /**
@@ -80,18 +75,26 @@ public class BoardState {
         //get User
         Array<EntityValue> entityValues = entities.values().toArray();
         for (int i = 0; i < entityValues.size; i++)
-            if (entityValues.get(i).checkIdentity(t.entity, teams.get(team.get(t.entity).teamNumber)))
+            if (entityValues.get(i).checkIdentity(t.entity))
                 effectedEntity = entityValues.get(i);
 
+        if (effectedEntity == null) //user died in the process, do nothing
+                return this;
+
+
+        /*
         if (effectedEntity == null) {
+            System.out.println("xxxxxxxxxxxxxx effectedEntity is null xxxxxxxxxxxxxxxxx");
+            System.out.println(t);
             System.out.println("Position : " + t.pos + "   Entity : " + nm.get(t.entity).name);
-            System.out.println("Entity actual index : " + teams.get(team.get(t.entity).teamNumber).getEntities().indexOf(t.entity, true));
+            System.out.println("Entity ID : " + bm.get(t.entity).BOARD_ENTITY_ID);
             System.out.println("All entity value size : " + entityValues.size);
-            System.out.println("All entity value indeces : ");
+            System.out.println("Board Entity IDs: ");
             for (EntityValue ev : entityValues)
-                System.out.println(ev.indexInTeam);
-            System.out.println("null!");
+                System.out.println(ev.BOARD_ENTITY_ID);
+            System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         }
+        */
 
         //movement
         if (!t.pos.equals(effectedEntity.pos))
@@ -105,7 +108,6 @@ public class BoardState {
 
             //deduct sp cost
             try {
-                System.out.println("Entity : " + entities.get(t.pos));
                 effectedEntity.sp -= move.spCost();
             } catch (Exception e) {
                 if (e instanceof NullPointerException) {
@@ -141,7 +143,14 @@ public class BoardState {
                     //remove dead
 
                     if (e.hp <= 0) {
-                        //entities.removeKey(newPos);
+                        entities.removeKey(newPos);
+                        /*
+                        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Entity killed~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        System.out.println("Entity's ID: " + e.BOARD_ENTITY_ID);
+                        System.out.println("Entity pos : " + e.pos);
+                        System.out.println("Entity toString : " + e);
+                        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        */
                     }
                 }
             }
@@ -164,8 +173,10 @@ public class BoardState {
                         s.turnEffectInfo.doTurnEffect(e);
             }
         } catch (Exception e) {
-            System.out.println("\n -----------------Entity Values : " + entityValues);
-            System.out.println("");
+            System.out.println("----------------------- Exception in doTurnEffects -------------------------------");
+            System.out.println("BoardState.doTurnEffects has caused an exception! : Excpetion is type " + e.getClass());
+            System.out.println("Entity Values : " + entityValues);
+            System.out.println("-------------------------------------");
         }
     }
 
@@ -189,7 +200,7 @@ public class BoardState {
         for (EntityValue e : entities.values())
             map.put(e.pos.copy(), e.copy());
 
-        return new BoardState(map, teams);
+        return new BoardState(map);
     }
 
     public ArrayMap<BoardPosition, EntityValue> getEntities() {
