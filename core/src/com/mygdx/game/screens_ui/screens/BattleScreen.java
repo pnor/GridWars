@@ -48,6 +48,7 @@ import com.mygdx.game.move_related.StatusEffect;
 import com.mygdx.game.move_related.Visuals;
 import com.mygdx.game.rules_types.Rules;
 import com.mygdx.game.rules_types.Team;
+import com.mygdx.game.rules_types.ZoneRules;
 import com.mygdx.game.screens_ui.*;
 import com.mygdx.game.systems.*;
 
@@ -388,8 +389,11 @@ public class BattleScreen implements Screen {
                        computer.DEBUG_TURNS_PROCESSED = 0;
                        //computerTurns = computer.getBestTurns(new BoardState(BoardComponent.boards.getCodeBoard().getEntities()), computer.getTeamControlled());
                        //computerTurns = computer.getBestTurnsMinimax(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), teams), computer.getTeamControlled(), 2);
-                       computerTurns = computer.getBestTurnsAlphaBetaPruning(new BoardState(BoardComponent.boards.getCodeBoard().getEntities()), computer.getTeamControlled(), 3);
-                        System.out.println("\n TURNS PROCESSED : " + computer.DEBUG_TURNS_PROCESSED);
+                       if (rules instanceof ZoneRules)
+                           computerTurns = computer.getBestTurnsBestTurnAssumption(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), ((ZoneRules) rules).getZones()), computer.getTeamControlled(), 2);
+                       else
+                           computerTurns = computer.getBestTurnsBestTurnAssumption(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), null), computer.getTeamControlled(), 5);
+                       System.out.println("TURNS PROCESSED : " + computer.DEBUG_TURNS_PROCESSED);
                    } else
                        playingComputerTurn = false;
 

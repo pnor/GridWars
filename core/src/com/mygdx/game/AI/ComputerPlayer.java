@@ -57,18 +57,17 @@ public /*abstract*/ class ComputerPlayer {
                 continue;
             }
 
-            int bestTurnVal = -9999999;
-            int worstValue = 999999;
+            int bestTurnVal = -99999999;
+            int worstValue = 99999999;
             int curValue = 0;
             //Array<Turn> allTurns = getAllPossibleTurns(e);
-            Array<Turn> allTurns = getAllPossibleTurns(e, entityValue);
+            Array<Turn> allTurns = getAllPossibleTurns(e, entityValue, board);
             Turn bestTurn = null;
 
             for (Turn t : allTurns) {
                 curValue = board.copy().tryTurn(t).evaluate(team);
                 worstValue = Math.min(curValue, worstValue);
                 if (curValue > bestTurnVal) {
-                    //System.out.print("!");
                     bestTurnVal = curValue;
                     bestTurn = t;
                 }
@@ -80,6 +79,7 @@ public /*abstract*/ class ComputerPlayer {
             System.out.println("Best Turn: " + bestTurn);
             System.out.println("-----------------------------------------------");
             */
+
 
             turns.add(bestTurn);
             //update BoardState with last Entity's action
@@ -194,13 +194,13 @@ public /*abstract*/ class ComputerPlayer {
             }
 
             int bestTurnVal = -9999999;
-            int worstValue = 999;
+            int worstValue = 9999999;
             int curValue = 0;
             Array<Turn> allTurns = getAllPossibleTurns(e);
             Turn bestTurn = null;
 
             for (Turn t : allTurns) {
-                curValue = getTurnValueAlphaBetaPruning(board.tryTurn(t), (team + 1) % teams.size, team, false, -99999, 99999, depth);
+                curValue = getTurnValueAlphaBetaPruning(board.copy().tryTurn(t), (team + 1) % teams.size, team, false, -99999, 99999, depth);
                 worstValue = Math.min(curValue, worstValue);
                 if (curValue > bestTurnVal) {
                     System.out.print("!!!");
@@ -288,6 +288,66 @@ public /*abstract*/ class ComputerPlayer {
         }
     }
 
+    public Array<Turn> getBestTurnsBestTurnAssumption(BoardState board, int team, int depth) {
+        Array<Turn> turns = new Array<>();
+        Array<Entity> entities = teams.get(team).getEntities();
+
+        for (int i = 0; i < entities.size; i++) {
+            Entity e = entities.get(i);
+
+            if (!stm.get(e).alive) { //is alive check
+                turns.add(null);
+                continue;
+            }
+
+            int bestTurnVal = -9999999;
+            int worstValue = 9999999;
+            int curValue = 0;
+            Array<Turn> allTurns = getAllPossibleTurns(e);
+            Turn bestTurn = null;
+
+            for (Turn t : allTurns) {
+                curValue = bestTurnAssumption(board.copy().tryTurn(t), (team + 1) % teams.size, team, depth);
+                worstValue = Math.min(curValue, worstValue);
+                if (curValue > bestTurnVal) {
+                    System.out.print("!!!");
+                    bestTurnVal = curValue;
+                    bestTurn = t;
+                }
+                System.out.print(t.toStringCondensed() + ": ");
+                System.out.print(curValue + ", " + "\n");
+            }
+
+            System.out.println("\nWorst: " + worstValue);
+            System.out.println("Best: " + bestTurnVal);
+            System.out.println("Best Turn: " + bestTurn);
+            System.out.println("-----------------------------------------------");
+
+
+            turns.add(bestTurn);
+            //update BoardState with last Entity's action
+            board.tryTurn(bestTurn);
+        }
+
+        return turns;
+    }
+
+    private int bestTurnAssumption(BoardState board, int teamNo, int originalTeam, int depthLevel) {
+        BoardState newBoardState = board.copy();
+        for (int i = 0; i < depthLevel; i++) {
+            DEBUG_TURNS_PROCESSED++;
+            //change turns
+            teamNo = (teamNo + 1) % teams.size;
+
+            //do turn
+            newBoardState.doTurnEffects(teamNo);
+            getBestTurns(newBoardState, teamNo);
+        }
+
+        return newBoardState.evaluate(originalTeam);
+    }
+
+
     /**
      * Retrieves all possible turns an {@link Entity} can make on the board.
      * @param e Entity
@@ -319,7 +379,7 @@ public /*abstract*/ class ComputerPlayer {
      * @param ev EntityValue. Used for getting stats affected by Statuses, etc.
      * @return {@link Array} of all possible moves for one Entity
      */
-    private Array<Turn> getAllPossibleTurns(Entity e, EntityValue ev) {
+    private Array<Turn> getAllPossibleTurns(Entity e, EntityValue ev, BoardState boardState) {
         boolean hasNonMovingStatus = false;
         for (StatusEffectInfo s : ev.statusEffectInfos)
             if (s.name.equals("Petrify") || s.name.equals("Freeze"))
@@ -337,8 +397,9 @@ public /*abstract*/ class ComputerPlayer {
             }
         }
 
-        Array<BoardPosition> possiblePositions = getPossiblePositions(ev.pos, speedVal);
+        Array<BoardPosition> possiblePositions = getPossiblePositions(ev.pos, speedVal, boardState);
         possiblePositions.add(ev.pos.copy()); //no movement
+
         for (BoardPosition pos : possiblePositions) {
             turns.add(new Turn(e, pos, -1, 0)); //no attack
             for (int i = 0; i < mvm.get(e).moveList.size; i++) {
@@ -397,7 +458,7 @@ public /*abstract*/ class ComputerPlayer {
      * @param spd remaining tiles the entity can move
      * @return {@link Array} of {@link BoardPosition}s.
      */
-    private Array<BoardPosition> getPossiblePositions(BoardPosition bp, int spd) {
+    private Array<BoardPosition> getPossiblePositions(BoardPosition bp, int spd, BoardState boardState) {
         BoardPosition next = new BoardPosition(-1, -1);
         Array<BoardPosition> positions = new Array<>();
 
@@ -405,12 +466,12 @@ public /*abstract*/ class ComputerPlayer {
             return positions;
 
         //get spread of tiles upwards
-        getPositionsSpread(bp, spd, positions, -1, 2);
+        getPositionsSpread(bp, spd, positions, -1, 2, boardState);
         //get spread of tiles downwards
-        getPositionsSpread(bp, spd, positions, -1, 0);
+        getPositionsSpread(bp, spd, positions, -1, 0, boardState);
 
         //fill in remaining line of unfilled spaces
-        getPositionsLine(bp, spd, positions, -1, false);
+        getPositionsLine(bp, spd, positions, -1, false, boardState);
 
         return positions;
     }
@@ -435,7 +496,7 @@ public /*abstract*/ class ComputerPlayer {
      *                          <p>3: right
      * @return {@link Array} of {@link BoardPosition}s.
      */
-    private Array<BoardPosition> getPositionsSpread(BoardPosition bp, int spd, Array<BoardPosition> positions, int directionCameFrom, int sourceDirection) {
+    private Array<BoardPosition> getPositionsSpread(BoardPosition bp, int spd, Array<BoardPosition> positions, int directionCameFrom, int sourceDirection, BoardState boardState) {
         BoardPosition next = new BoardPosition(-1, -1);
 
         if (spd == 0)
@@ -457,12 +518,12 @@ public /*abstract*/ class ComputerPlayer {
             //check if valid
             if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
                     || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
-                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
+                    || boardState.isOccupied(new BoardPosition(next.r, next.c)))
                 continue;
 
             //recursively call other tiles
             positions.add(next.copy());
-            getPositionsSpread(next, spd - 1, positions, (i + 2) % 4, sourceDirection);
+            getPositionsSpread(next, spd - 1, positions, (i + 2) % 4, sourceDirection, boardState);
         }
 
         return positions;
@@ -482,7 +543,7 @@ public /*abstract*/ class ComputerPlayer {
      *                          <p>3: right
      * @return {@link Array} of {@link BoardPosition}s.
      */
-    private Array<BoardPosition> getPositionsLine(BoardPosition bp, int spd, Array<BoardPosition> positions, int directionCameFrom, boolean vertical) {
+    private Array<BoardPosition> getPositionsLine(BoardPosition bp, int spd, Array<BoardPosition> positions, int directionCameFrom, boolean vertical, BoardState boardState) {
         BoardPosition next = new BoardPosition(-1, -1);
 
         if (spd == 0)
@@ -508,12 +569,12 @@ public /*abstract*/ class ComputerPlayer {
             //check if valid
             if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
                     || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
-                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
+                    || boardState.isOccupied(new BoardPosition(next.r, next.c)))
                 continue;
 
             //recursively call other tiles
             positions.add(next.copy());
-            getPositionsLine(next, spd - 1, positions, (i + 1) % 2, vertical);
+            getPositionsLine(next, spd - 1, positions, (i + 1) % 2, vertical, boardState);
         }
 
         return positions;

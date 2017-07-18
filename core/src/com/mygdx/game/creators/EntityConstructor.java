@@ -309,7 +309,7 @@ public class EntityConstructor {
                 atlas.findRegion("firebull2")
         }, Animation.PlayMode.LOOP, 0.2f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(5, 4, 5, 0, 1));
+        entity.add(new StatComponent(3, 4, 5, 0, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -401,7 +401,7 @@ public class EntityConstructor {
                 atlas.findRegion("turtle2")
         }, Animation.PlayMode.LOOP, 0.7f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(2, 8, 3, 4, 1));
+        entity.add(new StatComponent(4, 8, 3, 2, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -432,7 +432,7 @@ public class EntityConstructor {
                 atlas.findRegion("fox2")
         }, Animation.PlayMode.LOOP, 0.5f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(3, 3, 2, 1, 2));
+        entity.add(new StatComponent(4, 3, 2, 1, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -463,7 +463,7 @@ public class EntityConstructor {
                 atlas.findRegion("thunderdog2")
         }, Animation.PlayMode.LOOP, 0.2f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(4, 4, 1, 0, 1));
+        entity.add(new StatComponent(7, 4, 1, 0, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -494,7 +494,7 @@ public class EntityConstructor {
                 atlas.findRegion("mummy2")
         }, Animation.PlayMode.LOOP, 0.3f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(4, 3, 2, 1, 2));
+        entity.add(new StatComponent(5, 3, 2, 1, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -525,7 +525,7 @@ public class EntityConstructor {
                 atlas.findRegion("squid2")
         }, Animation.PlayMode.LOOP, 0.7f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(3, 9, 3, 0, 2));
+        entity.add(new StatComponent(4, 9, 3, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -556,7 +556,7 @@ public class EntityConstructor {
                 atlas.findRegion("steamdragon2")
         }, Animation.PlayMode.LOOP, 0.5f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(4, 4, 1, 0, 2));
+        entity.add(new StatComponent(6, 6, 1, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;

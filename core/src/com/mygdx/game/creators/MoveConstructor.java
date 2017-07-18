@@ -309,8 +309,8 @@ public class MoveConstructor {
     }
 
     public static StatusEffect supercharged() {
-        StatusEffect effect = new StatusEffect("Supercharged", 2, new LerpColor(Color.ORANGE, Color.CYAN, .3f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(2, 1, 3, 4, 1, 3);
+        StatusEffect effect = new StatusEffect("Supercharged", 3, new LerpColor(Color.ORANGE, Color.CYAN, .3f, Interpolation.fade), (e) -> {/*nothing*/}, null);
+        effect.setStatChanges(3, 1, 2, 5, 1, 3);
         return effect;
     }
 
@@ -919,7 +919,7 @@ public class MoveConstructor {
             }
         }, .11f, 1);
 
-        return new Move("Blade Flurry", nm.get(user).name + " let loose with a flurry of attacks!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        return new Move("Blade Flurry", nm.get(user).name + " let loose with a flurry of attacks!", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -996,7 +996,7 @@ public class MoveConstructor {
         }, .5f, 1);
 
         //Move
-        return new Move("Bark", nm.get(user).name + " barked intimidatingly!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+        return new Move("Bark", nm.get(user).name + " barked intimidatingly!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1009,7 +1009,7 @@ public class MoveConstructor {
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
 
                     }
-                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{bark.copy(.1f), bark2.copy(.1f), bark.copy(.1f), bark2.copy(.1f) ,bark, bark2})), new MoveInfo(false, 0, offenseless().createStatusEffectInfo()));
     }
 
@@ -3379,7 +3379,8 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode.copy(), barrage.copy(), explode.copy(), barrage.copy(), explode, barrage})),
                 new MoveInfo(false, 0, (entity) -> {
-                    entity.hp -= stm.get(user).getModAtk(user) * entity.statusEffectInfos.size;
+                    if (entity.acceptsStatusEffects)
+                        entity.hp -= stm.get(user).getModAtk(user) * entity.statusEffectInfos.size;
                 })
         );
     }
@@ -3911,11 +3912,17 @@ public class MoveConstructor {
                         if (stm.has(enemy))
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
 
+                        if (status.has(enemy) && MathUtils.randomBoolean(.2f))
+                            status.get(enemy).addStatusEffect(burn(), enemy);
+
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{redSparkleOut, explode, smallBooms, explodeBig, largerRadiusBooms})), new MoveInfo(false, 1));
+                new Array<VisualEvent>(new VisualEvent[]{redSparkleOut, explode, smallBooms, explodeBig, largerRadiusBooms})), new MoveInfo(false, 1, (entity) -> {
+            if (entity.acceptsStatusEffects && MathUtils.randomBoolean(.2f)) {
+                entity.statusEffectInfos.add(burn().createStatusEffectInfo());
+            }}));
     }
 
     public static Move cometShowerClose(Entity user) {

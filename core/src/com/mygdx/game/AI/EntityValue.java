@@ -30,7 +30,6 @@ public class EntityValue implements Comparable {
      * Creates an {@link EntityValue} based off an Entity that cannot receive a status effect.
      * @param position position of the Entity
      * @param teamNo Entity's team number
-     * @param indexWithinTeam Index location of the Entity within its team. (Used for identity purposes)
      * @param health Entity's health
      * @param maxHealth Entity's max health
      * @param skill Entity's skill points
@@ -75,9 +74,9 @@ public class EntityValue implements Comparable {
         int value = 0;
 
         if (hp > 0)
-            value += 200 + (hp / maxHp) * 150;
+            value += 200 + ((float) hp / (float) maxHp) * 150;
 
-        //value += sp * 15;
+        value += sp * 15;
         //value -= statusEffect * 20;
 
         if (team == -1) //no team -> treat as weak enemy
@@ -110,7 +109,7 @@ public class EntityValue implements Comparable {
 
     public EntityValue copy() {
         if (statusEffectInfos == null)
-            return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, attack, defense, null);
+            return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, attack, defense);
         else {
             //copy status effects
             StatusEffectInfo[] copyStatus = new StatusEffectInfo[statusEffectInfos.size];
