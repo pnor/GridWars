@@ -358,7 +358,7 @@ public /*abstract*/ class ComputerPlayer {
             return new Array<Turn>(new Turn[]{new Turn(e, bm.get(e).pos.copy(), -1, 0)});
 
         Array<Turn> turns = new Array<>();
-        Array<BoardPosition> possiblePositions = getPossiblePositions(bm.get(e).pos, stm.get(e).getModSpd(e));
+        Array<BoardPosition> possiblePositions = getPossiblePositions(bm.get(e).pos, stm.get(e).getModSpd(e), null);
         possiblePositions.add(bm.get(e).pos.copy()); //no movement
         for (BoardPosition pos : possiblePositions) {
             turns.add(new Turn(e, pos, -1, 0)); //no attack
@@ -441,7 +441,7 @@ public /*abstract*/ class ComputerPlayer {
                 }
             }
             //movement tiles
-            Array<BoardPosition> possibleTiles = getPossiblePositions(bm.get(e).pos, stm.get(e).getModSpd(e));
+            Array<BoardPosition> possibleTiles = getPossiblePositions(bm.get(e).pos, stm.get(e).getModSpd(e), null);
             if (possibleTiles.size == 0 || !state.get(e).canMove)
                 turns.add(new Turn(e, bm.get(e).pos, attackChoice, MathUtils.random(0, 3)));
             else
@@ -456,6 +456,8 @@ public /*abstract*/ class ComputerPlayer {
      * avoiding duplicates of the same tile.
      * @param bp Position that is being branched from
      * @param spd remaining tiles the entity can move
+     * @param boardState Used to check if a space is occupied. If this value is null, will use the {@link com.mygdx.game.boards.Board} from
+     *                   {@link BoardComponent}.
      * @return {@link Array} of {@link BoardPosition}s.
      */
     private Array<BoardPosition> getPossiblePositions(BoardPosition bp, int spd, BoardState boardState) {
@@ -494,6 +496,8 @@ public /*abstract*/ class ComputerPlayer {
      *                          <p>1: left
      *                          <p>2: bottom
      *                          <p>3: right
+     * @param boardState Used to check if a space is occupied. If this value is null, will use the {@link com.mygdx.game.boards.Board} from
+     *                   {@link BoardComponent}.
      * @return {@link Array} of {@link BoardPosition}s.
      */
     private Array<BoardPosition> getPositionsSpread(BoardPosition bp, int spd, Array<BoardPosition> positions, int directionCameFrom, int sourceDirection, BoardState boardState) {
@@ -516,10 +520,16 @@ public /*abstract*/ class ComputerPlayer {
                 next.set(bp.r, bp.c + 1);
 
             //check if valid
-            if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
-                    || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
-                    || boardState.isOccupied(new BoardPosition(next.r, next.c)))
-                continue;
+            if (boardState != null)
+                if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
+                        || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
+                        || boardState.isOccupied(new BoardPosition(next.r, next.c)))
+                    continue;
+            else
+                if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
+                        || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
+                        || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
+                    continue;
 
             //recursively call other tiles
             positions.add(next.copy());
@@ -541,6 +551,9 @@ public /*abstract*/ class ComputerPlayer {
      *                          <p>1: left
      *                          <p>2: bottom
      *                          <p>3: right
+     * @param vertical whether the line stretches vertically or horizontally. True if vertical, false if horizontal
+     * @param boardState Used to check if a space is occupied. If this value is null, will use the {@link com.mygdx.game.boards.Board} from
+     *                   {@link BoardComponent}.
      * @return {@link Array} of {@link BoardPosition}s.
      */
     private Array<BoardPosition> getPositionsLine(BoardPosition bp, int spd, Array<BoardPosition> positions, int directionCameFrom, boolean vertical, BoardState boardState) {
@@ -567,10 +580,16 @@ public /*abstract*/ class ComputerPlayer {
             }
 
             //check if valid
-            if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
-                    || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
-                    || boardState.isOccupied(new BoardPosition(next.r, next.c)))
-                continue;
+            if (boardState != null)
+                if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
+                        || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
+                        || boardState.isOccupied(new BoardPosition(next.r, next.c)))
+                    continue;
+            else
+                if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
+                        || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
+                        || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
+                    continue;
 
             //recursively call other tiles
             positions.add(next.copy());

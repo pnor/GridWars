@@ -183,29 +183,13 @@ public class BoardState {
      */
     public void doTurnEffects(int team) {
         Array<EntityValue> entityValues = entities.values().toArray();
-        //remove these vairables
-        EntityValue curValue = null;
-        StatusEffectInfo curStatus = null;
-        //---
-        try {
-            for (EntityValue e : entityValues) {
-                curValue = e;
-                if (e.team == team && e.statusEffectInfos != null && e.statusEffectInfos.size > 0)
-                    for (StatusEffectInfo s : e.statusEffectInfos) {
-                        curStatus = s;
-                        if (s.turnEffectInfo != null)
-                            s.turnEffectInfo.doTurnEffect(e);
-                    }
-            }
-        } catch (Exception e) {
-            //prolly remove this try catch, was an issue that is now resolved
-            System.out.println("----------------------- Exception in doTurnEffects -------------------------------");
-            System.out.println("BoardState.doTurnEffects has caused an exception! : Excpetion is type " + e.getClass());
-            System.out.println("Entity Values : " + entityValues);
-            System.out.println("curValue : " + curValue);
-            System.out.println("curStatus : " + curStatus);
-            System.out.println("curStatus turn effect: " + curStatus.turnEffectInfo);
-            System.out.println("-------------------------------------");
+
+        for (EntityValue e : entityValues) {
+            if (e.team == team && e.statusEffectInfos != null && e.statusEffectInfos.size > 0)
+                for (StatusEffectInfo s : e.statusEffectInfos) {
+                    if (s.turnEffectInfo != null)
+                        s.turnEffectInfo.doTurnEffect(e);
+                }
         }
     }
 

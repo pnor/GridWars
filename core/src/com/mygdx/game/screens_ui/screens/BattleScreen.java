@@ -689,10 +689,11 @@ public class BattleScreen implements Screen {
                 BoardComponent.boards.move(currentTurn.entity, currentTurn.pos);
             } catch (Exception e) {
                 System.out.println("\n \n --------------------------------" +
-                        "\n Exception! " +
+                        "\n Exception! : " + e + "  in BattleScreen 'Playing out the Turn'" +
                         "\n currentTurn = " + currentTurn +
                         "\n currentTurn.entity = " + currentTurn.entity +
                         "\n currentTurn.pos = " + currentTurn.pos);
+                Gdx.app.exit();
             }
             turnPhase = 1;
         } else if (timeAfterMove >= 1f && turnPhase == 1) { //use attack
