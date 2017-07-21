@@ -2,6 +2,7 @@ package com.mygdx.game.AI;
 
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.game.boards.BoardPosition;
+import com.mygdx.game.move_related.Attack;
 
 import static com.mygdx.game.ComponentMappers.nm;
 
@@ -34,6 +35,6 @@ public class Turn {
     }
 
     public String toStringCondensed() {
-        return "Attack# " + attack + " || Direction: " + direction;
+        return "Position: " + pos + " || Attack# " + attack + " || Direction: " + direction;
     }
 }

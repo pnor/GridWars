@@ -4664,7 +4664,7 @@ public class MoveConstructor {
             }
         }, .2f, 2);
 
-        return new Move("Spa Breath", nm.get(user).name + " breathed a soothing air!", user, 4,
+        return new Move("Spa Breath", nm.get(user).name + " breathed a soothing air!", user, 2,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)

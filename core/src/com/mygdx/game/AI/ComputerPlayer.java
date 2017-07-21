@@ -304,18 +304,36 @@ public /*abstract*/ class ComputerPlayer {
             int worstValue = 9999999;
             int curValue = 0;
             Array<Turn> allTurns = getAllPossibleTurns(e);
+            Array<Turn> bestTurns = new Array<>(); //for possible ties
             Turn bestTurn = null;
 
             for (Turn t : allTurns) {
                 curValue = bestTurnAssumption(board.copy().tryTurn(t), (team + 1) % teams.size, team, depth);
                 worstValue = Math.min(curValue, worstValue);
                 if (curValue > bestTurnVal) {
-                    System.out.print("!!!");
+                    System.out.print("!!!!");
                     bestTurnVal = curValue;
-                    bestTurn = t;
+                    bestTurns.clear();
+                    bestTurns.add(t);
+                } else if (curValue == bestTurnVal) {
+                    System.out.print("~!!~");
+                    bestTurns.add(t);
                 }
+
                 System.out.print(t.toStringCondensed() + ": ");
                 System.out.print(curValue + ", " + "\n");
+            }
+
+            //resolve ties
+            if (bestTurns.size > 1) {
+                System.out.println("Drawbreak");
+                System.out.println("bestTurns : ");
+                for (Turn t : bestTurns) {
+                    System.out.println(t.toStringCondensed());
+                }
+                bestTurn = drawbreakBestTurns(bestTurns, board, team, depth);
+            } else {
+                bestTurn = bestTurns.first();
             }
 
             System.out.println("\nWorst: " + worstValue);
@@ -345,6 +363,59 @@ public /*abstract*/ class ComputerPlayer {
         }
 
         return newBoardState.evaluate(originalTeam);
+    }
+
+    /**
+     * Resolves a tie in the value of multiple turns by comparing their values at lower depth levels. If there is still tied turns, then it will randomly return
+     * one of the multiple turns.
+     * @param bestTurns Turns that are tied for the best value
+     * @param boardState board state
+     * @param team of entity
+     * @param depthLevel depth level that was used before that resulted in a tie. (Not the depth that will be first used!)
+     * @return the best Turn
+     */
+    private Turn drawbreakBestTurns(Array<Turn> bestTurns, BoardState boardState, int team, int depthLevel) {
+        int bestTurnVal = -9999999;
+        int curValue = 0;
+        Array<Turn> currentBestTurns = bestTurns;
+        Array<Turn> newBestTurns = new Array<>();
+
+        for (int i = depthLevel - 1; i >= 0; i--) {
+            for (Turn t : currentBestTurns) {
+                if (i % 2 == 0)
+                    curValue = bestTurnAssumption(boardState.copy(), team, team, i);
+                else
+                    curValue = bestTurnAssumption(boardState.copy(), (team + 1) % teams.size, team, i);
+                System.out.print("\n(DrawBreak) : " + t.toStringCondensed() + " = " + curValue);
+
+                if (curValue > bestTurnVal) {
+                    newBestTurns.clear();
+                    newBestTurns.add(t);
+                    bestTurnVal = curValue;
+                    System.out.print("!!!");
+                } else if (curValue == bestTurnVal) {
+                    newBestTurns.add(t);
+                    System.out.print("~!~");
+
+                }
+            }
+
+            if (newBestTurns.size == 1) {
+                System.out.println("\nDrawbreak best Turn : " + newBestTurns.first().toStringCondensed() + "= " + bestTurnVal);
+                System.out.println("Broke the tie at depth of " + i);
+                return newBestTurns.first();
+            } else if (i != 0) {
+                bestTurnVal = -9999999;
+                curValue = 0;
+                currentBestTurns = new Array<Turn>(newBestTurns.toArray());
+                newBestTurns.clear();
+                System.out.print("\n~~~ i = " + i + " ~~~");
+            }
+        }
+
+        //still a tie
+        System.out.println("\nFull Tie !");
+        return newBestTurns.random();
     }
 
 
@@ -475,6 +546,9 @@ public /*abstract*/ class ComputerPlayer {
         //fill in remaining line of unfilled spaces
         getPositionsLine(bp, spd, positions, -1, false, boardState);
 
+        //TODO remove and replace
+        filterCopySpaces(positions);
+
         return positions;
     }
 
@@ -520,16 +594,17 @@ public /*abstract*/ class ComputerPlayer {
                 next.set(bp.r, bp.c + 1);
 
             //check if valid
-            if (boardState != null)
+            if (boardState != null) {
                 if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
                         || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
                         || boardState.isOccupied(new BoardPosition(next.r, next.c)))
                     continue;
-            else
-                if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
-                        || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
-                        || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
-                    continue;
+            } else {
+                    if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
+                            || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
+                            || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
+                        continue;
+            }
 
             //recursively call other tiles
             positions.add(next.copy());
@@ -580,16 +655,17 @@ public /*abstract*/ class ComputerPlayer {
             }
 
             //check if valid
-            if (boardState != null)
+            if (boardState != null) {
                 if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
                         || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
                         || boardState.isOccupied(new BoardPosition(next.r, next.c)))
                     continue;
-            else
+            } else {
                 if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
                         || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
                         || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
                     continue;
+            }
 
             //recursively call other tiles
             positions.add(next.copy());
@@ -597,6 +673,21 @@ public /*abstract*/ class ComputerPlayer {
         }
 
         return positions;
+    }
+
+    //dummy filter method
+    //TODO make it so get posisble positions does not return copies. This is a temporary slower dummy method!
+    public void filterCopySpaces(Array<BoardPosition> positions) {
+        for (int i = 0; i < positions.size; i++) {
+            for (int j = 0; j < positions.size; j++) {
+                if (i == j)
+                    continue;
+                if (positions.get(i).equals(positions.get(j))) {
+                    positions.removeIndex(j);
+                    j--;
+                }
+            }
+        }
     }
 
     public int getTeamSize() { return teams.get(teamControlled).getEntities().size; }

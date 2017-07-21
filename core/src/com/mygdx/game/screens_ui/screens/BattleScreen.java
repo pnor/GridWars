@@ -387,12 +387,10 @@ public class BattleScreen implements Screen {
                    if (rules.getCurrentTeamNumber() == 1) { //debug, should actually figure out whos computer
                        playingComputerTurn = true;
                        computer.DEBUG_TURNS_PROCESSED = 0;
-                       //computerTurns = computer.getBestTurns(new BoardState(BoardComponent.boards.getCodeBoard().getEntities()), computer.getTeamControlled());
-                       //computerTurns = computer.getBestTurnsMinimax(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), teams), computer.getTeamControlled(), 2);
                        if (rules instanceof ZoneRules)
-                           computerTurns = computer.getBestTurnsBestTurnAssumption(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), ((ZoneRules) rules).getZones()), computer.getTeamControlled(), 2);
+                           computerTurns = computer.getBestTurnsBestTurnAssumption(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), ((ZoneRules) rules).getZones()), computer.getTeamControlled(), 5);
                        else
-                           computerTurns = computer.getBestTurnsBestTurnAssumption(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), null), computer.getTeamControlled(), 5);
+                           computerTurns = computer.getBestTurnsBestTurnAssumption(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), null), computer.getTeamControlled(), 3);
                        System.out.println("TURNS PROCESSED : " + computer.DEBUG_TURNS_PROCESSED);
                    } else
                        playingComputerTurn = false;
@@ -691,10 +689,11 @@ public class BattleScreen implements Screen {
                 System.out.println("\n \n --------------------------------" +
                         "\n Exception! : " + e + "  in BattleScreen 'Playing out the Turn'" +
                         "\n currentTurn = " + currentTurn +
-                        "\n currentTurn.entity = " + currentTurn.entity +
-                        "\n currentTurn.pos = " + currentTurn.pos);
+                        "\n board size = " + BoardComponent.boards.getBoard().getRowSize()
+                );
                 Gdx.app.exit();
             }
+            BoardComponent.boards.move(currentTurn.entity, currentTurn.pos);
             turnPhase = 1;
         } else if (timeAfterMove >= 1f && turnPhase == 1) { //use attack
             currentEntity = currentTurn.entity;

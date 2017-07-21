@@ -189,7 +189,7 @@ public class EntityConstructor {
     public static Entity durableCube() {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(20, 0, 0, 0, 0));
+        entity.add(new StatComponent(10, 0, 0, 0, 0));
         entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("cubelight")), true, true)));
         entity.add(new NameComponent("Durable Cube"));
 
@@ -278,7 +278,7 @@ public class EntityConstructor {
                 atlas.findRegion("catdroid2")
         }, Animation.PlayMode.LOOP, 0.5f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(3, 5, 2, 2, 1));
+        entity.add(new StatComponent(3, 5, 2, 2, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
