@@ -72,9 +72,10 @@ public /*abstract*/ class ComputerPlayer implements Runnable {
     public Array<Turn> getBestTurns(BoardState board, int team) {
         Array<Turn> turns = new Array<>();
         EntityValue entityValue = null;
+        Entity e;
 
-        for (Entity e : teams.get(team).getEntities()) {
-            //System.out.println("+++++++++++++++++++++++++ Next Entity in getBestTurns +++++++++++++++++++++++++++++ ******************************");
+        for (int i = 0; i < teams.get(team).getEntities().size; i++) {
+            e = teams.get(team).getEntities().get(i);
 
             //recursion check -> if it dies in a later turn
             boolean inBoard = false;
@@ -94,7 +95,6 @@ public /*abstract*/ class ComputerPlayer implements Runnable {
             int bestTurnVal = -99999999;
             int worstValue = 99999999;
             int curValue = 0;
-            //Array<Turn> allTurns = getAllPossibleTurns(e);
             Array<Turn> allTurns = getAllPossibleTurns(e, entityValue, board);
             Turn bestTurn = null;
 
@@ -105,15 +105,7 @@ public /*abstract*/ class ComputerPlayer implements Runnable {
                     bestTurnVal = curValue;
                     bestTurn = t;
                 }
-                //System.out.print(curValue + ", ");
             }
-            /*
-            System.out.println("\nWorst: " + worstValue);
-            System.out.println("Best: " + bestTurnVal);
-            System.out.println("Best Turn: " + bestTurn);
-            System.out.println("-----------------------------------------------");
-            */
-
 
             turns.add(bestTurn);
             //update BoardState with last Entity's action

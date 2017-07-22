@@ -171,9 +171,9 @@ public class BattleScreen implements Screen {
         MoveConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, stage);
 
         if (rules instanceof ZoneRules)
-            computer = new ComputerPlayer(BoardComponent.boards, teams, ((ZoneRules) rules).getZones(), 1, 5);
+            computer = new ComputerPlayer(BoardComponent.boards, teams, ((ZoneRules) rules).getZones(), 1, 20);
         else
-            computer = new ComputerPlayer(BoardComponent.boards, teams, 1, 5);
+            computer = new ComputerPlayer(BoardComponent.boards, teams, 1, 20);
     }
 
 
@@ -393,8 +393,11 @@ public class BattleScreen implements Screen {
                        else
                            computer.updateComputerPlayer(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), null));
 
+                       new Thread(computer).start();
+                       /*
                        Thread AIThread = new Thread(computer);
                        AIThread.run();
+                       */
                    } else
                        playingComputerTurn = false;
 
