@@ -248,7 +248,7 @@ public class EntityConstructor {
                 atlas.findRegion("Canight2")
         }, Animation.PlayMode.LOOP, 0.5f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(3, 4, 2, 0, 3));
+        entity.add(new StatComponent(2, 4, 2, 0, 3));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;

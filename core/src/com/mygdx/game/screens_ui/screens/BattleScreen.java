@@ -804,7 +804,7 @@ public class BattleScreen implements Screen {
 
     /**
      * Algorithm that returns all tiles that can be moved to based on speed. Calls a recursive method. Takes into account barriers and blockades, while
-     * avoiding duplicates of the same tile.
+     * avoiding duplicates of the same tile. Note that this returns tiles horizontal of the entity multiple times.
      * @param bp Position that is being branched from
      * @param spd remaining tiles the entity can move
      * @return {@link Array} of {@link Tile}s.
@@ -817,12 +817,9 @@ public class BattleScreen implements Screen {
             return tiles;
 
         //get spread of tiles upwards
-        getMovableSquaresSpread(bp, spd, tiles, -1, 2);
+        getMovableSquaresSpread(bp, bp, spd, tiles, -1, 2, true);
         //get spread of tiles downwards
-        getMovableSquaresSpread(bp, spd, tiles, -1, 0);
-
-        //fill in remaining line of unfilled spaces
-       getMovableSquaresLine(bp, spd, tiles, -1, false);
+        getMovableSquaresSpread(bp, bp, spd, tiles, -1, 0, false);
 
         return tiles;
     }
@@ -847,7 +844,7 @@ public class BattleScreen implements Screen {
      *                          <p>3: right
      * @return {@link Array} of {@link Tile}s.
      */
-    private Array<Tile> getMovableSquaresSpread(BoardPosition bp, int spd, Array<Tile> tiles, int directionCameFrom, int sourceDirection) {
+    private Array<Tile> getMovableSquaresSpread(BoardPosition sourceBp, BoardPosition bp, int spd, Array<Tile> tiles, int directionCameFrom, int sourceDirection, boolean includeHorizontalSpaces) {
         BoardPosition next = new BoardPosition(-1, -1);
 
         if (spd == 0)
@@ -872,60 +869,12 @@ public class BattleScreen implements Screen {
                     || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
                 continue;
 
-            //recursively call other tiles
-            tiles.add(BoardComponent.boards.getBoard().getTile(next.r, next.c));
-            getMovableSquaresSpread(next, spd - 1, tiles, (i + 2) % 4, sourceDirection);
-        }
-
-        return tiles;
-    }
-
-    /**
-     * Recursive algorithm that returns all tiles in one direction and that are in a line. Takes into account barriers and blockades.
-     * @param bp Position that is being branched from
-     * @param spd remaining tiles the entity can move
-     * @param tiles {@link Array} of tiles that can be moved on
-     * @param directionCameFrom direction the previous tile came from. Eliminates the need to check if the next tile is already in the
-     *                          {@link Array}.
-     *                          <p>-1: No direction(starting)
-     *                          <p>0: top
-     *                          <p>1: left
-     *                          <p>2: bottom
-     *                          <p>3: right
-     * @return {@link Array} of {@link Tile}s.
-     */
-    private Array<Tile> getMovableSquaresLine(BoardPosition bp, int spd, Array<Tile> tiles, int directionCameFrom, boolean vertical) {
-        BoardPosition next = new BoardPosition(-1, -1);
-
-        if (spd == 0)
-            return tiles;
-
-        for (int i = 0; i < 2; i++) {
-            if (directionCameFrom == i) //Already checked tile -> skip!
-                continue;
-
-            //set position
-            if (i == 0) {
-                if (vertical)
-                    next.set(bp.r - 1, bp.c);
-                else
-                    next.set(bp.r, bp.c - 1);
-            } else if (i == 1) {
-                if (vertical)
-                    next.set(bp.r + 1, bp.c);
-                else
-                    next.set(bp.r, bp.c + 1);
-            }
-
-            //check if valid
-            if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
-                    || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
-                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
+            if (!includeHorizontalSpaces && next.r == sourceBp.r)
                 continue;
 
             //recursively call other tiles
             tiles.add(BoardComponent.boards.getBoard().getTile(next.r, next.c));
-            getMovableSquaresLine(next, spd - 1, tiles, (i + 1) % 2, vertical);
+            getMovableSquaresSpread(sourceBp, next, spd - 1, tiles, (i + 2) % 4, sourceDirection, includeHorizontalSpaces);
         }
 
         return tiles;

@@ -76,11 +76,10 @@ public class EntityValue implements Comparable {
         if (hp > 0)
             value += 200 + ((float) hp / (float) maxHp) * 150;
 
-        value += sp * 15;
-        //value -= statusEffect * 20;
+        value += sp * 30;
 
         if (team == -1) //no team -> treat as weak enemy
-            value /= 25;
+            value /= 40;
 
         if (team != homeTeam)
             value *= -1;

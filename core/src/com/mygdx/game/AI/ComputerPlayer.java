@@ -382,10 +382,8 @@ public /*abstract*/ class ComputerPlayer {
 
         for (int i = depthLevel - 1; i >= 0; i--) {
             for (Turn t : currentBestTurns) {
-                if (i % 2 == 0)
-                    curValue = bestTurnAssumption(boardState.copy(), team, team, i);
-                else
-                    curValue = bestTurnAssumption(boardState.copy(), (team + 1) % teams.size, team, i);
+                curValue = bestTurnAssumption(boardState.copy().tryTurn(t), (team + 1) % teams.size, team, i);
+
                 System.out.print("\n(DrawBreak) : " + t.toStringCondensed() + " = " + curValue);
 
                 if (curValue > bestTurnVal) {
@@ -535,25 +533,22 @@ public /*abstract*/ class ComputerPlayer {
         BoardPosition next = new BoardPosition(-1, -1);
         Array<BoardPosition> positions = new Array<>();
 
+
         if (spd == 0)
             return positions;
 
         //get spread of tiles upwards
-        getPositionsSpread(bp, spd, positions, -1, 2, boardState);
+        getPositionsSpread(bp, bp, spd, positions, -1, 0, boardState, true);
+
         //get spread of tiles downwards
-        getPositionsSpread(bp, spd, positions, -1, 0, boardState);
-
-        //fill in remaining line of unfilled spaces
-        getPositionsLine(bp, spd, positions, -1, false, boardState);
-
-        //TODO remove and replace
-        filterCopySpaces(positions);
+        getPositionsSpread(bp, bp, spd, positions, -1, 2, boardState, false);
 
         return positions;
     }
 
     /**
      * Recursive algorithm that returns all positions in one direction that can be moved to based on speed. Takes into account barriers and blockades.
+     * @param sourceBp the original location being branched from
      * @param bp Position that is being branched from
      * @param spd remaining tiles the entity can move
      * @param positions {@link Array} of tiles that can be moved on
@@ -572,9 +567,10 @@ public /*abstract*/ class ComputerPlayer {
      *                          <p>3: right
      * @param boardState Used to check if a space is occupied. If this value is null, will use the {@link com.mygdx.game.boards.Board} from
      *                   {@link BoardComponent}.
+     * @param includeHorizontal Whether it includes spaces directly horizontal of the origin position
      * @return {@link Array} of {@link BoardPosition}s.
      */
-    private Array<BoardPosition> getPositionsSpread(BoardPosition bp, int spd, Array<BoardPosition> positions, int directionCameFrom, int sourceDirection, BoardState boardState) {
+    private Array<BoardPosition> getPositionsSpread(BoardPosition sourceBp, BoardPosition bp, int spd, Array<BoardPosition> positions, int directionCameFrom, int sourceDirection, BoardState boardState, boolean includeHorizontal) {
         BoardPosition next = new BoardPosition(-1, -1);
 
         if (spd == 0)
@@ -605,78 +601,21 @@ public /*abstract*/ class ComputerPlayer {
                             || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
                         continue;
             }
+            if (!includeHorizontal && next.r == sourceBp.r)
+                continue;
 
             //recursively call other tiles
             positions.add(next.copy());
-            getPositionsSpread(next, spd - 1, positions, (i + 2) % 4, sourceDirection, boardState);
+            getPositionsSpread(sourceBp, next, spd - 1, positions, (i + 2) % 4, sourceDirection, boardState, includeHorizontal);
         }
 
         return positions;
     }
 
     /**
-     * Recursive algorithm that returns all tiles in one direction and that are in a line. Takes into account barriers and blockades.
-     * @param bp Position that is being branched from
-     * @param spd remaining tiles the entity can move
-     * @param positions {@link Array} of tiles that can be moved on
-     * @param directionCameFrom direction the previous tile came from. Eliminates the need to check if the next tile is already in the
-     *                          {@link Array}.
-     *                          <p>-1: No direction(starting)
-     *                          <p>0: top
-     *                          <p>1: left
-     *                          <p>2: bottom
-     *                          <p>3: right
-     * @param vertical whether the line stretches vertically or horizontally. True if vertical, false if horizontal
-     * @param boardState Used to check if a space is occupied. If this value is null, will use the {@link com.mygdx.game.boards.Board} from
-     *                   {@link BoardComponent}.
-     * @return {@link Array} of {@link BoardPosition}s.
+     * Filters duplicates in an Array of positions. Will filter any duplicates of any kind.
+     * @param positions Array being filtered.
      */
-    private Array<BoardPosition> getPositionsLine(BoardPosition bp, int spd, Array<BoardPosition> positions, int directionCameFrom, boolean vertical, BoardState boardState) {
-        BoardPosition next = new BoardPosition(-1, -1);
-
-        if (spd == 0)
-            return positions;
-
-        for (int i = 0; i < 2; i++) {
-            if (directionCameFrom == i) //Already checked tile -> skip!
-                continue;
-
-            //set position
-            if (i == 0) {
-                if (vertical)
-                    next.set(bp.r - 1, bp.c);
-                else
-                    next.set(bp.r, bp.c - 1);
-            } else if (i == 1) {
-                if (vertical)
-                    next.set(bp.r + 1, bp.c);
-                else
-                    next.set(bp.r, bp.c + 1);
-            }
-
-            //check if valid
-            if (boardState != null) {
-                if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
-                        || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
-                        || boardState.isOccupied(new BoardPosition(next.r, next.c)))
-                    continue;
-            } else {
-                if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
-                        || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
-                        || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
-                    continue;
-            }
-
-            //recursively call other tiles
-            positions.add(next.copy());
-            getPositionsLine(next, spd - 1, positions, (i + 1) % 2, vertical, boardState);
-        }
-
-        return positions;
-    }
-
-    //dummy filter method
-    //TODO make it so get posisble positions does not return copies. This is a temporary slower dummy method!
     public void filterCopySpaces(Array<BoardPosition> positions) {
         for (int i = 0; i < positions.size; i++) {
             for (int j = 0; j < positions.size; j++) {
