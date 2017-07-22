@@ -96,7 +96,6 @@ public class BattleScreen implements Screen {
     public boolean attacksEnabled = true;
 
     //Computer Turn variables
-    private Array<Turn> computerTurns;
     private boolean playingComputerTurn;
     private float timeAfterMove;
     private int currentComputerControlledEntity;
@@ -171,7 +170,10 @@ public class BattleScreen implements Screen {
 
         MoveConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, stage);
 
-        computer = new ComputerPlayer(BoardComponent.boards, teams, 1, 2);
+        if (rules instanceof ZoneRules)
+            computer = new ComputerPlayer(BoardComponent.boards, teams, ((ZoneRules) rules).getZones(), 1, 5);
+        else
+            computer = new ComputerPlayer(BoardComponent.boards, teams, 1, 5);
     }
 
 
@@ -386,12 +388,13 @@ public class BattleScreen implements Screen {
                    showEndTurnDisplay();
                    if (rules.getCurrentTeamNumber() == 1) { //debug, should actually figure out whos computer
                        playingComputerTurn = true;
-                       computer.DEBUG_TURNS_PROCESSED = 0;
                        if (rules instanceof ZoneRules)
-                           computerTurns = computer.getBestTurnsBestTurnAssumption(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), ((ZoneRules) rules).getZones()), computer.getTeamControlled(), 5);
+                            computer.updateComputerPlayer(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), ((ZoneRules) rules).getZones()));
                        else
-                           computerTurns = computer.getBestTurnsBestTurnAssumption(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), null), computer.getTeamControlled(), 3);
-                       System.out.println("TURNS PROCESSED : " + computer.DEBUG_TURNS_PROCESSED);
+                           computer.updateComputerPlayer(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), null));
+
+                       Thread AIThread = new Thread(computer);
+                       AIThread.run();
                    } else
                        playingComputerTurn = false;
 
@@ -598,7 +601,7 @@ public class BattleScreen implements Screen {
         //endregion
 
         //computer Turn
-        if (playingComputerTurn)
+        if (playingComputerTurn && !computer.getProcessing())
             processComputerTurn(delta);
 
         //playing current move animation
@@ -672,10 +675,10 @@ public class BattleScreen implements Screen {
         //Getting the Turn. Null if dead.
         Entity currentEntity;
         Turn currentTurn =
-                (currentComputerControlledEntity < computerTurns.size)? computerTurns.get(currentComputerControlledEntity) : null;
+                (currentComputerControlledEntity < computer.getDecidedTurns().size)? computer.getDecidedTurns().get(currentComputerControlledEntity) : null;
         timeAfterMove += delta;
 
-        if (currentComputerControlledEntity < computerTurns.size && currentTurn == null) { //entity is dead/skip turn
+        if (currentComputerControlledEntity < computer.getDecidedTurns().size && currentTurn == null) { //entity is dead/skip turn
             currentComputerControlledEntity++;
             turnPhase = 0;
             timeAfterMove = 0;

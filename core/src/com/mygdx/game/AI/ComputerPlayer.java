@@ -15,12 +15,17 @@ import static com.mygdx.game.ComponentMappers.*;
  *
  * @author Phillip O'Reggio
  */
-public /*abstract*/ class ComputerPlayer {
+public /*abstract*/ class ComputerPlayer implements Runnable {
     public int DEBUG_TURNS_PROCESSED = 0;
+
+    private boolean processing = false;
+    private Array<Turn> decidedTurns;
+    private int teamControlled;
+    private Array<Array<BoardPosition>> zoneLocations;
+    private BoardState currentBoardState;
 
     private BoardManager boards;
     private Array<Team> teams;
-    private int teamControlled;
     private int depthLevel;
 
     public ComputerPlayer(BoardManager b, Array<Team> t, int teamIndexControlled, int depth) {
@@ -28,7 +33,36 @@ public /*abstract*/ class ComputerPlayer {
         teams = t;
         teamControlled = teamIndexControlled;
         depthLevel = depth;
+        decidedTurns = new Array<>();
     }
+
+    public ComputerPlayer(BoardManager b, Array<Team> t, Array<Array<BoardPosition>> zones, int teamIndexControlled, int depth) {
+        boards = b;
+        teams = t;
+        zoneLocations = zones;
+        teamControlled = teamIndexControlled;
+        depthLevel = depth;
+        decidedTurns = new Array<>();
+    }
+
+    public void updateComputerPlayer(BoardState board) {
+        currentBoardState = board;
+    }
+
+    public void clearTurns() {
+        decidedTurns.clear();
+    }
+
+    @Override
+    public void run() {
+        processing = true;
+        decidedTurns.clear();
+        decidedTurns = getBestTurnsBestTurnAssumption(currentBoardState, teamControlled, depthLevel);
+        System.out.println("TURNS PROCESSED : " + DEBUG_TURNS_PROCESSED);
+        DEBUG_TURNS_PROCESSED = 0;
+        processing = false;
+    }
+
 
     /**
      * Gets the best turn by seeing Turn returns the highest heuristic value. Does not use recursion, so it only goes
@@ -627,6 +661,14 @@ public /*abstract*/ class ComputerPlayer {
                 }
             }
         }
+    }
+
+    public Array<Turn> getDecidedTurns() {
+        return decidedTurns;
+    }
+
+    public boolean getProcessing() {
+        return processing;
     }
 
     public int getTeamSize() { return teams.get(teamControlled).getEntities().size; }
