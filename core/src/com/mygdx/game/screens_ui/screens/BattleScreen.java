@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -36,9 +37,7 @@ import com.mygdx.game.actors.Tile;
 import com.mygdx.game.actors.UIActor;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
-import com.mygdx.game.components.BoardComponent;
-import com.mygdx.game.components.MovesetComponent;
-import com.mygdx.game.components.StatComponent;
+import com.mygdx.game.components.*;
 import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.creators.BoardAndRuleConstructor;
 import com.mygdx.game.creators.MoveConstructor;
@@ -74,6 +73,8 @@ public class BattleScreen implements Screen {
     //rules
     private static Rules rules;
     private boolean gameHasEnded;
+    private int winningTeamIndex;
+    private float changeScreenTimer;
 
     //Entities
     private Array<Team> teams = new Array<Team>();
@@ -182,6 +183,7 @@ public class BattleScreen implements Screen {
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         stage.clear();
+
         for (EntitySystem system : engine.getSystems()) {
             engine.removeSystem(system);
         }
@@ -326,6 +328,7 @@ public class BattleScreen implements Screen {
                             stm.get(selectedEntity).sp -= mvm.get(selectedEntity).moveList.get(3).spCost();
                             currentMove = mvm.get(selectedEntity).moveList.get(3);
                         }
+                        teams.get(team.get(selectedEntity).teamNumber).incrementTotalAttacksUsed();
 
                         //set canAttack and canMove state to false, and begin move's Visuals.
                         state.get(selectedEntity).canAttack = false;
@@ -613,10 +616,27 @@ public class BattleScreen implements Screen {
         //check win conditions
         if (rules.checkWinConditions() != null && currentMove == null) {
             if (!gameHasEnded) {
-                infoLbl.setText("" + rules.checkWinConditions().getTeamName() + " has won!");
                 endTurnBtn.setDisabled(true);
+                gameHasEnded = true;
             }
-            gameHasEnded = true;
+
+            //fade to black
+            if (changeScreenTimer >= 3) {
+                Entity blackCover = new Entity();
+                Sprite darkness = (atlas.createSprite("DarkTile"));
+                darkness.setColor(new Color(0, 0, 0, 0));
+                blackCover.add(new SpriteComponent(darkness));
+                blackCover.add(new PositionComponent(new Vector2(0, 0), stage.getHeight(), stage.getWidth(), 0));
+                blackCover.add(new EventComponent(.005f, 0, true, true, (entity, engine) -> {
+                    sm.get(entity).sprite.setColor(sm.get(entity).sprite.getColor().cpy().add(0, 0, 0, .05f));
+                }));
+                engine.addEntity(blackCover);
+            }
+
+            //go to results screen
+            if (changeScreenTimer >= 4)
+                GRID_WARS.setScreen(new EndResultsScreen(teams, teams.indexOf(rules.checkWinConditions(), true), rules, GRID_WARS));
+            changeScreenTimer += delta;
         }
 
         //debug
@@ -644,6 +664,11 @@ public class BattleScreen implements Screen {
     }
 
     private void processComputerTurn(float delta) {
+        //if game has ended stop
+        if (gameHasEnded) {
+            return;
+        }
+
         //Getting the Turn. Null if dead.
         Entity currentEntity;
         Turn currentTurn =
@@ -657,7 +682,7 @@ public class BattleScreen implements Screen {
         }
 
         //Playing out the Turn
-        if (timeAfterMove >= .3f && turnPhase == 0) { //Move
+        if (timeAfterMove >= .1f && turnPhase == 0) { //Move
             try {
                 BoardComponent.boards.move(currentTurn.entity, currentTurn.pos);
             } catch (Exception e) {
@@ -670,13 +695,14 @@ public class BattleScreen implements Screen {
             }
             BoardComponent.boards.move(currentTurn.entity, currentTurn.pos);
             turnPhase = 1;
-        } else if (timeAfterMove >= 1f && turnPhase == 1) { //use attack
+        } else if (timeAfterMove >= .5f && turnPhase == 1) { //use attack
             currentEntity = currentTurn.entity;
             if (currentTurn.attack != -1) {
                 if (currentTurn.direction > 0)
                     for (int i = 0; i < currentTurn.direction; i++)
                         Move.orientAttack(true, mvm.get(currentEntity).moveList.get(currentTurn.attack));
                 mvm.get(currentEntity).moveList.get(currentTurn.attack).useAttack();
+                teams.get(team.get(currentEntity).teamNumber).incrementTotalAttacksUsed();
                 stm.get(currentEntity).sp -= mvm.get(currentEntity).moveList.get(currentTurn.attack).spCost();
                 currentMove = mvm.get(currentEntity).moveList.get(currentTurn.attack);
                 showAttackMessage(nm.get(currentEntity).name, mvm.get(currentEntity).moveList.get(currentTurn.attack));
@@ -699,7 +725,8 @@ public class BattleScreen implements Screen {
                 timeAfterMove = 0;
                 turnPhase = 0;
                 currentComputerControlledEntity = 0;
-                nextTurn();
+                if (!gameHasEnded)
+                    nextTurn();
             }
         } else if (currentComputerControlledEntity >= computer.getTeamSize()) { //Check if ran through all turns
             timeAfterMove = 0;
@@ -1285,7 +1312,8 @@ public class BattleScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        for (EntitySystem e : engine.getSystems())
+            engine.removeSystem(e);
     }
 
     public int getMoveHover() {

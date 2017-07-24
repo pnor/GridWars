@@ -94,7 +94,5 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
         table.add(complex).size(350, 90).row();
         table.add(compact).size(350, 90).row();
         table.add(desert).size(350, 90).row();
-
-
     }
 }

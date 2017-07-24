@@ -15,25 +15,24 @@ public class Team {
     private Array<Entity> entities;
     private Color teamColor;
     private String teamName;
-    private boolean AIControlled;
 
-    public Team(String name, Color color, boolean isAIControlled, Array<Entity> e) {
+    //result info related
+    private int totalAttacksUsed;
+
+    public Team(String name, Color color, Array<Entity> e) {
         teamName = name;
         teamColor = color;
-        AIControlled = isAIControlled;
         entities = e;
     }
 
-    public Team(String name, Color color, boolean isAIControlled) {
+    public Team(String name, Color color) {
         teamName = name;
         teamColor = color;
-        AIControlled = isAIControlled;
         entities = new Array<Entity>();
     }
 
-    public Team(boolean isAIControlled, Array<Entity> e) {
+    public Team(Array<Entity> e) {
         teamColor = new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f);
-        AIControlled = isAIControlled;
         entities = e;
     }
 
@@ -55,12 +54,67 @@ public class Team {
         return true;
     }
 
+    /**
+     * @return the amount of entities on the team that are dead
+     */
+    public int getAmontDead() {
+        int live = 0;
+        for (Entity e : entities)
+            if (stm.get(e).alive) live++;
+        return live;
+    }
+
+    /**
+     * @return the average max hp of all entities on the team
+     */
+    public float getAverageMaxHealth() {
+        float health = 0;
+        for (Entity e : entities)
+            health += stm.get(e).maxHP;
+        health /= entities.size;
+        return health;
+    }
+
+    /**
+     * @return returns the average hp of all entities on the team.
+     */
+    public float getAverageHealth() {
+        float health = 0;
+        for (Entity e : entities) {
+            if (stm.get(e).alive)
+                health += stm.get(e).hp;
+        }
+        health /= entities.size;
+        return health;
+    }
+
+    /**
+     * @return returns the average sp of all entities on the team.
+     */
+    public int getAverageSp() {
+        int sp = 0;
+        for (Entity e : entities) {
+            if (stm.get(e).alive)
+                sp += stm.get(e).sp;
+        }
+        sp /= entities.size;
+        return sp;
+    }
+
+    public void incrementTotalAttacksUsed() {
+        totalAttacksUsed ++;
+    }
+
     public void setTeamName(String name) {
         teamName = name;
     }
 
     public void setTeamColor(Color color) {
         teamColor = color;
+    }
+
+    public void setTotalAttacksUsed(int i) {
+        totalAttacksUsed = i;
     }
 
     public Array<Entity> getEntities() {
@@ -75,11 +129,11 @@ public class Team {
         return teamName;
     }
 
-    public boolean getAIControlled() {
-        return AIControlled;
+    public int getTotalAttacksUsed() {
+        return totalAttacksUsed;
     }
 
     public String toString() {
-        return "" + teamName + "(" + teamColor + ", AIControlled: " + AIControlled + ", Entities : " + entities;
+        return teamName + "(" + teamColor + ", Entities : " + entities + ")";
     }
 }

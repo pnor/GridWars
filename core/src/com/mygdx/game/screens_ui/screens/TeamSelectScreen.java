@@ -102,7 +102,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
 
         teams = new Array<Team>();
         for (int i = 0; i < maxTeams; i++)
-            teams.add(new Team("", new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f), false));
+            teams.add(new Team("", new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f)));
         switch (maxTeams) { //Give default names
             case 2 :
                 teams.get(1).setTeamName("Beta");
