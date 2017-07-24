@@ -24,6 +24,7 @@ public class TitleScreen extends MenuScreen implements Screen {
 
     private Label titleLbl;
     private HoverButton startBtn;
+    private HoverButton optionBtn;
 
     public TitleScreen(GridWars gridWars) {
         super(gridWars);
@@ -41,12 +42,16 @@ public class TitleScreen extends MenuScreen implements Screen {
         param.shadowColor = Color.LIGHT_GRAY;
         titleLbl = new Label("Grid Wars", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         startBtn = new HoverButton("Start", skin, Color.WHITE, Color.DARK_GRAY);
+        optionBtn = new HoverButton("Option", skin, Color.WHITE, Color.DARK_GRAY);
+
         ChangeListener listener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == startBtn) {
                         GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
+                    } else if (actor == optionBtn) {
+                        GRID_WARS.setScreen(new OptionsScreen(GRID_WARS));
                     }
                 }
             }
@@ -60,7 +65,10 @@ public class TitleScreen extends MenuScreen implements Screen {
                 Color.GRAY, Color.ORANGE);
 
         startBtn.addListener(listener);
+        optionBtn.addListener(listener);
+
         table.add(titleLbl).padBottom(80f).row();
-        table.add(startBtn).size(300, 90);
+        table.add(startBtn).size(300, 90).padBottom(40).row();
+        table.add(optionBtn).size(300, 90);
     }
 }

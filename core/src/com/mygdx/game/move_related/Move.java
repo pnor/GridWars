@@ -18,6 +18,7 @@ public class Move {
     private int spCost;
     private Attack attack;
     private Visuals visuals;
+    public static boolean doesAnimations;
     /**
      * Represents effected tiles relative to user's position
      */
@@ -87,7 +88,8 @@ public class Move {
 
             attack.effect(user, bp);
         }
-        visuals.setPlaying(true, false);
+        if (doesAnimations)
+            visuals.setPlaying(true, false);
     }
 
     /**

@@ -197,23 +197,23 @@ public class EndResultsScreen extends MenuScreen implements Screen {
             for (Image i : team1Icons)
                 i.setColor(Color.WHITE);
             progress= 3;
-        } else if (time >= 3f && progress == 3) {
+        } else if (time >= 2.5f && progress == 3) {
             lbl0AttacksUsed.setColor(Color.WHITE);
             lbl1AttacksUsed.setColor(Color.WHITE);
             progress = 4;
-        } else if (time >= 4f && progress == 4) {
+        } else if (time >= 3f && progress == 4) {
             lbl0TotalSpRemaing.setColor(Color.WHITE);
             lbl1TotalSpRemaing.setColor(Color.WHITE);
             progress = 5;
-        } else if (time >= 5f && progress == 5) {
+        } else if (time >= 3.5f && progress == 5) {
             lbl0TotalHealthRemaining.setColor(Color.WHITE);
             lbl1TotalHealthRemaining.setColor(Color.WHITE);
             progress = 6;
-        } else if (time >= 6f && progress == 6) {
+        } else if (time >= 4f && progress == 6) {
             lbl0EntitiesRemaining.setColor(Color.WHITE);
             lbl1EntitiesRemaining.setColor(Color.WHITE);
             progress = 7;
-        } else if (time >= 8f && progress == 7) {
+        } else if (time >= 6f && progress == 7) {
             lblVictoryLabel.setColor(Color.WHITE);
             backgroundLayer.setColor(teams.get(winningTeamIndex).getTeamColor());
             progress = 8;

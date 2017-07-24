@@ -3,10 +3,7 @@ package com.mygdx.game.screens_ui.screens;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -97,6 +94,8 @@ public class BattleScreen implements Screen {
     private int[] computerControlledTeamsIndex;
     private boolean playingComputerTurn;
     private float timeAfterMove;
+    private float movementWaitTime;
+    private float attackWaitTime;
     private int currentComputerControlledEntity;
     /**
      * Waiting to... <p>
@@ -174,8 +173,22 @@ public class BattleScreen implements Screen {
         else
             computer = new ComputerPlayer(BoardComponent.boards, teams, 1, 4);
 
-        //for now
         computerControlledTeamsIndex = AIControlled;
+
+        //Options preferences
+        Preferences pref = Gdx.app.getPreferences("Options");
+        Move.doesAnimations = pref.getBoolean("Move Animation");
+        int AISpeed = pref.getInteger("AI Turn Speed");
+        if (AISpeed == 0) { //slow
+            movementWaitTime = 1f;
+            attackWaitTime = 1.5f;
+        } else if (AISpeed == 1) { //normal
+            movementWaitTime = .5f;
+            attackWaitTime = 1f;
+        } else { //fast
+            movementWaitTime = .1f;
+            attackWaitTime = .3f;
+        }
     }
 
     @Override
@@ -682,7 +695,7 @@ public class BattleScreen implements Screen {
         }
 
         //Playing out the Turn
-        if (timeAfterMove >= .1f && turnPhase == 0) { //Move
+        if (timeAfterMove >= movementWaitTime && turnPhase == 0) { //Move
             try {
                 BoardComponent.boards.move(currentTurn.entity, currentTurn.pos);
             } catch (Exception e) {
@@ -695,7 +708,7 @@ public class BattleScreen implements Screen {
             }
             BoardComponent.boards.move(currentTurn.entity, currentTurn.pos);
             turnPhase = 1;
-        } else if (timeAfterMove >= .5f && turnPhase == 1) { //use attack
+        } else if (timeAfterMove >= attackWaitTime && turnPhase == 1) { //use attack
             currentEntity = currentTurn.entity;
             if (currentTurn.attack != -1) {
                 if (currentTurn.direction > 0)
