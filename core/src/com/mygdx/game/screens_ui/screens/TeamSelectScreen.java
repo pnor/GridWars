@@ -62,6 +62,9 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     private Table portraitTable;
     private Array<Image> characterPortraits;
 
+    private Table AIControlTable;
+    private CheckBox AICheckBox;
+
     private Table menuBtnTable;
     private HoverButton okBtn, backBtn, clearBtn, lastTeamBtn, nextBtn;
 
@@ -69,6 +72,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     private final int MAX_ENTITY_PER_TEAM = 4;
     private boolean zones;
     private Array<Team> teams;
+    private Array<Integer> AIControlledTeams = new Array<>();
 
     /**
      * Creates a team selection screen
@@ -91,7 +95,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         super.show();
         EntityConstructor.initialize(engine, stage);
 
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         NinePatch tableBack = new NinePatch(new Texture(Gdx.files.internal("TableBackground.png")), 33, 33, 33, 33);
         NinePatchDrawable tableBackground = new NinePatchDrawable(tableBack);
@@ -100,10 +104,6 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         for (int i = 0; i < maxTeams; i++)
             teams.add(new Team("", new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f), false));
         switch (maxTeams) { //Give default names
-            case 4 :
-                teams.get(3).setTeamName("Delta");
-            case 3 :
-                teams.get(2).setTeamName("Gamma");
             case 2 :
                 teams.get(1).setTeamName("Beta");
             case 1 :
@@ -113,16 +113,17 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         selectedTeamsIconsTable = new Table();
         characterBtnTable = new Table();
         portraitTable = new Table();
+        AIControlTable = new Table();
         menuBtnTable = new Table();
         teamCustomizeTable = new Table();
 
         param.size = 65;
         titleLbl = new Label("Choose Your Team", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
-        titleLbl.setColor(Color.GREEN);
         teamNameLbl = new Label("Team", skin);
         teamName = new TextField("", skin);
         teamColorLbl = new Label("Color", skin);
         teamColor = new TextField("", skin);
+        AICheckBox = new CheckBox("Computer Controlled", skin);
         okBtn = new HoverButton("OK", skin, Color.PINK, Color.GRAY);
         backBtn = new HoverButton("Back", skin, Color.YELLOW, Color.GRAY);
         clearBtn = new HoverButton("Clear", skin, Color.RED, Color.GRAY);
@@ -218,6 +219,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
             }
             }
         };
+
         TextField.TextFieldListener nameListener = new TextField.TextFieldListener() {
             @Override
             public void keyTyped(TextField textField, char c) {
@@ -278,7 +280,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         teamCustomizeTable.add(teamName).padRight(10f);
         teamCustomizeTable.add(teamColorLbl).padRight(5f);
         teamCustomizeTable.add(teamColor);
-        table.add(teamCustomizeTable).padBottom(10f).row();
+        table.add(teamCustomizeTable).colspan(2).padBottom(10f).row();
 
         //team character buttons table
         for (int i = 0; i < 2; i++) {
@@ -291,11 +293,16 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         }
         table.add(characterBtnTable).colspan(2).padBottom(20f).row();
 
-        //team portratis
+        //team portraits
         for (int i = 0; i < characterPortraits.size; i++) {
             portraitTable.add(characterPortraits.get(i)).padRight(10f);
         }
         table.add(portraitTable).padBottom(30f).colspan(2).row();
+
+        //AI control table
+        AIControlTable.add(AICheckBox);
+        table.add(AIControlTable).colspan(2).padBottom(30f).row();
+
         //menu buttons table
         menuBtnTable.add(okBtn).size(150, 50);
         menuBtnTable.add(backBtn).size(150, 50);
@@ -307,7 +314,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         //table.setBackground(tableBackground);
 
         table.debug();
-        characterBtnTable.debug();
+        //characterBtnTable.debug();
         //portraitTable.debug();
     }
 
@@ -320,6 +327,12 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         if (teams.get(curTeam).getEntities().size <= 0) //empty team
             return;
         else { //else -> move to next team
+            //if AI controlled, store team index in array
+            if (AICheckBox.isChecked()) {
+                AIControlledTeams.add(curTeam);
+                AICheckBox.setChecked(false);
+            }
+
             teamName.setText("");
             teamColor.setText("");
             teamColor.setColor(Color.WHITE);
@@ -379,14 +392,18 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         String genericTeamName = "___";
         if (curTeam == 0) genericTeamName = "Alpha";
         else if (curTeam == 1) genericTeamName = "Beta";
-        else if (curTeam == 0) genericTeamName = "Gamma";
-        else if (curTeam == 0) genericTeamName = "Delta";
         teams.get(curTeam).getEntities().clear();
         teams.get(curTeam).setTeamName(genericTeamName);
         teams.get(curTeam).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
         teams.get(curTeam - 1).getEntities().clear();
         teams.get(curTeam - 1).setTeamName("" + (curTeam - 1));
         teams.get(curTeam - 1).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
+        //clear AI list
+        if (AIControlledTeams.contains(curTeam, false))
+            AIControlledTeams.removeIndex(AIControlledTeams.indexOf(curTeam, false));
+        if (AIControlledTeams.contains(curTeam - 1, false))
+            AIControlledTeams.removeIndex(AIControlledTeams.indexOf(curTeam - 1, false));
+        AICheckBox.setChecked(false);
         //clear portrait images
         for (int i = 0; i < characterPortraits.size; i++)
             characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
@@ -401,8 +418,13 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
      * Continues to the next screen if all teams have been set with at least one entity.
      */
     public void goToNextScreen() {
+        //convert Integer to int array
+        int[] intAIControlledTeamsArray = new int[AIControlledTeams.size];
+        for (int i = 0; i < AIControlledTeams.size; i++)
+            intAIControlledTeamsArray[i] = AIControlledTeams.get(i).intValue();
+
         if (teams.get(maxTeams - 1).getEntities().size > 0)
-            GRID_WARS.setScreen(new BoardSelectScreen(maxTeams, zones, teams, GRID_WARS));
+            GRID_WARS.setScreen(new BoardSelectScreen(maxTeams, zones, teams, intAIControlledTeamsArray, GRID_WARS));
     }
 
     /**

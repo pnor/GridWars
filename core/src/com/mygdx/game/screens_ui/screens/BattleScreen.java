@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -59,9 +58,6 @@ import static com.mygdx.game.GridWars.*;
  * @author pnore_000
  */
 public class BattleScreen implements Screen {
-    //debug
-    final ShapeRenderer SHAPE = new ShapeRenderer();
-    public static ComputerPlayer computer;
 
     private final GridWars GRID_WARS;
     private BattleInputProcessor battleInputProcessor;
@@ -96,6 +92,8 @@ public class BattleScreen implements Screen {
     public boolean attacksEnabled = true;
 
     //Computer Turn variables
+    private final ComputerPlayer computer;
+    private int[] computerControlledTeamsIndex;
     private boolean playingComputerTurn;
     private float timeAfterMove;
     private int currentComputerControlledEntity;
@@ -160,7 +158,7 @@ public class BattleScreen implements Screen {
     private final int deltatimeIntervals = 10000;
     private int currentDeltaTime;
 
-    public BattleScreen(Array<Team> selectedTeams, int boardIndex, GridWars game) {
+    public BattleScreen(Array<Team> selectedTeams, int boardIndex, int[] AIControlled, GridWars game) {
         GRID_WARS = game;
         teams = selectedTeams;
         if (BoardComponent.boards == null)
@@ -171,22 +169,13 @@ public class BattleScreen implements Screen {
         MoveConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, stage);
 
         if (rules instanceof ZoneRules)
-            computer = new ComputerPlayer(BoardComponent.boards, teams, ((ZoneRules) rules).getZones(), 1, 20);
+            computer = new ComputerPlayer(BoardComponent.boards, teams, ((ZoneRules) rules).getZones(), 1, 4);
         else
-            computer = new ComputerPlayer(BoardComponent.boards, teams, 1, 20);
-    }
+            computer = new ComputerPlayer(BoardComponent.boards, teams, 1, 4);
 
-
-    /* OLD
-    public BattleScreen(GridWars game, int boardSize, Color c, Color c2) {
-        GRID_WARS = game;
-        if (boardSize <= 7) {
-            BoardComponent.setBoardManager(new BoardManager(new Board(boardSize, boardSize, c, c2, 100), new CodeBoard(boardSize, boardSize)));
-        } else {
-            BoardComponent.setBoardManager(new BoardManager(new Board(boardSize, boardSize, c, c2, 700 / boardSize), new CodeBoard(boardSize, boardSize)));
-        }
+        //for now
+        computerControlledTeamsIndex = AIControlled;
     }
-    */
 
     @Override
     public void show() {
@@ -384,32 +373,7 @@ public class BattleScreen implements Screen {
            @Override
            public void changed(ChangeEvent event, Actor actor) {
                if (((Button) actor).isPressed()) {
-                   rules.nextTurn();
-                   showEndTurnDisplay();
-                   if (rules.getCurrentTeamNumber() == 1) { //debug, should actually figure out whos computer
-                       playingComputerTurn = true;
-                       if (rules instanceof ZoneRules)
-                            computer.updateComputerPlayer(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), ((ZoneRules) rules).getZones()));
-                       else
-                           computer.updateComputerPlayer(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), null));
-
-                       new Thread(computer).start();
-                       /*
-                       Thread AIThread = new Thread(computer);
-                       AIThread.run();
-                       */
-                   } else
-                       playingComputerTurn = false;
-
-                   //DEBUG!!
-                  /*
-                   for (Entity e : turns.orderedKeys()) {
-                       BoardComponent.boards.move(e, turns.get(e).pos);
-                       mvm.get(selectedEntity).moveList.get(0).useAttack();
-                       stm.get(selectedEntity).sp -= mvm.get(selectedEntity).moveList.get(0).spCost();
-                       currentMove = mvm.get(selectedEntity).moveList.get(0);
-                   }
-                   */
+                   nextTurn();
                }
            }
         });
@@ -461,6 +425,9 @@ public class BattleScreen implements Screen {
         */
 
         //Start first turn
+        nextTurn();
+
+        /*
         endTurnMessageLbl.setText("" + rules.getCurrentTeam().getTeamName() + " turn!");
         turnCountLbl.setText("Turn " + rules.getTurnCount());
         turnCountLbl.setColor(new Color(1,1,1,1).lerp(Color.ORANGE, (float) rules.getTurnCount() / 100f));
@@ -473,6 +440,8 @@ public class BattleScreen implements Screen {
         endTurnMessageTable.addAction(sequence);
         for (Entity e : rules.getCurrentTeam().getEntities())
             shadeBasedOnState(e);
+            */
+
         fontGenerator.dispose();
     }
 
@@ -681,7 +650,7 @@ public class BattleScreen implements Screen {
                 (currentComputerControlledEntity < computer.getDecidedTurns().size)? computer.getDecidedTurns().get(currentComputerControlledEntity) : null;
         timeAfterMove += delta;
 
-        if (currentComputerControlledEntity < computer.getDecidedTurns().size && currentTurn == null) { //entity is dead/skip turn
+        if ((currentTurn == null && currentComputerControlledEntity < computer.getDecidedTurns().size) || (currentTurn != null && !stm.get(currentTurn.entity).alive)) { //entity is dead/skip turn
             currentComputerControlledEntity++;
             turnPhase = 0;
             timeAfterMove = 0;
@@ -730,9 +699,7 @@ public class BattleScreen implements Screen {
                 timeAfterMove = 0;
                 turnPhase = 0;
                 currentComputerControlledEntity = 0;
-                rules.nextTurn();
-                showEndTurnDisplay();
-                playingComputerTurn = false; //debug
+                nextTurn();
             }
         } else if (currentComputerControlledEntity >= computer.getTeamSize()) { //Check if ran through all turns
             timeAfterMove = 0;
@@ -756,6 +723,42 @@ public class BattleScreen implements Screen {
                 infoLbl.setText(move.getName() + " was used!");
         } else {
             infoLbl.setText(move.getAttackMessage());
+        }
+    }
+
+    /**
+     * Ends the current turn and starts the next.
+     */
+    private void nextTurn() {
+        disableUI();
+        rules.nextTurn();
+        showEndTurnDisplay();
+
+        if (!gameHasEnded) {
+            boolean processingAComputerControlledTeam = false;
+            int controlledTeamIndex = -1;
+            for (int i = 0; i < computerControlledTeamsIndex.length; i++) {
+                if (computerControlledTeamsIndex[i] == rules.getCurrentTeamNumber()) {
+                    processingAComputerControlledTeam = true;
+                    controlledTeamIndex = i;
+                    break;
+                }
+            }
+
+            if (processingAComputerControlledTeam) {
+                playingComputerTurn = true;
+                computer.setTeamControlled(computerControlledTeamsIndex[controlledTeamIndex]);
+
+                if (rules instanceof ZoneRules)
+                    computer.updateComputerPlayer(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), ((ZoneRules) rules).getZones()));
+                else
+                    computer.updateComputerPlayer(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), null));
+
+                new Thread(computer).start();
+            } else
+                playingComputerTurn = false;
+
+            enableUI();
         }
     }
 
@@ -825,7 +828,7 @@ public class BattleScreen implements Screen {
         //get spread of tiles upwards
         getMovableSquaresSpread(bp, bp, spd, tiles, -1, 2, true);
         //get spread of tiles downwards
-        getMovableSquaresSpread(bp, bp, spd, tiles, -1, 0, false);
+        getMovableSquaresSpread(bp, bp, spd, tiles, -1, 0, true);
 
         return tiles;
     }

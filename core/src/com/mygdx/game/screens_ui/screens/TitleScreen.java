@@ -35,10 +35,10 @@ public class TitleScreen extends MenuScreen implements Screen {
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 120;
-        param.color = Color.RED;
+        param.color = Color.WHITE;
         param.shadowOffsetX = -4;
         param.shadowOffsetY = -4;
-        param.shadowColor = Color.BLACK;
+        param.shadowColor = Color.LIGHT_GRAY;
         titleLbl = new Label("Grid Wars", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         startBtn = new HoverButton("Start", skin, Color.WHITE, Color.DARK_GRAY);
         ChangeListener listener = new ChangeListener() {
@@ -57,7 +57,7 @@ public class TitleScreen extends MenuScreen implements Screen {
         background = new Background(backgroundLay,
                 new Sprite[]{topLayer},
                 new BackType[]{BackType.FADE_COLOR},
-                Color.BLACK, Color.CYAN);
+                Color.GRAY, Color.ORANGE);
 
         startBtn.addListener(listener);
         table.add(titleLbl).padBottom(80f).row();

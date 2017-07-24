@@ -630,7 +630,9 @@ public class EntityConstructor {
                 MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.reflectMove(entity),
-                MoveConstructor.StarSpin(entity)
+                MoveConstructor.mirrorMove(entity),
+                MoveConstructor.rouletteReflect(entity),
+                MoveConstructor.clear(entity)
         })));
 
         return entity;

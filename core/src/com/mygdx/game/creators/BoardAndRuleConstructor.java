@@ -39,25 +39,18 @@ public class BoardAndRuleConstructor {
             case 2 :
                 return makeSimple2PZone(screen, teams, boardManager);
             case 3 :
-                return makeSimple4PZone(screen, teams, boardManager);
-            case 4 :
                 return makeComplex2P(screen, teams, boardManager);
-            case 5 :
+            case 4 :
                 return makeComplex2PZone(screen, teams, boardManager);
-            case 6 :
-                return makeComplex4PZone(screen, teams, boardManager);
-            case 7 : //fix
+            case 5 : //fix
                 return makeCompact2P(screen, teams, boardManager);
-            case 8 :
+            case 6 :
                 return makeCompact2PZone(screen, teams, boardManager);
-            case 9 :
-                return makeCompact4PZone(screen, teams, boardManager);
-            case 10:
+            case 7:
                 return makeDesert2P(screen, teams, boardManager);
-            case 11:
+            case 8:
                 return makeDesert2PZone(screen, teams, boardManager);
-            case 12:
-                return makeDesert4PZone(screen, teams, boardManager);
+            case 9:
         }
         return null;
     }

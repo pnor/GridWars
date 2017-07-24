@@ -130,6 +130,18 @@ public class Visuals {
         autoReset = autoreset;
     }
 
+    public Visuals createCopy(Entity newUser) {
+        Array<BoardPosition> newRange = new Array<>();
+        for (BoardPosition bp : targetPositions)
+            newRange.add(bp.copy());
+
+        Array<VisualEvent> newVisuals = new Array<>();
+        for (VisualEvent v : visuals)
+            newVisuals.add(v.copy());
+
+        return new Visuals(newUser, newRange, newVisuals);
+    }
+
     public boolean getIsPlaying() {
         return isPlaying;
     }

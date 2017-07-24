@@ -184,4 +184,12 @@ public class Move {
     }
 
     public MoveInfo moveInfo() { return moveInfo;}
+
+    public Move createCopy(Entity newUser) {
+        Array<BoardPosition> newRange = new Array<>();
+        for (BoardPosition bp : range)
+            newRange.add(bp.copy());
+
+         return new Move(name, attackMessage, newUser, spCost, newRange, attack, visuals.createCopy(newUser), moveInfo);
+    }
 }

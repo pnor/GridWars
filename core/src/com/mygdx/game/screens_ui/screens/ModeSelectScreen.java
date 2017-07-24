@@ -22,7 +22,7 @@ import static com.mygdx.game.GridWars.skin;
  */
 public class ModeSelectScreen extends MenuScreen implements Screen {
     private Label titleLbl;
-    private HoverButton twoPlayerDeathMatch, twoPlayerZones, fourPlayerZones;
+    private HoverButton twoPlayerDeathMatch, twoPlayerZones;
 
     public ModeSelectScreen(GridWars gridWars) {
         super(gridWars);
@@ -37,7 +37,6 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
         titleLbl = new Label("Select A Game Mode", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         twoPlayerDeathMatch = new HoverButton("2-Player Death Match", skin, Color.CYAN, Color.DARK_GRAY);
         twoPlayerZones = new HoverButton("2-Player Zone Match", skin, Color.GREEN, Color.DARK_GRAY);
-        fourPlayerZones = new HoverButton("4-Player Zone Match", skin, Color.RED, Color.DARK_GRAY);
         ChangeListener listener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -46,8 +45,6 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
                         GRID_WARS.setScreen(new TeamSelectScreen(2, false, GRID_WARS));
                     } else if (actor == twoPlayerZones) {
                         GRID_WARS.setScreen(new TeamSelectScreen(2, true, GRID_WARS));
-                    } else if (actor == fourPlayerZones) {
-                        GRID_WARS.setScreen(new TeamSelectScreen(4, true, GRID_WARS));
                     }
                 }
             }
@@ -63,10 +60,8 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
 
         twoPlayerDeathMatch.addListener(listener);
         twoPlayerZones.addListener(listener);
-        fourPlayerZones.addListener(listener);
         table.add(titleLbl).padBottom(40).row();
         table.add(twoPlayerDeathMatch).size(350, 90).padBottom(10f).row();
         table.add(twoPlayerZones).size(350, 90).padBottom(10f).row();
-        table.add(fourPlayerZones).size(350, 90).padBottom(10f).row();
     }
 }

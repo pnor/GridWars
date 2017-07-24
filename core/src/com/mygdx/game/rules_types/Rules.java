@@ -18,14 +18,13 @@ public abstract class Rules {
     protected int currentTeamTurn;
     protected int totalTeams;
 
-    protected int turnCount = 1;
+    protected int turnCount = 0;
 
     public Rules(BattleScreen s, Array<Team> t) {
-
         screen = s;
         teams = t;
-        for (int i = 0; i< teams.size; i++)
-            totalTeams += 1;
+        totalTeams = teams.size;
+        currentTeamTurn = totalTeams - 1;
     }
 
     /**
@@ -80,13 +79,6 @@ public abstract class Rules {
         }
         //update the team bar
         screen.updateTeamBar();
-    }
-
-    /**
-     * Process computer controlled teams.
-     */
-    public void processAiTeam() {
-        //...?
     }
 
     public int getCurrentTeamNumber() {

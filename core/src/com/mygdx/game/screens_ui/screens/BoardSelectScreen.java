@@ -26,6 +26,7 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
     private int maxTeams;
     private boolean zoneRules;
     private Array<Team> teams;
+    private int[] AIComputerControlledTeams;
     /**
      * 1 : basic 2 player <p>
      * 2 : basic zone 2 player <p>
@@ -33,11 +34,12 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
      */
     private int board;
 
-    public BoardSelectScreen(int max, boolean isZones, Array<Team> selectedTeams, GridWars gridWars) {
+    public BoardSelectScreen(int max, boolean isZones, Array<Team> selectedTeams, int[] AIControlled, GridWars gridWars) {
         super(gridWars);
         maxTeams = max;
         zoneRules = isZones;
         teams = selectedTeams;
+        AIComputerControlledTeams = AIControlled;
     }
 
     @Override
@@ -55,23 +57,20 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
         ChangeListener listener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (maxTeams == 2)
-                    board = (zoneRules) ? 2 : 1;
-                else if (maxTeams == 4 && zoneRules)
-                    board = 3;
+                board = (zoneRules) ? 2 : 1;
 
                 if (((Button) actor).isPressed()) {
                     if (actor == basic) {
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
                     } else if (actor == complex) {
-                        board += 3;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, GRID_WARS));
+                        board += 2;
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
                     } else if (actor == compact) {
-                        board += 6;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, GRID_WARS));
+                        board += 4;
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
                     } else if (actor == desert) {
-                        board += 9;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, GRID_WARS));
+                        board += 6;
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
                     }
                 }
             }
