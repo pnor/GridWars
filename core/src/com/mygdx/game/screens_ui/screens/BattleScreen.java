@@ -91,7 +91,13 @@ public class BattleScreen implements Screen {
 
     //Computer Turn variables
     private final ComputerPlayer computer;
-    private int[] computerControlledTeamsIndex;
+    /**
+     * x-coordinate of the vector is team index. y-coordinate is the depth level.
+     * <p> Easy -> 0 </p>
+     * <p> Normal -> 2 </p>
+     * <p> Hard ->  6 </p>
+     */
+    private Vector2[] computerControlledTeamsIndex;
     private boolean playingComputerTurn;
     private float timeAfterMove;
     private float movementWaitTime;
@@ -158,7 +164,7 @@ public class BattleScreen implements Screen {
     private final int deltatimeIntervals = 10000;
     private int currentDeltaTime;
 
-    public BattleScreen(Array<Team> selectedTeams, int boardIndex, int[] AIControlled, GridWars game) {
+    public BattleScreen(Array<Team> selectedTeams, int boardIndex, Vector2[] AIControlled, GridWars game) {
         GRID_WARS = game;
         teams = selectedTeams;
         if (BoardComponent.boards == null)
@@ -169,9 +175,9 @@ public class BattleScreen implements Screen {
         MoveConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, stage);
 
         if (rules instanceof ZoneRules)
-            computer = new ComputerPlayer(BoardComponent.boards, teams, ((ZoneRules) rules).getZones(), 1, 4);
+            computer = new ComputerPlayer(BoardComponent.boards, teams, ((ZoneRules) rules).getZones(), 1, 1, true, 0);
         else
-            computer = new ComputerPlayer(BoardComponent.boards, teams, 1, 4);
+            computer = new ComputerPlayer(BoardComponent.boards, teams, 1, 1, true, 0);
 
         computerControlledTeamsIndex = AIControlled;
 
@@ -629,6 +635,7 @@ public class BattleScreen implements Screen {
         //check win conditions
         if (rules.checkWinConditions() != null && currentMove == null) {
             if (!gameHasEnded) {
+                System.out.println("-------------------------------GAME HAS ENDED---------------------------------");
                 endTurnBtn.setDisabled(true);
                 gameHasEnded = true;
             }
@@ -778,7 +785,7 @@ public class BattleScreen implements Screen {
             boolean processingAComputerControlledTeam = false;
             int controlledTeamIndex = -1;
             for (int i = 0; i < computerControlledTeamsIndex.length; i++) {
-                if (computerControlledTeamsIndex[i] == rules.getCurrentTeamNumber()) {
+                if ((int) computerControlledTeamsIndex[i].x == rules.getCurrentTeamNumber()) {
                     processingAComputerControlledTeam = true;
                     controlledTeamIndex = i;
                     break;
@@ -787,8 +794,18 @@ public class BattleScreen implements Screen {
 
             if (processingAComputerControlledTeam) {
                 playingComputerTurn = true;
-                computer.setTeamControlled(computerControlledTeamsIndex[controlledTeamIndex]);
-
+                computer.setTeamControlled((int) computerControlledTeamsIndex[controlledTeamIndex].x);
+                Vector2 v = computerControlledTeamsIndex[controlledTeamIndex];
+                if ((int) v.y == 1) {
+                    computer.setDepthLevel(0);
+                    computer.setForgetBestMoveChance(.5f);
+                } else if ((int) v.y == 2) {
+                    computer.setDepthLevel(2);
+                    computer.setForgetBestMoveChance(.2f);
+                } if ((int) v.y == 3) {
+                    computer.setDepthLevel(6);
+                    computer.setForgetBestMoveChance(.05f);
+                }
                 if (rules instanceof ZoneRules)
                     computer.updateComputerPlayer(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), ((ZoneRules) rules).getZones()));
                 else
@@ -977,6 +994,8 @@ public class BattleScreen implements Screen {
             am.get(e).actor.shade(Color.DARK_GRAY);
         else if (!state.get(e).canMove || !state.get(e).canAttack)
             am.get(e).actor.shade(Color.GRAY);
+        else if (rules.getCurrentTeamNumber() == team.get(e).teamNumber)
+            am.get(e).actor.shade(rules.getCurrentTeam().getTeamColor());
         //status effects
         else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
             am.get(e).actor.shade(status.get(e).statusEffects.values().toArray().first().getColor());

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -63,7 +64,12 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     private Array<Image> characterPortraits;
 
     private Table AIControlTable;
-    private CheckBox AICheckBox;
+    private Label AIDescription;
+    private CheckBox AIEasyCheckBox;
+    private CheckBox AINormalCheckBox;
+    private CheckBox AIHardCheckBox;
+    private ButtonGroup<CheckBox> AICheckBoxGroup;
+
 
     private Table menuBtnTable;
     private HoverButton okBtn, backBtn, clearBtn, lastTeamBtn, nextBtn;
@@ -72,7 +78,10 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     private final int MAX_ENTITY_PER_TEAM = 4;
     private boolean zones;
     private Array<Team> teams;
-    private Array<Integer> AIControlledTeams = new Array<>();
+    /**
+     * x-coordinate of the vector is team index. y-coordinate is the difficulty. 1 is easy, 2 is normal, 3 is hard.
+     */
+    private Array<Vector2> AIControlledTeams = new Array<>();
 
     /**
      * Creates a team selection screen
@@ -123,7 +132,12 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         teamName = new TextField("", skin);
         teamColorLbl = new Label("Color", skin);
         teamColor = new TextField("", skin);
-        AICheckBox = new CheckBox("Computer Controlled", skin);
+        AIDescription = new Label("Computer Control : ", skin);
+        AIEasyCheckBox = new CheckBox("Easy", skin);
+        AINormalCheckBox = new CheckBox("Normal", skin);
+        AIHardCheckBox = new CheckBox("Hard", skin);
+        AICheckBoxGroup = new ButtonGroup<>(AIEasyCheckBox, AINormalCheckBox, AIHardCheckBox);
+        AICheckBoxGroup.setMaxCheckCount(1);
         okBtn = new HoverButton("OK", skin, Color.PINK, Color.GRAY);
         backBtn = new HoverButton("Back", skin, Color.YELLOW, Color.GRAY);
         clearBtn = new HoverButton("Clear", skin, Color.RED, Color.GRAY);
@@ -300,7 +314,11 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         table.add(portraitTable).padBottom(30f).colspan(2).row();
 
         //AI control table
-        AIControlTable.add(AICheckBox);
+        AIControlTable.add(AIDescription).padRight(30);
+        AIControlTable.add(AIEasyCheckBox).padRight(30);
+        AIControlTable.add(AINormalCheckBox).padRight(30);
+        AIControlTable.add(AIHardCheckBox);
+
         table.add(AIControlTable).colspan(2).padBottom(30f).row();
 
         //menu buttons table
@@ -328,9 +346,16 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
             return;
         else { //else -> move to next team
             //if AI controlled, store team index in array
-            if (AICheckBox.isChecked()) {
-                AIControlledTeams.add(curTeam);
-                AICheckBox.setChecked(false);
+            if (AICheckBoxGroup.getChecked() != null) {
+                int difficulty = 0;
+                if (AICheckBoxGroup.getChecked() == AIEasyCheckBox)
+                    difficulty = 1;
+                else if (AICheckBoxGroup.getChecked() == AINormalCheckBox)
+                    difficulty = 2;
+                else
+                    difficulty = 3;
+                AIControlledTeams.add(new Vector2(curTeam, difficulty));
+                AICheckBoxGroup.uncheckAll();
             }
 
             teamName.setText("");
@@ -371,6 +396,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         teams.get(curTeam).getEntities().clear();
         for (int i = 0; i < characterPortraits.size; i++)
             characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
+        AICheckBoxGroup.uncheckAll();
         currentEntity = 0;
     }
 
@@ -399,11 +425,31 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         teams.get(curTeam - 1).setTeamName("" + (curTeam - 1));
         teams.get(curTeam - 1).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
         //clear AI list
-        if (AIControlledTeams.contains(curTeam, false))
-            AIControlledTeams.removeIndex(AIControlledTeams.indexOf(curTeam, false));
-        if (AIControlledTeams.contains(curTeam - 1, false))
-            AIControlledTeams.removeIndex(AIControlledTeams.indexOf(curTeam - 1, false));
-        AICheckBox.setChecked(false);
+        //search for curTeam
+        boolean hasCurTeam = false;
+        int indexOfTeam = -1;
+        for (Vector2 v : AIControlledTeams) {
+            if (v.x == curTeam) {
+                hasCurTeam = true;
+                indexOfTeam = AIControlledTeams.indexOf(v, true);
+                break;
+            }
+        }
+        if (hasCurTeam)
+            AIControlledTeams.removeIndex(indexOfTeam);
+        //search for curTeam - 1
+        hasCurTeam = false;
+        indexOfTeam = -1;
+        for (Vector2 v : AIControlledTeams) {
+            if (v.x == curTeam) {
+                hasCurTeam = true;
+                indexOfTeam = AIControlledTeams.indexOf(v, true);
+                break;
+            }
+        }
+        if (hasCurTeam)
+            AIControlledTeams.removeIndex(indexOfTeam);
+        AICheckBoxGroup.uncheckAll();
         //clear portrait images
         for (int i = 0; i < characterPortraits.size; i++)
             characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
@@ -418,13 +464,8 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
      * Continues to the next screen if all teams have been set with at least one entity.
      */
     public void goToNextScreen() {
-        //convert Integer to int array
-        int[] intAIControlledTeamsArray = new int[AIControlledTeams.size];
-        for (int i = 0; i < AIControlledTeams.size; i++)
-            intAIControlledTeamsArray[i] = AIControlledTeams.get(i).intValue();
-
         if (teams.get(maxTeams - 1).getEntities().size > 0)
-            GRID_WARS.setScreen(new BoardSelectScreen(maxTeams, zones, teams, intAIControlledTeamsArray, GRID_WARS));
+            GRID_WARS.setScreen(new BoardSelectScreen(maxTeams, zones, teams, AIControlledTeams.toArray(Vector2.class), GRID_WARS));
     }
 
     /**

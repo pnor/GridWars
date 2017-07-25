@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -26,7 +27,7 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
     private int maxTeams;
     private boolean zoneRules;
     private Array<Team> teams;
-    private int[] AIComputerControlledTeams;
+    private Vector2[] AIComputerControlledTeams;
     /**
      * 1 : basic 2 player <p>
      * 2 : basic zone 2 player <p>
@@ -34,7 +35,7 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
      */
     private int board;
 
-    public BoardSelectScreen(int max, boolean isZones, Array<Team> selectedTeams, int[] AIControlled, GridWars gridWars) {
+    public BoardSelectScreen(int max, boolean isZones, Array<Team> selectedTeams, Vector2[] AIControlled, GridWars gridWars) {
         super(gridWars);
         maxTeams = max;
         zoneRules = isZones;

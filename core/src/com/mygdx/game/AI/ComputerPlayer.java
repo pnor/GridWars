@@ -27,22 +27,35 @@ public /*abstract*/ class ComputerPlayer implements Runnable {
     private BoardManager boards;
     private Array<Team> teams;
     private int depthLevel;
+    /**
+     * Whether it adds something between -1 and 1 to depth each time.
+     */
+    private boolean randomizeDepthLevel = false;
+    /**
+     * Should be between 0 and 1 inclusive. Higher values means it has a higher change of not including a best move.
+     */
+    private float forgetBestMoveChance = 0;
 
-    public ComputerPlayer(BoardManager b, Array<Team> t, int teamIndexControlled, int depth) {
+    public ComputerPlayer(BoardManager b, Array<Team> t, int teamIndexControlled, int depth, boolean randomizeDepth, float forgetChance) {
         boards = b;
         teams = t;
         teamControlled = teamIndexControlled;
         depthLevel = depth;
         decidedTurns = new Array<>();
+        randomizeDepthLevel = randomizeDepth;
+        forgetBestMoveChance = forgetChance;
     }
 
-    public ComputerPlayer(BoardManager b, Array<Team> t, Array<Array<BoardPosition>> zones, int teamIndexControlled, int depth) {
+    public ComputerPlayer(BoardManager b, Array<Team> t, Array<Array<BoardPosition>> zones, int teamIndexControlled, int depth, boolean randomizeDepth, float forgetChance) {
         boards = b;
         teams = t;
         zoneLocations = zones;
         teamControlled = teamIndexControlled;
         depthLevel = depth;
         decidedTurns = new Array<>();
+        randomizeDepthLevel = randomizeDepth;
+        forgetBestMoveChance = forgetChance;
+
     }
 
     public void updateComputerPlayer(BoardState board) {
@@ -53,7 +66,12 @@ public /*abstract*/ class ComputerPlayer implements Runnable {
     public void run() {
         processing = true;
         decidedTurns.clear();
-        decidedTurns = getBestTurnsBestTurnAssumption(currentBoardState, teamControlled, depthLevel);
+        if (randomizeDepthLevel) {
+            int newDepth = depthLevel;
+            newDepth = MathUtils.clamp(newDepth + MathUtils.random(-1, 1), 0, 999);
+            decidedTurns = getBestTurnsBestTurnAssumption(currentBoardState, teamControlled, newDepth);
+        } else
+            decidedTurns = getBestTurnsBestTurnAssumption(currentBoardState, teamControlled, depthLevel);
         System.out.println("TURNS PROCESSED : " + DEBUG_TURNS_PROCESSED);
         DEBUG_TURNS_PROCESSED = 0;
         processing = false;
@@ -128,33 +146,41 @@ public /*abstract*/ class ComputerPlayer implements Runnable {
             int curValue = 0;
             Array<Turn> allTurns = getAllPossibleTurns(e);
             Array<Turn> bestTurns = new Array<>(); //for possible ties
-            Turn bestTurn = null;
+            Turn bestTurn;
+            boolean willForget;
 
             for (Turn t : allTurns) {
+                willForget = MathUtils.randomBoolean(forgetBestMoveChance) && bestTurns.size > 0;
+                if (willForget)
+                    System.out.print("?");
                 curValue = bestTurnAssumption(board.copy().tryTurn(t), (team + 1) % teams.size, team, depth);
                 worstValue = Math.min(curValue, worstValue);
-                if (curValue > bestTurnVal) {
+                if (curValue > bestTurnVal && !willForget) {
                     System.out.print("!!!!");
                     bestTurnVal = curValue;
                     bestTurns.clear();
                     bestTurns.add(t);
-                } else if (curValue == bestTurnVal) {
+                } else if (curValue == bestTurnVal && !willForget) {
                     System.out.print("~!!~");
                     bestTurns.add(t);
                 }
 
+                if (willForget && (curValue >bestTurnVal || curValue == bestTurnVal)) //debug
+                    System.out.print("????");
                 System.out.print(t.toStringCondensed() + ": ");
                 System.out.print(curValue + ", " + "\n");
             }
 
             //resolve ties
-            if (bestTurns.size > 1) {
+            if (bestTurns.size > 1 && depth > 0) {
                 System.out.println("Drawbreak");
                 System.out.println("bestTurns : ");
                 for (Turn t : bestTurns) {
                     System.out.println(t.toStringCondensed());
                 }
                 bestTurn = drawbreakBestTurns(bestTurns, board, team, depth);
+            } else if (depth == 0) {
+                bestTurn = bestTurns.random();
             } else {
                 bestTurn = bestTurns.first();
             }
@@ -457,6 +483,14 @@ public /*abstract*/ class ComputerPlayer implements Runnable {
 
     public void setTeamControlled(int i) {
         teamControlled = i;
+    }
+
+    public void setDepthLevel(int d) {
+        depthLevel = d;
+    }
+
+    public void setForgetBestMoveChance(float f) {
+        forgetBestMoveChance = f;
     }
 
     public Array<Turn> getDecidedTurns() {

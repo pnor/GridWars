@@ -4,12 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.GridWars;
+import com.mygdx.game.screens_ui.BackType;
+import com.mygdx.game.screens_ui.Background;
 import com.mygdx.game.screens_ui.HoverButton;
 
+import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
 
 /**
@@ -61,11 +65,11 @@ public class OptionsScreen extends MenuScreen implements Screen {
             btnFastAI.setChecked(true);
 
 
-        HorizontalGroup confirmationBox = new HorizontalGroup();
+        Table confirmationBox = new Table();
         TextButton btnBack = new HoverButton("Back", skin, Color.WHITE, Color.RED);
         TextButton btnOK = new HoverButton("OK", skin, Color.WHITE, Color.BLUE);
-        confirmationBox.addActor(btnBack);
-        confirmationBox.addActor(btnOK);
+        confirmationBox.add(btnBack).size(80, 50).padRight(30);
+        confirmationBox.add(btnOK).size(80, 50);
 
         ChangeListener listener = new ChangeListener() {
             @Override
@@ -97,16 +101,25 @@ public class OptionsScreen extends MenuScreen implements Screen {
         btnBack.addListener(listener);
 
         table.add(lblAnimationInfo).padBottom(20).row();
-        HorizontalGroup animBtnGroup = new HorizontalGroup();
-        animBtnGroup.addActor(btnDoAnimation);
-        animBtnGroup.addActor(btnDontDoAnimation);
+        Table animBtnGroup = new Table();
+        animBtnGroup.add(btnDoAnimation).size(90, 50);
+        animBtnGroup.add(btnDontDoAnimation).size(90, 50);
         table.add(animBtnGroup).padBottom(20).row();
         table.add(lblAISpeedInfo).padBottom(20).row();
-        HorizontalGroup AIBtnGroup = new HorizontalGroup();
-        AIBtnGroup.addActor(btnSlowAI);
-        AIBtnGroup.addActor(btnNormalAI);
-        AIBtnGroup.addActor(btnFastAI);
-        table.add(AIBtnGroup).padBottom(20).row();
+        Table AIBtnGroup = new Table();
+        AIBtnGroup.add(btnSlowAI).size(80, 50);
+        AIBtnGroup.add(btnNormalAI).size(80, 50);
+        AIBtnGroup.add(btnFastAI).size(80, 50);
+        table.add(AIBtnGroup).padBottom(80).row();
         table.add(confirmationBox);
+
+        Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
+        backgroundLay.setColor(Color.BLACK);
+        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeHoriz")));
+        topLayer.setColor(Color.DARK_GRAY);
+        background = new Background(backgroundLay,
+                new Sprite[]{topLayer},
+                new BackType[]{BackType.FADE_COLOR},
+                Color.DARK_GRAY, Color.GRAY);
     }
 }

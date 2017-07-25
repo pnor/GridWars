@@ -116,62 +116,6 @@ public class BoardAndRuleConstructor {
 
         return rules;
     }
-
-    public static Rules makeSimple4PZone(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
-        //declare rules
-        boardManager.setBoards(new Board(9, 9, 700 / 9), new CodeBoard(9, 9));
-        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
-        ZoneRules rules = new ZoneRules(screen, teams, new Array<Array<BoardPosition>>(new Array[] {
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(maxSize, 6),
-                        new BoardPosition(maxSize, 5),
-                        new BoardPosition(maxSize, 4),
-                        new BoardPosition(maxSize, 3)}),
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(0, 2),
-                        new BoardPosition(0, 3),
-                        new BoardPosition(0, 4),
-                        new BoardPosition(0, 5)}),
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(3, maxSize),
-                        new BoardPosition(4, maxSize),
-                        new BoardPosition(5, maxSize),
-                        new BoardPosition(6, maxSize)}),
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(2, 0),
-                        new BoardPosition(3, 0),
-                        new BoardPosition(4, 0),
-                        new BoardPosition(5, 0)}),
-        }));
-
-        //place entities
-        int col, row;
-        col = 2;
-        for (Entity e : teams.get(0).getEntities()) {
-            boardManager.add(e, new BoardPosition(0, col));
-            col++;
-        }
-        col = 6;
-        for (Entity e : teams.get(1).getEntities()) {
-            boardManager.add(e, new BoardPosition(maxSize, col));
-            col--;
-        }
-        row = 2;
-        for (Entity e : teams.get(2).getEntities()) {
-            boardManager.add(e, new BoardPosition(row, 0));
-            row++;
-        }
-        row = 3;
-        for (Entity e : teams.get(3).getEntities()) {
-            boardManager.add(e, new BoardPosition(row, maxSize));
-            row++;
-        }
-
-        //color zones
-        rules.colorZones();
-
-        return rules;
-    }
     //endregion
 
     //region Complex
@@ -190,14 +134,19 @@ public class BoardAndRuleConstructor {
             col--;
         }
         //place blocks randomly
-        for (int i = 0; i < 8; i++) {
-            BoardPosition pos = new BoardPosition(MathUtils.random(1, 5), MathUtils.random(1, 5));
-            if (boardManager.getBoard().getTile(pos.r, pos.c).isOccupied()) {
-                i--;
-                continue;
-            }
-            boardManager.add(EntityConstructor.cube(), pos);
-        }
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(1, 0));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(1, 2));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(1, 4));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(1, 6));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(3, 0));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(3, 2));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(3, 4));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(3, 6));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(5, 0));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(5, 2));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(5, 4));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(5, 6));
+
         return new Battle2PRules(screen, teams);
     }
 
@@ -230,81 +179,22 @@ public class BoardAndRuleConstructor {
             col--;
         }
 
-        //place blocks randomly
-        for (int i = 0; i < 12; i++) {
-            BoardPosition pos = new BoardPosition(MathUtils.random(1, 5), MathUtils.random(1, 5));
-            if (boardManager.getBoard().getTile(pos.r, pos.c).isOccupied()) {
-                i--;
-                continue;
-            }
-            boardManager.add(EntityConstructor.cube(), pos);
-        }
+        //place blocks
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(1, 0));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(2, 0));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(3, 0));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(3, 1));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(4, 0));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(4, 1));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(4, 2));
 
-        //color zones
-        rules.colorZones();
-
-        return rules;
-    }
-
-    public static Rules makeComplex4PZone(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
-        //declare rules
-        boardManager.setBoards(new Board(9, 9, 700 / 9), new CodeBoard(9, 9));
-        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
-        ZoneRules rules = new ZoneRules(screen, teams, new Array<Array<BoardPosition>>(new Array[] {
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(maxSize, 6),
-                        new BoardPosition(maxSize, 5),
-                        new BoardPosition(maxSize, 4),
-                        new BoardPosition(maxSize, 3)}),
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(0, 2),
-                        new BoardPosition(0, 3),
-                        new BoardPosition(0, 4),
-                        new BoardPosition(0, 5)}),
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(3, maxSize),
-                        new BoardPosition(4, maxSize),
-                        new BoardPosition(5, maxSize),
-                        new BoardPosition(6, maxSize)}),
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(2, 0),
-                        new BoardPosition(3, 0),
-                        new BoardPosition(4, 0),
-                        new BoardPosition(5, 0)}),
-        }));
-
-        //place entities
-        int col, row;
-        col = 2;
-        for (Entity e : teams.get(0).getEntities()) {
-            boardManager.add(e, new BoardPosition(0, col));
-            col++;
-        }
-        col = 6;
-        for (Entity e : teams.get(1).getEntities()) {
-            boardManager.add(e, new BoardPosition(maxSize, col));
-            col--;
-        }
-        row = 2;
-        for (Entity e : teams.get(2).getEntities()) {
-            boardManager.add(e, new BoardPosition(row, 0));
-            row++;
-        }
-        row = 3;
-        for (Entity e : teams.get(3).getEntities()) {
-            boardManager.add(e, new BoardPosition(row, maxSize));
-            row++;
-        }
-
-        //place blocks randomly
-        for (int i = 0; i < 24; i++) {
-            BoardPosition pos = new BoardPosition(MathUtils.random(1, 7), MathUtils.random(1, 7));
-            if (boardManager.getBoard().getTile(pos.r, pos.c).isOccupied()) {
-                i--;
-                continue;
-            }
-            boardManager.add(EntityConstructor.cube(), pos);
-        }
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(5, 6));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(4, 6));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(3, 6));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(3, 5));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(2, 6));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(2, 5));
+        boardManager.add(EntityConstructor.cube(), new BoardPosition(2, 4));
 
         //color zones
         rules.colorZones();
@@ -366,81 +256,26 @@ public class BoardAndRuleConstructor {
 
         return rules;
     }
-
-    public static Rules makeCompact4PZone(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
-        //declare rules
-        boardManager.setBoards(new Board(7, 7, Color.DARK_GRAY, Color.GRAY, 100), new CodeBoard(7, 7));
-        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
-        ZoneRules rules = new ZoneRules(screen, teams, new Array<Array<BoardPosition>>(new Array[] {
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(2, 2)}),
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(4, 4)}),
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(2, 4)}),
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(4, 2)}),
-        }));
-
-        //place entities
-        int col, row;
-        col = 2;
-        for (Entity e : teams.get(0).getEntities()) {
-            boardManager.add(e, new BoardPosition(0, col));
-            col++;
-        }
-        col = 5;
-        for (Entity e : teams.get(1).getEntities()) {
-            boardManager.add(e, new BoardPosition(maxSize, col));
-            col--;
-        }
-        row = 2;
-        for (Entity e : teams.get(2).getEntities()) {
-            boardManager.add(e, new BoardPosition(row, 0));
-            row++;
-        }
-        row = 1;
-        for (Entity e : teams.get(3).getEntities()) {
-            boardManager.add(e, new BoardPosition(row, maxSize));
-            row++;
-        }
-
-        //place blocks
-        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(1, 1));
-        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(2, 1));
-        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(3, 1));
-        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(3, 2));
-        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(3, 3));
-        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(3, 4));
-        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(3, 5));
-        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(4, 5));
-        boardManager.add(EntityConstructor.durableCube(), new BoardPosition(5, 5));
-
-        //color zones
-        rules.colorZones();
-
-        return rules;
-    }
     //endregion
 
     //region desert
     public static Rules makeDesert2P(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
-        boardManager.setBoards(new Board(7, 7, new Color(221f / 255, 221f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1), 700 / 7), new CodeBoard(7, 7));
+        boardManager.setBoards(new Board(9, 9, new Color(221f / 255, 221f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1), 700 / 9), new CodeBoard(9, 9));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
         //place entities
-        int col = 1;
+        int col = 0;
         for (Entity e : teams.get(0).getEntities()) {
             boardManager.add(e, new BoardPosition(0, col));
             col++;
         }
-        col = 5;
+        col = 8;
         for (Entity e : teams.get(1).getEntities()) {
             boardManager.add(e, new BoardPosition(maxSize, col));
             col--;
         }
         //place blocks randomly
-        for (int i = 0; i < 8; i++) {
-            BoardPosition pos = new BoardPosition(MathUtils.random(1, 5), MathUtils.random(1, 5));
+        for (int i = 0; i < 6; i++) {
+            BoardPosition pos = new BoardPosition(MathUtils.random(0, 8), MathUtils.random(0, 8));
             if (boardManager.getBoard().getTile(pos.r, pos.c).isOccupied()) {
                 i--;
                 continue;
@@ -456,82 +291,17 @@ public class BoardAndRuleConstructor {
 
     public static Rules makeDesert2PZone(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
         //declare rules
-        boardManager.setBoards(new Board(7, 7, new Color(221f / 255, 221f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1), 700 / 7), new CodeBoard(7, 7));
+        boardManager.setBoards(new Board(8, 8, new Color(221f / 255, 221f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1), 700 / 8), new CodeBoard(8, 8));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
         ZoneRules rules = new ZoneRules(screen, teams, new Array<Array<BoardPosition>>(new Array[] {
                 new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(maxSize, 5),
-                        new BoardPosition(maxSize, 4),
-                        new BoardPosition(maxSize, 3),
-                        new BoardPosition(maxSize, 2)}),
+                        new BoardPosition(6, 2)}),
                 new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(0, 1),
-                        new BoardPosition(0, 2),
-                        new BoardPosition(0, 3),
-                        new BoardPosition(0, 4)})
+                        new BoardPosition(1, 5)})
         }));
 
         //place entities
         int col = 1;
-        for (Entity e : teams.get(0).getEntities()) {
-            boardManager.add(e, new BoardPosition(0, col));
-            col++;
-        }
-        col = 5;
-        for (Entity e : teams.get(1).getEntities()) {
-            boardManager.add(e, new BoardPosition(maxSize, col));
-            col--;
-        }
-
-        //place blocks randomly
-        for (int i = 0; i < 12; i++) {
-            BoardPosition pos = new BoardPosition(MathUtils.random(1, 5), MathUtils.random(1, 5));
-            if (boardManager.getBoard().getTile(pos.r, pos.c).isOccupied()) {
-                i--;
-                continue;
-            }
-            if (MathUtils.randomBoolean(.7f))
-                boardManager.add(EntityConstructor.cactus(), pos);
-            else
-                boardManager.add(EntityConstructor.flowerCactus(), pos);
-        }
-
-        //color zones
-        rules.colorZones();
-
-        return rules;
-    }
-
-    public static Rules makeDesert4PZone(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
-        //declare rules
-        boardManager.setBoards(new Board(12, 12, new Color(221f / 255, 221f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1), 700 / 12), new CodeBoard(12, 12));
-        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
-        ZoneRules rules = new ZoneRules(screen, teams, new Array<Array<BoardPosition>>(new Array[] {
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(maxSize, 6),
-                        new BoardPosition(maxSize, 5),
-                        new BoardPosition(maxSize, 4),
-                        new BoardPosition(maxSize, 3)}),
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(0, 2),
-                        new BoardPosition(0, 3),
-                        new BoardPosition(0, 4),
-                        new BoardPosition(0, 5)}),
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(3, maxSize),
-                        new BoardPosition(4, maxSize),
-                        new BoardPosition(5, maxSize),
-                        new BoardPosition(6, maxSize)}),
-                new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(2, 0),
-                        new BoardPosition(3, 0),
-                        new BoardPosition(4, 0),
-                        new BoardPosition(5, 0)}),
-        }));
-
-        //place entities
-        int col, row;
-        col = 2;
         for (Entity e : teams.get(0).getEntities()) {
             boardManager.add(e, new BoardPosition(0, col));
             col++;
@@ -541,21 +311,22 @@ public class BoardAndRuleConstructor {
             boardManager.add(e, new BoardPosition(maxSize, col));
             col--;
         }
-        row = 2;
-        for (Entity e : teams.get(2).getEntities()) {
-            boardManager.add(e, new BoardPosition(row, 0));
-            row++;
-        }
-        row = 3;
-        for (Entity e : teams.get(3).getEntities()) {
-            boardManager.add(e, new BoardPosition(row, maxSize));
-            row++;
-        }
+
+        //place blocks around zones
+        boardManager.add(EntityConstructor.cactus(), new BoardPosition(0, 5));
+        boardManager.add(EntityConstructor.cactus(), new BoardPosition(1, 4));
+        boardManager.add(EntityConstructor.cactus(), new BoardPosition(1, 6));
+        boardManager.add(EntityConstructor.cactus(), new BoardPosition(2, 5));
+
+        boardManager.add(EntityConstructor.cactus(), new BoardPosition(5, 2));
+        boardManager.add(EntityConstructor.cactus(), new BoardPosition(6, 1));
+        boardManager.add(EntityConstructor.cactus(), new BoardPosition(6, 3));
+        boardManager.add(EntityConstructor.cactus(), new BoardPosition(7, 2));
 
         //place blocks randomly
-        for (int i = 0; i < 24; i++) {
-            BoardPosition pos = new BoardPosition(MathUtils.random(1, 7), MathUtils.random(1, 7));
-            if (boardManager.getBoard().getTile(pos.r, pos.c).isOccupied()) {
+        for (int i = 0; i < MathUtils.random(0, 3); i++) {
+            BoardPosition pos = new BoardPosition(MathUtils.random(1, 6), MathUtils.random(1, 6));
+            if (boardManager.getBoard().getTile(pos.r, pos.c).isOccupied() || pos.equals(new BoardPosition(1, 5)) || pos.equals(new BoardPosition(6, 2))) {
                 i--;
                 continue;
             }

@@ -2236,7 +2236,7 @@ public class MoveConstructor {
             }
         }, .15f, 6);
 
-        return new Move("Submerge", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        return new Move("Submerge", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-3, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -2244,7 +2244,7 @@ public class MoveConstructor {
                         if (stm.has(enemy))
                             stm.get(enemy).hp = MathUtils.clamp(stm.get(enemy).hp - 3, 0, stm.get(enemy).getModMaxHp(enemy));
                     }
-                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-3, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{ripples, waterBall, changeToBlue, largeSparkle, returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, (entity) -> {
                     entity.hp -= 3;
@@ -2718,7 +2718,7 @@ public class MoveConstructor {
 
                 engine.addEntity(diamondBoom);
             }
-        }, .02f, 7);
+        }, .02f, 10);
 
         VisualEvent comets = new VisualEvent(new VisualEffect() {
             @Override
@@ -2781,13 +2781,14 @@ public class MoveConstructor {
         return new Move("Comet Shower", user, 6, new Array<BoardPosition>(new BoardPosition[]{
                     new BoardPosition(-2, 0), new BoardPosition(-1, -1),  new BoardPosition(2, 0),  new BoardPosition(1, 1),
                     new BoardPosition(-2, 1),  new BoardPosition(0, -3),  new BoardPosition(2, -1), new BoardPosition(0, 3),
-                    new BoardPosition(-4, 1),  new BoardPosition(1, -4),  new BoardPosition(3, -1), new BoardPosition(1, 3)}),
+                    new BoardPosition(-4, 1),  new BoardPosition(1, -4),  new BoardPosition(3, -1), new BoardPosition(1, 3),
+                    new BoardPosition(-4, 2), new BoardPosition(4, -2), new BoardPosition(3, -4), new BoardPosition(3, -3)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
                         if (stm.has(enemy))
-                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) * 1.5f - stm.get(enemy).getModDef(enemy), 0, 999);
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) * 2f - stm.get(enemy).getModDef(enemy), 0, 999);
 
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
@@ -2795,10 +2796,11 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{
                     new BoardPosition(-2, 0), new BoardPosition(-1, -1),  new BoardPosition(2, 0),  new BoardPosition(1, 1),
                     new BoardPosition(-2, 1),  new BoardPosition(0, -3),  new BoardPosition(2, -1), new BoardPosition(0, 3),
-                    new BoardPosition(-4, 1),  new BoardPosition(1, -4),  new BoardPosition(3, -1), new BoardPosition(1, 3)}),
+                    new BoardPosition(-4, 1),  new BoardPosition(1, -4),  new BoardPosition(3, -1), new BoardPosition(1, 3),
+                    new BoardPosition(-4, 2), new BoardPosition(4, -2), new BoardPosition(3, -4), new BoardPosition(3, -3)}),
                 new Array<VisualEvent>(new VisualEvent[]{
                         preSparkles.copy(), preBooms.copy(), preSparkles.copy(), preBooms.copy(),
-                        comets.copy(), ripple.copy(), comets.copy(), ripple.copy(), comets.copy(), ripple, comets, preBooms.copy(), preBooms})), new MoveInfo(false, 1.5f));
+                        comets.copy(), ripple.copy(), comets.copy(), ripple.copy(), comets.copy(), ripple, comets, preBooms.copy(), preBooms})), new MoveInfo(false, 2f));
     }
 
     //Thundog
@@ -3480,7 +3482,7 @@ public class MoveConstructor {
             }
         }, .19f, 2);
 
-        return new Move("Basilisk Strike", "The target was petrified!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        return new Move("Basilisk Strike", "The target was petrified!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -4045,7 +4047,7 @@ public class MoveConstructor {
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
                         if (stm.has(enemy))
-                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e), 0, 999);
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) * 2, 0, 999);
 
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
@@ -4056,7 +4058,7 @@ public class MoveConstructor {
                 new BoardPosition(1, 0),  new BoardPosition(1, -1),  new BoardPosition(1, 1)}),
                 new Array<VisualEvent>(new VisualEvent[]{
                         preSparkles.copy(), preBooms.copy(), preSparkles.copy(), preBooms.copy(),
-                        comets.copy(), ripple.copy(), comets.copy(), ripple.copy(), comets.copy(), ripple, comets, preBooms.copy(), preBooms})), new MoveInfo(true, 1));
+                        comets.copy(), ripple.copy(), comets.copy(), ripple.copy(), comets.copy(), ripple, comets, preBooms.copy(), preBooms})), new MoveInfo(true, 2));
     }
 
     //wyvrapor
@@ -4489,7 +4491,7 @@ public class MoveConstructor {
             }
         }, .2f, 2);
 
-        return new Move("Fresh Breath", nm.get(user).name + " breathed refreshing air!", user, 2,
+        return new Move("Fresh Breath", nm.get(user).name + " breathed refreshing air!", user, 1,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)

@@ -463,7 +463,7 @@ public class EntityConstructor {
                 atlas.findRegion("thunderdog2")
         }, Animation.PlayMode.LOOP, 0.2f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(7, 4, 1, 0, 1));
+        entity.add(new StatComponent(7, 5, 1, 0, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;

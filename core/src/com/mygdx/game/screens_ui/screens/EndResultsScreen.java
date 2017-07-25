@@ -75,7 +75,7 @@ public class EndResultsScreen extends MenuScreen implements Screen {
         param.size = 50;
         Label titleLbl = new Label("Results", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         param.size = 30;
-        lblVictoryLabel = new Label("Team " + teams.get(winningTeamIndex).getTeamName() + " Wins", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        lblVictoryLabel = new Label(teams.get(winningTeamIndex).getTeamName() + " Wins!", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         lblVictoryLabel.setColor(Color.CLEAR);
         HoverButton btnReturn = new HoverButton("Return", skin, Color.WHITE, Color.DARK_GRAY);
 
@@ -130,7 +130,7 @@ public class EndResultsScreen extends MenuScreen implements Screen {
         lbl1AttacksUsed.setColor(Color.CLEAR);
         lbl1TotalSpRemaing = new Label("Average Sp Remaining : " + teams.get(1).getAverageSp(), skin);
         lbl1TotalSpRemaing.setColor(Color.CLEAR);
-        lbl1EntitiesRemaining = new Label("Team Members Remaining : " + (teams.get(1).getEntities().size - teams.get(0).getAmontDead()), skin);
+        lbl1EntitiesRemaining = new Label("Team Members Remaining : " + teams.get(0).getAmontDead(), skin);
         lbl1EntitiesRemaining.setColor(Color.CLEAR);
         lbl1TotalHealthRemaining = new Label("Average Health Remaining : " + teams.get(1).getAverageHealth() + " / " + teams.get(1).getAverageMaxHealth(), skin);
         lbl1TotalHealthRemaining.setColor(Color.CLEAR);
@@ -185,10 +185,10 @@ public class EndResultsScreen extends MenuScreen implements Screen {
 
         time += delta;
 
-        if (time >=.5f && progress == 0) {
+        if (time >= 1f && progress == 0) {
             lblMatchType.setColor(Color.WHITE);
             progress = 1;
-        } else if (time >= 1f && progress == 1) {
+        } else if (time >= 1.5f && progress == 1) {
             lblTurnCount.setColor(Color.WHITE);
             progress = 2;
         }  else if (time >= 2f && progress == 2) {
@@ -214,6 +214,12 @@ public class EndResultsScreen extends MenuScreen implements Screen {
             lbl1EntitiesRemaining.setColor(Color.WHITE);
             progress = 7;
         } else if (time >= 6f && progress == 7) {
+            if (winningTeamIndex == 0)
+                for (Image i : team1Icons)
+                    i.setColor(Color.BLACK);
+            else
+                for (Image i : team0Icons)
+                    i.setColor(Color.BLACK);
             lblVictoryLabel.setColor(Color.WHITE);
             backgroundLayer.setColor(teams.get(winningTeamIndex).getTeamColor());
             progress = 8;
