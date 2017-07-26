@@ -18,20 +18,19 @@ public class BackgroundConstructor {
         switch (boardIndex) {
             case 1 :
             case 2 :
-            case 3 :
                 return makeSimpleBack();
+            case 3 :
             case 4 :
+                return makeComplexBack();
             case 5 :
             case 6 :
-                return makeComplexBack();
+                return makeCompactBack();
             case 7 :
             case 8 :
-            case 9 :
-                return makeCompactBack();
-            case 10 :
-            case 11 :
-            case 12 :
                 return makeDesertBack();
+            case 9 :
+            case 10 :
+                return makeForestBack();
         }
         return null;
     }
@@ -81,5 +80,17 @@ public class BackgroundConstructor {
                 new Sprite[]{new Sprite(backAtlas.findRegion("DiagStripeOverlay")), topLayer},
                 new BackType[]{BackType.FADE_COLOR, BackType.SCROLL_HORIZONTAL},
                 Color.DARK_GRAY, Color.WHITE);
+    }
+
+    public static Background makeForestBack() {
+        Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
+        back.setColor(new Color(.1f, .1f, 0, 1));
+        Sprite overlay = new Sprite(backAtlas.findRegion("DiagStripeHoriz"));
+        overlay.setColor(new Color(.05f, .3f, 0, .6f));
+        return new Background(
+                back,
+                new Sprite[] {overlay},
+                new BackType[] {BackType.SCROLL_HORIZONTAL},
+                null, null);
     }
 }

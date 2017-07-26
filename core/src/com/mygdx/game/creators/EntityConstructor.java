@@ -236,6 +236,22 @@ public class EntityConstructor {
     }
     //endregion
 
+    public static Entity tree() {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(2, 0, 0, 1, 0));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("tree")), true, true)));
+        entity.add(new NameComponent("Tree"));
+
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+
+        return entity;
+    }
+
     //Game Piece Entity ------------
     public static Entity canight(int team) {
         Entity entity = new Entity();

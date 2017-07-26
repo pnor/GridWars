@@ -5350,7 +5350,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        return new Move("Reflect Move", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        return new Move("Reflect Move", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5360,7 +5360,7 @@ public class MoveConstructor {
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})), new MoveInfo(false, 0));
+                new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})), new MoveInfo(false, 0, (entity) -> entity.arbitraryValue += 50));
     }
 
     public static Move mirrorMove(Entity user) {
@@ -5430,7 +5430,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        return new Move("Mirror Move", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        return new Move("Mirror Move", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5440,11 +5440,11 @@ public class MoveConstructor {
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})), new MoveInfo(false, 0));
+                new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})), new MoveInfo(false, 0, (entity) -> entity.arbitraryValue += 50));
     }
 
     public static Move rouletteReflect(Entity user) {
-        VisualEvent largeSparkle = new VisualEvent(new VisualEffect() {
+        VisualEvent spinning = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
@@ -5454,33 +5454,34 @@ public class MoveConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
-                Vector2 entitySize = new Vector2(10 * scale, 10 * scale);
+                Vector2 entitySize = new Vector2(40 * scale, 40 * scale);
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
                 tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
                         boards.getTileHeight() / 2 - entitySize.y / 2f);
 
-                Entity sparkle = new Entity();
-                sparkle.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-50 * scale, 50 * scale), MathUtils.random(-50 * scale, 10 * scale)),
-                        entitySize.x, entitySize.y, 0));
-                sparkle.add(new MovementComponent(new Vector2(0, 20 * scale)));
-                sparkle.add(new LifetimeComponent(0, 1.2f));
-                Sprite sprite = new Sprite(atlas.findRegion("sparkle"));
-                sprite.setOriginCenter();
-                sprite.setColor(new Color(MathUtils.random(0, 1f), MathUtils.random(0, 1f), MathUtils.random(0, 1f), 1));
-                sparkle.add(new SpriteComponent(sprite));
-                sparkle.add(new EventComponent(.1f, true, (entity, engine) -> {
-                    sprite.setColor(
-                            MathUtils.clamp(sprite.getColor().r - 1f / 24, 0, 1),
-                            MathUtils.clamp(sprite.getColor().g - 1f / 24, 0, 1),
-                            MathUtils.clamp(sprite.getColor().b - 1f / 24, 0, 1),
-                            MathUtils.clamp(sprite.getColor().a - 1f / 12, 0, 1));
-
-                    mm.get(entity).movement.add(0, 15 * scale);
+                Entity circles = new Entity();
+                circles.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 0));
+                circles.add(new LifetimeComponent(0,1.5f));
+                circles.add(new AnimationComponent(.5f,
+                        new TextureRegion[]{atlas.findRegion("fourCircles"),
+                                atlas.findRegion("sixCircles"),
+                                atlas.findRegion("eightCircles")},
+                        Color.WHITE,
+                        Animation.PlayMode.NORMAL));
+                circles.add(new EventComponent(.1f, true, (entity, engine) -> {
+                    pm.get(entity).rotation += 8 + pm.get(entity).rotation / 2.5f;
+                    Color color = animm.get(entity).shadeColor;
+                    color = new Color(
+                            MathUtils.clamp(color.r + 1f / 30f, 0, 1),
+                            MathUtils.clamp(color.g - 1f / 30f, 0, 1),
+                            MathUtils.clamp(color.b + 1f / 30f, 0, 1),
+                            color.a);
+                    animm.get(entity).shadeColor = color;
                 }));
 
-                engine.addEntity(sparkle);
+                engine.addEntity(circles);
             }
-        }, .03f, 8);
+        }, 3f, 1);
 
         VisualEvent mirror = new VisualEvent(new VisualEffect() {
             @Override
@@ -5510,7 +5511,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        return new Move("Roulette Reflect", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        return new Move("Roulette Reflect", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5520,7 +5521,7 @@ public class MoveConstructor {
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})), new MoveInfo(false, 0));
+                new Array<VisualEvent>(new VisualEvent[]{mirror, spinning})), new MoveInfo(false, 0, (entity) -> entity.arbitraryValue += 50));
     }
 
 

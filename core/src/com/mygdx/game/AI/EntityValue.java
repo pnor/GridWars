@@ -21,6 +21,11 @@ public class EntityValue implements Comparable {
     public int attack;
     public int defense;
 
+    /**
+     * Points representing nothing. Used to fine tune moves with effects that cannot be expressed in raw stats, status conditions or position.
+     */
+    public int arbitraryValue;
+
     public boolean acceptsStatusEffects;
     public Array<StatusEffectInfo> statusEffectInfos;
 
@@ -36,7 +41,7 @@ public class EntityValue implements Comparable {
      * @param atk Entity's attack value
      * @param def Entity's defense value
      */
-    public EntityValue(BoardPosition position, int teamNo, int boardEntityID, int health, int maxHealth, int skill, int atk, int def) {
+    public EntityValue(BoardPosition position, int teamNo, int boardEntityID, int health, int maxHealth, int skill, int atk, int def, int arbitrary) {
         pos = position;
         team = teamNo;
         BOARD_ENTITY_ID = boardEntityID;
@@ -47,9 +52,11 @@ public class EntityValue implements Comparable {
         attack = atk;
         defense = def;
         acceptsStatusEffects = false;
+
+        arbitraryValue = arbitrary;
     }
 
-    public EntityValue(BoardPosition position, int teamNo, int boardEntityID, int health, int maxHealth, int skill, int atk, int def, StatusEffectInfo[] statusEffects) {
+    public EntityValue(BoardPosition position, int teamNo, int boardEntityID, int health, int maxHealth, int skill, int atk, int def, StatusEffectInfo[] statusEffects, int arbitrary) {
         pos = position;
         team = teamNo;
         BOARD_ENTITY_ID = boardEntityID;
@@ -62,6 +69,8 @@ public class EntityValue implements Comparable {
 
         acceptsStatusEffects = true;
         statusEffectInfos = new Array<>(statusEffects);
+
+        arbitraryValue = arbitrary;
     }
 
     /**
@@ -72,6 +81,7 @@ public class EntityValue implements Comparable {
      */
     public int getValue(int homeTeam) {
         int value = 0;
+        value += arbitraryValue;
 
         if (hp > 0)
             value += 200 + ((float) hp / (float) maxHp) * 150;
@@ -108,13 +118,13 @@ public class EntityValue implements Comparable {
 
     public EntityValue copy() {
         if (statusEffectInfos == null)
-            return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, attack, defense);
+            return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, attack, defense, arbitraryValue);
         else {
             //copy status effects
             StatusEffectInfo[] copyStatus = new StatusEffectInfo[statusEffectInfos.size];
             for (int i = 0; i < statusEffectInfos.size; i++)
                 copyStatus[i] = statusEffectInfos.get(i).copy();
-            return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, attack, defense, copyStatus);
+            return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, attack, defense, copyStatus, arbitraryValue);
         }
     }
 

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -223,9 +224,51 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                     } else if (actor == characterBtns.get(12)) {
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mirrorman")));
                         teams.get(curTeam).getEntities().add(EntityConstructor.mirrorman(curTeam));
-                    } else {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("tester")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.AITester(curTeam));
+                    } else { //random
+                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mystery")));
+                        //teams.get(curTeam).getEntities().add(EntityConstructor.AITester(curTeam));
+                        int randomIndex = MathUtils.random(0, 12);
+                        switch (randomIndex) {
+                            case 0 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.canight(curTeam));
+                                break;
+                            case 1 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.catdroid(curTeam));
+                                break;
+                            case 2 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.pyrobull(curTeam));
+                                break;
+                            case 3 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.freezird(curTeam));
+                                break;
+                            case 4 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.medicarp(curTeam));
+                                break;
+                            case 5 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.thoughtoise(curTeam));
+                                break;
+                            case 6 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.vulpedge(curTeam));
+                                break;
+                            case 7 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.thundog(curTeam));
+                                break;
+                            case 8 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.mummy(curTeam));
+                                break;
+                            case 9 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.squizerd(curTeam));
+                                break;
+                            case 10 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.wyvrapor(curTeam));
+                                break;
+                            case 11 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.jellymiss(curTeam));
+                                break;
+                            case 12 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.mirrorman(curTeam));
+                                break;
+                        }
                     }
 
                     currentEntity++;

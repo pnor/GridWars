@@ -32,7 +32,7 @@ public class BoardState {
                 if (team.has(entity)) //on a team
                     if (!status.has(entity)) { //does not have status effect
                         value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, bm.get(entity).BOARD_ENTITY_ID, stm.get(entity).hp,
-                                stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def);
+                                stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, 0);
                     } else { //does have status effect
                         Array<StatusEffect> currentStatusEffects = status.get(entity).statusEffects.values().toArray();
                         StatusEffectInfo[] statusInfos = new StatusEffectInfo[status.get(entity).statusEffects.size];
@@ -40,12 +40,12 @@ public class BoardState {
                             statusInfos[i] = currentStatusEffects.get(i).createStatusEffectInfo();
 
                         value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, bm.get(entity).BOARD_ENTITY_ID, stm.get(entity).hp,
-                            stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, statusInfos);
+                            stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, statusInfos, 0);
                     }
                 else { //not on a team
                     if (!status.has(entity))
                         value = new EntityValue(bm.get(entity).pos, -1, -1, stm.get(entity).hp,
-                            stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def);
+                            stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, 0);
                     else {
                         Array<StatusEffect> currentStatusEffects = status.get(entity).statusEffects.values().toArray();
                         StatusEffectInfo[] statusInfos = new StatusEffectInfo[status.get(entity).statusEffects.size];
@@ -53,7 +53,7 @@ public class BoardState {
                             statusInfos[i] = currentStatusEffects.get(i).createStatusEffectInfo();
 
                         value = new EntityValue(bm.get(entity).pos, -1, -1, stm.get(entity).hp,
-                                stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, statusInfos);
+                                stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, statusInfos, 0);
                     }
                 }
             } else continue;
@@ -158,17 +158,8 @@ public class BoardState {
                         move.moveInfo().miscEffects.doMiscEffects(e);
 
                     //remove dead
-
-                    if (e.hp <= 0) {
+                    if (e.hp <= 0)
                         entities.removeKey(newPos);
-                        /*
-                        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Entity killed~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                        System.out.println("Entity's ID: " + e.BOARD_ENTITY_ID);
-                        System.out.println("Entity pos : " + e.pos);
-                        System.out.println("Entity toString : " + e);
-                        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                        */
-                    }
                 }
             }
 

@@ -54,6 +54,8 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
         HoverButton complex = new HoverButton("Complex", skin, Color.WHITE, Color.DARK_GRAY);
         HoverButton compact = new HoverButton("Compact", skin, Color.WHITE, Color.DARK_GRAY);
         HoverButton desert = new HoverButton("Desert", skin, Color.WHITE, Color.DARK_GRAY);
+        HoverButton forest = new HoverButton("Forest", skin, Color.WHITE, Color.DARK_GRAY);
+
 
         ChangeListener listener = new ChangeListener() {
             @Override
@@ -72,10 +74,14 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
                     } else if (actor == desert) {
                         board += 6;
                         GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
+                    } else if (actor == forest) {
+                        board += 8;
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
                     }
                 }
             }
         };
+
         Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
         backgroundLay.setColor(Color.BLACK);
         Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeOverlay")));
@@ -89,11 +95,13 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
         complex.addListener(listener);
         compact.addListener(listener);
         desert.addListener(listener);
+        forest.addListener(listener);
 
         table.add(titleLbl).padBottom(40).row();
         table.add(basic).size(350, 90).row();
         table.add(complex).size(350, 90).row();
         table.add(compact).size(350, 90).row();
         table.add(desert).size(350, 90).row();
+        table.add(forest).size(350, 90).row();
     }
 }

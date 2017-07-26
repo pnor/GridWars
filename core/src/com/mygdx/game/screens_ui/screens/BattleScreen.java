@@ -381,14 +381,6 @@ public class BattleScreen implements Screen {
         attackTable.pack();
         attackTable.setPosition(stage.getWidth() * .875f - (attackTable.getWidth() / 2), stage.getHeight() * .225f - (attackTable.getWidth() / 2));
 
-        //set up infoTable
-        infoLbl = new GradualLabel(.001f, "---", skin);
-        infoTable.add(infoLbl).height(25).center();
-        infoTable.setBackground(tableBackground);
-        infoTable.pack();
-        infoTable.setPosition(boardTable.getX(), stage.getHeight() * .9f);
-        infoTable.setSize(700, 80);
-
         //set up team table
         endTurnBtn = new HoverButton("End Turn", skin, new Color(200f / 255f, 200f / 255f, 255f / 255f, 1), new Color(.8f, 1f, 1f, 1));
         endTurnBtn.addListener(new ChangeListener() {
@@ -412,7 +404,14 @@ public class BattleScreen implements Screen {
         teamTable.pack();
         teamTable.setSize(600, 90);
         teamTable.setPosition(teamTable.getX() + teamTable.getOriginX() + 40, stage.getHeight() * .01f);
-        //teamTable.debug();
+
+        //set up infoTable
+        infoLbl = new GradualLabel(.001f, "---", skin);
+        infoTable.add(infoLbl).height(25).center();
+        infoTable.setBackground(tableBackground);
+        infoTable.pack();
+        infoTable.setPosition(teamTable.getX(), stage.getHeight() * .9f);
+        infoTable.setSize(700, 80);
 
         //set up endTurnMessageTable
         param.size = 25;
