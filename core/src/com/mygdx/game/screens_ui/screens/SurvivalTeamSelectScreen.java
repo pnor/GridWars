@@ -342,7 +342,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
             for (int i = 0; i < characterPortraits.size; i++)
                 characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
             teamImage.setColor(team.getTeamColor());
-            //GRID_WARS.setScreen(new BoardSelectScreen(maxTeams, zones, teams, AIControlledTeams.toArray(Vector2.class), GRID_WARS));
+            GRID_WARS.setScreen(new SurvivalTowerScreen(team, 1, 1, 1, GRID_WARS));
         }
     }
 

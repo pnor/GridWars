@@ -112,11 +112,11 @@ public class BattleScreen implements Screen {
     /**
      * Table with board tiles
      */
-    private Table boardTable;
+    protected Table boardTable;
     /**
      * Table that displays stat values and names
      */
-    private Table statsTable;
+    protected Table statsTable;
     private Label nameLbl,
             hpLblID, hpLbl,
             spLblID, spLbl,
@@ -128,7 +128,7 @@ public class BattleScreen implements Screen {
     /**
      * Table with attack buttons
      */
-    private Table attackTable;
+    protected Table attackTable;
     private Label attackTitleLabel;
     private HoverButton attackBtn1;
     private HoverButton attackBtn2;
@@ -137,12 +137,12 @@ public class BattleScreen implements Screen {
     /**
      * Table that shows the info label
      */
-    private Table infoTable;
+    protected Table infoTable;
     private Label infoLbl;
     /**
      * Has data for the team. Has end turn button, and will have a icon of all the entities on a team
      */
-    private Table teamTable;
+    protected Table teamTable;
     private Image member1;
     private Image member2;
     private Image member3;
@@ -151,18 +151,14 @@ public class BattleScreen implements Screen {
     /**
      * The box that says the next team's turn has started.
      */
-    private Table endTurnMessageTable;
+    protected Table endTurnMessageTable;
     private Label endTurnMessageLbl;
     private Label turnCountLbl;
     /** Pop up message that says the effects of a move. */
-    private Table helpTable;
+    protected Table helpTable;
     private Label moveDescriptionLbl;
     private HoverButton closeHelpMenuBtn;
 
-    //debug values
-    private float deltaTimeSums;
-    private final int deltatimeIntervals = 10000;
-    private int currentDeltaTime;
 
     public BattleScreen(Array<Team> selectedTeams, int boardIndex, Vector2[] AIControlled, GridWars game) {
         GRID_WARS = game;
@@ -207,7 +203,6 @@ public class BattleScreen implements Screen {
             engine.removeSystem(system);
         }
 
-        //set up assets
         boardTable = new Table();
         statsTable = new Table();
         attackTable = new Table();
@@ -477,17 +472,6 @@ public class BattleScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //Debug
-        if (!(currentDeltaTime >= deltatimeIntervals)) {
-            deltaTimeSums += delta;
-            currentDeltaTime += 1;
-        } else {
-            currentDeltaTime = 0;
-            System.out.println("Average delta time : " + deltaTimeSums / deltatimeIntervals + "  [interval:" + deltatimeIntervals + "]");
-            deltaTimeSums = 0;
-            System.out.println(Visuals.visualsArePlaying);
-        }
-
         //sync code board and ui board ---
         int rowSize = BoardComponent.boards.getBoard().getRowSize();
         int colSize = BoardComponent.boards.getBoard().getColumnSize();
@@ -642,21 +626,13 @@ public class BattleScreen implements Screen {
             }
 
             //fade to black
-            if (changeScreenTimer >= 3) {
-                Entity blackCover = new Entity();
-                Sprite darkness = (atlas.createSprite("DarkTile"));
-                darkness.setColor(new Color(0, 0, 0, 0));
-                blackCover.add(new SpriteComponent(darkness));
-                blackCover.add(new PositionComponent(new Vector2(0, 0), stage.getHeight(), stage.getWidth(), 0));
-                blackCover.add(new EventComponent(.005f, 0, true, true, (entity, engine) -> {
-                    sm.get(entity).sprite.setColor(sm.get(entity).sprite.getColor().cpy().add(0, 0, 0, .05f));
-                }));
-                engine.addEntity(blackCover);
-            }
+            if (changeScreenTimer >= 3)
+                doScreenTransitionAnimation();
 
             //go to results screen
             if (changeScreenTimer >= 4)
-                GRID_WARS.setScreen(new EndResultsScreen(teams, teams.indexOf(rules.checkWinConditions(), true), rules, GRID_WARS));
+                goToNextScreen();
+
             changeScreenTimer += delta;
         }
 
@@ -1252,6 +1228,22 @@ public class BattleScreen implements Screen {
             } else
                 member.setColor(Color.WHITE);
         }
+    }
+
+    public void doScreenTransitionAnimation() {
+        Entity blackCover = new Entity();
+        Sprite darkness = (atlas.createSprite("DarkTile"));
+        darkness.setColor(new Color(0, 0, 0, 0));
+        blackCover.add(new SpriteComponent(darkness));
+        blackCover.add(new PositionComponent(new Vector2(0, 0), stage.getHeight(), stage.getWidth(), 0));
+        blackCover.add(new EventComponent(.005f, 0, true, true, (entity, engine) -> {
+            sm.get(entity).sprite.setColor(sm.get(entity).sprite.getColor().cpy().add(0, 0, 0, .05f));
+        }));
+        engine.addEntity(blackCover);
+    }
+
+    public void goToNextScreen() {
+        GRID_WARS.setScreen(new EndResultsScreen(teams, teams.indexOf(rules.checkWinConditions(), true), rules, GRID_WARS));
     }
 
     /**

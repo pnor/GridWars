@@ -54,9 +54,9 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
             }
         };
         Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
-        backgroundLay.setColor(Color.GRAY);
+        backgroundLay.setColor(Color.DARK_GRAY);
         Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeHoriz")));
-        topLayer.setColor(new Color(1, 0, 0, .7f));
+        topLayer.setColor(Color.GRAY);
         background = new Background(backgroundLay,
                 new Sprite[]{topLayer},
                 new BackType[]{BackType.SCROLL_HORIZONTAL},

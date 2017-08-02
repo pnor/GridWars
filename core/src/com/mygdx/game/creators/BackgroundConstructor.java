@@ -16,6 +16,7 @@ public class BackgroundConstructor {
 
     public static Background getBackground(int boardIndex) {
         switch (boardIndex) {
+            //region regular boards
             case 1 :
             case 2 :
                 return makeSimpleBack();
@@ -34,7 +35,10 @@ public class BackgroundConstructor {
             case 11:
             case 12:
                 return makeIslandBack();
+            //endregion
+            //region survival boards
 
+            //endregion
         }
         return null;
     }
