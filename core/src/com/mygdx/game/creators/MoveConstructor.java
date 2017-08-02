@@ -338,6 +338,7 @@ public class MoveConstructor {
         Vector2 tilePosition = t.localToStageCoordinates(new Vector2(t.getWidth() / 2 - (half sprite width), t.getHeight() / 2 - (half sprite height)));
     Gets the position of the center of the tile, then subtracts half the size of the sprite being drawn from it.
      */
+    //TODO check all moves used out of bounds (on invisible tiles and actually out of bounds). fix ones that crash
 
     public static Move Tackle(Entity user) {
         VisualEvent TackleVis = new VisualEvent(new VisualEffect() {
@@ -5461,21 +5462,21 @@ public class MoveConstructor {
 
                 Entity circles = new Entity();
                 circles.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 0));
-                circles.add(new LifetimeComponent(0,1.5f));
+                circles.add(new LifetimeComponent(0, 1.5f));
                 circles.add(new AnimationComponent(.5f,
                         new TextureRegion[]{atlas.findRegion("fourCircles"),
                                 atlas.findRegion("sixCircles"),
                                 atlas.findRegion("eightCircles")},
-                        Color.WHITE,
+                        Color.ORANGE,
                         Animation.PlayMode.NORMAL));
-                circles.add(new EventComponent(.1f, true, (entity, engine) -> {
-                    pm.get(entity).rotation += 8 + pm.get(entity).rotation / 2.5f;
+                circles.add(new EventComponent(.05f, true, (entity, engine) -> {
+                    pm.get(entity).rotation += 8 + pm.get(entity).rotation / 1.5f;
                     Color color = animm.get(entity).shadeColor;
                     color = new Color(
                             MathUtils.clamp(color.r + 1f / 30f, 0, 1),
                             MathUtils.clamp(color.g - 1f / 30f, 0, 1),
                             MathUtils.clamp(color.b + 1f / 30f, 0, 1),
-                            color.a);
+                            MathUtils.clamp(color.a - 1f / 30f, 0, 1));
                     animm.get(entity).shadeColor = color;
                 }));
 

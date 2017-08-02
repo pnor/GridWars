@@ -298,6 +298,7 @@ public class BattleScreen implements Screen {
             //statsTable.debug();
         statsTable.setBackground(tableBackground);
         statsTable.pack();
+        statsTable.setSize(statsTable.getWidth() - 30f, statsTable.getHeight() - 30f);
         statsTable.setPosition(stage.getWidth() * .875f - (statsTable.getWidth() / 2), stage.getHeight() * .725f - (statsTable.getHeight() / 2));
 
         //set up attack menu ui
@@ -379,6 +380,7 @@ public class BattleScreen implements Screen {
         attackTable.add(attackBtn4).size(140, 50).padBottom(15f).row();
         attackTable.setBackground(tableBackground);
         attackTable.pack();
+        attackTable.setSize(attackTable.getWidth() - 30f, attackTable.getHeight() - 30f);
         attackTable.setPosition(stage.getWidth() * .875f - (attackTable.getWidth() / 2), stage.getHeight() * .225f - (attackTable.getWidth() / 2));
 
         //set up team table
@@ -402,16 +404,16 @@ public class BattleScreen implements Screen {
         teamTable.add(member4).size(48).padLeft(60f);
         teamTable.setBackground(tableBackground);
         teamTable.pack();
-        teamTable.setSize(600, 90);
-        teamTable.setPosition(teamTable.getX() + teamTable.getOriginX() + 40, stage.getHeight() * .01f);
+        teamTable.setSize(700, 70);
+        teamTable.setPosition(teamTable.getX() + teamTable.getOriginX() + 50, stage.getHeight() * .01f);
 
         //set up infoTable
         infoLbl = new GradualLabel(.001f, "---", skin);
         infoTable.add(infoLbl).height(25).center();
         infoTable.setBackground(tableBackground);
         infoTable.pack();
-        infoTable.setPosition(teamTable.getX(), stage.getHeight() * .9f);
-        infoTable.setSize(700, 80);
+        infoTable.setPosition(teamTable.getX(), stage.getHeight() * .91f);
+        infoTable.setSize(700, 60);
 
         //set up endTurnMessageTable
         param.size = 25;

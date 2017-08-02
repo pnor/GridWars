@@ -31,6 +31,10 @@ public class BackgroundConstructor {
             case 9 :
             case 10 :
                 return makeForestBack();
+            case 11:
+            case 12:
+                return makeIslandBack();
+
         }
         return null;
     }
@@ -50,7 +54,7 @@ public class BackgroundConstructor {
     public static Background makeComplexBack() {
         Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
         back.setColor(new Color(.5f, .5f, .5f, 1));
-        Sprite overlay = new Sprite(backAtlas.findRegion("DiagStripeHoriz"));
+        Sprite overlay = new Sprite(backAtlas.findRegion("DiagCheckerBackground"));
         overlay.setColor(new Color(.3f, .3f, .3f, 1));
         return new Background(
                 back,
@@ -62,7 +66,7 @@ public class BackgroundConstructor {
     public static Background makeCompactBack() {
         Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
         back.setColor(Color.LIGHT_GRAY);
-        Sprite overlay = new Sprite(backAtlas.findRegion("FadeHoriz"));
+        Sprite overlay = new Sprite(backAtlas.findRegion("CheckerBackground"));
         overlay.setColor(Color.WHITE);
         return new Background(
                 back,
@@ -74,7 +78,7 @@ public class BackgroundConstructor {
     public static Background makeDesertBack() {
         Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
         backgroundLay.setColor(new Color(121f / 255, 121f / 255f, 19f / 255f, 1));
-        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeHoriz")));
+        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("SpeedBackground")));
         topLayer.setColor(new Color(181f / 255, 181f / 255f, 79f / 255f, 1));
         return new Background(backgroundLay,
                 new Sprite[]{new Sprite(backAtlas.findRegion("DiagStripeOverlay")), topLayer},
@@ -87,6 +91,18 @@ public class BackgroundConstructor {
         back.setColor(new Color(.1f, .1f, 0, 1));
         Sprite overlay = new Sprite(backAtlas.findRegion("DiagStripeHoriz"));
         overlay.setColor(new Color(.05f, .3f, 0, .6f));
+        return new Background(
+                back,
+                new Sprite[] {overlay},
+                new BackType[] {BackType.SCROLL_HORIZONTAL},
+                null, null);
+    }
+
+    public static Background makeIslandBack() {
+        Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
+        back.setColor(new Color(.3f, .3f, 1, 1));
+        Sprite overlay = new Sprite(backAtlas.findRegion("CloudBackground"));
+        overlay.setColor(new Color(.9f, .9f, .9f, .6f));
         return new Background(
                 back,
                 new Sprite[] {overlay},

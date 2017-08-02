@@ -55,6 +55,8 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
         HoverButton compact = new HoverButton("Compact", skin, Color.WHITE, Color.DARK_GRAY);
         HoverButton desert = new HoverButton("Desert", skin, Color.WHITE, Color.DARK_GRAY);
         HoverButton forest = new HoverButton("Forest", skin, Color.WHITE, Color.DARK_GRAY);
+        HoverButton island = new HoverButton("Island", skin, Color.WHITE, Color.DARK_GRAY);
+
 
 
         ChangeListener listener = new ChangeListener() {
@@ -77,6 +79,9 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
                     } else if (actor == forest) {
                         board += 8;
                         GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
+                    } else if (actor == island) {
+                        board += 10;
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
                     }
                 }
             }
@@ -96,12 +101,17 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
         compact.addListener(listener);
         desert.addListener(listener);
         forest.addListener(listener);
+        island.addListener(listener);
 
-        table.add(titleLbl).padBottom(40).row();
-        table.add(basic).size(350, 90).row();
-        table.add(complex).size(350, 90).row();
-        table.add(compact).size(350, 90).row();
-        table.add(desert).size(350, 90).row();
-        table.add(forest).size(350, 90).row();
+        table.add();
+        table.add();
+        table.row();
+        table.add(titleLbl).colspan(2).padBottom(40).row();
+        table.add(basic).size(300, 70).padRight(20f);
+        table.add(complex).size(300, 70).padBottom(20f).row();
+        table.add(compact).size(300, 70).padRight(20f);
+        table.add(desert).size(300, 70).padBottom(20f).row();
+        table.add(forest).size(300, 70).padRight(20f);
+        table.add(island).size(300, 70);
     }
 }

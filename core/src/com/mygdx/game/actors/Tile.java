@@ -1,6 +1,7 @@
 package com.mygdx.game.actors;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -15,12 +16,14 @@ import static com.mygdx.game.GridWars.atlas;
 public class Tile extends Group {
     private UIActor tileBack;
     private boolean isDark;
+    private boolean usesCustomSprite;
     private Color color = Color.WHITE;
     private int r;
     private int c;
 
     private boolean lastSelected;
     private boolean isListening;
+    private boolean invisible;
 
     /**
      * Creates a new tile with no set color.
@@ -83,10 +86,37 @@ public class Tile extends Group {
     }
 
     /**
+     * Creates a new tile with a set color
+     * @param rPos row position in relation to board
+     * @param cPos column position in relation to board
+     * @param isItDark if true, the tile will be dark. Else, will be lighter
+     * @param c color of the tile
+     * @param spr Tile's sprite
+     * @param size siz of the tile
+     */
+    public Tile(int rPos, int cPos, boolean isItDark, Color c, Sprite spr, float size) {
+        super();
+        usesCustomSprite = true;
+        isDark = isItDark;
+        color = c;
+        this.r = rPos;
+        this.c = cPos;
+
+        UIActor tile;
+        Sprite s = spr;
+        s.setColor(c);
+        s.setSize(size, size);
+        tile = new SpriteActor(s, false);
+        addActor(tile);
+        tileBack = tile;
+        setSize(tile.getWidth(), tile.getHeight());
+    }
+
+    /**
      * @return whether this has any actors on it. True if it has 1 or more actors and false otherwise.
      */
     public boolean isOccupied() {
-        return getChildren().size >= 2;
+        return getChildren().size >= 2 || invisible;
     }
 
     /**
@@ -146,7 +176,9 @@ public class Tile extends Group {
      * @return copy
      */
     public Tile copy(int rPos, int cPos) {
-        if (color == null)
+        if (usesCustomSprite)
+            return new Tile(rPos, cPos, isDark, getChildren().first().getColor(), ((SpriteActor) getChildren().first()).getSprite(), getWidth());
+        else if (color == null)
             return new Tile(rPos, cPos, isDark, getWidth());
         else
             return new Tile(rPos, cPos, isDark, color, getWidth());
@@ -163,6 +195,10 @@ public class Tile extends Group {
 
     public void setLastSelected(boolean b) {
         lastSelected = b;
+    }
+
+    public void setInvisible(boolean b) {
+        invisible = b;
     }
 
     public boolean getIsListening() {
@@ -195,5 +231,18 @@ public class Tile extends Group {
      */
     public int getColumn() {
         return c;
+    }
+
+    /**
+     * @return if the tile shows up on the board
+     */
+    public boolean getInvisble() {
+        return invisible;
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        if (!invisible)
+            super.draw(batch, parentAlpha);
     }
 }

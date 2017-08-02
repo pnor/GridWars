@@ -54,6 +54,10 @@ public class BoardAndRuleConstructor {
                 return makeForest2P(screen, teams, boardManager);
             case 10:
                 return makeForest2PZone(screen, teams, boardManager);
+            case 11:
+                return makeIsland2P(screen, teams, boardManager);
+            case 12:
+                return makeIsland2PZone(screen, teams, boardManager);
         }
         return null;
     }
@@ -406,6 +410,140 @@ public class BoardAndRuleConstructor {
 
         //place blocks around zones
         for (int i = 0; i < 10; i++) {
+            BoardPosition pos = new BoardPosition(MathUtils.random(0, 5), MathUtils.random(0, 5));
+            if (boardManager.getBoard().getTile(pos.r, pos.c).isOccupied()) {
+                i--;
+                continue;
+            }
+            boardManager.add(EntityConstructor.tree(), pos);
+        }
+
+        //color zones
+        rules.colorZones();
+
+        return rules;
+    }
+    //endregion
+
+    //region island
+    public static Rules makeIsland2P(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(7, 7, new Color(229f / 255f, 238f / 255f, 220f / 255f, 1), new Color(220f / 255f, 238f / 255f, 239f / 255f, 1), 700 / 7), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        int j = 0;
+        while (j < teams.get(0).getEntities().size) {
+            if (j == 0)
+                boardManager.add(teams.get(0).getEntities().get(0), new BoardPosition(1, 1));
+            else if (j == 1)
+                boardManager.add(teams.get(0).getEntities().get(1), new BoardPosition(0, 2));
+            else if (j == 2)
+                boardManager.add(teams.get(0).getEntities().get(2), new BoardPosition(0, 4));
+            else if (j == 3)
+                boardManager.add(teams.get(0).getEntities().get(3), new BoardPosition(1, 5));
+            j++;
+        }
+        
+        j = 0;
+        while (j < teams.get(0).getEntities().size) {
+            if (j == 0)
+                boardManager.add(teams.get(1).getEntities().get(0), new BoardPosition(5, 1));
+            else if (j == 1)
+                boardManager.add(teams.get(1).getEntities().get(1), new BoardPosition(6, 2));
+            else if (j == 2)
+                boardManager.add(teams.get(1).getEntities().get(2), new BoardPosition(6, 4));
+            else if (j == 3)
+                boardManager.add(teams.get(1).getEntities().get(3), new BoardPosition(5, 5));
+            j++;
+        }
+
+        //remove tiles
+        boardManager.getBoard().getTile(0, 0).setInvisible(true);
+        boardManager.getBoard().getTile(0, 1).setInvisible(true);
+        boardManager.getBoard().getTile(1, 0).setInvisible(true);
+        boardManager.getBoard().getTile(0, 5).setInvisible(true);
+        boardManager.getBoard().getTile(0, 6).setInvisible(true);
+        boardManager.getBoard().getTile(1, 6).setInvisible(true);
+
+        boardManager.getBoard().getTile(6, 0).setInvisible(true);
+        boardManager.getBoard().getTile(6, 1).setInvisible(true);
+        boardManager.getBoard().getTile(5, 0).setInvisible(true);
+        boardManager.getBoard().getTile(6, 5).setInvisible(true);
+        boardManager.getBoard().getTile(6, 6).setInvisible(true);
+        boardManager.getBoard().getTile(5, 6).setInvisible(true);
+
+        //place blocks randomly
+        for (int i = 0; i < 2; i++) {
+            BoardPosition pos = new BoardPosition(MathUtils.random(0, 5), MathUtils.random(0, 5));
+            if (boardManager.getBoard().getTile(pos.r, pos.c).isOccupied()) {
+                i--;
+                continue;
+            }
+            boardManager.add(EntityConstructor.tree(), pos);
+        }
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeIsland2PZone(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        //declare rules
+        boardManager.setBoards(new Board(7, 7, new Color(234f / 255f, 155f / 255f, 35f / 255f, 1), new Color(220f / 255f, 238f / 255f, 239f / 255f, 1), 700 / 7), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        ZoneRules rules = new ZoneRules(screen, teams, new Array<Array<BoardPosition>>(new Array[] {
+                new Array<BoardPosition>(new BoardPosition[]{
+                        new BoardPosition(6, 3)
+                }),
+                new Array<BoardPosition>(new BoardPosition[]{
+                        new BoardPosition(0, 3)
+                })
+        }));
+
+        //place entities
+        int j = 0;
+        while (j < teams.get(0).getEntities().size) {
+            if (j == 0)
+                boardManager.add(teams.get(0).getEntities().get(0), new BoardPosition(1, 1));
+            else if (j == 1)
+                boardManager.add(teams.get(0).getEntities().get(1), new BoardPosition(0, 2));
+            else if (j == 2)
+                boardManager.add(teams.get(0).getEntities().get(2), new BoardPosition(0, 4));
+            else if (j == 3)
+                boardManager.add(teams.get(0).getEntities().get(3), new BoardPosition(1, 5));
+            j++;
+        }
+
+        j = 0;
+        while (j < teams.get(0).getEntities().size) {
+            if (j == 0)
+                boardManager.add(teams.get(1).getEntities().get(0), new BoardPosition(5, 1));
+            else if (j == 1)
+                boardManager.add(teams.get(1).getEntities().get(1), new BoardPosition(6, 2));
+            else if (j == 2)
+                boardManager.add(teams.get(1).getEntities().get(2), new BoardPosition(6, 4));
+            else if (j == 3)
+                boardManager.add(teams.get(1).getEntities().get(3), new BoardPosition(5, 5));
+            j++;
+        }
+
+        //remove tiles
+        boardManager.getBoard().getTile(0, 0).setInvisible(true);
+        boardManager.getBoard().getTile(0, 1).setInvisible(true);
+        boardManager.getBoard().getTile(1, 0).setInvisible(true);
+        boardManager.getBoard().getTile(0, 5).setInvisible(true);
+        boardManager.getBoard().getTile(0, 6).setInvisible(true);
+        boardManager.getBoard().getTile(1, 6).setInvisible(true);
+
+        boardManager.getBoard().getTile(6, 0).setInvisible(true);
+        boardManager.getBoard().getTile(6, 1).setInvisible(true);
+        boardManager.getBoard().getTile(5, 0).setInvisible(true);
+        boardManager.getBoard().getTile(6, 5).setInvisible(true);
+        boardManager.getBoard().getTile(6, 6).setInvisible(true);
+        boardManager.getBoard().getTile(5, 6).setInvisible(true);
+
+        boardManager.getBoard().getTile(3, 3).setInvisible(true);
+
+
+
+        //place blocks randomly
+        for (int i = 0; i < 2; i++) {
             BoardPosition pos = new BoardPosition(MathUtils.random(0, 5), MathUtils.random(0, 5));
             if (boardManager.getBoard().getTile(pos.r, pos.c).isOccupied()) {
                 i--;

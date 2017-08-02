@@ -1,6 +1,7 @@
 package com.mygdx.game.boards;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -109,6 +110,44 @@ public class Board {
         boolean dark = true;
         Tile d = new Tile(0, 0, true, darkColor, tileSize);
         Tile l = new Tile(0, 1, false, lightColor, tileSize);
+        grid = new Array<Array<Tile>>();
+
+        for (int i = 0; i < r; i++) {
+            grid.add(new Array<Tile>());
+            if ((r % 2) == 0)
+                dark = !dark;
+            for (int j = 0; j < c; j++) {
+                if (dark)
+                    grid.get(i).add(d.copy(i, j));
+                else
+                    grid.get(i).add(l.copy(i, j));
+
+                dark = !dark;
+            }
+        }
+    }
+
+    /**
+     * Creates a board of a set size and of 2 different colors
+     *
+     * @param r  row size
+     * @param c  column size
+     * @param darkSprite sprite used for dark tiles
+     * @param lightSprite sprite used for light tiles
+     * @param tileSize size of the tiles
+     */
+    public Board(int r, int c, Sprite darkSprite, Sprite lightSprite, float tileSize) {
+        if (r <= 0 || c <= 0)
+            throw new IndexOutOfBoundsException();
+        if (darkSprite == null || lightSprite == null)
+            throw new NullPointerException("Sprite of board can't be null!");
+
+        scaleFactor = tileSize / 100;
+        rows = r;
+        columns = c;
+        boolean dark = true;
+        Tile d = new Tile(0, 0, true, darkSprite.getColor(), darkSprite, tileSize);
+        Tile l = new Tile(0, 0, true, lightSprite.getColor(), lightSprite, tileSize);
         grid = new Array<Array<Tile>>();
 
         for (int i = 0; i < r; i++) {
