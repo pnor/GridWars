@@ -286,7 +286,7 @@ public class MoveConstructor {
 
     public static StatusEffect attackUp() {
         StatusEffect effect = new StatusEffect("Power", 1, new LerpColor(Color.WHITE, Color.ORANGE, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 1.5f, 1, 1);
+        effect.setStatChanges(1, 1, 1, 2, 1, 1);
         return effect;
     }
 

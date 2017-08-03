@@ -911,7 +911,8 @@ public class BattleScreen implements Screen {
             //check if valid
             if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
                     || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
-                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
+                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied()
+                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isInvisible())
                 continue;
 
             if (!includeHorizontalSpaces && next.r == sourceBp.r)
@@ -1038,12 +1039,20 @@ public class BattleScreen implements Screen {
      */
     public void updateStatsAndMoves() {
         if (stm.has(selectedEntity)) {
-            StatComponent stat = stm.get(selectedEntity);
-            hpLbl.setText("" + stat.hp + " / " + stat.getModMaxHp(selectedEntity));
-            spLbl.setText("" + stat.getModSp(selectedEntity) + " / " + stat.getModMaxSp(selectedEntity));
-            atkLbl.setText("" + stat.getModAtk(selectedEntity));
-            defLbl.setText("" + stat.getModDef(selectedEntity));
-            spdLbl.setText("" + stat.getModSpd(selectedEntity));
+            if (!stm.get(selectedEntity).obscureStatInfo) {
+                StatComponent stat = stm.get(selectedEntity);
+                hpLbl.setText(stat.hp + " / " + stat.getModMaxHp(selectedEntity));
+                spLbl.setText(stat.getModSp(selectedEntity) + " / " + stat.getModMaxSp(selectedEntity));
+                atkLbl.setText("" + stat.getModAtk(selectedEntity));
+                defLbl.setText("" + stat.getModDef(selectedEntity));
+                spdLbl.setText("" + stat.getModSpd(selectedEntity));
+            } else {
+                hpLbl.setText("? / ?");
+                spLbl.setText("? / ?");
+                atkLbl.setText("?");
+                defLbl.setText("?");
+                spdLbl.setText("?");
+            }
             if (team.has(selectedEntity))
                 nameLbl.setColor(teams.get(team.get(selectedEntity).teamNumber).getTeamColor());
             else
@@ -1055,72 +1064,34 @@ public class BattleScreen implements Screen {
             spdLbl.setColor(Color.WHITE);
             statusLbl.setColor(Color.GREEN);
             if (status.has(selectedEntity) && status.get(selectedEntity).getTotalStatusEffects() > 0) {
-                /* TODO optimize so it doesn't shade labels again if the shade does not need to be changed. (not essential)
-                TODO change to make it more modular (using StatusEffects in StatusEffectComponent to figure out what to shade
-                For example, switching from a burned entity to a cursed one will shade attack label red again.
-                 */
-                statusLbl.setColor(Color.RED);
-                //Positive
-                if (status.get(selectedEntity).statusEffects.containsKey("Quick")) {
-                    spdLbl.setColor(Color.GREEN);
+                statusLbl.setColor(Color.ORANGE);
+                for (StatusEffect status : status.get(selectedEntity).statusEffects.values().toArray()) {
+                    if (status.getStatChanges().maxHP > 1f && !hpLbl.getColor().equals(Color.RED) && !hpLbl.getColor().equals(Color.GREEN))
+                        hpLbl.setColor(Color.GREEN);
+                    else if (status.getStatChanges().maxHP < 1f && !hpLbl.getColor().equals(Color.RED))
+                        hpLbl.setColor(Color.RED);
+
+                    if (status.getStatChanges().sp > 1f && !spLbl.getColor().equals(Color.RED) && !spLbl.getColor().equals(Color.GREEN))
+                        spLbl.setColor(Color.GREEN);
+                    else if (status.getStatChanges().sp < 1f && !spLbl.getColor().equals(Color.RED))
+                        spLbl.setColor(Color.RED);
+
+                    if (status.getStatChanges().atk > 1f && !atkLbl.getColor().equals(Color.RED) && !atkLbl.getColor().equals(Color.GREEN))
+                        atkLbl.setColor(Color.GREEN);
+                    else if (status.getStatChanges().atk < 1f && !atkLbl.getColor().equals(Color.RED))
+                        atkLbl.setColor(Color.RED);
+
+                    if (status.getStatChanges().def > 1f && !defLbl.getColor().equals(Color.RED) && !defLbl.getColor().equals(Color.GREEN))
+                        defLbl.setColor(Color.GREEN);
+                    else if (status.getStatChanges().def < 1f && !defLbl.getColor().equals(Color.RED))
+                        defLbl.setColor(Color.RED);
+
+                    if (status.getStatChanges().spd > 1f && !spdLbl.getColor().equals(Color.RED) && !spdLbl.getColor().equals(Color.GREEN))
+                        spdLbl.setColor(Color.GREEN);
+                    else if (status.getStatChanges().spd < 1f && !spdLbl.getColor().equals(Color.RED))
+                        spdLbl.setColor(Color.RED);
                 }
 
-                if (status.get(selectedEntity).statusEffects.containsKey("Power")) {
-                    atkLbl.setColor(Color.GREEN);
-                }
-
-                if (status.get(selectedEntity).statusEffects.containsKey("Guard")) {
-                    defLbl.setColor(Color.GREEN);
-                }
-
-                if (status.get(selectedEntity).statusEffects.containsKey("Durability")) {
-                    hpLbl.setColor(Color.GREEN);
-                }
-
-                if (status.get(selectedEntity).statusEffects.containsKey("Charged") || status.get(selectedEntity).statusEffects.containsKey("Supercharged")) {
-                    hpLbl.setColor(Color.GREEN);
-                    spdLbl.setColor(Color.GREEN);
-                    atkLbl.setColor(Color.GREEN);
-                    spdLbl.setColor(Color.GREEN);
-                }
-
-                //Negative
-                if (status.get(selectedEntity).statusEffects.containsKey("Burn"))
-                    atkLbl.setColor(Color.RED);
-
-                if (status.get(selectedEntity).statusEffects.containsKey("Paralyze"))
-                    spdLbl.setColor(Color.RED);
-
-                if (status.get(selectedEntity).statusEffects.containsKey("Petrify")) {
-                    defLbl.setColor(Color.CYAN);
-                    spdLbl.setColor(Color.RED);
-                }
-
-                if (status.get(selectedEntity).statusEffects.containsKey("Freeze")) {
-                    defLbl.setColor(Color.RED);
-                    spdLbl.setColor(Color.RED);
-                }
-
-                if (status.get(selectedEntity).statusEffects.containsKey("Shivers")) {
-                    spLbl.setColor(Color.RED);
-                }
-
-                if (status.get(selectedEntity).statusEffects.containsKey("Defenseless")) {
-                    defLbl.setColor(Color.RED);
-                }
-
-                if (status.get(selectedEntity).statusEffects.containsKey("Offenseless")) {
-                    atkLbl.setColor(Color.RED);
-                }
-
-                if (status.get(selectedEntity).statusEffects.containsKey("Stillness"))
-                    spLbl.setColor(Color.RED);
-
-                if (status.get(selectedEntity).statusEffects.containsKey("Curse")) {
-                    atkLbl.setColor(Color.RED);
-                    defLbl.setColor(Color.RED);
-                    spdLbl.setColor(Color.RED);
-                }
                 //status effect label
                 StringBuilder statusEffects = new StringBuilder();
                 for (StatusEffect effect : status.get(selectedEntity).statusEffects.values())

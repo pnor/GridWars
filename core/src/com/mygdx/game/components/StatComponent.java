@@ -13,6 +13,7 @@ import static com.mygdx.game.ComponentMappers.status;
 public class StatComponent implements Component {
 
     public boolean alive = true;
+    public boolean obscureStatInfo;
 
     /**
      * health
@@ -58,6 +59,26 @@ public class StatComponent implements Component {
         atk = attack;
         def = defense;
         spd = speed;
+    }
+
+    /**
+     * Creates Component representing stats
+     * @param health ability to take hits. Max health
+     * @param skill used to use special attacks. Max skill points that can be held
+     * @param attack attacking power
+     * @param defense defending power
+     * @param speed mobility on board
+     * @param obscure whether its info can be viewed by the player
+     *
+     */
+    public StatComponent(int health, int skill, int attack, int defense, int speed, boolean obscure) {
+        maxHP = health;
+        hp = health;
+        maxSP = skill;
+        atk = attack;
+        def = defense;
+        spd = speed;
+        obscureStatInfo = obscure;
     }
 
     /**

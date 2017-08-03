@@ -445,12 +445,14 @@ public /*abstract*/ class ComputerPlayer implements Runnable {
             if (boardState != null) {
                 if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
                         || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
-                        || boardState.isOccupied(new BoardPosition(next.r, next.c)))
+                        || boardState.isOccupied(new BoardPosition(next.r, next.c))
+                        || BoardComponent.boards.getBoard().getTile(next.r, next.c).isInvisible())
                     continue;
             } else {
                     if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
                             || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
-                            || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied())
+                            || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied()
+                            || BoardComponent.boards.getBoard().getTile(next.r, next.c).isInvisible())
                         continue;
             }
             if (!includeHorizontal && next.r == sourceBp.r)

@@ -51,12 +51,19 @@ public enum BackType {
     public void update(float deltaTime) {
         switch (this) {
             case SCROLL_VERTICAL:
+            case SCROLL_VERTICAL_SLOW:
+            case SCROLL_VERTICAL_FAST:
+            case SCROLL_VERTICAL_FASTER:
+            case SCROLL_VERTICAL_FASTEST:
                 pm.get(e).position.add(movement.x * deltaTime, movement.y * deltaTime);
                 if (Math.abs(pm.get(e).position.y) > loopPoint)
                     pm.get(e).position.set(pm.get(e).position.x, 0);
                 break;
 
             case SCROLL_HORIZONTAL:
+            case SCROLL_HORIZONTAL_SLOW:
+            case SCROLL_HORIZONTAL_FAST:
+            case SCROLL_HORIZONTAL_FASTER:
                 pm.get(e).position.add(movement.x * deltaTime, movement.y * deltaTime);
                 if (Math.abs(pm.get(e).position.x) >= loopPoint)
                     pm.get(e).position.set(0, pm.get(e).position.y);
