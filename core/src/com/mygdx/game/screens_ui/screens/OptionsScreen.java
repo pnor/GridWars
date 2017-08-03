@@ -30,6 +30,7 @@ public class OptionsScreen extends MenuScreen implements Screen {
         if (!preferences.contains("Move Animation")) {
             preferences.putBoolean("Move Animation", true);
             preferences.putInteger("AI Turn Speed", 1);
+            preferences.putBoolean("Animate Background", true);
             preferences.flush();
         }
     }
@@ -60,9 +61,21 @@ public class OptionsScreen extends MenuScreen implements Screen {
         if (preferences.getInteger("AI Turn Speed") == 0)
             btnSlowAI.setChecked(true);
         else if (preferences.getInteger("AI Turn Speed") == 1)
-            btnDontDoAnimation.setChecked(true);
+            btnNormalAI.setChecked(true);
         else if (preferences.getInteger("AI Turn Speed") == 2)
             btnFastAI.setChecked(true);
+
+        Label lblBackgroundInfo = new Label("Background Animations", skin);
+        ButtonGroup<TextButton> backgroundGroup;
+        TextButton btnAnimateBackground = new TextButton("Animate", skin, "toggle");
+        TextButton btnDontAnimateBackground = new TextButton("Static", skin, "toggle");
+        backgroundGroup = new ButtonGroup<>(btnAnimateBackground, btnDontAnimateBackground);
+        backgroundGroup.setMaxCheckCount(1);
+        if (preferences.getBoolean("Animate Background"))
+            btnAnimateBackground.setChecked(true);
+        else
+            btnDontAnimateBackground.setChecked(true);
+
 
 
         Table confirmationBox = new Table();
@@ -78,9 +91,9 @@ public class OptionsScreen extends MenuScreen implements Screen {
                     if (actor == btnBack) {
                         GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
                     } else if (actor == btnOK) {
-                        if (animationGroup.getChecked() == btnDoAnimation) {
+                        if (animationGroup.getChecked() == btnDoAnimation)
                             preferences.putBoolean("Move Animation", true);
-                        } else
+                        else
                             preferences.putBoolean("Move Animation", false);
 
                         if (AIGroup.getChecked() == btnSlowAI) {
@@ -89,6 +102,14 @@ public class OptionsScreen extends MenuScreen implements Screen {
                             preferences.putInteger("AI Turn Speed", 1);
                         else if (AIGroup.getChecked() == btnFastAI)
                             preferences.putInteger("AI Turn Speed", 2);
+
+                        if (backgroundGroup.getChecked() == btnAnimateBackground) {
+                            preferences.putBoolean("Animate Background", true);
+                            Background.setAnimateBackground(true);
+                        } else {
+                            preferences.putBoolean("Animate Background", false);
+                            Background.setAnimateBackground(false);
+                        }
 
                         preferences.flush();
                         GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
@@ -110,7 +131,12 @@ public class OptionsScreen extends MenuScreen implements Screen {
         AIBtnGroup.add(btnSlowAI).size(80, 50);
         AIBtnGroup.add(btnNormalAI).size(80, 50);
         AIBtnGroup.add(btnFastAI).size(80, 50);
-        table.add(AIBtnGroup).padBottom(80).row();
+        table.add(AIBtnGroup).padBottom(20).row();
+        table.add(lblBackgroundInfo).padBottom(20).row();
+        Table animBackgroundGroup = new Table();
+        animBackgroundGroup.add(btnAnimateBackground).size(90, 50);
+        animBackgroundGroup.add(btnDontAnimateBackground).size(90, 50);
+        table.add(animBackgroundGroup).padBottom(40).row();
         table.add(confirmationBox);
 
         Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));

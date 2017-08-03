@@ -118,8 +118,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                             }
                         }
                     } else if (actor == btnContinue) {
-                        Team tempEnemyTeam = new Team("Survival Guys", Color.DARK_GRAY, new Array<Entity>(new Entity[] {EntityConstructor.mummy(1), EntityConstructor.pyrobull(1)}));
-                        GRID_WARS.setScreen(new SurvivalBattleScreen(team, tempEnemyTeam, 3, -11, healingPowerUp, spPowerUp, GRID_WARS));
+                        GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), getComputerDifficulty(), level + 12, healingPowerUp, spPowerUp, GRID_WARS));
                     }
                 }
             }
@@ -155,5 +154,43 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         //offsetTable.setPosition(offsetTable.getX() + 200, offsetTable.getY());
         table.add().padRight(200f);
         table.add(offsetTable);
+    }
+
+    private Team getFloorLevelTeam() {
+        switch (level) {
+            case 1 :
+                return new Team("Enemy",
+                        Color.WHITE,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1)
+                        }));
+            case 2 :
+                return new Team("Enemy",
+                        Color.WHITE,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1)
+                        }));
+        }
+        return null;
+    }
+
+    private int getComputerDifficulty() {
+        switch (level) {
+            case 1 :
+            case 2 :
+            case 3 :
+            case 4 :
+            case 5 :
+            case 6 :
+            case 7 :
+                return 1;
+        }
+        return -999;
     }
 }

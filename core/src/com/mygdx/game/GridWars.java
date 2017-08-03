@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mygdx.game.screens_ui.Background;
 import com.mygdx.game.screens_ui.screens.TitleScreen;
 
 public class GridWars extends Game {
@@ -25,10 +26,15 @@ public class GridWars extends Game {
 		stage.getViewport().setWorldSize(1000, 900);
 		stage.getViewport().setScreenSize(1000, 900);
 		engine = new Engine();
+		//set up assets
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		skin.addRegions( new TextureAtlas("uiskin.atlas"));
 		atlas = new TextureAtlas(Gdx.files.internal("GDSprites.pack"));
 		backAtlas = new TextureAtlas(Gdx.files.internal("BackPack.pack"));
+
+		//set up options related things
+		Background.setAnimateBackground(Gdx.app.getPreferences("Options").getBoolean("Animate Background"));
+
 		setScreen(new TitleScreen(this));
 	}
 

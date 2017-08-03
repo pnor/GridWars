@@ -16,7 +16,14 @@ import static com.mygdx.game.ComponentMappers.sm;
  */
 public enum BackType {
     SCROLL_VERTICAL(new Vector2(0, -30), 900, 0, null, null),
+    SCROLL_VERTICAL_SLOW(new Vector2(0, -10), 900, 0, null, null),
+    SCROLL_VERTICAL_FAST(new Vector2(0, -45), 900, 0, null, null),
+    SCROLL_VERTICAL_FASTER(new Vector2(0, -60), 900, 0, null, null),
+    SCROLL_VERTICAL_FASTEST(new Vector2(0, -100), 900, 0, null, null),
     SCROLL_HORIZONTAL(new Vector2(-120, 0), 1000, 0, null, null),
+    SCROLL_HORIZONTAL_SLOW(new Vector2(-60, 0), 1000, 0, null, null),
+    SCROLL_HORIZONTAL_FAST(new Vector2(-180, 0), 1000, 0, null, null),
+    SCROLL_HORIZONTAL_FASTER(new Vector2(-240, 0), 1000, 0, null, null),
     ROTATE(null, 0, 30, null, null),
     FADE_COLOR(null, 0, 0, null, null);
 

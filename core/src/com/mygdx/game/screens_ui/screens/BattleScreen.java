@@ -55,7 +55,7 @@ import static com.mygdx.game.GridWars.*;
  */
 public class BattleScreen implements Screen {
 
-    private final GridWars GRID_WARS;
+    protected final GridWars GRID_WARS;
     private BattleInputProcessor battleInputProcessor;
 
     //Background
@@ -68,13 +68,13 @@ public class BattleScreen implements Screen {
         */
 
     //rules
-    private static Rules rules;
+    protected static Rules rules;
     private boolean gameHasEnded;
     private int winningTeamIndex;
     private float changeScreenTimer;
 
     //Entities
-    private Array<Team> teams = new Array<Team>();
+    protected Array<Team> teams = new Array<Team>();
 
     //Selection and Hover
     private Entity selectedEntity;
@@ -152,8 +152,8 @@ public class BattleScreen implements Screen {
      * The box that says the next team's turn has started.
      */
     protected Table endTurnMessageTable;
-    private Label endTurnMessageLbl;
-    private Label turnCountLbl;
+    protected Label endTurnMessageLbl;
+    protected Label turnCountLbl;
     /** Pop up message that says the effects of a move. */
     protected Table helpTable;
     private Label moveDescriptionLbl;
@@ -228,8 +228,10 @@ public class BattleScreen implements Screen {
         engine.addSystem(new DamageDeathSystem());
 
         //Add all things on board to engine
-        for (Entity e : BoardComponent.boards.getAllEntities())
+        for (Entity e : BoardComponent.boards.getAllEntities()) {
+            if (stm.has(e) && !stm.get(e).alive) continue; //skip dead
             engine.addEntity(e);
+        }
 
         //Set up visuals
         Visuals.engine = engine;

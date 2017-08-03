@@ -34,6 +34,7 @@ public class BoardAndRuleConstructor {
      */
     public static Rules getBoardAndRules(int boardIndex, BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
         switch (boardIndex) {
+            //region regular battle
             case 1 :
                 return makeSimple2P(screen, teams, boardManager);
             case 2 :
@@ -58,17 +59,25 @@ public class BoardAndRuleConstructor {
                 return makeIsland2P(screen, teams, boardManager);
             case 12:
                 return makeIsland2PZone(screen, teams, boardManager);
+            //endregion
+            //region survival
+            case 13:
+            case 14:
+                return makeSurvivalNormal(screen, teams, boardManager);
+            //endregion
         }
         return null;
     }
 
-    //for reference when making boards that are greater than 7 by 7
     /*
+    For reference when making boards that are greater than 7 by 7
     LESS THAN 7
        new Board(boardSize, boardSize, c, c2, 100
     GREATER
        new Board(boardSize, boardSize, c, c2, 700 / boardSize
    */
+
+    //region regular battle stages
 
     //region Simple
     public static Rules makeSimple2P(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
@@ -556,6 +565,27 @@ public class BoardAndRuleConstructor {
         rules.colorZones();
 
         return rules;
+    }
+    //endregion
+    //endregion
+
+    //region survival
+    public static Rules makeSurvivalNormal(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(5, 5, 100), new CodeBoard(5, 5));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        int col = 0;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            col++;
+        }
+        col = 4;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            col--;
+        }
+
+        return new Battle2PRules(screen, teams);
     }
     //endregion
 }

@@ -124,19 +124,7 @@ public class BoardState {
             Move move = mvm.get(t.entity).moveList.get(t.attack);
 
             //deduct sp cost
-            try {
-                effectedEntity.sp -= move.spCost();
-            } catch (Exception e) {
-                if (e instanceof NullPointerException) {
-                    //System.out.println("!");
-                    /*
-                    System.out.println("Pos :" + t.pos);
-                    System.out.println("move :" + move);
-                    System.out.println("entities :" + entities.get(t.pos));
-                    */
-                    //System.out.println("No Entity where there should be an entity in BoardState Hashmap.");
-                }
-            }
+            effectedEntity.sp -= move.spCost();
 
             for (BoardPosition pos : move.getOrientedAttackPositions(t.direction, move)) {
                 BoardPosition newPos = pos.add(t.pos.r, t.pos.c);
@@ -160,6 +148,8 @@ public class BoardState {
                     //remove dead
                     if (e.hp <= 0)
                         entities.removeKey(newPos);
+                } else { //attacking on an empty space
+                    effectedEntity.arbitraryValue -= 1; //discourage attacking empty spaces compared to not attacking at all
                 }
             }
 

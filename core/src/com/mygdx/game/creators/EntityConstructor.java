@@ -253,6 +253,7 @@ public class EntityConstructor {
     }
 
     //Game Piece Entity ------------
+    //region player entities
     public static Entity canight(int team) {
         Entity entity = new Entity();
         if (team > -1)
@@ -653,4 +654,36 @@ public class EntityConstructor {
 
         return entity;
     }
+    //endregion
+
+    //region Survival enemy entities
+    public static Entity stoneLeo(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Stone Leo"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("StoneLion"),
+                atlas.findRegion("StoneLion2")
+        }, Animation.PlayMode.LOOP, 0.8f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(4, 2, 2, 1, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.bodySlam(entity),
+                MoveConstructor.Bark(entity)
+        })));
+
+        return entity;
+    }
+    //endregion
 }

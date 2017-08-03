@@ -37,12 +37,14 @@ public class BackgroundConstructor {
                 return makeIslandBack();
             //endregion
             //region survival boards
-
+            case 13:
+                return makeSurvivalBackChecker();
             //endregion
         }
         return null;
     }
 
+    //region regular battle
     public static Background makeSimpleBack() {
         Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
         back.setColor(new Color(.7f, .7f, .7f, 1));
@@ -113,4 +115,21 @@ public class BackgroundConstructor {
                 new BackType[] {BackType.SCROLL_HORIZONTAL},
                 null, null);
     }
+    //endregion
+
+    //region survival
+    public static Background makeSurvivalBackChecker() {
+        Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
+        back.setColor(new Color(.3f, .3f, .3f, 1));
+        Sprite overlay = new Sprite(backAtlas.findRegion("DiagCheckerBackground"));
+        overlay.setColor(new Color(.4f, .4f, .4f, 1));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("DiagStripeHoriz"));
+        overlay2.setColor(new Color(1, 1, 1, .1f));
+        return new Background(
+                back,
+                new Sprite[] {overlay, overlay2},
+                new BackType[] {BackType.SCROLL_HORIZONTAL, BackType.SCROLL_HORIZONTAL_SLOW},
+                null, null);
+    }
+    //endregion
 }

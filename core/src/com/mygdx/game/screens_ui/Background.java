@@ -16,6 +16,7 @@ import com.mygdx.game.components.SpriteComponent;
 public class Background {
     private Entity backLayer;
     private Array<BackType> layers;
+    private static boolean animateBackground = true;
 
     /**
      * backTypes and frontLayer must be equal size.
@@ -43,9 +44,13 @@ public class Background {
     }
 
     public void update(float deltaTime) {
-        for (BackType back : layers) {
-            back.update(deltaTime);
-        }
+        if (animateBackground)
+            for (BackType back : layers)
+                back.update(deltaTime);
+    }
+
+    public static void setAnimateBackground(boolean b) {
+        animateBackground = b;
     }
 
     public Entity getBackLayer() {
