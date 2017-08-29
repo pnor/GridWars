@@ -118,7 +118,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                             }
                         }
                     } else if (actor == btnContinue) {
-                        GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), getComputerDifficulty(), level + 12, healingPowerUp, spPowerUp, GRID_WARS));
+                        GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), getComputerDifficulty(), level, healingPowerUp, spPowerUp, GRID_WARS));
                     }
                 }
             }
@@ -162,10 +162,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
+                                EntityConstructor.spider(1),
+                                EntityConstructor.stoneSword(1),
                                 EntityConstructor.stoneLeo(1),
-                                EntityConstructor.stoneLeo(1),
-                                EntityConstructor.stoneLeo(1),
-                                EntityConstructor.stoneLeo(1)
+                                EntityConstructor.golem(1)
                         }));
             case 2 :
                 return new Team("Enemy",

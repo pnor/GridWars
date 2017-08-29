@@ -32,7 +32,7 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
     private int spPowerUp;
 
     public SurvivalBattleScreen(Team team, Team enemyTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, GridWars game) {
-        super(new Array<Team>(new Team[]{team, enemyTeam}), floorLevel, new Vector2[]{new Vector2(1, difficulty)}, game);
+        super(new Array<Team>(new Team[]{team, enemyTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty)}, game);
         healthPowerUp = healthPowerUpNum;
         spPowerUp = spPowerUpNum;
         level = floorLevel;
@@ -42,7 +42,6 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
     public void show() {
         super.show();
         attackTable.setBackground(new NinePatchDrawable(new NinePatch(atlas.findRegion("TableBackDark"), 33, 33, 28, 28)));
-        boardTable.setBackground(new NinePatchDrawable(new NinePatch(atlas.findRegion("TableBackDark"), 33, 33, 28, 28)));
         //helpTable.setBackground(new NinePatchDrawable(atlas.createPatch("TableBackDark")));
         infoTable.setBackground(new NinePatchDrawable(new NinePatch(atlas.findRegion("TableBackDark"), 33, 33, 28, 28)));
         statsTable.setBackground(new NinePatchDrawable(new NinePatch(atlas.findRegion("TableBackDark"), 33, 33, 28, 28)));
@@ -106,7 +105,7 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
     @Override
     public void goToNextScreen() {
         if (rules.checkWinConditions() == teams.first()) { //victory
-            GRID_WARS.setScreen(new SurvivalTowerScreen(teams.first(), level++, healthPowerUp++, spPowerUp++, GRID_WARS));
+            GRID_WARS.setScreen(new SurvivalTowerScreen(teams.first(), ++level, healthPowerUp++, spPowerUp++, GRID_WARS));
         } else { //loss
             GRID_WARS.setScreen(new GameOverScreen(level, GRID_WARS));
         }

@@ -453,7 +453,7 @@ public class BoardAndRuleConstructor {
         }
         
         j = 0;
-        while (j < teams.get(0).getEntities().size) {
+        while (j < teams.get(1).getEntities().size) {
             if (j == 0)
                 boardManager.add(teams.get(1).getEntities().get(0), new BoardPosition(5, 1));
             else if (j == 1)
@@ -520,7 +520,7 @@ public class BoardAndRuleConstructor {
         }
 
         j = 0;
-        while (j < teams.get(0).getEntities().size) {
+        while (j < teams.get(1).getEntities().size) {
             if (j == 0)
                 boardManager.add(teams.get(1).getEntities().get(0), new BoardPosition(5, 1));
             else if (j == 1)
@@ -571,10 +571,10 @@ public class BoardAndRuleConstructor {
 
     //region survival
     public static Rules makeSurvivalNormal(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
-        boardManager.setBoards(new Board(5, 5, 100), new CodeBoard(5, 5));
+        boardManager.setBoards(new Board(6, 6, Color.DARK_GRAY, Color.LIGHT_GRAY, 100), new CodeBoard(6, 6));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
         //place entities
-        int col = 0;
+        int col = 1;
         for (Entity e : teams.get(0).getEntities()) {
             boardManager.add(e, new BoardPosition(0, col));
             col++;
@@ -584,6 +584,22 @@ public class BoardAndRuleConstructor {
             boardManager.add(e, new BoardPosition(maxSize, col));
             col--;
         }
+
+        //remove corners
+        boardManager.getBoard().getTile(0, 0).setInvisible(true);
+        boardManager.getBoard().getTile(1, 0).setInvisible(true);
+        boardManager.getBoard().getTile(0, 5).setInvisible(true);
+        boardManager.getBoard().getTile(1, 5).setInvisible(true);
+        boardManager.getBoard().getTile(4, 0).setInvisible(true);
+        boardManager.getBoard().getTile(5, 0).setInvisible(true);
+        boardManager.getBoard().getTile(4, 5).setInvisible(true);
+        boardManager.getBoard().getTile(5, 5).setInvisible(true);
+
+        //add items
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(2, 0));
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(3, 0));
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(2, 5));
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(3, 5));
 
         return new Battle2PRules(screen, teams);
     }

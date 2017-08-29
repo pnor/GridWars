@@ -13,7 +13,7 @@ public class MoveInfo {
      */
     public boolean pierces;
     /**
-     * Amount it multiplies the attack
+     * Amount it multiplies the user's attack stat
      */
     public float ampValue;
     /**

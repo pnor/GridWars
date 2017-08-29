@@ -592,7 +592,8 @@ public class BattleScreen implements Screen {
                 currentMove.getVisuals().play();
             } else {
                 currentMove.getVisuals().reset();
-                enableUI();
+                if (!playingComputerTurn)
+                    enableUI();
                 if (selectedEntity != null)
                     updateStatsAndMoves();
                 currentMove = null;
@@ -761,6 +762,7 @@ public class BattleScreen implements Screen {
         showEndTurnDisplay();
 
         if (!gameHasEnded) {
+            //find computer controlled team
             boolean processingAComputerControlledTeam = false;
             int controlledTeamIndex = -1;
             for (int i = 0; i < computerControlledTeamsIndex.length; i++) {
@@ -794,7 +796,8 @@ public class BattleScreen implements Screen {
             } else
                 playingComputerTurn = false;
 
-            enableUI();
+            if (!playingComputerTurn)
+                enableUI();
         }
     }
 

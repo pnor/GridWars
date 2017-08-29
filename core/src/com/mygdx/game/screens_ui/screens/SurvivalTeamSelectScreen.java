@@ -38,8 +38,6 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
     private TextField teamName, teamColor;
     private HashMap<String, Color> colorChoices;
 
-    private Image teamImage;
-
     private Table characterBtnTable;
     /**
      * 0 : canight <p>
@@ -78,7 +76,6 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
      */
     public SurvivalTeamSelectScreen(GridWars gridWars) {
         super(gridWars);
-        teamImage = new Image(atlas.findRegion("cubelight"));
         setUpColorChoices();
     }
 
@@ -105,9 +102,9 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
         teamName = new TextField("", skin);
         teamColorLbl = new Label("Color", skin);
         teamColor = new TextField("", skin);
-        okBtn = new HoverButton("OK", skin, Color.PINK, Color.GRAY);
-        backBtn = new HoverButton("Back", skin, Color.YELLOW, Color.GRAY);
-        clearBtn = new HoverButton("Clear", skin, Color.RED, Color.GRAY);
+        okBtn = new HoverButton("OK", skin, Color.GRAY, Color.GREEN);
+        backBtn = new HoverButton("Back", skin, Color.GRAY, Color.BLUE);
+        clearBtn = new HoverButton("Clear", skin, Color.GRAY, Color.RED);
 
         //set up character buttons
         characterBtns = new Array<ImageButton>(new ImageButton[]{
@@ -285,9 +282,6 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
         //Table set ups and arranging
         table.add(titleLbl).colspan(2).padBottom(40).row();
 
-        //selected teams so far table
-        table.add(teamImage).padBottom(20).colspan(2).center().row();
-
         //team customization table
         teamCustomizeTable.add(teamNameLbl).padRight(5f);
         teamCustomizeTable.add(teamName).padRight(10f);
@@ -304,12 +298,14 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
                     characterBtnTable.add(characterBtns.get( ((i*7) + j) - 1 ) );
             }
         }
+        characterBtnTable.setBackground(tableBackground);
         table.add(characterBtnTable).colspan(2).padBottom(20f).row();
 
         //team portraits
         for (int i = 0; i < characterPortraits.size; i++) {
             portraitTable.add(characterPortraits.get(i)).padRight(10f);
         }
+        portraitTable.setBackground(tableBackground);
         table.add(portraitTable).padBottom(30f).colspan(2).row();
 
         //menu buttons table
@@ -320,7 +316,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
 
         //table.setBackground(tableBackground);
 
-        table.debug();
+        //table.debug();
         //characterBtnTable.debug();
         //portraitTable.debug();
     }
@@ -341,7 +337,6 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
             //color team icon
             for (int i = 0; i < characterPortraits.size; i++)
                 characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
-            teamImage.setColor(team.getTeamColor());
             GRID_WARS.setScreen(new SurvivalTowerScreen(team, 1, 1, 1, GRID_WARS));
         }
     }

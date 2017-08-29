@@ -50,7 +50,7 @@ public class EntityConstructor {
         return ready;
     }
 
-    //Testing purposes ----
+    //region Testing purposes
     public static Entity testerChessPiece(int team) {
         Entity entity = new Entity();
         if (team > -1)
@@ -168,6 +168,7 @@ public class EntityConstructor {
 
         return entity;
     }
+    //endregion
 
     //region Blockade Type Entity
     public static Entity cube() {
@@ -234,7 +235,6 @@ public class EntityConstructor {
 
         return entity;
     }
-    //endregion
 
     public static Entity tree() {
         Entity entity = new Entity();
@@ -251,6 +251,63 @@ public class EntityConstructor {
 
         return entity;
     }
+
+    public static Entity torch() {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(2, 0, 0, 0, 0));
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("torch"),
+                atlas.findRegion("torch2")
+        }, Animation.PlayMode.LOOP, 0.3f)));
+        entity.add(new NameComponent("Torch"));
+
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+
+        return entity;
+    }
+
+    public static Entity stoneTorch() {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(4, 0, 0, 0, 0));
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("stoneTorch"),
+                atlas.findRegion("stoneTorch2")
+        }, Animation.PlayMode.LOOP, 0.3f)));
+        entity.add(new NameComponent("Stone Torch"));
+
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+
+        return entity;
+    }
+
+    public static Entity pillar() {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(6, 0, 0, 0, 0));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("pillar")), true, true)));
+        entity.add(new NameComponent("Pillar"));
+
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+
+        return entity;
+    }
+
+
+    //endregion
 
     //Game Piece Entity ------------
     //region player entities
@@ -657,6 +714,8 @@ public class EntityConstructor {
     //endregion
 
     //region Survival enemy entities
+
+    //region small lion
     public static Entity stoneLeo(int team) {
         Entity entity = new Entity();
         if (team > -1)
@@ -679,11 +738,172 @@ public class EntityConstructor {
                 MoveConstructor.deathAnimation(entity),
                 MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.bodySlam(entity),
-                MoveConstructor.Bark(entity)
+                MoveConstructor.slam(entity),
+                MoveConstructor.stoneGlare(entity)
         })));
 
         return entity;
     }
+    //endregion
+
+    //region big lion
+    public static Entity stoneLion(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Stone Lion"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("lion"),
+                atlas.findRegion("lion2")
+        }, Animation.PlayMode.LOOP, 0.7f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(10, 5, 4, 1, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.claw(entity),
+                MoveConstructor.heavySlam(entity),
+                MoveConstructor.stoneGlare(entity)
+        })));
+
+        return entity;
+    }
+    //endregion
+
+    //region slimemen
+    public static Entity slimeman(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Slimeman"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("slimeman"),
+                atlas.findRegion("slimeman2")
+        }, Animation.PlayMode.LOOP, .5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 2, 1, 0, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.poisonPunch(entity),
+                MoveConstructor.immobilize(entity)
+        })));
+
+        return entity;
+    }
+    //endregion
+
+    //region golem
+    public static Entity golem(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Golem"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("StoneGolem"),
+                atlas.findRegion("StoneGolem2")
+        }, Animation.PlayMode.LOOP, 1f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(7, 2, 2, 1, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.slam(entity),
+                MoveConstructor.heavySlam(entity),
+                MoveConstructor.guard(entity)
+        })));
+
+        return entity;
+    }
+    //endregion
+
+    //region spiders
+    public static Entity spider(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Spider"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("spider"),
+                atlas.findRegion("spider2")
+        }, Animation.PlayMode.LOOP, 0.3f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 3, 1, 0, 3));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.slash(entity),
+                MoveConstructor.toxicSlash(entity),
+                MoveConstructor.immobilize(entity)
+        })));
+
+        return entity;
+    }
+    //endregion
+
+    //region spirit
+    public static Entity stoneSword(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Possessed Sword"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("stoneSword"),
+                atlas.findRegion("stoneSword2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(2, 0, 2, 0, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.swordSlice(entity)
+        })));
+
+        return entity;
+    }
+
+    //endregion
+
+    //region other
     //endregion
 }

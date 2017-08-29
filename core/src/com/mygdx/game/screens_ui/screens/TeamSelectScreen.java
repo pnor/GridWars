@@ -1,7 +1,6 @@
 package com.mygdx.game.screens_ui.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -127,6 +126,15 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         menuBtnTable = new Table();
         teamCustomizeTable = new Table();
 
+        //backgrounds?
+        /*
+        selectedTeamsIconsTable.setBackground(tableBackground);
+        AIControlTable.setBackground(tableBackground);
+        portraitTable.setBackground(tableBackground);
+        */
+        characterBtnTable.setBackground(tableBackground);
+
+
         param.size = 65;
         titleLbl = new Label("Choose Your Team", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         teamNameLbl = new Label("Team", skin);
@@ -139,11 +147,11 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         AIHardCheckBox = new CheckBox("Hard", skin);
         AICheckBoxGroup = new ButtonGroup<>(AIEasyCheckBox, AINormalCheckBox, AIHardCheckBox);
         AICheckBoxGroup.setMaxCheckCount(1);
-        okBtn = new HoverButton("OK", skin, Color.PINK, Color.GRAY);
-        backBtn = new HoverButton("Back", skin, Color.YELLOW, Color.GRAY);
-        clearBtn = new HoverButton("Clear", skin, Color.RED, Color.GRAY);
-        lastTeamBtn = new HoverButton("Last Team", skin, Color.BLUE, Color.GRAY);
-        nextBtn = new HoverButton("Next", skin, Color.GREEN, Color.GRAY);
+        okBtn = new HoverButton("OK", skin, Color.GRAY, Color.BLUE);
+        backBtn = new HoverButton("Back", skin, Color.GRAY, Color.ORANGE);
+        clearBtn = new HoverButton("Clear", skin, Color.GRAY, Color.RED);
+        lastTeamBtn = new HoverButton("Last Team", skin, Color.GRAY, Color.YELLOW);
+        nextBtn = new HoverButton("Next", skin, Color.GRAY, Color.GREEN);
 
         //set up character buttons
         characterBtns = new Array<ImageButton>(new ImageButton[]{
@@ -310,7 +318,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         topLayer.setColor(Color.GRAY);
         background = new Background(backgroundLay,
                 new Sprite[]{topLayer},
-                new BackType[]{BackType.SCROLL_HORIZONTAL},
+                new BackType[]{BackType.SCROLL_HORIZONTAL_SLOW},
                 null, null);
 
         //listeners
@@ -372,9 +380,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         menuBtnTable.add(nextBtn).size(150, 50);
         table.add(menuBtnTable).colspan(2);
 
-        //table.setBackground(tableBackground);
-
-        table.debug();
+        //table.debug();
         //characterBtnTable.debug();
         //portraitTable.debug();
     }
@@ -421,10 +427,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
      * Removes the last entity selection.
      */
     private void removeLastSelection() {
-        if (currentEntity <= 0 || teams.get(curTeam).getEntities().size <= 0) { //debug
-            if (currentEntity <= 0) {
-                System.out.println("currentEntity <= 0  !!");
-            }
+        if (currentEntity <= 0 || teams.get(curTeam).getEntities().size <= 0) {
             return;
         }
         characterPortraits.get(currentEntity - 1).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
@@ -605,13 +608,5 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         for (Image i : characterPortraits)
             if (i.getColor() instanceof LerpColor)
                 ((LerpColor) i.getColor()).update(dt);
-
-        //DEBUG!
-        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-            System.out.println("----");
-            for (int i = 0; i < teams.size; i++) {
-                System.out.println("Team " + teams.get(i).getTeamName() + " Color: " + teams.get(i).getTeamColor() + "  " + teams.get(i).getEntities());
-            }
-        }
     }
 }

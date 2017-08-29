@@ -15,6 +15,12 @@ public class GradualLabel extends Label {
     private boolean writingText;
     private int currentIndex;
 
+    /**
+     * Creates a label that displays its text gradually, character by character.
+     * @param time time between letters
+     * @param text full text
+     * @param skin skin
+     */
     public GradualLabel(float time, CharSequence text, Skin skin) {
         super(text, skin);
         timeBetweenLetters = time;
