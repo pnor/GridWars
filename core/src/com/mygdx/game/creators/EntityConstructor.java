@@ -809,6 +809,38 @@ public class EntityConstructor {
     }
     //endregion
 
+    //region can man
+    public static Entity canman(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Can Man"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("toxicCanMan"),
+                atlas.findRegion("toxicCanMan2")
+        }, Animation.PlayMode.LOOP, .5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(2, 4, 1, 0, 3));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.sludgeThrow(entity),
+                MoveConstructor.suppressAttack(entity)
+        })));
+
+        return entity;
+    }
+
+    //endregion
+
     //region golem
     public static Entity golem(int team) {
         Entity entity = new Entity();
@@ -866,7 +898,7 @@ public class EntityConstructor {
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.slash(entity),
                 MoveConstructor.toxicSlash(entity),
-                MoveConstructor.immobilize(entity)
+                MoveConstructor.immobite(entity)
         })));
 
         return entity;
@@ -897,6 +929,97 @@ public class EntityConstructor {
                 MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.swordSlice(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity blueSword(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Possessed Sword"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("possesedSwordBlue"),
+                atlas.findRegion("possesedSwordBlue2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 4, 4, 0, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.swordSlice(entity),
+                MoveConstructor.guardPiercer(entity),
+                MoveConstructor.chargedSlice(entity)
+        })));
+
+        return entity;
+    }
+
+
+    public static Entity book(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Haunted Book"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("possesedBook"),
+                atlas.findRegion("possesedBook2")
+        }, Animation.PlayMode.LOOP, 0.4f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 5, 2, 0, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.monoplode(entity),
+                MoveConstructor.monopierce(entity),
+                MoveConstructor.curse(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity advancedBook(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Haunted Textbook"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("advancedBook"),
+                atlas.findRegion("advancedBook2")
+        }, Animation.PlayMode.LOOP, 0.4f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(4, 7, 3, 0, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.monoplode2(entity),
+                MoveConstructor.disarm(entity),
+                MoveConstructor.curse(entity)
         })));
 
         return entity;
