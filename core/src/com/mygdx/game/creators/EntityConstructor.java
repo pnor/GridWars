@@ -383,7 +383,7 @@ public class EntityConstructor {
                 atlas.findRegion("firebull2")
         }, Animation.PlayMode.LOOP, 0.2f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(3, 4, 5, 0, 1));
+        entity.add(new StatComponent(5, 4, 5, 0, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1019,7 +1019,37 @@ public class EntityConstructor {
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.monoplode2(entity),
                 MoveConstructor.disarm(entity),
-                MoveConstructor.curse(entity)
+                MoveConstructor.monoflash(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity fancyBook(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Haunted Novel"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("fancyBook"),
+                atlas.findRegion("fancyBook2")
+        }, Animation.PlayMode.LOOP, 0.4f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(6, 12, 3, 0, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.monoplode2(entity),
+                MoveConstructor.disarm(entity),
+                MoveConstructor.monoflash(entity)
         })));
 
         return entity;

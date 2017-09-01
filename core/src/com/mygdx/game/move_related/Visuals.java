@@ -45,7 +45,7 @@ public class Visuals {
         for (VisualEvent v : visual) {
             total += v.getTriggerTime() * v.getRepeatAmount();
         }
-        timer = new GameTimer(total + .03f);
+        timer = new GameTimer(total + .06f); //buffer room
 
         visuals = visual;
     }

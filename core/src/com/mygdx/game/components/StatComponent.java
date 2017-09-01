@@ -12,7 +12,17 @@ import static com.mygdx.game.ComponentMappers.status;
  */
 public class StatComponent implements Component {
 
+    /**
+     * Whether the entity is alive
+     */
     public boolean alive = true;
+    /**
+     * True when the entity is done doing processes and can be removed from the game.
+     */
+    public boolean readyToRemoveFromGame = false;
+    /**
+     * If the stats are hidden from the player
+     */
     public boolean obscureStatInfo;
 
     /**
@@ -176,5 +186,13 @@ public class StatComponent implements Component {
         }
 
         return newSpd;
+    }
+
+    /**
+     * Sets the entity as if it was alive. (also sets readyToRemoveFromGame to false)
+     */
+    public void setAlive() {
+        alive = true;
+        readyToRemoveFromGame = false;
     }
 }

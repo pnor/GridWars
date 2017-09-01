@@ -168,7 +168,7 @@ public class BattleScreen implements Screen {
         rules = BoardAndRuleConstructor.getBoardAndRules(boardIndex, this, teams, BoardComponent.boards);
         background = BackgroundConstructor.getBackground(boardIndex);
 
-        MoveConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, stage);
+        MoveConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, stage, GRID_WARS);
 
         if (rules instanceof ZoneRules)
             computer = new ComputerPlayer(BoardComponent.boards, teams, ((ZoneRules) rules).getZones(), 1, 1, true, 0);
@@ -613,8 +613,9 @@ public class BattleScreen implements Screen {
 
         //Handling dead entities
         for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
-            if (stm.has(e) && !stm.get(e).alive) {
+            if (stm.has(e) && !stm.get(e).alive && stm.get(e).readyToRemoveFromGame) {
                 BoardComponent.boards.remove(e);
+                engine.removeEntity(e);
                 if (nm.has(e))
                     infoLbl.setText(nm.get(e).name + " has been defeated!");
             }

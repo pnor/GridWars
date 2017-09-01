@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.screens_ui.Background;
@@ -62,5 +63,26 @@ public class GridWars extends Game {
 
 	public Batch getBatch() {
 		return stage.getBatch();
+	}
+
+	/**
+	 * Sets the game to shade in grayscale
+	 */
+	public void setGrayScale() {
+		stage.getBatch().setShader(new ShaderProgram(Gdx.files.internal("GrayscaleVertexShader"), Gdx.files.internal("GrayScaleFragmentShader")));
+	}
+
+	/**
+	 * Sets the game to shade all colors inverted
+	 */
+	public void setInvertColor() {
+		stage.getBatch().setShader(new ShaderProgram(Gdx.files.internal("GrayscaleVertexShader"), Gdx.files.internal("InvertFragmentShader")));
+	}
+
+	/**
+	 * Sets the game to shade normally
+	 */
+	public void removeShader() {
+		stage.getBatch().setShader(null);
 	}
 }

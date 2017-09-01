@@ -108,7 +108,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                             for (Entity e : team.getEntities()) {
                                 stm.get(e).hp = stm.get(e).maxHP;
                                 status.get(e).removeAll(e);
-                                stm.get(e).alive = true;
+                                stm.get(e).setAlive();
                             }
                         }
                     } else if (actor == btnSpUp) {
@@ -163,10 +163,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.advancedBook(1),
-                                EntityConstructor.book(1),
-                                EntityConstructor.advancedBook(1),
-                                EntityConstructor.advancedBook(1)
+                                EntityConstructor.fancyBook(1),
+                                EntityConstructor.fancyBook(1),
+                                EntityConstructor.fancyBook(1),
+                                EntityConstructor.fancyBook(1)
                         }));
             case 2 :
                 return new Team("Enemy",
