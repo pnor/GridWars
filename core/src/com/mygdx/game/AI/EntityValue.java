@@ -23,6 +23,7 @@ public class EntityValue implements Comparable {
 
     /**
      * Points representing nothing. Used to fine tune moves with effects that cannot be expressed in raw stats, status conditions or position.
+     * For example, a move that copies another move or to discourage using damaging moves on allies or empty spaces
      */
     public int arbitraryValue;
 
@@ -126,22 +127,6 @@ public class EntityValue implements Comparable {
                 copyStatus[i] = statusEffectInfos.get(i).copy();
             return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, attack, defense, copyStatus, arbitraryValue);
         }
-    }
-
-    /**
-     * Sp value after status effects and other effects are applied
-     */
-    public int getModSp() {
-        int newSp = sp;
-        if (statusEffectInfos == null)
-            return sp;
-
-        for (StatusEffectInfo status : statusEffectInfos) {
-            if (status.statChanges == null) continue;
-            newSp = (int) (newSp * status.statChanges.sp);
-        }
-
-        return newSp;
     }
 
     /**

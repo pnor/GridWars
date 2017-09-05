@@ -65,8 +65,12 @@ public abstract class Rules {
         }
         //do affects and stats
         for (Entity e : teams.get(currentTeamTurn).getEntities()) { //increment sp
-            if (stm.has(e) && !(stm.get(e).getModSp(e) >= stm.get(e).getModMaxSp(e)) && !(status.has(e) && status.get(e).statusEffects.containsKey("stillness"))) //check if it can
+            if (stm.has(e) && !(stm.get(e).sp >= stm.get(e).getModMaxSp(e)) && !(status.has(e) && status.get(e).statusEffects.containsKey("stillness"))) //check if it can
                 stm.get(e).sp += 1;
+
+            //clamp sp values to max
+            if (stm.get(e).sp > stm.get(e).getModMaxSp(e))
+                stm.get(e).sp = stm.get(e).getModMaxSp(e);
 
             //status effects
             if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {

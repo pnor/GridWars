@@ -22,6 +22,9 @@ public class GridWars extends Game {
 	public static TextureAtlas atlas;
 	public static TextureAtlas backAtlas;
 
+	//debug variables
+	public static boolean DEBUG_halfSpeed;
+
 	@Override
 	public void create() {
 		stage = new Stage();
@@ -44,9 +47,15 @@ public class GridWars extends Game {
 	public void render() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		getScreen().render(Gdx.graphics.getDeltaTime());
+		if (DEBUG_halfSpeed)
+			getScreen().render(Gdx.graphics.getDeltaTime() / 2);
+		else
+			getScreen().render(Gdx.graphics.getDeltaTime());
+		//debug
 		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
 			setScreen(new TitleScreen(this));
+		if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
+			DEBUG_halfSpeed = !DEBUG_halfSpeed;
 	}
 
 	@Override

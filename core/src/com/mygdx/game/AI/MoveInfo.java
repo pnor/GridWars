@@ -82,6 +82,10 @@ public class MoveInfo {
      * set amount.
      */
     public interface MiscEffects {
+        /**
+         * Miscellaneous effect caused from an attack
+         * @param entity enemy
+         */
         public void doMiscEffects(EntityValue entity);
     }
 }

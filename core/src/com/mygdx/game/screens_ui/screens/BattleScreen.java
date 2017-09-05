@@ -313,7 +313,7 @@ public class BattleScreen implements Screen {
                 if (((Button) actor).isPressed()) {
                     if (mayAttack(selectedEntity)) { //Use attack at button position or say they don't have enough SP
                         if (actor == attackBtn1) {
-                            if (mvm.get(selectedEntity).moveList.get(0).spCost() > stm.get(selectedEntity).getModSp(selectedEntity)) {
+                            if (mvm.get(selectedEntity).moveList.get(0).spCost() > stm.get(selectedEntity).sp) {
                                 infoLbl.setText("Not enough SP!");
                                 return;
                             }
@@ -321,7 +321,7 @@ public class BattleScreen implements Screen {
                             stm.get(selectedEntity).sp -= mvm.get(selectedEntity).moveList.get(0).spCost();
                             currentMove = mvm.get(selectedEntity).moveList.get(0);
                         } else if (actor == attackBtn2) {
-                            if (mvm.get(selectedEntity).moveList.get(1).spCost() > stm.get(selectedEntity).getModSp(selectedEntity)) {
+                            if (mvm.get(selectedEntity).moveList.get(1).spCost() > stm.get(selectedEntity).sp) {
                                 infoLbl.setText("Not enough SP!");
                                 return;
                             }
@@ -329,7 +329,7 @@ public class BattleScreen implements Screen {
                             stm.get(selectedEntity).sp -= mvm.get(selectedEntity).moveList.get(1).spCost();
                             currentMove = mvm.get(selectedEntity).moveList.get(1);
                         } else if (actor == attackBtn3) {
-                            if (mvm.get(selectedEntity).moveList.get(2).spCost() > stm.get(selectedEntity).getModSp(selectedEntity)) {
+                            if (mvm.get(selectedEntity).moveList.get(2).spCost() > stm.get(selectedEntity).sp) {
                                 infoLbl.setText("Not enough SP!");
                                 return;
                             }
@@ -337,7 +337,7 @@ public class BattleScreen implements Screen {
                             stm.get(selectedEntity).sp -= mvm.get(selectedEntity).moveList.get(2).spCost();
                             currentMove = mvm.get(selectedEntity).moveList.get(2);
                         } else if (actor == attackBtn4) {
-                            if (mvm.get(selectedEntity).moveList.get(3).spCost() > stm.get(selectedEntity).getModSp(selectedEntity)) {
+                            if (mvm.get(selectedEntity).moveList.get(3).spCost() > stm.get(selectedEntity).sp) {
                                 infoLbl.setText("Not enough SP!");
                                 return;
                             }
@@ -541,9 +541,9 @@ public class BattleScreen implements Screen {
             }
 
             //updating attack squares
-            if (!mayAttack(selectedEntity) && attacksEnabled)
+            if (!mayAttack(selectedEntity) && attacksEnabled) {
                 disableAttacks();
-            else if (mayAttack(selectedEntity) && !attacksEnabled && Visuals.visualsArePlaying == 0)
+            } else if (mayAttack(selectedEntity) && !attacksEnabled && Visuals.visualsArePlaying == 0)
                 enableAttacks();
 
             if (!hoverChanged) {
@@ -616,7 +616,7 @@ public class BattleScreen implements Screen {
             if (stm.has(e) && !stm.get(e).alive && stm.get(e).readyToRemoveFromGame) {
                 BoardComponent.boards.remove(e);
                 engine.removeEntity(e);
-                if (nm.has(e))
+                if (nm.has(e)) //TODO make death messages not overwrite whatever message is supposed to show. perhaps have a message queue thing
                     infoLbl.setText(nm.get(e).name + " has been defeated!");
             }
         }
@@ -778,15 +778,15 @@ public class BattleScreen implements Screen {
                 playingComputerTurn = true;
                 computer.setTeamControlled((int) computerControlledTeamsIndex[controlledTeamIndex].x);
                 Vector2 v = computerControlledTeamsIndex[controlledTeamIndex];
-                if ((int) v.y == 1) {
+                if ((int) v.y == 1) { //easy
                     computer.setDepthLevel(0);
                     computer.setForgetBestMoveChance(.5f);
-                } else if ((int) v.y == 2) {
+                } else if ((int) v.y == 2) { //normal
                     computer.setDepthLevel(2);
-                    computer.setForgetBestMoveChance(.2f);
-                } if ((int) v.y == 3) {
-                    computer.setDepthLevel(6);
-                    computer.setForgetBestMoveChance(.05f);
+                    computer.setForgetBestMoveChance(.3f);
+                } if ((int) v.y == 3) { //hard
+                    computer.setDepthLevel(4);
+                    computer.setForgetBestMoveChance(.15f);
                 }
                 if (rules instanceof ZoneRules)
                     computer.updateComputerPlayer(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), ((ZoneRules) rules).getZones()));
@@ -1046,7 +1046,7 @@ public class BattleScreen implements Screen {
             if (!stm.get(selectedEntity).obscureStatInfo) {
                 StatComponent stat = stm.get(selectedEntity);
                 hpLbl.setText(stat.hp + " / " + stat.getModMaxHp(selectedEntity));
-                spLbl.setText(stat.getModSp(selectedEntity) + " / " + stat.getModMaxSp(selectedEntity));
+                spLbl.setText(stat.sp + " / " + stat.getModMaxSp(selectedEntity));
                 atkLbl.setText("" + stat.getModAtk(selectedEntity));
                 defLbl.setText("" + stat.getModDef(selectedEntity));
                 spdLbl.setText("" + stat.getModSpd(selectedEntity));
@@ -1075,9 +1075,9 @@ public class BattleScreen implements Screen {
                     else if (status.getStatChanges().maxHP < 1f && !hpLbl.getColor().equals(Color.RED))
                         hpLbl.setColor(Color.RED);
 
-                    if (status.getStatChanges().sp > 1f && !spLbl.getColor().equals(Color.RED) && !spLbl.getColor().equals(Color.GREEN))
+                    if (status.getStatChanges().maxSP > 1f && !spLbl.getColor().equals(Color.RED) && !spLbl.getColor().equals(Color.GREEN))
                         spLbl.setColor(Color.GREEN);
-                    else if (status.getStatChanges().sp < 1f && !spLbl.getColor().equals(Color.RED))
+                    else if (status.getStatChanges().maxSP < 1f && !spLbl.getColor().equals(Color.RED))
                         spLbl.setColor(Color.RED);
 
                     if (status.getStatChanges().atk > 1f && !atkLbl.getColor().equals(Color.RED) && !atkLbl.getColor().equals(Color.GREEN))

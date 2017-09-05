@@ -76,6 +76,11 @@ public class AnimationComponent implements Component {
         width = w;
     }
 
+    public void addSpriteSize(float h, float w) {
+        height += h;
+        width += w;
+    }
+
     public void draw(Batch batch) {
         Sprite drawSprite = getSprite();
         drawSprite.setPosition(x, y);

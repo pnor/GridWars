@@ -108,22 +108,6 @@ public class StatComponent implements Component {
     }
 
     /**
-     * Sp value after status effects and other effects are applied
-     */
-    public int getModSp(Entity e) {
-        int newSp = sp;
-        if (!status.has(e))
-            return sp;
-
-        for (StatusEffect status : status.get(e).statusEffects.values()) {
-            if (status.getStatChanges() == null) continue;
-            newSp = (int) (newSp * status.getStatChanges().sp);
-        }
-
-        return newSp;
-    }
-
-    /**
      * Max Sp value after status effects and other effects are applied
      */
     public int getModMaxSp(Entity e) {

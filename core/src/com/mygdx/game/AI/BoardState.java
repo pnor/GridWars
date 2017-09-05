@@ -29,7 +29,7 @@ public class BoardState {
         for (Entity entity : e) {
             EntityValue value;
             if (stm.has(entity) && stm.get(entity).alive) {
-                if (team.has(entity)) //on a team
+                if (team.has(entity)) { //on a team
                     if (!status.has(entity)) { //does not have status effect
                         value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, bm.get(entity).BOARD_ENTITY_ID, stm.get(entity).hp,
                                 stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, 0);
@@ -40,9 +40,9 @@ public class BoardState {
                             statusInfos[i] = currentStatusEffects.get(i).createStatusEffectInfo();
 
                         value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, bm.get(entity).BOARD_ENTITY_ID, stm.get(entity).hp,
-                            stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, statusInfos, 0);
+                                stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, statusInfos, 0);
                     }
-                else { //not on a team
+                } else { //not on a team
                     if (!status.has(entity))
                         value = new EntityValue(bm.get(entity).pos, -1, -1, stm.get(entity).hp,
                             stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, 0);
@@ -96,21 +96,6 @@ public class BoardState {
         if (effectedEntity == null) //user died, do nothing
                 return this;
 
-
-        /*
-        if (effectedEntity == null) {
-            System.out.println("xxxxxxxxxxxxxx effectedEntity is null xxxxxxxxxxxxxxxxx");
-            System.out.println(t);
-            System.out.println("Position : " + t.pos + "   Entity : " + nm.get(t.entity).name);
-            System.out.println("Entity ID : " + bm.get(t.entity).BOARD_ENTITY_ID);
-            System.out.println("All entity value size : " + entityValues.size);
-            System.out.println("Board Entity IDs: ");
-            for (EntityValue ev : entityValues)
-                System.out.println(ev.BOARD_ENTITY_ID);
-            System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-        }
-        */
-
         //movement
         if (!t.pos.equals(effectedEntity.pos))
             if (entities.containsKey(effectedEntity.pos)) {
@@ -144,6 +129,10 @@ public class BoardState {
                     //misc
                     if (move.moveInfo().miscEffects != null)
                         move.moveInfo().miscEffects.doMiscEffects(e);
+
+                    //discourage hitting allies slightly
+                    if (effectedEntity.team == e.team)
+                        e.arbitraryValue -= 1;
 
                     //remove dead
                     if (e.hp <= 0)
@@ -182,19 +171,6 @@ public class BoardState {
     public int evaluate(int homeTeam) {
         int val = 0;
         for (EntityValue e : entities.values()) {
-
-            /*
-            System.out.println("e.team : " + e.team);
-            System.out.println("e.pos : " + e.pos);
-            System.out.println("That team's zones : " + zones.get(e.team));
-            if (zones.get(e.team).contains(e.pos, false))
-                System.out.println("!On Zone!");
-            if (e.pos.equals(zones.first()))
-                System.out.println("!On a Zone!");
-            if (e.pos.equals(new BoardPosition(6, 5)) && e.team == 0)
-                System.out.println("");
-                */
-
             //zone check
             if (zones != null && e.team != -1 && zones.get(e.team).contains(e.pos, false)) {
                 if (e.team == homeTeam)

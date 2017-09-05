@@ -15,7 +15,7 @@ import static com.mygdx.game.ComponentMappers.*;
  *
  * @author Phillip O'Reggio
  */
-public /*abstract*/ class ComputerPlayer implements Runnable {
+public class ComputerPlayer implements Runnable {
     public int DEBUG_TURNS_PROCESSED = 0;
 
     private boolean processing = false;

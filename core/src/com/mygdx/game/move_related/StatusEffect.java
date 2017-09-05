@@ -74,8 +74,8 @@ public class StatusEffect {
             ((AnimationActor) am.get(e).actor).setStopUpdating(false);
     }
 
-    public void setStatChanges(float maxHealth, float skill, float maxSkill, float attack, float defense, float speed) {
-        statChanges = new StatChanges(maxHealth, skill, maxSkill, attack, defense, speed);
+    public void setStatChanges(float maxHealth, float maxSkill, float attack, float defense, float speed) {
+        statChanges = new StatChanges(maxHealth, maxSkill, attack, defense, speed);
     }
 
     public StatusEffectInfo createStatusEffectInfo() {
@@ -114,11 +114,10 @@ public class StatusEffect {
          * Amount is multiplied to corresponding stat. Ex. : if hp in {@link StatChanges} is
          * 2, that means that the entity's health is multiplied by 2.
          */
-        public final float maxHP, sp, maxSP, atk, def, spd;
+        public final float maxHP, maxSP, atk, def, spd;
 
-        public StatChanges(float maxHealth, float skill, float maxSkill, float attack, float defense, float speed) {
+        public StatChanges(float maxHealth, float maxSkill, float attack, float defense, float speed) {
             maxHP = maxHealth;
-            sp = skill;
             maxSP = maxSkill;
             atk = attack;
             def = defense;
