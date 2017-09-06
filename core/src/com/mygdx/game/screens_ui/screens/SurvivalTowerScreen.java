@@ -163,10 +163,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.book(1),
-                                EntityConstructor.fancyBook(1),
-                                EntityConstructor.golemMK3(1),
-                                EntityConstructor.golemMK3(1)
+                                EntityConstructor.scaleman(1),
+                                EntityConstructor.scaleman(1),
+                                EntityConstructor.scaleman(1),
+                                EntityConstructor.scaleman(1)
                         }));
             case 2 :
                 return new Team("Enemy",
@@ -190,7 +190,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             case 5 :
             case 6 :
             case 7 :
-                return 1;
+                return 3;
         }
         return -999;
     }

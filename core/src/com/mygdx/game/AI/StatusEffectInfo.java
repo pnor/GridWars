@@ -29,6 +29,15 @@ public class StatusEffectInfo {
     }
 
     /**
+     * @param o other status effect
+     * @return True if 2 status effects have the same name. False otherwise. Note that 2 status effects with slightly different effects and same names are considered equal.
+     * For Ex. : offenseless and offenseless2 both have the same name ("Offenseless"), but last different durations. Despite this, they are equal.
+     */
+    public boolean equals(Object o) {
+        return o instanceof StatusEffectInfo && ((StatusEffectInfo) o).name.equals(name);
+    }
+
+    /**
      * Class representing the effect of a {@link com.mygdx.game.move_related.StatusEffect} at the end of a turn.
      */
     public interface TurnEffectInfo {

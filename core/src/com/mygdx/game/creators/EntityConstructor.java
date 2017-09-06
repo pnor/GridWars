@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.SpriteActor;
 import com.mygdx.game.components.*;
+import com.mygdx.game.misc.Phase;
 import com.mygdx.game.move_related.Move;
 
 import static com.mygdx.game.ComponentMappers.state;
@@ -290,6 +291,22 @@ public class EntityConstructor {
         return entity;
     }
 
+    public static Entity gargoyleStatue() {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(7, 0, 0, 2, 0));
+        entity.add(new ActorComponent(new SpriteActor(atlas.findRegion("gargoyleStatue"))));
+        entity.add(new NameComponent("Gargoyle Statue"));
+
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+
+        return entity;
+    }
+
     public static Entity pillar() {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
@@ -305,8 +322,6 @@ public class EntityConstructor {
 
         return entity;
     }
-
-
     //endregion
 
     //Game Piece Entity ------------
@@ -778,6 +793,117 @@ public class EntityConstructor {
     }
     //endregion
 
+    //region gargoyle
+    public static Entity gargoyle(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Gargoyle"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("gargoyle"),
+                atlas.findRegion("gargoyle2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(6, 6, 2, 0, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.claw(entity),
+                MoveConstructor.stoneGlare(entity),
+                MoveConstructor.penetrate(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity archgargoyle(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Archgargoyle"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("whiteGargoyle"),
+                atlas.findRegion("whiteGargoyle2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(8, 8, 2, 0, 3));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.crushClaw(entity),
+                MoveConstructor.beam(entity),
+                MoveConstructor.stoneGlare(entity),
+                MoveConstructor.judgingGlare(entity)
+        })));
+
+        return entity;
+    }
+    //endregion
+
+    //region scaleman
+    public static Entity scaleman(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Scaleman"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("scaleman"),
+                atlas.findRegion("scaleman2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(10, 5, 1, 1, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.slam(entity),
+                MoveConstructor.heavySlam(entity)
+        })));
+        entity.add(new PhaseComponent(
+                new Phase(3, new AnimationActor(new TextureRegion[]{
+                        atlas.findRegion("scalemanHigh"),
+                        atlas.findRegion("scalemanHigh2")},
+                        Animation.PlayMode.LOOP, 0.1f),
+                        new StatComponent(10, 5, 4, 0, 3)),
+                new Phase(6, new AnimationActor(new TextureRegion[]{
+                        atlas.findRegion("scalemanMid"),
+                        atlas.findRegion("scalemanMid2")},
+                        Animation.PlayMode.LOOP, 0.2f),
+                        new StatComponent(10, 5, 2, 0, 2)),
+                new Phase(10, new AnimationActor(new TextureRegion[]{
+                        atlas.findRegion("scaleman"),
+                        atlas.findRegion("scaleman2")},
+                        Animation.PlayMode.LOOP, 0.5f),
+                        new StatComponent(10, 5, 1, 1, 1))
+        ));
+
+        return entity;
+    }
+    //endregion
+
     //region slimemen
     public static Entity slimeman(int team) {
         Entity entity = new Entity();
@@ -803,6 +929,65 @@ public class EntityConstructor {
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.poisonPunch(entity),
                 MoveConstructor.immobilize(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity chemMan(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Chemistry Man"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("slimemanNeo"),
+                atlas.findRegion("slimemanNeo2")
+        }, Animation.PlayMode.LOOP, .5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(4, 4, 3, 0, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.stunPunch(entity),
+                MoveConstructor.regenerate(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity alkaliMan(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Alkali Man"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("slimemanDark"),
+                atlas.findRegion("slimemanDark2")
+        }, Animation.PlayMode.LOOP, .5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(6, 4, 3, 0, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.mysteryStrike(entity),
+                MoveConstructor.accursedSludge(entity),
+                MoveConstructor.regenerate(entity)
         })));
 
         return entity;
@@ -834,6 +1019,66 @@ public class EntityConstructor {
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.sludgeThrow(entity),
                 MoveConstructor.suppressAttack(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity toxicCanman(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Toxic Can Man"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("acidicCanMan"),
+                atlas.findRegion("acidicCanMan2")
+        }, Animation.PlayMode.LOOP, .5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 5, 1, 0, 3));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.sludgeThrow2(entity),
+                MoveConstructor.toxicThrow(entity),
+                MoveConstructor.suppressDefense(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity medicanMan(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Medican Man"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("healCanMan"),
+                atlas.findRegion("healCanMan2")
+        }, Animation.PlayMode.LOOP, .5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(2, 7, 1, 0, 3));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.suppressAttack(entity),
+                MoveConstructor.suppressDefense(entity),
+                MoveConstructor.medicalThrow(entity)
         })));
 
         return entity;

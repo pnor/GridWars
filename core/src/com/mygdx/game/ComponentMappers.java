@@ -37,5 +37,7 @@ public class ComponentMappers {
     public static ComponentMapper<StateComponent> state = ComponentMapper.getFor(StateComponent.class);
     //names
     public static ComponentMapper<NameComponent> nm = ComponentMapper.getFor(NameComponent.class);
+    //phase
+    public static ComponentMapper<PhaseComponent> phase = ComponentMapper.getFor(PhaseComponent.class);
 
 }

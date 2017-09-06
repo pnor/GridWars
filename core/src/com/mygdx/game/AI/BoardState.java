@@ -123,8 +123,16 @@ public class BoardState {
                         e.hp = MathUtils.clamp(e.hp - (MathUtils.clamp((int) (move.moveInfo().ampValue * effectedEntity.getModAtk()) - e.getModDef(), 0, 999)), 0, e.maxHp);
 
                     //status
+                    if (move.moveInfo().statusEffects != null && e.acceptsStatusEffects) {
+                        for (StatusEffectInfo status : move.moveInfo().statusEffects) {
+                            if (!e.statusEffectInfos.contains(status, false))
+                                e.statusEffectInfos.add(status);
+                        }
+                    }
+                    /*
                     if (move.moveInfo().statusEffects != null && e.acceptsStatusEffects)
                         e.statusEffectInfos.addAll(move.moveInfo().statusEffects);
+                        */
 
                     //misc
                     if (move.moveInfo().miscEffects != null)

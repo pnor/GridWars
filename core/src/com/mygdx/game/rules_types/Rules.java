@@ -2,6 +2,8 @@ package com.mygdx.game.rules_types;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.components.BoardComponent;
+import com.mygdx.game.misc.Phase;
 import com.mygdx.game.move_related.StatusEffect;
 import com.mygdx.game.screens_ui.screens.BattleScreen;
 
@@ -50,17 +52,29 @@ public abstract class Rules {
             turnCount = currentTeamTurn == 0 ? turnCount + 1 : turnCount;
         }
 
-        //toggle states
+        //toggle states + process PhaseComponent entities
         for (Team t : teams) {
-            for (Entity e : t.getEntities())
-            if (state.has(e)) {
-                state.get(e).canAttack = true; //TODO make it not redundant
-                if (status.get(e).statusEffects.containsKey("Freeze") || status.get(e).statusEffects.containsKey("Petrify"))
-                    state.get(e).canAttack = false;
-
-                state.get(e).canMove = true;
-                if (!screen.checkShading(e));
-                    screen.shadeBasedOnState(e);
+            for (Entity e : t.getEntities()) {
+                //toggle states
+                if (state.has(e)) {
+                    state.get(e).canAttack = true; //TODO make it not redundant
+                    if (status.get(e).statusEffects.containsKey("Freeze") || status.get(e).statusEffects.containsKey("Petrify"))
+                        state.get(e).canAttack = false;
+                    state.get(e).canMove = true;
+                    if (!screen.checkShading(e))
+                        screen.shadeBasedOnState(e);
+                }
+                //phase component
+                if (phase.has(e) && stm.get(e).alive) {
+                    for (Phase phase : phase.get(e).phases) {
+                        if (stm.get(e).hp <= phase.getHealthThreshold()) {
+                            BoardComponent.boards.getBoard().remove(am.get(e).actor, bm.get(e).pos.r, bm.get(e).pos.c);
+                            phase.applyPhase(e);
+                            BoardComponent.boards.getBoard().add(am.get(e).actor, bm.get(e).pos.r, bm.get(e).pos.c);
+                            break;
+                        }
+                    }
+                }
             }
         }
         //do affects and stats

@@ -67,6 +67,21 @@ public class MoveInfo {
      * @param pierce whether it pierces
      * @param amp how much the attack alters the base attack of the user. For example, a double damage attack would have an amp value
      *            of 2.
+     * @param statusEffectInformation status effect caused by this attack
+     * @param miscEffect the misc. effect caused by this attack
+     */
+    public MoveInfo(boolean pierce, float amp, StatusEffectInfo statusEffectInformation, MiscEffects miscEffect) {
+        pierces = pierce;
+        ampValue = amp;
+        statusEffects = new StatusEffectInfo[]{statusEffectInformation};
+        miscEffects = miscEffect;
+    }
+
+    /**
+     * Creates a {@link MoveInfo} object that represents a move with other misc. effects. and causes multiple status effects.
+     * @param pierce whether it pierces
+     * @param amp how much the attack alters the base attack of the user. For example, a double damage attack would have an amp value
+     *            of 2.
      * @param statusEffectInformation status effects caused by this attack
      * @param miscEffect the misc. effect caused by this attack
      */
