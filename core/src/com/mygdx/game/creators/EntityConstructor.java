@@ -880,7 +880,8 @@ public class EntityConstructor {
                 MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.slam(entity),
-                MoveConstructor.heavySlam(entity)
+                MoveConstructor.heavySlam(entity),
+                MoveConstructor.guard(entity)
         })));
         entity.add(new PhaseComponent(
                 new Phase(3, new AnimationActor(new TextureRegion[]{
@@ -899,7 +900,53 @@ public class EntityConstructor {
                         Animation.PlayMode.LOOP, 0.5f),
                         new StatComponent(10, 5, 1, 1, 1))
         ));
+        return entity;
+    }
 
+    public static Entity chromeMan(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Chrome Man"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("brightScaleman"),
+                atlas.findRegion("brightScaleman2")
+        }, Animation.PlayMode.LOOP, 0.5f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(10, 7, 1, 1, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimation(entity),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.reflectionBeam(entity),
+                MoveConstructor.refractionnBeam(entity),
+                MoveConstructor.recover(entity),
+                MoveConstructor.superGuard(entity)
+        })));
+        entity.add(new PhaseComponent(
+                new Phase(3, new AnimationActor(new TextureRegion[]{
+                        atlas.findRegion("brightScalemanHigh"),
+                        atlas.findRegion("brightScalemanHigh2")},
+                        Animation.PlayMode.LOOP, 0.1f),
+                        new StatComponent(10, 5, 3, 0, 3)),
+                new Phase(6, new AnimationActor(new TextureRegion[]{
+                        atlas.findRegion("brightScalemanMid"),
+                        atlas.findRegion("brightScalemanMid2")},
+                        Animation.PlayMode.LOOP, 0.2f),
+                        new StatComponent(10, 7, 2, 1, 2)),
+                new Phase(10, new AnimationActor(new TextureRegion[]{
+                        atlas.findRegion("brightScaleman"),
+                        atlas.findRegion("brightScaleman2")},
+                        Animation.PlayMode.LOOP, 0.5f),
+                        new StatComponent(10, 7, 1, 1, 1))
+        ));
         return entity;
     }
     //endregion

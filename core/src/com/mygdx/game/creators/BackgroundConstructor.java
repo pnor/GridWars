@@ -39,6 +39,15 @@ public class BackgroundConstructor {
             //region survival boards
             case 13:
             case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
                 return makeSurvivalBackChecker();
             //endregion
         }
