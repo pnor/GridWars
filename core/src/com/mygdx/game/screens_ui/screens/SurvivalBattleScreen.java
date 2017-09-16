@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -51,6 +52,7 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
 
     @Override
     public void showEndTurnDisplay() {
+        showingEndTurnMessageTable = true;
         //show next turn message
         if (rules.getCurrentTeamNumber() == 0)
             endTurnMessageLbl.setText(rules.getCurrentTeam().getTeamName() + " turn!");
@@ -69,6 +71,13 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
         sequence.addAction(Actions.fadeIn(.2f));
         sequence.addAction(Actions.delay(1f));
         sequence.addAction(Actions.fadeOut(.2f));
+        sequence.addAction(new Action() {
+            @Override
+            public boolean act(float delta) {
+                showingEndTurnMessageTable = false;
+                return false;
+            }
+        });
         endTurnMessageTable.addAction(sequence);
 
         //update entity appearance

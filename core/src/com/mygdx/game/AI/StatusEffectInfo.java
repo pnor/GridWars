@@ -9,6 +9,8 @@ import com.mygdx.game.move_related.StatusEffect;
  */
 public class StatusEffectInfo {
     public String name;
+    public int duration;
+    private int currentTurn;
     public StatusEffect.StatChanges statChanges;
     public TurnEffectInfo turnEffectInfo;
 
@@ -18,14 +20,15 @@ public class StatusEffectInfo {
      * @param statChange Amount stats are augmented by the status effect.
      * @param turnEffect effect that happens each turn. If null, the status effect has no turn effect.
      */
-    public StatusEffectInfo(String n, StatusEffect.StatChanges statChange, TurnEffectInfo turnEffect) {
+    public StatusEffectInfo(String n, int duration, StatusEffect.StatChanges statChange, TurnEffectInfo turnEffect) {
         name = n;
+        this.duration = duration;
         statChanges = statChange;
         turnEffectInfo = turnEffect;
     }
 
     public StatusEffectInfo copy() {
-        return new StatusEffectInfo(name, statChanges, turnEffectInfo); //TODO if this object accounts for status duration, then there is no need for a copy method
+        return new StatusEffectInfo(name, duration, statChanges, turnEffectInfo); //TODO if this object accounts for status duration, then there is no need for a copy method (?)
     }
 
     /**
@@ -35,6 +38,20 @@ public class StatusEffectInfo {
      */
     public boolean equals(Object o) {
         return o instanceof StatusEffectInfo && ((StatusEffectInfo) o).name.equals(name);
+    }
+
+    /**
+     * Increases currentTurn by 1
+     */
+    public void incrementTurn() {
+        currentTurn++;
+    }
+
+    /**
+     * @return Whether currentTurn is >= duration
+     */
+    public boolean checkDuration() {
+        return currentTurn >= duration;
     }
 
     /**

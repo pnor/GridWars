@@ -129,6 +129,14 @@ public class ComputerPlayer implements Runnable {
         return turns;
     }
 
+    /**
+     * Returns an Array of the best turns for a team of Entities. If an entity is dead, its turn will be null. Ties in heuristic values of turn is
+     * drawbreaked by using shallower depth levels.
+     * @param board {@link BoardState}
+     * @param team {@link Team} that the best turns is getting retrieved
+     * @param depth how many turns ahead it looks
+     * @return {@link Array} of {@link Turn}s
+     */
     public Array<Turn> getBestTurnsBestTurnAssumption(BoardState board, int team, int depth) {
         Array<Turn> turns = new Array<>();
         Array<Entity> entities = teams.get(team).getEntities();
@@ -272,7 +280,7 @@ public class ComputerPlayer implements Runnable {
      * @return {@link Array} of all possible moves for one Entity
      */
     private Array<Turn> getAllPossibleTurns(Entity e) {
-        if (status.get(e).statusEffects.containsKey("Petrify") || status.get(e).statusEffects.containsKey("Freeze")) //handle petrify/freeze
+        if (status.get(e).statusEffects.containsKey("Petrify") || status.get(e).statusEffects.containsKey("Freeze")) //handle petrify/freeze (non moving conditions)
             return new Array<Turn>(new Turn[]{new Turn(e, bm.get(e).pos.copy(), -1, 0)});
 
         Array<Turn> turns = new Array<>();
@@ -495,6 +503,10 @@ public class ComputerPlayer implements Runnable {
         forgetBestMoveChance = f;
     }
 
+    /**
+     *
+     * @return
+     */
     public Array<Turn> getDecidedTurns() {
         return decidedTurns;
     }

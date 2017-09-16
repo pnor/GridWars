@@ -165,8 +165,12 @@ public class BoardState {
         for (EntityValue e : entityValues) {
             if (e.team == team && e.statusEffectInfos != null && e.statusEffectInfos.size > 0)
                 for (StatusEffectInfo s : e.statusEffectInfos) {
-                    if (s.turnEffectInfo != null)
+                    if (s.turnEffectInfo != null) {
                         s.turnEffectInfo.doTurnEffect(e);
+                    }
+                    s.incrementTurn();
+                    if (s.checkDuration())
+                        e.statusEffectInfos.removeValue(s, true);
                 }
         }
     }

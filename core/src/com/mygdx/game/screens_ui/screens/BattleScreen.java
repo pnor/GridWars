@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -154,6 +155,7 @@ public class BattleScreen implements Screen {
     protected Table endTurnMessageTable;
     protected Label endTurnMessageLbl;
     protected Label turnCountLbl;
+    protected boolean showingEndTurnMessageTable;
     /** Pop up message that says the effects of a move. */
     protected Table helpTable;
     private Label moveDescriptionLbl;
@@ -188,8 +190,8 @@ public class BattleScreen implements Screen {
             movementWaitTime = .5f;
             attackWaitTime = 1f;
         } else { //fast
-            movementWaitTime = .1f;
-            attackWaitTime = .3f;
+            movementWaitTime = .25f;
+            attackWaitTime = .5f;
         }
     }
 
@@ -630,14 +632,15 @@ public class BattleScreen implements Screen {
             }
 
             //fade to black
-            if (changeScreenTimer >= 3)
+            if (changeScreenTimer >= 2)
                 doScreenTransitionAnimation();
 
             //go to results screen
-            if (changeScreenTimer >= 4)
+            if (changeScreenTimer >= 3)
                 goToNextScreen();
 
-            changeScreenTimer += delta;
+            if (Visuals.visualsArePlaying == 0)
+                changeScreenTimer += delta;
         }
 
         //debug
@@ -657,10 +660,28 @@ public class BattleScreen implements Screen {
             }
         }
         //debug: get values via key press
-        if (Gdx.input.isKeyJustPressed(Input.Keys.V))
+        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) //Visuals
             System.out.println("Visuals.visualsArePlaying = " + Visuals.visualsArePlaying);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F))
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) //Frames
             System.out.println("Frames per Second: " + Gdx.graphics.getFramesPerSecond());
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) { // Computer Control info
+            String contents = "";
+            for (Vector2 v : computerControlledTeamsIndex)
+                contents = contents.concat(", " + v.toString());
+
+            System.out.println("Computer Info: \nplayingComputerTurn = " + playingComputerTurn +
+                    "\ncomputerControlledTeamsIndeces = " + contents +
+                    "\ncurrentTeam = " + rules.getCurrentTeamNumber() +
+                    "\nCurrent Computer Controlled Entity = " + currentComputerControlledEntity);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) { // Turn Info
+            System.out.println("Turn Info: \n" +
+                    "Turn Count = " + rules.getTurnCount() +
+                    "\nTeam Number = " + rules.getCurrentTeamNumber());
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) { // Turn Info
+            System.out.println("ShowingEndTUrnMessage = " + showingEndTurnMessageTable);
+        }
 
     }
 
@@ -674,7 +695,8 @@ public class BattleScreen implements Screen {
         Entity currentEntity;
         Turn currentTurn =
                 (currentComputerControlledEntity < computer.getDecidedTurns().size)? computer.getDecidedTurns().get(currentComputerControlledEntity) : null;
-        timeAfterMove += delta;
+        if (!showingEndTurnMessageTable)
+            timeAfterMove += delta;
 
         if ((currentTurn == null && currentComputerControlledEntity < computer.getDecidedTurns().size) || (currentTurn != null && !stm.get(currentTurn.entity).alive)) { //entity is dead/skip turn
             currentComputerControlledEntity++;
@@ -684,12 +706,13 @@ public class BattleScreen implements Screen {
 
         //Playing out the Turn
         if (timeAfterMove >= movementWaitTime && turnPhase == 0) { //Move
-            try {
+            try { //debug
                 BoardComponent.boards.move(currentTurn.entity, currentTurn.pos);
             } catch (Exception e) {
                 System.out.println("\n \n --------------------------------" +
                         "\n Exception! : " + e + "  in BattleScreen 'Playing out the Turn'" +
                         "\n currentTurn = " + currentTurn +
+                        "\n currentEntity = " + currentComputerControlledEntity +
                         "\n board size = " + BoardComponent.boards.getBoard().getRowSize()
                 );
                 Gdx.app.exit();
@@ -722,7 +745,7 @@ public class BattleScreen implements Screen {
         //Next turn or end the turn
         if (turnPhase == 3) { //next turn
             timeAfterMove += delta;
-            if (timeAfterMove >= .75f) { //wait to end turn
+            if (timeAfterMove >= 1f && Visuals.visualsArePlaying == 0) { //wait to end turn and wait till visuals are done
                 timeAfterMove = 0;
                 turnPhase = 0;
                 currentComputerControlledEntity = 0;
@@ -807,6 +830,7 @@ public class BattleScreen implements Screen {
      */
     public void showEndTurnDisplay() {
         //show next turn message
+        showingEndTurnMessageTable = true;
         endTurnMessageLbl.setText(rules.getCurrentTeam().getTeamName() + " turn!");
         turnCountLbl.setText("Turn " + rules.getTurnCount());
         turnCountLbl.setColor(new Color(1,1,1,1).lerp(Color.ORANGE, (float) rules.getTurnCount() / 100f));
@@ -820,6 +844,13 @@ public class BattleScreen implements Screen {
         sequence.addAction(Actions.fadeIn(.2f));
         sequence.addAction(Actions.delay(1f));
         sequence.addAction(Actions.fadeOut(.2f));
+        sequence.addAction(new Action() {
+            @Override
+            public boolean act(float delta) {
+                showingEndTurnMessageTable = false;
+                return false;
+            }
+        });
         endTurnMessageTable.addAction(sequence);
 
         //update entity appearance

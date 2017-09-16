@@ -79,7 +79,7 @@ public class StatusEffect {
     }
 
     public StatusEffectInfo createStatusEffectInfo() {
-        return new StatusEffectInfo(name, statChanges, turnEffectInfo);
+        return new StatusEffectInfo(name, DURATION, statChanges, turnEffectInfo);
     }
 
     public void setStopsAnimation(boolean b) {
