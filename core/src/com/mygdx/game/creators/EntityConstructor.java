@@ -744,6 +744,7 @@ public class EntityConstructor {
         }, Animation.PlayMode.LOOP, 0.4f)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(20, 6, 3, 0, 2));
+        stm.get(entity).obscureStatInfo = true;
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -756,8 +757,40 @@ public class EntityConstructor {
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.fireSlash(entity),
                 MoveConstructor.chainFire(entity),
-                MoveConstructor.ignite(entity),
-                MoveConstructor.wildFire(entity)
+                MoveConstructor.flameCharge(entity),
+                MoveConstructor.blueFlame(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity aquaPneuma(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Aqua Pneuma"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("waterSpirit"),
+                atlas.findRegion("waterSpirit2")
+        }, Animation.PlayMode.LOOP, 0.9f)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(25, 9, 4, 1, 1));
+        stm.get(entity).obscureStatInfo = true;
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimationExplosive(entity, Color.RED),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.hammerStrike(entity),
+                MoveConstructor.chainFire(entity),
+                MoveConstructor.flameCharge(entity),
+                MoveConstructor.blueFlame(entity)
         })));
 
         return entity;
