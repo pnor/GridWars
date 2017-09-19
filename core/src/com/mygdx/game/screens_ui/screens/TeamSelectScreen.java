@@ -1,6 +1,7 @@
 package com.mygdx.game.screens_ui.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,6 +26,7 @@ import com.mygdx.game.screens_ui.LerpColor;
 
 import java.util.HashMap;
 
+import static com.mygdx.game.ComponentMappers.am;
 import static com.mygdx.game.GridWars.*;
 
 /**
@@ -33,14 +35,17 @@ import static com.mygdx.game.GridWars.*;
 public class TeamSelectScreen extends MenuScreen implements Screen {
     private Label titleLbl;
 
+    //team info table
     private Table teamCustomizeTable;
     private Label teamNameLbl, teamColorLbl;
     private TextField teamName, teamColor;
     private HashMap<String, Color> colorChoices;
 
+    //selected teams
     private Table selectedTeamsIconsTable;
     private Array<Image> teamImages;
 
+    //character buttons
     private Table characterBtnTable;
     /**
      * 0 : canight <p>
@@ -60,20 +65,23 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
      */
     private Array<ImageButton> characterBtns;
 
+    //character portraits
     private Table portraitTable;
     private Array<Image> characterPortraits;
 
+    //AI
     private Table AIControlTable;
     private Label AIDescription;
     private CheckBox AIEasyCheckBox;
     private CheckBox AINormalCheckBox;
     private CheckBox AIHardCheckBox;
     private ButtonGroup<CheckBox> AICheckBoxGroup;
-
-
+    
+    //menu control buttons
     private Table menuBtnTable;
     private HoverButton okBtn, backBtn, clearBtn, lastTeamBtn, nextBtn;
 
+    //game info
     private int maxTeams, curTeam, currentEntity;
     private final int MAX_ENTITY_PER_TEAM = 4;
     private boolean zones;
@@ -82,6 +90,10 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
      * x-coordinate of the vector is team index. y-coordinate is the difficulty. 1 is easy, 2 is normal, 3 is hard.
      */
     private Array<Vector2> AIControlledTeams = new Array<>();
+    
+    //misc
+    /** number representing alternate color choices for players */
+    private int altNumber;
 
     /**
      * Creates a team selection screen
@@ -194,87 +206,101 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
             if (currentEntity <= 3) {
                 if (actor != null) {
                     if (actor == characterBtns.get(0)) {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("Canight")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.canight(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.canight(curTeam, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(1)) {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("catdroid")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.catdroid(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.catdroid(curTeam, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(2)) {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("firebull")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.pyrobull(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.pyrobull(curTeam, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(3)) {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("icebird")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.freezird(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.freezird(curTeam, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(4)) {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("fish")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.medicarp(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.medicarp(curTeam, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(5)) {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("turtle")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.thoughtoise(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.thoughtoise(curTeam, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(6)) {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("fox")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.vulpedge(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.vulpedge(curTeam, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(7)) {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("thunderdog")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.thundog(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.thundog(curTeam, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(8)) {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mummy")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.mummy(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.mummy(curTeam, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(9)) {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("squid")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.squizerd(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.squizerd(curTeam, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(10)) {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("steamdragon")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.wyvrapor(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.wyvrapor(curTeam, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(11)) {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("jellygirl")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.jellymiss(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.jellymiss(curTeam, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(12)) {
-                        characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mirrorman")));
-                        teams.get(curTeam).getEntities().add(EntityConstructor.mirrorman(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.mirrorman(curTeam, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else { //random
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mystery")));
-                        //teams.get(curTeam).getEntities().add(EntityConstructor.AITester(curTeam));
+                        //teams.get(curTeam).getEntities().add(EntityConstructor.AITester(curTeam, altNumber));
                         int randomIndex = MathUtils.random(0, 12);
+                        int randomColor = (MathUtils.randomBoolean(.05f))? 1 : 0;
                         switch (randomIndex) {
                             case 0 :
-                                teams.get(curTeam).getEntities().add(EntityConstructor.canight(curTeam));
+                                teams.get(curTeam).getEntities().add(EntityConstructor.canight(curTeam, randomColor));
                                 break;
                             case 1 :
-                                teams.get(curTeam).getEntities().add(EntityConstructor.catdroid(curTeam));
+                                teams.get(curTeam).getEntities().add(EntityConstructor.catdroid(curTeam, randomColor));
                                 break;
                             case 2 :
-                                teams.get(curTeam).getEntities().add(EntityConstructor.pyrobull(curTeam));
+                                teams.get(curTeam).getEntities().add(EntityConstructor.pyrobull(curTeam, randomColor));
                                 break;
                             case 3 :
-                                teams.get(curTeam).getEntities().add(EntityConstructor.freezird(curTeam));
+                                teams.get(curTeam).getEntities().add(EntityConstructor.freezird(curTeam, randomColor));
                                 break;
                             case 4 :
-                                teams.get(curTeam).getEntities().add(EntityConstructor.medicarp(curTeam));
+                                teams.get(curTeam).getEntities().add(EntityConstructor.medicarp(curTeam, randomColor));
                                 break;
                             case 5 :
-                                teams.get(curTeam).getEntities().add(EntityConstructor.thoughtoise(curTeam));
+                                teams.get(curTeam).getEntities().add(EntityConstructor.thoughtoise(curTeam, randomColor));
                                 break;
                             case 6 :
-                                teams.get(curTeam).getEntities().add(EntityConstructor.vulpedge(curTeam));
+                                teams.get(curTeam).getEntities().add(EntityConstructor.vulpedge(curTeam, randomColor));
                                 break;
                             case 7 :
-                                teams.get(curTeam).getEntities().add(EntityConstructor.thundog(curTeam));
+                                teams.get(curTeam).getEntities().add(EntityConstructor.thundog(curTeam, randomColor));
                                 break;
                             case 8 :
-                                teams.get(curTeam).getEntities().add(EntityConstructor.mummy(curTeam));
+                                teams.get(curTeam).getEntities().add(EntityConstructor.mummy(curTeam, randomColor));
                                 break;
                             case 9 :
-                                teams.get(curTeam).getEntities().add(EntityConstructor.squizerd(curTeam));
+                                teams.get(curTeam).getEntities().add(EntityConstructor.squizerd(curTeam, randomColor));
                                 break;
                             case 10 :
-                                teams.get(curTeam).getEntities().add(EntityConstructor.wyvrapor(curTeam));
+                                teams.get(curTeam).getEntities().add(EntityConstructor.wyvrapor(curTeam, randomColor));
                                 break;
                             case 11 :
-                                teams.get(curTeam).getEntities().add(EntityConstructor.jellymiss(curTeam));
+                                teams.get(curTeam).getEntities().add(EntityConstructor.jellymiss(curTeam, randomColor));
                                 break;
                             case 12 :
-                                teams.get(curTeam).getEntities().add(EntityConstructor.mirrorman(curTeam));
+                                teams.get(curTeam).getEntities().add(EntityConstructor.mirrorman(curTeam, randomColor));
                                 break;
                         }
                     }
@@ -601,6 +627,12 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     @Override
     public void render(float dt) {
         super.render(dt);
+        
+        //alternate color number
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1))
+            altNumber = 1;
+        else
+            altNumber = 0;
 
         //LerpColors TODO make it work !
         if (teamColor.getColor() instanceof LerpColor)

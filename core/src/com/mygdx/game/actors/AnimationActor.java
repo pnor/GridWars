@@ -84,6 +84,14 @@ public class AnimationActor extends UIActor {
         return shadeColor;
     }
 
+    /**
+     * @return New {@link Sprite} representing the animation at time 0 seconds.
+     */
+    @Override
+    public Sprite getSprite() {
+        return new Sprite(animation.getKeyFrame(0));
+    }
+
     public Sprite getCurrentFrame() {
         return currentFrame;
     }

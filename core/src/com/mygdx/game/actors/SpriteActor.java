@@ -106,6 +106,9 @@ public class SpriteActor extends UIActor{
         }
     }
 
+    /**
+     * @return the sprite. Note that it's NOT a copy!
+     */
     public Sprite getSprite() {
         return sprite;
     }

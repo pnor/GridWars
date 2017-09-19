@@ -6581,19 +6581,6 @@ public class MoveConstructor {
             }
         }, .01f, 8);
 
-        VisualEvent returnToNormalGradual = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
-
-                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
-                    return;
-
-                Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
-                am.get(enemy).actor.shade(am.get(enemy).actor.getColor().lerp(BattleScreen.getShadeColorBasedOnState(user), .1f));
-            }
-        }, .05f, 8);
-
         VisualEvent changeToBlack = new VisualEvent(new VisualEffect() {
             private float progress;
             @Override
@@ -7017,12 +7004,176 @@ public class MoveConstructor {
                         if (stm.has(enemy))
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
 
+                        if (status.has(enemy))
+                            status.get(enemy).addStatusEffect(defenseless2(), enemy);
+
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{explode, bam, sparkle})), new MoveInfo(false, 1));
+                new Array<VisualEvent>(new VisualEvent[]{explode, bam, sparkle})), new MoveInfo(false, 1, defenseless2().createStatusEffectInfo()));
     }
+
+    public static Move gather(Entity user) {
+        VisualEvent waterBall = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(130 * scale, 130 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity waterBall = new Entity();
+                waterBall.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 0));
+                waterBall.add(new LifetimeComponent(0, 2f));
+                Sprite water = new Sprite(atlas.findRegion("water"));
+                water.setOriginCenter();
+                water.setColor(1, 1, 1, 0);
+                waterBall.add(new SpriteComponent(water));
+                waterBall.add(new EventComponent(.1f, true, EventCompUtil.fadeInThenOut(5, 10, 5)));
+
+                engine.addEntity(waterBall);
+            }
+        }, .2f, 1);
+
+        VisualEvent particles = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(25 * scale, 25 * scale);
+                //Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
+                Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
+
+                Entity glow = new Entity();
+
+                glow.add(new PositionComponent(tileCenter.cpy().add((float) (Math.random() * 150) - 75, (float) (Math.random() * 150) - 75),
+                        entitySize.x, entitySize.y, 0));
+
+                float directionTowardsCenter = MathUtils.radiansToDegrees * MathUtils.atan2(
+                        tileCenter.y - (pm.get(glow).getCenter().y),
+                        tileCenter.x - (pm.get(glow).getCenter().x));
+                Vector2 movementToCenter = new Vector2(30 * scale, 0);
+                movementToCenter.setAngle(directionTowardsCenter);
+                glow.add(new MovementComponent(movementToCenter));
+
+                glow.add(new LifetimeComponent(0, .3f));
+
+                Sprite glowSprite = (MathUtils.randomBoolean())? atlas.createSprite("diamonds") : atlas.createSprite("openDiamonds");
+                glowSprite.setColor(new Color(.3f, .8f, 1, 0));
+                glow.add(new SpriteComponent(glowSprite));
+
+                glow.add(new EventComponent(.05f, true, (entity, engine) -> {
+                    mm.get(entity).movement.scl(1.3f);
+                    sm.get(entity).sprite.setColor(sm.get(entity).sprite.getColor().lerp(.3f, .4f, 1, 1, .1f));
+                }));
+
+                engine.addEntity(glow);
+            }
+
+        }, .04f, 35);
+
+        VisualEvent innerBubble = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(20 * scale, 20 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity sparkle = new Entity();
+                sparkle.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-30 * scale, 30 * scale), MathUtils.random(-30 * scale, 30 * scale)),
+                        entitySize.x, entitySize.y, 0));
+                sparkle.add(new MovementComponent(new Vector2(0, 30 * scale)));
+                sparkle.add(new LifetimeComponent(0, .5f));
+                Sprite sprite = new Sprite(atlas.findRegion("bubble"));
+                sprite.setOriginCenter();
+                sprite.setColor(Color.BLUE);
+                sparkle.add(new SpriteComponent(sprite));
+                sparkle.add(new EventComponent(.025f, true, EventCompUtil.fadeOut(20)));
+
+                engine.addEntity(sparkle);
+            }
+        }, .25f, 5);
+
+
+        VisualEvent returnToNormalGradual = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+
+                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                    return;
+
+                Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
+                am.get(enemy).actor.shade(am.get(enemy).actor.getColor().lerp(BattleScreen.getShadeColorBasedOnState(user), .1f));
+            }
+        }, .05f, 8);
+
+        VisualEvent changeToBlack = new VisualEvent(new VisualEffect() {
+            private float progress;
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+
+                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                    return;
+                progress = MathUtils.clamp(progress + .1f, 0, 1);
+
+                Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
+                if (enemy != null)
+                    am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress));
+            }
+        }, .05f, 10);
+
+        VisualEvent returnToNormal = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+
+                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                    return;
+
+                Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
+                am.get(enemy).actor.shade(BattleScreen.getShadeColorBasedOnState(enemy));
+            }
+        }, .05f, 1);
+
+        return new Move("Gather", nm.get(user).name + " began gathering water molecules!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        if (status.has(e)) {
+                            status.get(e).addStatusEffect(regenerationPlus(), e);
+                            status.get(e).addStatusEffect(guardUpAmp(), e);
+                        }
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{
+                        changeToBlack, waterBall, particles, innerBubble, returnToNormalGradual, returnToNormal
+                })),
+                new MoveInfo(false, 0, regenerationPlus().createStatusEffectInfo(), guardUpAmp().createStatusEffectInfo()));
+    }
+
 
     //lions
     public static Move stoneGlare(Entity user) {

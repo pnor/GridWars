@@ -53,7 +53,7 @@ public class EntityConstructor {
     }
 
     //region Testing purposes
-    public static Entity testerChessPiece(int team) {
+    public static Entity testerChessPiece(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -74,7 +74,7 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity testerRobot(int team) {
+    public static Entity testerRobot(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -101,7 +101,7 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity testerPlaceHolder(int team) {
+    public static Entity testerPlaceHolder(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -130,7 +130,7 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity AITester(int team) {
+    public static Entity AITester(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -159,7 +159,7 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity testerHole(int team) {
+    public static Entity testerHole(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
@@ -327,16 +327,23 @@ public class EntityConstructor {
 
     //Game Piece Entity ------------
     //region player entities
-    public static Entity canight(int team) {
+    public static Entity canight(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Canight"));
 
-        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("Canight"),
-                atlas.findRegion("Canight2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("Canight"),
+                    atlas.findRegion("Canight2")
+            }, Animation.PlayMode.LOOP, 0.5f)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("CanightAlt"),
+                    atlas.findRegion("Canight2Alt")
+            }, Animation.PlayMode.LOOP, 0.5f)));
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(2, 4, 2, 0, 3));
         entity.add(new StatusEffectComponent());
@@ -357,16 +364,23 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity catdroid(int team) {
+    public static Entity catdroid(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Catdroid"));
 
-        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("catdroid"),
-                atlas.findRegion("catdroid2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("catdroid"),
+                    atlas.findRegion("catdroid2")
+            }, Animation.PlayMode.LOOP, 0.5f)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("catdroidAlt"),
+                    atlas.findRegion("catdroid2Alt")
+            }, Animation.PlayMode.LOOP, 0.5f)));
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 5, 2, 2, 2));
         entity.add(new StatusEffectComponent());
@@ -388,16 +402,23 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity pyrobull(int team) {
+    public static Entity pyrobull(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Pyrobull"));
 
-        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("firebull"),
-                atlas.findRegion("firebull2")
-        }, Animation.PlayMode.LOOP, 0.2f)));
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("firebull"),
+                    atlas.findRegion("firebull2")
+            }, Animation.PlayMode.LOOP, 0.2f)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("firebullAlt"),
+                    atlas.findRegion("firebull2Alt")
+            }, Animation.PlayMode.LOOP, 0.2f)));
+       
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 4, 5, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -418,16 +439,23 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity freezird(int team) {
+    public static Entity freezird(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Freezird"));
 
-        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("icebird"),
-                atlas.findRegion("icebird2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("icebird"),
+                    atlas.findRegion("icebird2")
+            }, Animation.PlayMode.LOOP, 0.5f)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("icebirdAlt"),
+                    atlas.findRegion("icebird2Alt")
+            }, Animation.PlayMode.LOOP, 0.5f)));
+
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 5, 2, 0, 3));
         entity.add(new StatusEffectComponent());
@@ -449,16 +477,23 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity medicarp(int team) {
+    public static Entity medicarp(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Medicarp"));
 
-        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("fish"),
-                atlas.findRegion("fish2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("fish"),
+                    atlas.findRegion("fish2")
+            }, Animation.PlayMode.LOOP, 0.5f)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("fishAlt"),
+                    atlas.findRegion("fish2Alt")
+            }, Animation.PlayMode.LOOP, 0.5f)));
+
         entity.add(new BoardComponent());
         entity.add(new StatComponent(8, 4, 1, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -480,16 +515,23 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity thoughtoise(int team) {
+    public static Entity thoughtoise(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Thoughtoise"));
 
-        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("turtle"),
-                atlas.findRegion("turtle2")
-        }, Animation.PlayMode.LOOP, 0.7f)));
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("turtle"),
+                    atlas.findRegion("turtle2")
+            }, Animation.PlayMode.LOOP, 0.7f)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("turtleAlt"),
+                    atlas.findRegion("turtle2Alt")
+            }, Animation.PlayMode.LOOP, 0.7f)));
+
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 8, 3, 2, 1));
         entity.add(new StatusEffectComponent());
@@ -511,16 +553,23 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity vulpedge(int team) {
+    public static Entity vulpedge(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Vulpedge"));
 
-        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("fox"),
-                atlas.findRegion("fox2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("fox"),
+                    atlas.findRegion("fox2")
+            }, Animation.PlayMode.LOOP, 0.5f)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("foxAlt"),
+                    atlas.findRegion("fox2Alt")
+            }, Animation.PlayMode.LOOP, 0.5f)));
+
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 3, 2, 1, 2));
         entity.add(new StatusEffectComponent());
@@ -542,16 +591,23 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity thundog(int team) {
+    public static Entity thundog(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Thundog"));
 
-        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("thunderdog"),
-                atlas.findRegion("thunderdog2")
-        }, Animation.PlayMode.LOOP, 0.2f)));
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("thunderdog"),
+                    atlas.findRegion("thunderdog2")
+            }, Animation.PlayMode.LOOP, 0.2f)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("thunderdogAlt"),
+                    atlas.findRegion("thunderdog2Alt")
+            }, Animation.PlayMode.LOOP, 0.2f)));
+
         entity.add(new BoardComponent());
         entity.add(new StatComponent(7, 5, 1, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -573,16 +629,23 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity mummy(int team) {
+    public static Entity mummy(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Mummy"));
 
-        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("mummy"),
-                atlas.findRegion("mummy2")
-        }, Animation.PlayMode.LOOP, 0.3f)));
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("mummy"),
+                    atlas.findRegion("mummy2")
+            }, Animation.PlayMode.LOOP, 0.3f)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("mummyAlt"),
+                    atlas.findRegion("mummy2Alt")
+            }, Animation.PlayMode.LOOP, 0.3f)));
+
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 5, 2, 1, 2));
         entity.add(new StatusEffectComponent());
@@ -604,16 +667,23 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity squizerd(int team) {
+    public static Entity squizerd(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Squizerd"));
 
-        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("squid"),
-                atlas.findRegion("squid2")
-        }, Animation.PlayMode.LOOP, 0.7f)));
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("squid"),
+                    atlas.findRegion("squid2")
+            }, Animation.PlayMode.LOOP, 0.7f)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("squidAlt"),
+                    atlas.findRegion("squid2Alt")
+            }, Animation.PlayMode.LOOP, 0.7f)));
+
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 9, 3, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -635,16 +705,23 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity wyvrapor(int team) {
+    public static Entity wyvrapor(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Wyvrapor"));
 
-        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("steamdragon"),
-                atlas.findRegion("steamdragon2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("steamdragon"),
+                    atlas.findRegion("steamdragon2")
+            }, Animation.PlayMode.LOOP, 0.5f)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("steamdragonAlt"),
+                    atlas.findRegion("steamdragon2Alt")
+            }, Animation.PlayMode.LOOP, 0.5f)));
+
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 6, 1, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -666,16 +743,23 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity jellymiss(int team) {
+    public static Entity jellymiss(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Jellymiss"));
 
-        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("jellygirl"),
-                atlas.findRegion("jellygirl2")
-        }, Animation.PlayMode.LOOP, 0.7f)));
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("jellygirl"),
+                    atlas.findRegion("jellygirl2")
+            }, Animation.PlayMode.LOOP, 0.7f)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("jellygirlAlt"),
+                    atlas.findRegion("jellygirl2Alt")
+            }, Animation.PlayMode.LOOP, 0.7f)));
+
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 10, 1, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -697,16 +781,23 @@ public class EntityConstructor {
         return entity;
     }
 
-    public static Entity mirrorman(int team) {
+    public static Entity mirrorman(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Mirror Man"));
 
-        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
-                atlas.findRegion("mirrorman"),
-                atlas.findRegion("mirrorman2")
-        }, Animation.PlayMode.LOOP, 0.3f)));
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("mirrorman"),
+                    atlas.findRegion("mirrorman2")
+            }, Animation.PlayMode.LOOP, 0.3f)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("mirrormanAlt"),
+                    atlas.findRegion("mirrorman2Alt")
+            }, Animation.PlayMode.LOOP, 0.3f)));
+
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 12, 1, 1, 2));
         entity.add(new StatusEffectComponent());
@@ -744,7 +835,6 @@ public class EntityConstructor {
         }, Animation.PlayMode.LOOP, 0.4f)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(20, 6, 3, 0, 2));
-        stm.get(entity).obscureStatInfo = true;
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -773,10 +863,9 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("waterSpirit"),
                 atlas.findRegion("waterSpirit2")
-        }, Animation.PlayMode.LOOP, 0.9f)));
+        }, Animation.PlayMode.LOOP, 0.5f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(25, 9, 4, 1, 1));
-        stm.get(entity).obscureStatInfo = true;
+        entity.add(new StatComponent(25, 5, 4, 1, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -788,9 +877,9 @@ public class EntityConstructor {
                 MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.hammerStrike(entity),
-                MoveConstructor.chainFire(entity),
-                MoveConstructor.flameCharge(entity),
-                MoveConstructor.blueFlame(entity)
+                MoveConstructor.drench(entity),
+                MoveConstructor.gather(entity),
+                MoveConstructor.superGuard(entity)
         })));
 
         return entity;

@@ -2,6 +2,7 @@ package com.mygdx.game.actors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -72,6 +73,11 @@ public abstract class UIActor extends Actor {
 
     public abstract void shade(Color tint);
     public abstract Color getColor();
+    /**
+     * @return Copy of this actor's sprite.
+     */
+    public abstract Sprite getSprite();
+
     @Override
     public abstract void draw(Batch batch, float parentAlpha);
 }

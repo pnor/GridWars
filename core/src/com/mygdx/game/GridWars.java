@@ -54,7 +54,7 @@ public class GridWars extends Game {
 		//debug
 		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
 			setScreen(new TitleScreen(this));
-		if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
+		if (Gdx.input.isKeyJustPressed(Input.Keys.TAB))
 			DEBUG_halfSpeed = !DEBUG_halfSpeed;
 	}
 

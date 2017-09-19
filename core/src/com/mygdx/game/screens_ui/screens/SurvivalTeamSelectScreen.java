@@ -1,6 +1,7 @@
 package com.mygdx.game.screens_ui.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -25,6 +25,7 @@ import com.mygdx.game.screens_ui.LerpColor;
 
 import java.util.HashMap;
 
+import static com.mygdx.game.ComponentMappers.am;
 import static com.mygdx.game.GridWars.*;
 
 /**
@@ -33,11 +34,13 @@ import static com.mygdx.game.GridWars.*;
 public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
     private Label titleLbl;
 
+    //team info
     private Table teamCustomizeTable;
     private Label teamNameLbl, teamColorLbl;
     private TextField teamName, teamColor;
     private HashMap<String, Color> colorChoices;
 
+    //character buttons
     private Table characterBtnTable;
     /**
      * 0 : canight <p>
@@ -57,19 +60,22 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
      */
     private Array<ImageButton> characterBtns;
 
+    //character portraits
     private Table portraitTable;
     private Array<Image> characterPortraits;
     
+    //menu control buttons
     private Table menuBtnTable;
     private HoverButton okBtn, backBtn, clearBtn;
 
+    //team info
     private int currentEntity;
     private final int MAX_ENTITY_PER_TEAM = 4;
     private Team team;
-    /**
-     * x-coordinate of the vector is team index. y-coordinate is the difficulty. 1 is easy, 2 is normal, 3 is hard.
-     */
-    private Array<Vector2> AIControlledTeams = new Array<>();
+
+    //misc
+    /** number representing alternate color choices for players */
+    private int altNumber;
 
     /**
      * Creates a team selection screen for a survival mode. Only one team is selectable
@@ -143,87 +149,101 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
                 if (currentEntity <= 3) {
                     if (actor != null) {
                         if (actor == characterBtns.get(0)) {
-                            characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("Canight")));
-                            team.getEntities().add(EntityConstructor.canight(0));
+                            team.getEntities().add(EntityConstructor.canight(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(1)) {
-                            characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("catdroid")));
-                            team.getEntities().add(EntityConstructor.catdroid(0));
+                            team.getEntities().add(EntityConstructor.catdroid(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(2)) {
-                            characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("firebull")));
-                            team.getEntities().add(EntityConstructor.pyrobull(0));
+                            team.getEntities().add(EntityConstructor.pyrobull(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(3)) {
-                            characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("icebird")));
-                            team.getEntities().add(EntityConstructor.freezird(0));
+                            team.getEntities().add(EntityConstructor.freezird(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(4)) {
-                            characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("fish")));
-                            team.getEntities().add(EntityConstructor.medicarp(0));
+                            team.getEntities().add(EntityConstructor.medicarp(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(5)) {
-                            characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("turtle")));
-                            team.getEntities().add(EntityConstructor.thoughtoise(0));
+                            team.getEntities().add(EntityConstructor.thoughtoise(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(6)) {
-                            characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("fox")));
-                            team.getEntities().add(EntityConstructor.vulpedge(0));
+                            team.getEntities().add(EntityConstructor.vulpedge(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(7)) {
-                            characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("thunderdog")));
-                            team.getEntities().add(EntityConstructor.thundog(0));
+                            team.getEntities().add(EntityConstructor.thundog(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(8)) {
-                            characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mummy")));
-                            team.getEntities().add(EntityConstructor.mummy(0));
+                            team.getEntities().add(EntityConstructor.mummy(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(9)) {
-                            characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("squid")));
-                            team.getEntities().add(EntityConstructor.squizerd(0));
+                            team.getEntities().add(EntityConstructor.squizerd(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(10)) {
-                            characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("steamdragon")));
-                            team.getEntities().add(EntityConstructor.wyvrapor(0));
+                            team.getEntities().add(EntityConstructor.wyvrapor(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(11)) {
-                            characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("jellygirl")));
-                            team.getEntities().add(EntityConstructor.jellymiss(0));
+                            team.getEntities().add(EntityConstructor.jellymiss(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(12)) {
-                            characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mirrorman")));
-                            team.getEntities().add(EntityConstructor.mirrorman(0));
+                            team.getEntities().add(EntityConstructor.mirrorman(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else { //random
                             characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mystery")));
                             //team.getEntities().add(EntityConstructor.AITester(0));
                             int randomIndex = MathUtils.random(0, 12);
+                            int randomColor = (MathUtils.randomBoolean(.05f))? 1 : 0;
                             switch (randomIndex) {
                                 case 0 :
-                                    team.getEntities().add(EntityConstructor.canight(0));
+                                    team.getEntities().add(EntityConstructor.canight(0, randomColor));
                                     break;
                                 case 1 :
-                                    team.getEntities().add(EntityConstructor.catdroid(0));
+                                    team.getEntities().add(EntityConstructor.catdroid(0, randomColor));
                                     break;
                                 case 2 :
-                                    team.getEntities().add(EntityConstructor.pyrobull(0));
+                                    team.getEntities().add(EntityConstructor.pyrobull(0, randomColor));
                                     break;
                                 case 3 :
-                                    team.getEntities().add(EntityConstructor.freezird(0));
+                                    team.getEntities().add(EntityConstructor.freezird(0, randomColor));
                                     break;
                                 case 4 :
-                                    team.getEntities().add(EntityConstructor.medicarp(0));
+                                    team.getEntities().add(EntityConstructor.medicarp(0, randomColor));
                                     break;
                                 case 5 :
-                                    team.getEntities().add(EntityConstructor.thoughtoise(0));
+                                    team.getEntities().add(EntityConstructor.thoughtoise(0, randomColor));
                                     break;
                                 case 6 :
-                                    team.getEntities().add(EntityConstructor.vulpedge(0));
+                                    team.getEntities().add(EntityConstructor.vulpedge(0, randomColor));
                                     break;
                                 case 7 :
-                                    team.getEntities().add(EntityConstructor.thundog(0));
+                                    team.getEntities().add(EntityConstructor.thundog(0, randomColor));
                                     break;
                                 case 8 :
-                                    team.getEntities().add(EntityConstructor.mummy(0));
+                                    team.getEntities().add(EntityConstructor.mummy(0, randomColor));
                                     break;
                                 case 9 :
-                                    team.getEntities().add(EntityConstructor.squizerd(0));
+                                    team.getEntities().add(EntityConstructor.squizerd(0, randomColor));
                                     break;
                                 case 10 :
-                                    team.getEntities().add(EntityConstructor.wyvrapor(0));
+                                    team.getEntities().add(EntityConstructor.wyvrapor(0, randomColor));
                                     break;
                                 case 11 :
-                                    team.getEntities().add(EntityConstructor.jellymiss(0));
+                                    team.getEntities().add(EntityConstructor.jellymiss(0, randomColor));
                                     break;
                                 case 12 :
-                                    team.getEntities().add(EntityConstructor.mirrorman(0));
+                                    team.getEntities().add(EntityConstructor.mirrorman(0, randomColor));
                                     break;
                             }
                         }
@@ -450,6 +470,12 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
     @Override
     public void render(float dt) {
         super.render(dt);
+
+        //alternate color number
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1))
+            altNumber = 1;
+        else
+            altNumber = 0;
 
         //LerpColors TODO make it work !
         if (teamColor.getColor() instanceof LerpColor)
