@@ -296,7 +296,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
         entity.add(new StatComponent(7, 0, 0, 2, 0));
-        entity.add(new ActorComponent(new SpriteActor(atlas.findRegion("gargoyleStatue"))));
+        entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("gargoyleStatue"), true, true)));
         entity.add(new NameComponent("Gargoyle Statue"));
 
         entity.add(new VisualsComponent(
@@ -865,7 +865,7 @@ public class EntityConstructor {
                 atlas.findRegion("waterSpirit2")
         }, Animation.PlayMode.LOOP, 0.5f)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(25, 5, 4, 1, 1));
+        entity.add(new StatComponent(25, 7, 4, 1, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -873,13 +873,13 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 MoveConstructor.damageAnimation(entity),
                 MoveConstructor.heavyDamageAnimation(entity),
-                MoveConstructor.deathAnimationExplosive(entity, Color.RED),
+                MoveConstructor.deathAnimationExplosive(entity, Color.BLUE),
                 MoveConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.hammerStrike(entity),
-                MoveConstructor.drench(entity),
                 MoveConstructor.gather(entity),
-                MoveConstructor.superGuard(entity)
+                MoveConstructor.strengthen(entity),
+                MoveConstructor.KOStrike(entity)
         })));
 
         return entity;
@@ -1751,5 +1751,52 @@ public class EntityConstructor {
     //endregion
 
     //region other
+    public static Entity powerTower(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Power Tower"));
+
+        entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("lightTower"), true, true)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(6, 2, 0, 0, 0));
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimationExplosive(entity, Color.WHITE),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.powerWave(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity weakenTower(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Weaken Tower"));
+
+        entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("darkTower"), true, true)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(6, 2, 0, 0, 0));
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                MoveConstructor.damageAnimation(entity),
+                MoveConstructor.heavyDamageAnimation(entity),
+                MoveConstructor.deathAnimationExplosive(entity, Color.WHITE),
+                MoveConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.weakenWave(entity)
+        })));
+
+        return entity;
+    }
     //endregion
 }

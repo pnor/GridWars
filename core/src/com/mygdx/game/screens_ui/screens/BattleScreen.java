@@ -1140,8 +1140,10 @@ public class BattleScreen implements Screen {
                 }
                 statusLbl.reset();
                 statusLbl.setText(statusEffects.toString());
-            } else
+            } else if (status.has(selectedEntity))
                 statusLbl.setText("Healthy");
+            else
+                statusLbl.setText("---");
         } else {
             hpLbl.setText("-- / --");
             spLbl.setText("-- / --");

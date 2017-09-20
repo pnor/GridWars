@@ -149,6 +149,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
                 if (currentEntity <= 3) {
                     if (actor != null) {
                         if (actor == characterBtns.get(0)) {
+                            //team.getEntities().add(EntityConstructor.canight(0, altNumber));
                             team.getEntities().add(EntityConstructor.canight(0, altNumber));
                             characterPortraits.get(currentEntity).setDrawable(
                                     new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));

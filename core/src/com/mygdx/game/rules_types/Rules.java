@@ -58,7 +58,7 @@ public abstract class Rules {
                 //toggle states
                 if (state.has(e)) {
                     state.get(e).canAttack = true; //TODO make it not redundant
-                    if (status.get(e).statusEffects.containsKey("Freeze") || status.get(e).statusEffects.containsKey("Petrify"))
+                    if (status.has(e) && (status.get(e).statusEffects.containsKey("Freeze") || status.get(e).statusEffects.containsKey("Petrify")))
                         state.get(e).canAttack = false;
                     state.get(e).canMove = true;
                     if (!screen.checkShading(e))

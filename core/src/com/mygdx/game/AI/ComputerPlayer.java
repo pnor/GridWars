@@ -280,7 +280,7 @@ public class ComputerPlayer implements Runnable {
      * @return {@link Array} of all possible moves for one Entity
      */
     private Array<Turn> getAllPossibleTurns(Entity e) {
-        if (status.get(e).statusEffects.containsKey("Petrify") || status.get(e).statusEffects.containsKey("Freeze")) //handle petrify/freeze (non moving conditions)
+        if (status.has(e) && (status.get(e).statusEffects.containsKey("Petrify") || status.get(e).statusEffects.containsKey("Freeze"))) //handle petrify/freeze (non moving conditions)
             return new Array<Turn>(new Turn[]{new Turn(e, bm.get(e).pos.copy(), -1, 0)});
 
         Array<Turn> turns = new Array<>();
@@ -307,9 +307,10 @@ public class ComputerPlayer implements Runnable {
      */
     private Array<Turn> getAllPossibleTurns(Entity e, EntityValue ev, BoardState boardState) {
         boolean hasNonMovingStatus = false;
-        for (StatusEffectInfo s : ev.statusEffectInfos)
-            if (s.name.equals("Petrify") || s.name.equals("Freeze"))
-                hasNonMovingStatus = true;
+        if (ev.acceptsStatusEffects)
+            for (StatusEffectInfo s : ev.statusEffectInfos)
+                if (s.name.equals("Petrify") || s.name.equals("Freeze"))
+                    hasNonMovingStatus = true;
 
         if (hasNonMovingStatus) //handle petrify/freeze
             return new Array<Turn>(new Turn[]{new Turn(e, bm.get(e).pos.copy(), -1, 0)});
