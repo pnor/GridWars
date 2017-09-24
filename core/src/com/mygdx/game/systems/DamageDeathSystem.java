@@ -30,7 +30,7 @@ public class DamageDeathSystem extends IteratingSystem {
                 if (vm.get(e).deathAnimation.getTimer().checkIfFinished()) {
                     //Compensate for unfinished damage animations
                     if ((vm.get(e).damageAnimation != null && vm.get(e).damageAnimation.getIsPlaying()) || (vm.get(e).heavyDamageAnimation != null && vm.get(e).heavyDamageAnimation.getIsPlaying()))
-                    Visuals.visualsArePlaying -= 1;
+                        Visuals.visualsArePlaying -= 1;
                     stm.get(e).readyToRemoveFromGame = true;
                 }
 

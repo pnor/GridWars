@@ -126,4 +126,11 @@ public class LerpColor extends Color {
         return endColor;
     }
 
+    /**
+     * @return Color in the middle of the start and end colors
+     */
+    public Color getMiddleColor() {
+        return new Color((startColor.r + endColor.r) / 2f, (startColor.g + endColor.g) / 2f, (startColor.b + endColor.b) / 2f, (startColor.a + endColor.a) / 2f);
+    }
+
 }

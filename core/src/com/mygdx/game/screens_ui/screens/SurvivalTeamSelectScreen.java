@@ -150,7 +150,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
                     if (actor != null) {
                         if (actor == characterBtns.get(0)) {
                             //team.getEntities().add(EntityConstructor.canight(0, altNumber));
-                            team.getEntities().add(EntityConstructor.canight(0, altNumber));
+                            team.getEntities().add(EntityConstructor.dragonPneuma(0));
                             characterPortraits.get(currentEntity).setDrawable(
                                     new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(1)) {
@@ -272,8 +272,13 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
                     return;
                 Color color = getColorFromChoices(input);
                 if (color != null) {
-                    textField.setColor(color);
-                    team.setTeamColor(color);
+                    if (color instanceof LerpColor) {
+                        textField.setColor(((LerpColor) color).getMiddleColor());
+                        team.setTeamColor(color);
+                    } else {
+                        textField.setColor(color);
+                        team.setTeamColor(color);
+                    }
                 } else { //random color
                     team.setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
                     textField.setColor(Color.WHITE);

@@ -11,18 +11,21 @@ import static com.mygdx.game.ComponentMappers.stm;
  * Contains stat and visual information (as {@link StatComponent}s and {@link UIActor}s for each phase. Used in {@link com.mygdx.game.components.PhaseComponent}.
  */
 public class Phase implements Comparable {
-    private int healthThreshold; //if lower than this amount, go into phase
+    private int upperHealthThreshold;
+    private int lowerHealthThreshold;
     private UIActor actor;
     private StatComponent stat;
 
     /**
      * Creates a phase to be used in PhaseComponent
-     * @param threshold health threshold
+     * @param upperBounds upper health threshold
+     * @param lowerBounds lower health threshold
      * @param newActor new Actor
      * @param newStats new Stat Component
      */
-    public Phase(int threshold, UIActor newActor, StatComponent newStats) {
-        healthThreshold = threshold;
+    public Phase(int upperBounds, int lowerBounds, UIActor newActor, StatComponent newStats) {
+        upperHealthThreshold = upperBounds;
+        lowerHealthThreshold = lowerBounds;
         actor = newActor;
         stat = newStats;
     }
@@ -41,15 +44,23 @@ public class Phase implements Comparable {
         am.get(e).actor = actor;
     }
 
-    public int getHealthThreshold() {
-        return healthThreshold;
+    /**
+     * Whether the health number lies between the upper and lower health thresholds.
+     * @param health entity health
+     * @return The number is within (lower Threshold, upper Threshold]
+     */
+    public boolean withinThreshold(int health) {
+        return health <= upperHealthThreshold && health > lowerHealthThreshold;
     }
 
+    /**
+     * Compares based on upper health thresholds.
+     */
     @Override
     public int compareTo(Object o) {
-        if (healthThreshold > ((Phase) o).healthThreshold)
+        if (upperHealthThreshold > ((Phase) o).upperHealthThreshold)
             return 1;
-        else if (healthThreshold < ((Phase) o).healthThreshold)
+        else if (upperHealthThreshold < ((Phase) o).upperHealthThreshold)
             return -1;
         else
             return 0;

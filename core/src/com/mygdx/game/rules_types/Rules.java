@@ -52,9 +52,16 @@ public abstract class Rules {
             turnCount = currentTeamTurn == 0 ? turnCount + 1 : turnCount;
         }
 
+        //All entities in all teams --
         //toggle states + process PhaseComponent entities
         for (Team t : teams) {
             for (Entity e : t.getEntities()) {
+                //clamp sp and hp values to max
+                if (stm.get(e).hp > stm.get(e).getModMaxHp(e))
+                    stm.get(e).hp = stm.get(e).getModMaxHp(e);
+                if (stm.get(e).sp > stm.get(e).getModMaxSp(e))
+                    stm.get(e).sp = stm.get(e).getModMaxSp(e);
+
                 //toggle states
                 if (state.has(e)) {
                     state.get(e).canAttack = true; //TODO make it not redundant
@@ -66,10 +73,15 @@ public abstract class Rules {
                 }
                 //phase component
                 if (phase.has(e) && stm.get(e).alive) {
-                    for (Phase phase : phase.get(e).phases) {
-                        if (stm.get(e).hp <= phase.getHealthThreshold()) {
+                    for (int i = 0; i < phase.get(e).phases.size; i++) {
+                        if (i == phase.get(e).currentPhaseIndex) //skip current phase
+                            continue;
+                        Phase curPhase = phase.get(e).phases.get(i);
+
+                        if (curPhase.withinThreshold(stm.get(e).hp)) {
+                            phase.get(e).currentPhaseIndex = i;
                             BoardComponent.boards.getBoard().remove(am.get(e).actor, bm.get(e).pos.r, bm.get(e).pos.c);
-                            phase.applyPhase(e);
+                            curPhase.applyPhase(e);
                             BoardComponent.boards.getBoard().add(am.get(e).actor, bm.get(e).pos.r, bm.get(e).pos.c);
                             break;
                         }
@@ -77,14 +89,10 @@ public abstract class Rules {
                 }
             }
         }
-        //do affects and stats
+        //do affects and stats (current Team only) --
         for (Entity e : teams.get(currentTeamTurn).getEntities()) { //increment sp
             if (stm.has(e) && !(stm.get(e).sp >= stm.get(e).getModMaxSp(e)) && !(status.has(e) && status.get(e).statusEffects.containsKey("stillness"))) //check if it can
                 stm.get(e).sp += 1;
-
-            //clamp sp values to max
-            if (stm.get(e).sp > stm.get(e).getModMaxSp(e))
-                stm.get(e).sp = stm.get(e).getModMaxSp(e);
 
             //status effects
             if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
@@ -114,10 +122,4 @@ public abstract class Rules {
     public int getTotalTeams() {
         return totalTeams;
     }
-/*
-    public void calculateTotalTeams() {
-        totalTeams = 0;
-        for (int i = 0; i < teams.size; i++)
-            totalTeams += 1;
-    }*/
 }

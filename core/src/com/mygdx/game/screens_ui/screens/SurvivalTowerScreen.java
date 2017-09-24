@@ -23,8 +23,7 @@ import com.mygdx.game.screens_ui.BackType;
 import com.mygdx.game.screens_ui.Background;
 import com.mygdx.game.screens_ui.HoverButton;
 
-import static com.mygdx.game.ComponentMappers.am;
-import static com.mygdx.game.ComponentMappers.stm;
+import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.*;
 
 /**
@@ -160,6 +159,13 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         //offsetTable.setPosition(offsetTable.getX() + 200, offsetTable.getY());
         table.add().padRight(200f);
         table.add(offsetTable);
+
+        //Remove Status Effects from player team
+        for (Entity e : team.getEntities()) {
+            if (status.has(e) && status.get(e).statusEffects.size >= 1)
+                status.get(e).removeAll(e);
+        }
+
     }
 
     private Team getFloorLevelTeam() {
@@ -168,10 +174,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.powerTower(1),
-                                EntityConstructor.archgargoyle(1),
-                                EntityConstructor.archgargoyle(1),
-                                EntityConstructor.weakenTower(1)
+                                EntityConstructor.dragonPneuma(1)
                         }));
             case 2 :
                 return new Team("Enemy",
@@ -270,7 +273,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             case 8 :
             case 9 :
             case 10 :
-                return 2;
+                return 3;
         }
         return -999;
     }

@@ -328,8 +328,13 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                     return;
                 Color color = getColorFromChoices(input);
                 if (color != null) {
-                    textField.setColor(color);
-                    teams.get(curTeam).setTeamColor(color);
+                    if (color instanceof LerpColor) {
+                        textField.setColor(((LerpColor) color).getMiddleColor());
+                        teams.get(curTeam).setTeamColor(color);
+                    } else {
+                        textField.setColor(color);
+                        teams.get(curTeam).setTeamColor(color);
+                    }
                 } else { //random color
                     teams.get(curTeam).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
                     textField.setColor(Color.WHITE);
@@ -440,7 +445,10 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
             //color team icon
             for (int i = 0; i < characterPortraits.size; i++)
                 characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
-            teamImages.get(curTeam).setColor(teams.get(curTeam).getTeamColor());
+            if (teams.get(curTeam).getTeamColor() instanceof LerpColor)
+                teamImages.get(curTeam).setColor(((LerpColor) teams.get(curTeam).getTeamColor()).getMiddleColor());
+            else
+                teamImages.get(curTeam).setColor(teams.get(curTeam).getTeamColor());
             //disable buttons if last team was selected
             if (curTeam >= maxTeams - 1)
                 disableSelectionButtons();

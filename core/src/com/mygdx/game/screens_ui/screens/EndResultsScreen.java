@@ -22,6 +22,7 @@ import com.mygdx.game.rules_types.ZoneRules;
 import com.mygdx.game.screens_ui.BackType;
 import com.mygdx.game.screens_ui.Background;
 import com.mygdx.game.screens_ui.HoverButton;
+import com.mygdx.game.screens_ui.LerpColor;
 
 import static com.mygdx.game.ComponentMappers.am;
 import static com.mygdx.game.GridWars.backAtlas;
@@ -221,7 +222,10 @@ public class EndResultsScreen extends MenuScreen implements Screen {
                 for (Image i : team0Icons)
                     i.setColor(Color.BLACK);
             lblVictoryLabel.setColor(Color.WHITE);
-            backgroundLayer.setColor(teams.get(winningTeamIndex).getTeamColor());
+            if (teams.get(winningTeamIndex).getTeamColor() instanceof LerpColor)
+                backgroundLayer.setColor(((LerpColor) teams.get(winningTeamIndex).getTeamColor()).getMiddleColor());
+            else
+                backgroundLayer.setColor(teams.get(winningTeamIndex).getTeamColor());
             progress = 8;
         }
     }

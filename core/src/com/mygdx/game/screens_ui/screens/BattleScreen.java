@@ -161,7 +161,6 @@ public class BattleScreen implements Screen {
     private Label moveDescriptionLbl;
     private HoverButton closeHelpMenuBtn;
 
-
     public BattleScreen(Array<Team> selectedTeams, int boardIndex, Vector2[] AIControlled, GridWars game) {
         GRID_WARS = game;
         teams = selectedTeams;
@@ -660,8 +659,30 @@ public class BattleScreen implements Screen {
             }
         }
         //debug: get values via key press
-        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) //Visuals
+        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {//Visuals
             System.out.println("Visuals.visualsArePlaying = " + Visuals.visualsArePlaying);
+            System.out.println("Current Move : " + currentMove);
+            if (currentMove != null) {
+                System.out.println("Current Move Visuals : " + currentMove.getVisuals());
+                System.out.println("- isPlaying : " + currentMove.getVisuals().getIsPlaying());
+                System.out.println("- Timer : " + currentMove.getVisuals().getTimer());
+                System.out.println("- EndTime : " + currentMove.getVisuals().getTimer().getEndTime());
+            }
+            //check entity on all teams
+            System.out.println("Team 0 ~~~");
+            boolean visualsPlaying = false;
+            for (Entity e : teams.get(0).getEntities()) {
+                visualsPlaying = vm.get(e).shuffleAnimation.getIsPlaying() || vm.get(e).deathAnimation.getIsPlaying() || vm.get(e).damageAnimation.getIsPlaying()
+                        || vm.get(e).heavyDamageAnimation.getIsPlaying();
+                System.out.println("Entity : " + nm.get(e).name + "(" + teams.get(0).getEntities().indexOf(e, true) + ") has visuals playing = " + visualsPlaying);
+            }
+            System.out.println("Team 1 ~~~");
+            for (Entity e : teams.get(1).getEntities()) {
+                visualsPlaying = vm.get(e).shuffleAnimation.getIsPlaying() || vm.get(e).deathAnimation.getIsPlaying() || vm.get(e).damageAnimation.getIsPlaying()
+                        || vm.get(e).heavyDamageAnimation.getIsPlaying();
+                System.out.println("Entity : " + nm.get(e).name + "(" + teams.get(1).getEntities().indexOf(e, true) + ") has visuals playing = " + visualsPlaying);
+            }
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) //Frames
             System.out.println("Frames per Second: " + Gdx.graphics.getFramesPerSecond());
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) { // Computer Control info
@@ -805,11 +826,11 @@ public class BattleScreen implements Screen {
                     computer.setDepthLevel(0);
                     computer.setForgetBestMoveChance(.5f);
                 } else if ((int) v.y == 2) { //normal
-                    computer.setDepthLevel(2);
+                    computer.setDepthLevel(3);
                     computer.setForgetBestMoveChance(.3f);
                 } if ((int) v.y == 3) { //hard
-                    computer.setDepthLevel(4);
-                    computer.setForgetBestMoveChance(.15f);
+                    computer.setDepthLevel(5);
+                    computer.setForgetBestMoveChance(.1f);
                 }
                 if (rules instanceof ZoneRules)
                     computer.updateComputerPlayer(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), ((ZoneRules) rules).getZones()));
@@ -836,7 +857,7 @@ public class BattleScreen implements Screen {
         turnCountLbl.setColor(new Color(1,1,1,1).lerp(Color.ORANGE, (float) rules.getTurnCount() / 100f));
         Color teamColor = rules.getCurrentTeam().getTeamColor();
         if (teamColor instanceof LerpColor)
-            endTurnMessageTable.setColor(Color.WHITE);
+            endTurnMessageTable.setColor(((LerpColor) teamColor).getMiddleColor());
         else
             endTurnMessageTable.setColor(rules.getCurrentTeam().getTeamColor());
         endTurnMessageTable.clearActions();
@@ -1088,9 +1109,12 @@ public class BattleScreen implements Screen {
                 defLbl.setText("?");
                 spdLbl.setText("?");
             }
-            if (team.has(selectedEntity))
-                nameLbl.setColor(teams.get(team.get(selectedEntity).teamNumber).getTeamColor());
-            else
+            if (team.has(selectedEntity)) {
+                if (teams.get(team.get(selectedEntity).teamNumber).getTeamColor() instanceof LerpColor)
+                    nameLbl.setColor(((LerpColor) teams.get(team.get(selectedEntity).teamNumber).getTeamColor()).getMiddleColor());
+                else
+                    nameLbl.setColor(teams.get(team.get(selectedEntity).teamNumber).getTeamColor());
+            } else
                 nameLbl.setColor(Color.WHITE);
             hpLbl.setColor(Color.WHITE);
             spLbl.setColor(Color.WHITE);
