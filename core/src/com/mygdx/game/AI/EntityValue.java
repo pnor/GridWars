@@ -78,14 +78,14 @@ public class EntityValue implements Comparable {
      * Gets the value of the {@link com.badlogic.ashley.core.Entity}.
      * @param homeTeam value that is treated as the its own team. Being on the homeTeam is treated as addition, while not being on it is treated as
      *                 subtraction.
-     *
      */
     public int getValue(int homeTeam) {
         int value = 0;
         value += arbitraryValue;
 
         if (hp > 0)
-            value += 200 + ((float) hp / (float) maxHp) * 150;
+            //value += 200 + ((float) hp / (float) maxHp) * 150;   OLD Proportional to max
+            value += 200 + (hp * 20);
 
         value += sp * 30;
 

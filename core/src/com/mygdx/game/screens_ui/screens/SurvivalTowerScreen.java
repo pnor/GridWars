@@ -174,7 +174,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.dragonPneuma(1)
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1)
                         }));
             case 2 :
                 return new Team("Enemy",
@@ -189,9 +192,9 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.canman(1),
+                                EntityConstructor.book(1),
                                 EntityConstructor.slimeman(1),
-                                EntityConstructor.canman(1),
+                                EntityConstructor.book(1),
                                 EntityConstructor.slimeman(1)
                         }));
             case 4 :
@@ -200,26 +203,23 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.immoralSpider(1),
                                 EntityConstructor.toxicCanman(1),
-                                EntityConstructor.canman(1),
+                                EntityConstructor.scaleman(1),
                                 EntityConstructor.immoralSpider(1)
                         }));
             case 5 :
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.medicanMan(1),
-                                EntityConstructor.toxicCanman(1),
-                                EntityConstructor.stoneLion(1),
-                                EntityConstructor.golem(1)
+                                EntityConstructor.blazePneuma(1)
                         }));
             case 6 :
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.book(1),
+                                EntityConstructor.golem(1),
                                 EntityConstructor.stoneSword(1),
-                                EntityConstructor.stoneSword(1),
-                                EntityConstructor.book(1)
+                                EntityConstructor.chemMan(1),
+                                EntityConstructor.golem(1)
                         }));
             case 7 :
                 return new Team("Enemy",
@@ -227,7 +227,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.advancedBook(1),
                                 EntityConstructor.redGolem(1),
-                                EntityConstructor.redGolem(1),
+                                EntityConstructor.golemMK2(1),
                                 EntityConstructor.immoralSpider(1)
                         }));
             case 8 :
@@ -236,26 +236,20 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.lethalSpider(1),
                                 EntityConstructor.lethalSpider(1),
-                                EntityConstructor.lethalSpider(1),
-                                EntityConstructor.golemMK2(1)
+                                EntityConstructor.fancyBook(1),
+                                EntityConstructor.golemMK3(1)
                         }));
             case 9 :
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.scaleman(1),
-                                EntityConstructor.immoralSpider(1),
-                                EntityConstructor.golemMK2(1),
-                                EntityConstructor.scaleman(1)
+                                EntityConstructor.aquaPneuma(1)
                         }));
             case 10 :
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.golemMK3(1),
-                                EntityConstructor.fancyBook(1),
-                                EntityConstructor.chromeMan(1),
-                                EntityConstructor.golemMK3(1)
+                                EntityConstructor.electroPnuema(1)
                         }));
         }
         return null;
