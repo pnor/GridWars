@@ -685,7 +685,7 @@ public class BattleScreen implements Screen {
                 System.out.println("Entity : " + nm.get(e).name + "(" + teams.get(1).getEntities().indexOf(e, true) + ") has visuals playing = " + visualsPlaying);
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.V) && Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) { //Force Visuals to 0
+        if (Gdx.input.isKeyJustPressed(Input.Keys.V) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) { //Force Visuals to 0
             System.out.println("Visuals forced to 0.");
             Visuals.visualsArePlaying = 0;
         }
