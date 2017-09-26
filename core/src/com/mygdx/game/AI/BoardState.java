@@ -75,7 +75,7 @@ public class BoardState {
      * @return The {@link BoardState} for chaining
      */
     public BoardState tryTurn(Turn t) {
-        EntityValue effectedEntity = null; //entity value representing entity playing out turn
+        EntityValue userEntity = null; //entity value representing entity playing out turn
 
         //get User
         Array<EntityValue> entityValues = entities.values().toArray();
@@ -84,7 +84,7 @@ public class BoardState {
             for (int i = 0; i < entityValues.size; i++) {
                 cur = entityValues.get(i);
                 if (entityValues.get(i).checkIdentity(t.entity))
-                    effectedEntity = entityValues.get(i);
+                    userEntity = entityValues.get(i);
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -93,34 +93,33 @@ public class BoardState {
             Gdx.app.exit();
         }
 
-        if (effectedEntity == null) //user died, do nothing
+        if (userEntity == null) //user died, do nothing
                 return this;
 
         //movement
-        if (!t.pos.equals(effectedEntity.pos))
-            if (entities.containsKey(effectedEntity.pos)) {
-                entities.put(t.pos, entities.removeKey(effectedEntity.pos));
-                effectedEntity.pos = t.pos.copy();
+        if (!t.pos.equals(userEntity.pos))
+            if (entities.containsKey(userEntity.pos)) {
+                entities.put(t.pos, entities.removeKey(userEntity.pos));
+                userEntity.pos = t.pos.copy();
             }
-
 
         //attack
         if (t.attack != -1) {
             Move move = mvm.get(t.entity).moveList.get(t.attack);
 
             //deduct sp cost
-            effectedEntity.sp -= move.spCost();
+            userEntity.sp -= move.spCost();
 
             for (BoardPosition pos : move.getOrientedAttackPositions(t.direction, move)) {
                 BoardPosition newPos = pos.add(t.pos.r, t.pos.c);
 
                 if (entities.containsKey(newPos)) {
-                    EntityValue e = entities.get(newPos);
+                    EntityValue e = entities.get(newPos); //entity targeted by attack
                     //damage
                     if (move.moveInfo().pierces)
-                        e.hp = MathUtils.clamp(e.hp - (int) (move.moveInfo().ampValue * effectedEntity.getModAtk()), 0, e.maxHp);
+                        e.hp = MathUtils.clamp(e.hp - (int) (move.moveInfo().ampValue * userEntity.getModAtk()), 0, e.maxHp);
                     else
-                        e.hp = MathUtils.clamp(e.hp - (MathUtils.clamp((int) (move.moveInfo().ampValue * effectedEntity.getModAtk()) - e.getModDef(), 0, 999)), 0, e.maxHp);
+                        e.hp = MathUtils.clamp(e.hp - (MathUtils.clamp((int) (move.moveInfo().ampValue * userEntity.getModAtk()) - e.getModDef(), 0, 999)), 0, e.maxHp);
 
                     //status
                     if (move.moveInfo().statusEffects != null && e.acceptsStatusEffects) {
@@ -129,24 +128,27 @@ public class BoardState {
                                 e.statusEffectInfos.add(status);
                         }
                     }
-                    /*
-                    if (move.moveInfo().statusEffects != null && e.acceptsStatusEffects)
-                        e.statusEffectInfos.addAll(move.moveInfo().statusEffects);
-                        */
 
-                    //misc
+                    //misc effects
                     if (move.moveInfo().miscEffects != null)
                         move.moveInfo().miscEffects.doMiscEffects(e);
 
+                    //clamp hp to max hp
+                    if (e.hp > e.maxHp)
+                        e.hp = e.maxHp;
+
                     //discourage hitting allies slightly
-                    if (effectedEntity.team == e.team)
-                        e.arbitraryValue -= 1;
+                    if (userEntity.team == e.team)
+                        e.arbitraryValue -= 5;
 
                     //remove dead
                     if (e.hp <= 0)
                         entities.removeKey(newPos);
                 } else { //attacking on an empty space
-                    effectedEntity.arbitraryValue -= 1; //discourage attacking empty spaces compared to not attacking at all
+                    //discourage attacking empty spaces compared to not attacking at all
+                    //single hitting moves weighted heavier than spread attacks
+                    userEntity.arbitraryValue = (move.getRange().size == 1)?
+                            userEntity.arbitraryValue - 30 : userEntity.arbitraryValue - 30 / move.getRange().size;
                 }
             }
 

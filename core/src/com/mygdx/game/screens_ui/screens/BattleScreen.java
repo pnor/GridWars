@@ -38,6 +38,7 @@ import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.*;
 import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.creators.BoardAndRuleConstructor;
+import com.mygdx.game.creators.DamageAnimationConstructor;
 import com.mygdx.game.creators.MoveConstructor;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.StatusEffect;
@@ -170,6 +171,7 @@ public class BattleScreen implements Screen {
         background = BackgroundConstructor.getBackground(boardIndex);
 
         MoveConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, stage, GRID_WARS);
+        DamageAnimationConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine);
 
         if (rules instanceof ZoneRules)
             computer = new ComputerPlayer(BoardComponent.boards, teams, ((ZoneRules) rules).getZones(), 1, 1, true, 0);
@@ -1258,7 +1260,7 @@ public class BattleScreen implements Screen {
             } else if (actor instanceof AnimationActor)
                 member.setDrawable(new SpriteDrawable(((AnimationActor) actor).getInitialFrame()));
             //color image
-            if (stm.has(entity) && stm.get(entity).hp <= 0 && !(status.has(entity) && status.get(entity).getTotalStatusEffects() > 0)) { //Shade based on health
+            if (stm.has(entity)) { //Shade based on health
                 if (stm.get(entity).hp <= 0)
                     member.setColor(Color.BLACK);
                 else

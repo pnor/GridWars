@@ -13,23 +13,25 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.AI.MoveInfo;
 import com.mygdx.game.AI.StatusEffectInfo;
-import com.mygdx.game.ColorUtils;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.actors.Tile;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.*;
+import com.mygdx.game.misc.ColorUtils;
+import com.mygdx.game.misc.EventCompUtil;
 import com.mygdx.game.misc.GameEvent;
 import com.mygdx.game.move_related.*;
-import com.mygdx.game.screens_ui.LerpColor;
 import com.mygdx.game.screens_ui.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.atlas;
+import static com.mygdx.game.creators.StatusEffectConstructor.*;
+import static com.mygdx.game.misc.EventCompUtil.*;
 
 /**
- * Class that creates various moves to be used by Entities on the board. Also contains methods for certain
- * animations ({@link Visuals} for dying and taking damage) and {@link StatusEffect}s.
+ * Class that creates various {@link Move}s to be used by Entities on the board.
+ *
  * @author Phillip O'Reggio
  */
 public class MoveConstructor {
@@ -72,500 +74,6 @@ public class MoveConstructor {
     public static boolean isReady() {
         return ready;
     }
-
-
-    //region Damage related animations
-    /**
-     * Creates a generic damage animation
-     * @param user Entity that is being damaged
-     * @return damage animation {@code Visuals}
-     */
-    public static Visuals damageAnimation(Entity user) {
-
-        VisualEvent initialRed = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.shade(new Color(.9f, .1f, .1f, 1));
-            }
-        }, .001f, 1);
-
-        VisualEvent returnToNormalGradual = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.shade(am.get(user).actor.getColor().lerp(BattleScreen.getShadeColorBasedOnState(user), .1f));
-            }
-        }, .05f, 8);
-
-        VisualEvent returnToNormal = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.shade(BattleScreen.getShadeColorBasedOnState(user));
-            }
-        }, .05f, 1);
-
-        return new Visuals(user, null,
-                new Array<VisualEvent>(new VisualEvent[]{initialRed, returnToNormalGradual.copy(.15f, 1), returnToNormalGradual, returnToNormal}));
-    }
-
-    /**
-     * Creates a shuffling animation for status effects
-     * @param user Entity that is being damaged
-     * @return damage animation {@code Visuals}
-     */
-    public static Visuals shuffleAnimation(Entity user) {
-        VisualEvent moveRight = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.moveBy(2, 0);
-            }
-        }, .05f, 2);
-
-        VisualEvent moveLeft = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.moveBy(-2, 0);
-            }
-        }, .05f, 2);
-
-        return new Visuals(user, null,
-                new Array<VisualEvent>(new VisualEvent[]{moveRight.copy(.001f, 1), moveLeft, moveRight, moveLeft.copy(), moveRight.copy(1)
-                }));
-    }
-
-    /**
-     * Creates a generic damage animation
-     * @param user Entity that is being damaged
-     * @return damage animation {@code Visuals}
-     */
-    public static Visuals heavyDamageAnimation(Entity user) {
-        VisualEvent initialRed = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.shade(new Color(.8f, 0, 0, 1));
-            }
-        }, .001f, 1);
-
-        VisualEvent moveRight = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.moveBy(3, 0);
-            }
-        }, .05f, 2);
-
-        VisualEvent moveLeft = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.moveBy(-3, 0);
-            }
-        }, .05f, 2);
-
-        VisualEvent returnToNormalGradual = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.shade(am.get(user).actor.getColor().lerp(BattleScreen.getShadeColorBasedOnState(user), .1f));
-            }
-        }, .02f, 9);
-
-        VisualEvent returnToNormal = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.shade(BattleScreen.getShadeColorBasedOnState(user));
-            }
-        }, .02f, 1);
-
-        return new Visuals(user, null,
-                new Array<VisualEvent>(new VisualEvent[]{initialRed,
-                        moveRight.copy(.001f, 1), moveLeft, moveRight, moveLeft.copy(), moveRight.copy(1),
-                        returnToNormalGradual, returnToNormal
-                }));
-    }
-
-    /**
-     * Creates the generic death animation
-     * @param user Entity that is being killed
-     * @return death animation {@code Visuals}
-     */
-    public static Visuals deathAnimation(Entity user) {
-        VisualEvent initialRed = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.shade(Color.RED);
-            }
-        }, .001f, 1);
-
-        VisualEvent fadeAndBlacken = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.shade(
-                        new Color(am.get(user).actor.getColor().r - .01f, am.get(user).actor.getColor().g - .1f,
-                                am.get(user).actor.getColor().b - .1f, am.get(user).actor.getColor().a - .1f));
-            }
-        }, .1f, 9);
-
-        return new Visuals(user, null,
-                new Array<VisualEvent>(new VisualEvent[]{initialRed, fadeAndBlacken.copy(.275f, 1), fadeAndBlacken}));
-    }
-
-    /**
-     * Creates the explosive death animation
-     * @param user Entity that is being killed
-     * @return death animation {@code Visuals}
-     */
-    public static Visuals deathAnimationExplosive(Entity user, Color color) {
-        VisualEvent initialRed = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.shade(Color.RED);
-            }
-        }, .2f, 1);
-
-        VisualEvent explosions = new VisualEvent(new VisualEffect() {
-            boolean right;
-
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                BoardPosition bp = bm.get(user).pos.copy();
-                Tile t;
-                try {
-                    t = boards.getBoard().getTile(bp.r, bp.c);
-                } catch (IndexOutOfBoundsException e) {
-                    return;
-                }
-                Vector2 entitySize = new Vector2(100 * scale, 100 * scale);
-                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
-                tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
-                        BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
-
-                Entity boom = new Entity();
-                boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-50 * scale, 50 * scale), MathUtils.random(-50 * scale, 50 * scale))
-                        , entitySize.x, entitySize.y, 0));
-                boom.add(new LifetimeComponent(0, .11f));
-                boom.add(new AnimationComponent(.02f,
-                        new TextureRegion[]{atlas.findRegion("BWexplode"),
-                                atlas.findRegion("BWexplode2"),
-                                atlas.findRegion("BWexplode3"),
-                                atlas.findRegion("BWexplode4"),
-                                atlas.findRegion("BWexplode5"),
-                                atlas.findRegion("BWexplode6")},
-                                color,
-                        Animation.PlayMode.NORMAL));
-                boom.add(new EventComponent(.02f, true, EventCompUtil.fadeOut(5)));
-                engine.addEntity(boom);
-
-                if (right)
-                    am.get(user).actor.moveBy(4 * scale, 0);
-                else
-                    am.get(user).actor.moveBy(-4 * scale, 0);
-                right = !right;
-
-            }
-        }, .2f, 6);
-
-        VisualEvent explosionsFast = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                BoardPosition bp = bm.get(user).pos.copy();
-                Tile t;
-                try {
-                    t = boards.getBoard().getTile(bp.r, bp.c);
-                } catch (IndexOutOfBoundsException e) {
-                    return;
-                }
-                Vector2 entitySize = new Vector2(70 * scale, 70 * scale);
-                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
-                tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
-                        BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
-
-                Entity boom = new Entity();
-                boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-50 * scale, 50 * scale), MathUtils.random(-50 * scale, 50 * scale))
-                        , entitySize.x, entitySize.y, 0));
-                boom.add(new LifetimeComponent(0, .11f));
-                boom.add(new AnimationComponent(.02f,
-                        new TextureRegion[]{atlas.findRegion("BWexplode"),
-                                atlas.findRegion("BWexplode2"),
-                                atlas.findRegion("BWexplode3"),
-                                atlas.findRegion("BWexplode4"),
-                                atlas.findRegion("BWexplode5"),
-                                atlas.findRegion("BWexplode6")},
-                                color,
-                        Animation.PlayMode.NORMAL));
-                boom.add(new EventComponent(.02f, true, EventCompUtil.fadeOut(5)));
-                engine.addEntity(boom);
-            }
-        }, .05f, 18);
-
-        VisualEvent endSparkles = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                BoardPosition bp = bm.get(user).pos.copy();
-                Tile t;
-                try {
-                    t = boards.getBoard().getTile(bp.r, bp.c);
-                } catch (IndexOutOfBoundsException e) {
-                    return;
-                }
-                Vector2 entitySize = new Vector2(10 * scale, 10 * scale);
-                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
-                tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
-                        boards.getTileHeight() / 2 - entitySize.y / 2f);
-
-                Entity boom = new Entity();
-                boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-90 * scale, 90 * scale), MathUtils.random(-90 * scale, 90 * scale)),
-                        entitySize.x, entitySize.y, 0));
-                boom.add(new LifetimeComponent(0, .3f));
-                Sprite sprite = atlas.createSprite("sparkle");
-                sprite.setOriginCenter();
-                sprite.setColor(color);
-                boom.add(new SpriteComponent(sprite));
-                boom.add(new EventComponent(.1f, true, EventCompUtil.fadeOut(3)));
-
-                engine.addEntity(boom);
-            }
-        }, .005f, 30);
-
-        VisualEvent fadeAndBlacken = new VisualEvent(new VisualEffect() {
-            @Override
-            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                am.get(user).actor.shade(
-                        new Color(am.get(user).actor.getColor().r - .01f, am.get(user).actor.getColor().g - .1f,
-                                am.get(user).actor.getColor().b - .1f, am.get(user).actor.getColor().a - .1f));
-            }
-        }, .1f, 9);
-
-        return new Visuals(user, null,
-                new Array<VisualEvent>(new VisualEvent[]{initialRed, explosions, explosionsFast, endSparkles, fadeAndBlacken.copy(.275f, 1), fadeAndBlacken}));
-    }
-    //endregion
-
-    //region Status Effects
-    public static StatusEffect poison() {
-        StatusEffect statusEffect = new StatusEffect("Poison", 2, new LerpColor(Color.GREEN, new Color(201f / 255f, 1f, 0f, 1f)), (e) -> {
-            stm.get(e).hp -= 1;
-            if (vm.has(e) && !vm.get(e).heavyDamageAnimation.getIsPlaying())
-                vm.get(e).heavyDamageAnimation.setPlaying(true, true);
-        }, (entity) -> entity.hp -= 1);
-
-        statusEffect.setStatChanges(1, 1, 1, 1, 1);
-        return statusEffect;
-    }
-
-    public static StatusEffect toxic() {
-        StatusEffect statusEffect = new StatusEffect("Toxic", 3, new LerpColor(Color.GREEN, new Color(10f / 255f, 41f / 255f, 10f / 255f, 1f)),
-                (e) -> {
-                    stm.get(e).hp -= 2;
-                    if (vm.has(e) && !vm.get(e).heavyDamageAnimation.getIsPlaying())
-                        vm.get(e).heavyDamageAnimation.setPlaying(true, true);
-                }, (entity) -> entity.hp -= 2);
-
-        statusEffect.setStatChanges(1, 1, 1, 1, 1);
-        return statusEffect;
-    }
-
-    public static StatusEffect burn() {
-        StatusEffect effect = new StatusEffect("Burn", 3, new LerpColor(Color.RED, new Color(1, 125f / 255f, 0f, 1f), .3f, Interpolation.sineOut),
-                (e) -> {
-            if (stm.has(e) && MathUtils.randomBoolean()) {
-                stm.get(e).hp -= 1;
-                if (vm.has(e) && !vm.get(e).heavyDamageAnimation.getIsPlaying())
-                    vm.get(e).heavyDamageAnimation.setPlaying(true, true);
-            }
-        }, (entity) -> {
-            if (MathUtils.randomBoolean())
-                entity.hp -= 1;
-        });
-
-        effect.setStatChanges(1, 1, .5f, 1, 1);
-        return effect;
-    }
-
-    public static StatusEffect paralyze() {
-        StatusEffect effect = new StatusEffect("Paralyze", 3, new LerpColor(Color.GRAY, Color.YELLOW, .4f, Interpolation.exp5In), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 1, .5f);
-        return effect;
-    }
-
-    public static StatusEffect freeze() {
-        StatusEffect effect = new StatusEffect("Freeze", 3, new LerpColor(new Color(.8f, .4f, 1, 1), Color.CYAN, .5f), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, .5f, 0);
-        effect.setStopsAnimation(true);
-        return effect;
-    }
-
-    public static StatusEffect shivers() {
-        StatusEffect effect = new StatusEffect("Shivers", 2, new LerpColor(new Color(.8f, .8f, 1, 1), Color.WHITE), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, .5f, 1, 1, 1);
-        return effect;
-    }
-
-    public static StatusEffect petrify() {
-        StatusEffect effect = new StatusEffect("Petrify", 2, new Color(214f / 255f, 82f / 255f, 0, 1), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 2, 0);
-        effect.setStopsAnimation(true);
-        return effect;
-    }
-
-    public static StatusEffect stillness() {
-        StatusEffect effect = new StatusEffect("Stillness", 2, new LerpColor(Color.WHITE, new Color(0, 140f / 255f, 1f, 1f), .7f,  Interpolation.sine), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 1, 1);
-        effect.setStopsAnimation(true);
-        return effect;
-    }
-
-    public static StatusEffect inept() {
-        StatusEffect effect = new StatusEffect("Inept", 3, new LerpColor(Color.WHITE, Color.NAVY, .7f,  Interpolation.sine), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 0, 1, 1, 1);
-        effect.setStopsAnimation(true);
-        return effect;
-    }
-
-    public static StatusEffect curse() {
-        StatusEffect effect = new StatusEffect("Curse", 4, new LerpColor(Color.GRAY, Color.BLACK, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, .5f, .5f, .5f);
-        return effect;
-    }
-
-    public static StatusEffect defenseless() {
-        StatusEffect effect =  new StatusEffect("Defenseless", 1, new LerpColor(Color.WHITE, Color.NAVY, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 0, 1);
-        return effect;
-    }
-
-    public static StatusEffect defenseless2() {
-        StatusEffect effect =  new StatusEffect("Defenseless", 2, new LerpColor(Color.WHITE, Color.NAVY, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 0, 1);
-        return effect;
-    }
-
-    public static StatusEffect offenseless() {
-        StatusEffect effect = new StatusEffect("Offenseless", 2, new LerpColor(Color.WHITE, Color.RED, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, .5f, 1, 1);
-        return effect;
-    }
-
-    public static StatusEffect offenseless2() {
-        StatusEffect effect = new StatusEffect("Offenseless", 3, new LerpColor(Color.WHITE, Color.RED, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, .5f, 1, 1);
-        return effect;
-    }
-
-    public static StatusEffect speedUp() {
-        StatusEffect effect = new StatusEffect("Quick", 1, new LerpColor(Color.WHITE, Color.CYAN, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 1, 2);
-        return effect;
-    }
-
-    public static StatusEffect speedUp2() {
-        StatusEffect effect = new StatusEffect("Quick", 2, new LerpColor(Color.WHITE, Color.CYAN, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 1, 2);
-        return effect;
-    }
-
-    public static StatusEffect speedUpAmp() {
-        StatusEffect effect = new StatusEffect("QuickII", 2, new LerpColor(Color.WHITE, Color.CYAN, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 1, 3);
-        return effect;
-    }
-
-    public static StatusEffect attackUp() {
-        StatusEffect effect = new StatusEffect("Power", 1, new LerpColor(Color.WHITE, Color.ORANGE, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 2, 1, 1);
-        return effect;
-    }
-
-    public static StatusEffect attackUp2() {
-        StatusEffect effect = new StatusEffect("Power", 2, new LerpColor(Color.WHITE, Color.ORANGE, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 2, 1, 1);
-        return effect;
-    }
-
-    public static StatusEffect attackUp3() {
-        StatusEffect effect = new StatusEffect("Power", 3, new LerpColor(Color.WHITE, Color.ORANGE, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 2, 1, 1);
-        return effect;
-    }
-
-    public static StatusEffect guardUp() {
-        StatusEffect effect = new StatusEffect("Guard", 1, new LerpColor(Color.WHITE, Color.BLUE, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 2, 1);
-        return effect;
-    }
-
-    public static StatusEffect guardUp2() {
-        StatusEffect effect = new StatusEffect("Guard", 2, new LerpColor(Color.WHITE, Color.BLUE, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 2, 1);
-        return effect;
-    }
-
-    public static StatusEffect guardUpAmp() {
-        StatusEffect effect = new StatusEffect("GuardII", 1, new LerpColor(Color.WHITE, Color.BLUE, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 3, 1);
-        return effect;
-    }
-
-    public static StatusEffect healthUp() {
-        StatusEffect effect = new StatusEffect("Durability", 3, new LerpColor(Color.WHITE, Color.GREEN, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(2, 1, 1, 2, 1);
-        return effect;
-    }
-
-    public static StatusEffect charged() {
-        StatusEffect effect = new StatusEffect("Charged", 3, new LerpColor(Color.ORANGE, Color.YELLOW, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 2, 2, 1, 2);
-        return effect;
-    }
-
-    public static StatusEffect supercharged() {
-        StatusEffect effect = new StatusEffect("Supercharged", 4, new LerpColor(Color.ORANGE, Color.CYAN, .3f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 2, 5, 1, 3);
-        return effect;
-    }
-
-    public static StatusEffect berserk() {
-        StatusEffect effect = new StatusEffect("Berserk", 10, new LerpColor(Color.RED, Color.BLUE, .2f, Interpolation.sine), (e) -> {
-            stm.get(e).hp -= 1;
-            stm.get(e).sp += 1;
-            if (vm.has(e) && !vm.get(e).heavyDamageAnimation.getIsPlaying())
-                vm.get(e).heavyDamageAnimation.setPlaying(true, true);
-        }, (entity) -> {
-            entity.hp -= 1;
-            entity.sp += 1;
-        });
-
-        effect.setStatChanges(.5f, 1, 5, 0, 2);
-        return effect;
-    }
-
-    public static StatusEffect regeneration() {
-        StatusEffect effect = new StatusEffect("Regeneration", 3, new LerpColor(Color.PINK, new Color(.8f, 1, .8f, 1f), .5f, Interpolation.sineOut), (e) -> {
-            if (stm.has(e)) {
-                stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + 1, 0, stm.get(e).getModMaxHp(e));
-            }
-            if (vm.has(e) && !vm.get(e).shuffleAnimation.getIsPlaying())
-                vm.get(e).shuffleAnimation.setPlaying(true, true);
-        }, (entity -> {
-            entity.hp += 1;
-        }));
-        effect.setStatChanges(1, 1, 1, 1, 1);
-        return effect;
-    }
-
-    public static StatusEffect regenerationPlus() {
-        StatusEffect effect = new StatusEffect("Regeneration+", 3, new LerpColor(Color.GOLD, Color.PINK, Interpolation.sineOut), (e) -> {
-            if (stm.has(e)) {
-                stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + 1, 0, stm.get(e).getModMaxHp(e));
-                stm.get(e).sp = MathUtils.clamp(stm.get(e).sp + 1, 0, stm.get(e).getModMaxSp(e));
-            }
-            if (vm.has(e) && !vm.get(e).shuffleAnimation.getIsPlaying())
-                vm.get(e).shuffleAnimation.setPlaying(true, true);
-        }, (entity -> {
-            entity.hp += 1;
-            entity.sp += 1;
-        }));
-        effect.setStatChanges(1, 1, 1, 1, 1);
-        return effect;
-    }
-
-    //endregion
 
     //region Moves
 
@@ -2013,7 +1521,7 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{shuriken, sparkle})), new MoveInfo(false, 1));
     }
 
-    public static Move freeze(Entity user) {
+    public static Move freezeAttack(Entity user) {
         VisualEvent freeze = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
@@ -3807,7 +3315,7 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{barrage, doNothing, sparkle.copy(), bubble.copy(), sparkle, bubble})), new MoveInfo(false, 1, petrify().createStatusEffectInfo()));
     }
 
-    public static Move curse(Entity user) {
+    public static Move curseAttack(Entity user) {
         VisualEvent fire = new VisualEvent(new VisualEffect() {
             private float direction;
             @Override
@@ -5982,7 +5490,6 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{mirror, spinning})), new MoveInfo(false, 0, (entity) -> entity.arbitraryValue += 50));
     }
     //endregion
-
 
     //region survival Moves
     //misc
@@ -8580,7 +8087,7 @@ public class MoveConstructor {
                 else if (tempBp.r > 0)
                     direction = 270;
 
-                entitySize = new Vector2(30 * scale, 30 * scale);
+                entitySize = new Vector2(60 * scale, 60 * scale);
 
                 try { //check first tile
                     startTile = boards.getBoard().getTile(bm.get(user).pos.r, bm.get(user).pos.c);
@@ -8588,22 +8095,36 @@ public class MoveConstructor {
                     return;
                 }
                 startTilePosition = startTile.localToStageCoordinates(new Vector2(0, 0));
+                startTilePosition.add(boards.getTileWidth() / 2 - 25 * scale,
+                        boards.getTileHeight() / 2 - 50 * scale);
 
-                Entity spark = new Entity();
-                Sprite s = atlas.createSprite("openCircle");
-                s.setOriginCenter();
-                s.setColor(Color.BLUE);
-                spark.add(new SpriteComponent(s));
-                spark.add(new PositionComponent(startTilePosition, entitySize.x, entitySize.y, direction - 90 + offset));
-                spark.add(new MovementComponent(new Vector2(MathUtils.random(350, 750) * scale, 0).setAngle(direction + offset)));
-                spark.add(new LifetimeComponent(0, .52f));
-                spark.add(new EventComponent(0.02f, true, (entity, engine) -> {
-                    sm.get(entity).sprite.setColor(sm.get(entity).sprite.getColor().lerp(new Color(1, 0, 0, 0.3f), .06f));
-                    mm.get(entity).movement.scl(.97f);
+                Entity clouds = new Entity();
+                clouds.add(new AnimationComponent(.1f, new TextureRegion[]{
+                        atlas.findRegion("cloud"), atlas.findRegion("cloud2")
+                }, Animation.PlayMode.LOOP));
+                clouds.add(new PositionComponent(startTilePosition, entitySize.x, entitySize.y, direction - 90 + offset));
+                clouds.add(new MovementComponent(new Vector2(MathUtils.random(250, 450) * scale, 0).setAngle(direction + offset)));
+                clouds.add(new LifetimeComponent(0, .92f));
+                clouds.add(new EventComponent(0.02f, true, new GameEvent() {
+                    private int timesCalled;
+                    @Override
+                    public void event(Entity e, Engine engine) {
+                        timesCalled++;
+                        if (timesCalled >= 16) {
+                            Color color = animm.get(e).shadeColor;
+                            color = new Color(
+                                    color.r,
+                                    color.g,
+                                    color.b,
+                                    MathUtils.clamp(color.a - 1f / 46f, 0, 1));
+                            animm.get(e).shadeColor = color;
+                        }
+                        pm.get(e).rotation += 2;
+                    }
                 }));
-                engine.addEntity(spark);
+                engine.addEntity(clouds);
             }
-        }, .03f, 28);
+        }, .03f, 48);
 
         VisualEvent explode = new VisualEvent(new VisualEffect() {
             @Override
@@ -8701,7 +8222,7 @@ public class MoveConstructor {
                                     atlas.findRegion("openCircle3"),
                                     atlas.findRegion("openCircle4"),
                                     atlas.findRegion("openCircle5")},
-                            Color.RED,
+                            Color.WHITE,
                             Animation.PlayMode.LOOP_REVERSED));
                     boom.add(new EventComponent(.06f, true, EventCompUtil.fadeOut(5)));
                     engine.addEntity(boom);
@@ -8731,17 +8252,17 @@ public class MoveConstructor {
                     Entity sparks = new Entity();
                     sparks.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-40, 40), MathUtils.random(-40, 40)), entitySize.x, entitySize.y, 0));
                     sparks.add(new LifetimeComponent(0, .4f));
-                    Sprite s = atlas.createSprite("zigzag");
+                    Sprite s = atlas.createSprite("openDiamonds");
                     s.setOriginCenter();
-                    s.setColor(Color.RED);
+                    s.setColor(ColorUtils.HSV_to_RGB(MathUtils.random(0, 360), 100, 100));
                     sparks.add(new SpriteComponent(s));
                     sparks.add(new EventComponent(.06f, true, EventCompUtil.fadeOut(5)));
                     engine.addEntity(sparks);
                 }
             }
-        }, .1f, 7);
+        }, .05f, 15);
 
-        return new Move("Roar", nm.get(user).name + "'s roar scared the enemy!", user, 1,
+        return new Move("Roar", nm.get(user).name + "'s roar scared the enemy!", user, 3,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
@@ -8770,6 +8291,27 @@ public class MoveConstructor {
     }
 
     public static Move flash(Entity user) {
+        VisualEvent flash = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(stage.getWidth(), stage.getHeight());
+                Entity flash = new Entity();
+                flash.add(new PositionComponent(new Vector2(0, 0), entitySize.x, entitySize.y, 0));
+                flash.add(new LifetimeComponent(0, .25f));
+                flash.add(new SpriteComponent(atlas.createSprite("LightTile")));
+                sm.get(flash).sprite.setColor(Color.WHITE);
+                flash.add(new EventComponent(.025f, true, EventCompUtil.fadeOutAfter(5, 5)));
+                engine.addEntity(flash);
+            }
+        }, .01f, 1);
+
         VisualEvent explode = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
@@ -8987,7 +8529,7 @@ public class MoveConstructor {
             }
         }, .03f, 25);
 
-        return new Move("Flash", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        return new Move("Flash", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -9000,9 +8542,178 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{sparkleOut, explode, smallBooms, explodeBig, largerRadiusBooms, sparkle, floatUpDiamonds})), new MoveInfo(false, 1.5f));
+                new Array<VisualEvent>(new VisualEvent[]{sparkleOut, explode, smallBooms, flash, explodeBig, largerRadiusBooms, sparkle, floatUpDiamonds})), new MoveInfo(true, 1.5f));
     }
 
+    //TODO redo
+    public static Move raze(Entity user) {
+        VisualEvent firebreath = new VisualEvent(new VisualEffect() {
+            Tile startTile;
+            float offset = -45;
+
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                Vector2 startTilePosition;
+                Vector2 entitySize;
+                float direction = 0;
+                //spraying code --
+                offset = MathUtils.random(-45, 45);
+
+                BoardPosition tempBp = targetPositions.first();
+                if (tempBp.r < 0)
+                    direction = 90;
+                else if (tempBp.c < 0)
+                    direction = 180;
+                else if (tempBp.r > 0)
+                    direction = 270;
+
+                entitySize = new Vector2(80 * scale, 60 * scale);
+
+                try { //check first tile
+                    startTile = boards.getBoard().getTile(bm.get(user).pos.r, bm.get(user).pos.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                startTilePosition = startTile.localToStageCoordinates(new Vector2(0, 0));
+                startTilePosition.add(boards.getTileWidth() / 2 - 25 * scale,
+                        boards.getTileHeight() / 2 - 50 * scale);
+
+                Entity clouds = new Entity();
+                Sprite s = atlas.createSprite("flame");
+                s.setOriginCenter();
+                //s.setColor(ColorUtils.HSV_to_RGB(MathUtils.random(0, 360), 100, 100));
+                clouds.add(new SpriteComponent(s));
+                clouds.add(new PositionComponent(startTilePosition, entitySize.x, entitySize.y, direction - 90 + offset + 180));
+                clouds.add(new MovementComponent(new Vector2(MathUtils.random(450, 850) * scale, 0).setAngle(direction + offset)));
+                clouds.add(new LifetimeComponent(0, .5f));
+                clouds.add(new EventComponent(0.02f, true, EventCompUtil.fadeOut(25)));
+                engine.addEntity(clouds);
+            }
+        }, .03f, 30);
+
+        VisualEvent explosions = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                for (BoardPosition pos : targetPositions) {
+                    BoardPosition bp = pos.copy().add(bm.get(user).pos.r, bm.get(user).pos.c);
+                    Tile t;
+                    try {
+                        t = boards.getBoard().getTile(bp.r, bp.c);
+                    } catch (IndexOutOfBoundsException e) {
+                        return;
+                    }
+                    Vector2 entitySize = new Vector2(130 * scale, 130 * scale);
+                    Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                    tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
+                            BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                    Entity boom = new Entity();
+                    boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-30 * scale, 30 * scale), MathUtils.random(-30 * scale, 30 * scale))
+                            , entitySize.x, entitySize.y, 0));
+                    boom.add(new LifetimeComponent(0, .16f));
+                    boom.add(new AnimationComponent(.03f,
+                            new TextureRegion[]{atlas.findRegion("explode"),
+                                    atlas.findRegion("explode2"),
+                                    atlas.findRegion("explode3"),
+                                    atlas.findRegion("explode4"),
+                                    atlas.findRegion("explode5"),
+                                    atlas.findRegion("explode6")},
+                            Animation.PlayMode.LOOP_PINGPONG));
+                    engine.addEntity(boom);
+                }
+            }
+        }, .01f, 2);
+
+        VisualEvent fires = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                Vector2 entitySize = new Vector2(32 * scale, 32 * scale);
+                Vector2 tilePosition;
+
+                for (BoardPosition bp : targetPositions) {
+                    BoardPosition newPos = bp.copy().add(bm.get(user).pos.r, bm.get(user).pos.c);
+                    Tile t;
+                    try {
+                        t = boards.getBoard().getTile(newPos.r, newPos.c);
+                    } catch (IndexOutOfBoundsException e) {
+                        continue;
+                    }
+
+                    tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                    tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
+                            BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                    Entity flame = new Entity();
+                    flame.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-40, 40), MathUtils.random(-40, 40)), entitySize.x, entitySize.y, 0));
+                    flame.add(new LifetimeComponent(0, .4f));
+                    flame.add(new AnimationComponent(.03f,
+                            new TextureRegion[]{atlas.findRegion("flame"),
+                                    atlas.findRegion("flame2"),
+                                    atlas.findRegion("flame3")},
+                            Animation.PlayMode.NORMAL));
+                    flame.add(new EventComponent(.06f, true, EventCompUtil.fadeOut(5)));
+                    engine.addEntity(flame);
+                }
+            }
+        }, .01f, 4);
+        
+        VisualEvent sparks = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                Vector2 entitySize = new Vector2(26 * scale, 26 * scale);
+                Vector2 tilePosition;
+
+                for (BoardPosition bp : targetPositions) {
+                    BoardPosition newPos = bp.copy().add(bm.get(user).pos.r, bm.get(user).pos.c);
+                    Tile t;
+                    try {
+                        t = boards.getBoard().getTile(newPos.r, newPos.c);
+                    } catch (IndexOutOfBoundsException e) {
+                        continue;
+                    }
+
+                    tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                    tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
+                            BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                    Entity sparks = new Entity();
+                    sparks.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-40, 40), MathUtils.random(-40, 40)), entitySize.x, entitySize.y, 0));
+                    sparks.add(new LifetimeComponent(0, .4f));
+                    Sprite s = atlas.createSprite("circle");
+                    s.setOriginCenter();
+                    s.setColor(Color.RED);
+                    sparks.add(new SpriteComponent(s));
+                    sparks.add(new EventComponent(.06f, true, EventCompUtil.fadeOut(5)));
+                    engine.addEntity(sparks);
+                }
+            }
+        }, .05f, 15);
+
+        return new Move("Raze", nm.get(user).name + " unleashed a surge of energy", user, 0,
+                new Array<BoardPosition>(new BoardPosition[]{
+                        new BoardPosition(-1, 0),
+                        new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
+                        new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)
+                }),
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+
+                        if (stm.has(enemy))
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) * 5, 0, 999);
+
+                        if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
+                            vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{
+                new BoardPosition(-1, 0),
+                new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
+                new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)}),
+                new Array<VisualEvent>(new VisualEvent[]{firebreath, explosions, firebreath.copy(), fires, firebreath.copy(),
+                        explosions.copy(), explosions.copy(), firebreath.copy(), fires.copy(), sparks})),
+                new MoveInfo(true, 5));
+    }
 
 
     //lions
@@ -15187,164 +14898,5 @@ public class MoveConstructor {
                         entity.statusEffectInfos.clear();
                 }));
     }
-
-
     //endregion
-
-
-    /**
-     * Class containing convenience methods for the {@link GameEvent} in {@link EventComponent}.
-     *
-     * @author Phillip O'Reggio
-     */
-    private static class EventCompUtil {
-        /**
-         * @return {@link GameEvent} that will become more transparent.
-         * @param amount of times this needs to be called until it is fully transparent. (note: will not work as well
-         *               colors that have a transparency of <1
-         */
-        public static GameEvent fadeOut(int amount) {
-            return (entity, engine) -> {
-                if (sm.has(entity)) { //sprite
-                  Sprite sprite = sm.get(entity).sprite;
-                  sprite.setColor(
-                          sprite.getColor().r,
-                          sprite.getColor().g,
-                          sprite.getColor().b,
-                          MathUtils.clamp(sprite.getColor().a - 1f / amount, 0, 1));
-                } else { //animation
-                    Color color = animm.get(entity).shadeColor;
-                    color = new Color(
-                            color.r,
-                            color.g,
-                            color.b,
-                            MathUtils.clamp(color.a - 1f / amount, 0, 1));
-                    animm.get(entity).shadeColor = color;
-                }
-            };
-        }
-
-        /**
-         * @return {@link GameEvent} that will become more opaque.
-         * @param amount of times this needs to be called until it is fully opaque. (note: will not work as well
-         *               colors that have a transparency of <1
-         */
-        public static GameEvent fadeIn(int amount) {
-            return (entity, engine) -> {
-                if (sm.has(entity)) { //sprite
-                    Sprite sprite = sm.get(entity).sprite;
-                    sprite.setColor(
-                            sprite.getColor().r,
-                            sprite.getColor().g,
-                            sprite.getColor().b,
-                            MathUtils.clamp(sprite.getColor().a + 1f / amount, 0, 1));
-                } else { //animation
-                    Color color = animm.get(entity).shadeColor;
-                    color = new Color(
-                            color.r,
-                            color.g,
-                            color.b,
-                            MathUtils.clamp(color.a + 1f / amount, 0, 1));
-                    animm.get(entity).shadeColor = color;
-                }
-            };
-        }
-
-        /**
-         * @return {@link GameEvent} that will become more transparent after a set amount of time
-         * @param timesUntilFade Amount of times this method will be called until it begins fading
-         * @param amount of times this needs to be called until it is fully transparent. (note: will not work as well
-         *               colors that have a transparency of <1
-         */
-        public static GameEvent fadeOutAfter(int timesUntilFade, int amount) {
-            return new GameEvent() {
-                private int timesCalled;
-                @Override
-                public void event(Entity e, Engine engine) {
-                    timesCalled++;
-                    if (timesCalled >= timesUntilFade) {
-                        if (sm.has(e)) { //sprite
-                            Sprite sprite = sm.get(e).sprite;
-                            sprite.setColor(
-                                    sprite.getColor().r,
-                                    sprite.getColor().g,
-                                    sprite.getColor().b,
-                                    MathUtils.clamp(sprite.getColor().a - 1f / amount, 0, 1));
-                        } else { //animation
-                            Color color = animm.get(e).shadeColor;
-                            color = new Color(
-                                    color.r,
-                                    color.g,
-                                    color.b,
-                                    MathUtils.clamp(color.a - 1f / amount, 0, 1));
-                            animm.get(e).shadeColor = color;
-
-                        }
-                    }
-                }
-            };
-        }
-
-        public static GameEvent fadeInThenOut(int amountIn, int space, int amountOut) {
-            return new GameEvent() {
-                private int timesRun;
-                @Override
-                public void event(Entity e, Engine engine) {
-                    timesRun++;
-
-                    if (timesRun < amountIn) {
-                        if (sm.has(e)) { //sprite
-                            Sprite sprite = sm.get(e).sprite;
-                            sprite.setColor(
-                                    sprite.getColor().r,
-                                    sprite.getColor().g,
-                                    sprite.getColor().b,
-                                    MathUtils.clamp(sprite.getColor().a + 1f / amountIn, 0, 1));
-                        } else { //animation
-                            Color color = animm.get(e).shadeColor;
-                            color = new Color(
-                                    color.r,
-                                    color.g,
-                                    color.b,
-                                    MathUtils.clamp(color.a + 1f / amountIn, 0, 1));
-                            animm.get(e).shadeColor = color;
-                        }
-                    } else if (timesRun >= amountIn && timesRun < space) {
-                        //nothing
-                    } else {
-                        if (sm.has(e)) { //sprite
-                            Sprite sprite = sm.get(e).sprite;
-                            sprite.setColor(
-                                    sprite.getColor().r,
-                                    sprite.getColor().g,
-                                    sprite.getColor().b,
-                                    MathUtils.clamp(sprite.getColor().a - 1f / amountOut, 0, 1));
-                        } else { //animation
-                            Color color = animm.get(e).shadeColor;
-                            color = new Color(
-                                    color.r,
-                                    color.g,
-                                    color.b,
-                                    MathUtils.clamp(color.a - 1f / amountOut, 0, 1));
-                            animm.get(e).shadeColor = color;
-                        }
-                    }
-                }
-            };
-        }
-
-
-        /**
-         * @param amount degrees rotated per method call
-         * @return {@link GameEvent} that rotates the entity
-         */
-        public static GameEvent rotate(float amount) {
-            return (entity, engine) -> {
-                pm.get(entity).rotation += amount;
-            };
-        }
-
-
-
-    }
 }

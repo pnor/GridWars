@@ -85,7 +85,7 @@ public class EntityValue implements Comparable {
 
         if (hp > 0)
             //value += 200 + ((float) hp / (float) maxHp) * 150;   OLD Proportional to max
-            value += 200 + (hp * 20);
+            value += 200 + (hp * 30);
 
         value += sp * 30;
 
