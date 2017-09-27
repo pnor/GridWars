@@ -78,7 +78,7 @@ public abstract class Rules {
                             continue;
                         Phase curPhase = phase.get(e).phases.get(i);
 
-                        if (curPhase.withinThreshold(stm.get(e).hp)) {
+                        if (curPhase.withinThreshold(stm.get(e).hp)) { //change phase
                             phase.get(e).currentPhaseIndex = i;
                             BoardComponent.boards.getBoard().remove(am.get(e).actor, bm.get(e).pos.r, bm.get(e).pos.c);
                             curPhase.applyPhase(e);

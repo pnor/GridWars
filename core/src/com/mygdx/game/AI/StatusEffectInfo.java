@@ -33,8 +33,8 @@ public class StatusEffectInfo {
 
     /**
      * @param o other status effect
-     * @return True if 2 status effects have the same name. False otherwise. Note that 2 status effects with slightly different effects and same names are considered equal.
-     * For Ex. : offenseless and offenseless2 both have the same name ("Offenseless"), but last different durations. Despite this, they are equal.
+     * @return True if 2 status effects have the same name. False otherwise. Note that 2 status effects with differing durations and same names are considered equal.
+     * For Ex. : Offenseless with 2 turns and Offenseless with 3 turns are considered equal
      */
     public boolean equals(Object o) {
         return o instanceof StatusEffectInfo && ((StatusEffectInfo) o).name.equals(name);
