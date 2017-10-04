@@ -1,7 +1,11 @@
 package com.mygdx.game.creators;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.components.PositionComponent;
+import com.mygdx.game.components.SpriteComponent;
 import com.mygdx.game.screens_ui.BackType;
 import com.mygdx.game.screens_ui.Background;
 
@@ -57,13 +61,15 @@ public class BackgroundConstructor {
     //region regular battle
     public static Background makeSimpleBack() {
         Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
-        back.setColor(new Color(.7f, .7f, .7f, 1));
+        back.setColor(new Color(.8f, .8f, .8f, 1));
         Sprite overlay = new Sprite(backAtlas.findRegion("DiagStripeHoriz"));
-        overlay.setColor(new Color(.5f, .5f, .5f, 1));
+        overlay.setColor(new Color(.7f, .7f, .7f, 1));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("SimpleRoundedZag"));
+        overlay2.setColor(new Color(.5f, .5f, .5f, .1f));
         return new Background(
                 back,
-                new Sprite[] {overlay},
-                new BackType[] {BackType.SCROLL_HORIZONTAL},
+                new Sprite[] {overlay, overlay2},
+                new BackType[] {BackType.SCROLL_HORIZONTAL, BackType.SCROLL_HORIZONTAL_SLOW},
                 null, null);
     }
 
@@ -72,22 +78,38 @@ public class BackgroundConstructor {
         back.setColor(new Color(.5f, .5f, .5f, 1));
         Sprite overlay = new Sprite(backAtlas.findRegion("DiagCheckerBackground"));
         overlay.setColor(new Color(.3f, .3f, .3f, 1));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("SqureStripHoriz"));
+        overlay2.setColor(new Color(.2f, .2f, .2f, 1f));
         return new Background(
                 back,
-                new Sprite[] {overlay},
-                new BackType[] {BackType.SCROLL_HORIZONTAL},
+                new Sprite[] {overlay, overlay2},
+                new BackType[] {BackType.SCROLL_HORIZONTAL, BackType.SCROLL_HORIZONTAL_SLOW},
                 null, null);
     }
 
     public static Background makeCompactBack() {
         Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
-        back.setColor(Color.LIGHT_GRAY);
+        back.setColor(Color.DARK_GRAY);
+        Entity backgroundEntity = new Entity();
+        backgroundEntity.add(new SpriteComponent(back));
+        backgroundEntity.add(new PositionComponent(new Vector2(0, 0), back.getHeight(), back.getWidth(), 0));
+
         Sprite overlay = new Sprite(backAtlas.findRegion("CheckerBackground"));
-        overlay.setColor(Color.WHITE);
+        overlay.setColor(Color.GRAY);
+        Entity overlayEntity = new Entity();
+        overlayEntity.add(new SpriteComponent(overlay));
+        overlayEntity.add(new PositionComponent(new Vector2(0, 0), overlay.getHeight(), overlay.getWidth(), 0));
+
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("CheckerBackground"));
+        overlay2.setColor(Color.LIGHT_GRAY);
+        Entity overlayEntity2 = new Entity();
+        overlayEntity2.add(new SpriteComponent(overlay2));
+        overlayEntity2.add(new PositionComponent(new Vector2(-overlay2.getWidth() / 4, 0), overlay2.getHeight(), back.getWidth(), 90));
+
         return new Background(
                 back,
-                new Sprite[] {overlay},
-                new BackType[] {BackType.SCROLL_HORIZONTAL},
+                new Entity[] {overlayEntity, overlayEntity2},
+                new BackType[] {BackType.SCROLL_HORIZONTAL, BackType.SCROLL_VERTICAL_FAST},
                 null, null);
     }
 

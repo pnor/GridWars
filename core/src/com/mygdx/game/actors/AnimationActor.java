@@ -21,7 +21,7 @@ public class AnimationActor extends UIActor {
     private boolean stopUpdating;
 
     /**
-     * Creates an {@code AnimationActor} with a looping animation.
+     * Creates an {@code AnimationActor} with a looping animation. (is selectable)
      *
      * @param duration how long duration will take
      * @param s        images shown in animation
@@ -33,27 +33,15 @@ public class AnimationActor extends UIActor {
     }
 
     /**
-     * Creates an {@code AnimationActor} with an animation.
-     *
-     * @param duration how long duration will take
-     * @param s        images shown in animation
-     * @param playType how animation will play
-     */
-    public AnimationActor(float duration, TextureRegion[] s, Animation.PlayMode playType) {
-        super(s[0].getRegionWidth(), s[0].getRegionHeight(), true);
-        animation = new Animation(duration, new Array<TextureRegion>(s), playType);
-        currentFrame = new Sprite(animation.getKeyFrame(0));
-    }
-
-    /**
      * Creates an {@code AnimationActor} with an animation that is selectable.
      *
      * @param s        images shown in animation
      * @param playType how animation will play
      * @param duration how long duration will take
+     * @param selectable whether it is selectable
      */
-    public AnimationActor(TextureRegion[] s, Animation.PlayMode playType, float duration) {
-        super(true, s[0].getRegionWidth(), s[0].getRegionHeight());
+    public AnimationActor(TextureRegion[] s, Animation.PlayMode playType, float duration, boolean selectable) {
+        super(s[0].getRegionWidth(), s[0].getRegionHeight(), selectable);
         animation = new Animation(duration, new Array<TextureRegion>(s), playType);
         currentFrame = new Sprite(animation.getKeyFrame(0));
     }

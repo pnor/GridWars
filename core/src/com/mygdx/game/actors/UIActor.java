@@ -14,38 +14,25 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
  * by the entity system.
  */
 public abstract class UIActor extends Actor {
-    private boolean center = true;
     private boolean lastSelected;
 
     /**
      * Creates an {@code UIActor} with specified width and height
      * @param width width
      * @param height height
-     * @param c whether to center when moved on board
+     * @param selectable is selectable
      */
-    public UIActor(float width, float height, boolean c) {
-        center = c;
-        setWidth(width);
-        setHeight(height);
-    }
-
-    /**
-     * Creates an {@code UIActor} with specified width and height that is selectable
-     * @param c whether to center when moved on board
-     * @param width width
-     * @param height height
-     */
-    public UIActor(boolean c, float width, float height) {
-        center = c;
+    public UIActor(float width, float height, boolean selectable) {
         setWidth(width);
         setHeight(height);
 
-        this.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                lastSelected = true;
-                return false;
-            }
-        });
+        if (selectable)
+            this.addListener(new InputListener() {
+                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                    lastSelected = true;
+                    return false;
+                }
+            });
     }
 
     /**
@@ -53,14 +40,6 @@ public abstract class UIActor extends Actor {
      */
     public void center() {
         setPosition((getParent().getWidth() - getWidth()) / 2, (getParent().getHeight() - getHeight()) / 2);
-    }
-
-    /**
-     * Sets whether this actor should center itself when added, or moved on the board.
-     * @param c whether to center
-     */
-    public void setShouldCenter(boolean c) {
-        center = c;
     }
 
     public boolean getLastSelected() {

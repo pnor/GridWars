@@ -58,7 +58,7 @@ public class EntityConstructor {
         if (team > -1)
             entity.add(new TeamComponent(team));
 
-        entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("tester"), true, true)));
+        entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("tester"), 64, 64)));
         entity.add(new BoardComponent());
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity)})));
         entity.add(new StatComponent(1, 999, 1, 0, 8));
@@ -82,7 +82,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("robot"),
                 atlas.findRegion("robot2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 5, 1, 1, 2));
         entity.add(new StatusEffectComponent());
@@ -109,7 +109,8 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("robot"),
                 atlas.findRegion("robot2")
-        }, Animation.PlayMode.LOOP, 0.5f)));        entity.add(new BoardComponent());
+        }, Animation.PlayMode.LOOP, 0.5f, true)));
+        entity.add(new BoardComponent());
         entity.add(new StatComponent(1, 20, 20, 0, 14));
         stm.get(entity).sp  = 20;
         entity.add(new StatusEffectComponent());
@@ -139,7 +140,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("floorSpike"),
                 atlas.findRegion("iceSpike")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 5, 1, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -164,7 +165,7 @@ public class EntityConstructor {
         if (team > -1)
             entity.add(new TeamComponent(team));
 
-        entity.add(new ActorComponent(new SpriteActor(new Sprite(atlas.findRegion("hole")))));
+        entity.add(new ActorComponent(new SpriteActor(new Sprite(atlas.findRegion("hole")), false)));
         entity.add(new BoardComponent());
         entity.add(new NameComponent("Hole"));
 
@@ -177,7 +178,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 0, 0, 0, 0));
-        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("cube")), true, true)));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("cube")))));
         entity.add(new NameComponent("Cube"));
 
         entity.add(new VisualsComponent(
@@ -193,7 +194,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
         entity.add(new StatComponent(10, 0, 0, 0, 0));
-        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("cubelight")), true, true)));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("cubelight")))));
         entity.add(new NameComponent("Durable Cube"));
 
         entity.add(new VisualsComponent(
@@ -209,7 +210,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 0, 0, 1, 0));
-        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("Cactus")), true, true)));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("Cactus")))));
         entity.add(new NameComponent("Cactus"));
 
         entity.add(new VisualsComponent(
@@ -225,7 +226,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 0, 0, 0, 0));
-        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("flowercactus")), true, true)));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("flowercactus")))));
         entity.add(new NameComponent("Flower Cactus"));
 
         entity.add(new VisualsComponent(
@@ -242,7 +243,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
         entity.add(new StatComponent(2, 0, 0, 1, 0));
-        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("tree")), true, true)));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("tree")))));
         entity.add(new NameComponent("Tree"));
 
         entity.add(new VisualsComponent(
@@ -261,7 +262,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("torch"),
                 atlas.findRegion("torch2")
-        }, Animation.PlayMode.LOOP, 0.3f)));
+        }, Animation.PlayMode.LOOP, 0.3f, true)));
         entity.add(new NameComponent("Torch"));
 
         entity.add(new VisualsComponent(
@@ -280,7 +281,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("stoneTorch"),
                 atlas.findRegion("stoneTorch2")
-        }, Animation.PlayMode.LOOP, 0.3f)));
+        }, Animation.PlayMode.LOOP, 0.3f, true)));
         entity.add(new NameComponent("Stone Torch"));
 
         entity.add(new VisualsComponent(
@@ -296,7 +297,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
         entity.add(new StatComponent(7, 0, 0, 2, 0));
-        entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("gargoyleStatue"), true, true)));
+        entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("gargoyleStatue"), true)));
         entity.add(new NameComponent("Gargoyle Statue"));
 
         entity.add(new VisualsComponent(
@@ -312,7 +313,23 @@ public class EntityConstructor {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 0, 0, 0, 0));
-        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("pillar")), true, true)));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("pillar")), true)));
+        entity.add(new NameComponent("Pillar"));
+
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+
+        return entity;
+    }
+
+    public static Entity brokenPillar() {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(4, 0, 0, 0, 0));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("pillar")), true)));
         entity.add(new NameComponent("Pillar"));
 
         entity.add(new VisualsComponent(
@@ -337,12 +354,12 @@ public class EntityConstructor {
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("Canight"),
                     atlas.findRegion("Canight2")
-            }, Animation.PlayMode.LOOP, 0.5f)));
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
         else if (altColor >= 1)
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("CanightAlt"),
                     atlas.findRegion("Canight2Alt")
-            }, Animation.PlayMode.LOOP, 0.5f)));
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
         
         entity.add(new BoardComponent());
         entity.add(new StatComponent(2, 4, 2, 0, 3));
@@ -374,12 +391,12 @@ public class EntityConstructor {
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("catdroid"),
                     atlas.findRegion("catdroid2")
-            }, Animation.PlayMode.LOOP, 0.5f)));
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
         else if (altColor >= 1)
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("catdroidAlt"),
                     atlas.findRegion("catdroid2Alt")
-            }, Animation.PlayMode.LOOP, 0.5f)));
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
         
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 5, 2, 2, 2));
@@ -412,12 +429,12 @@ public class EntityConstructor {
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("firebull"),
                     atlas.findRegion("firebull2")
-            }, Animation.PlayMode.LOOP, 0.2f)));
+            }, Animation.PlayMode.LOOP, 0.2f, true)));
         else if (altColor >= 1)
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("firebullAlt"),
                     atlas.findRegion("firebull2Alt")
-            }, Animation.PlayMode.LOOP, 0.2f)));
+            }, Animation.PlayMode.LOOP, 0.2f, true)));
        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 4, 5, 0, 1));
@@ -449,12 +466,12 @@ public class EntityConstructor {
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("icebird"),
                     atlas.findRegion("icebird2")
-            }, Animation.PlayMode.LOOP, 0.5f)));
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
         else if (altColor >= 1)
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("icebirdAlt"),
                     atlas.findRegion("icebird2Alt")
-            }, Animation.PlayMode.LOOP, 0.5f)));
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
 
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 5, 2, 0, 3));
@@ -487,12 +504,12 @@ public class EntityConstructor {
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("fish"),
                     atlas.findRegion("fish2")
-            }, Animation.PlayMode.LOOP, 0.5f)));
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
         else if (altColor >= 1)
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("fishAlt"),
                     atlas.findRegion("fish2Alt")
-            }, Animation.PlayMode.LOOP, 0.5f)));
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
 
         entity.add(new BoardComponent());
         entity.add(new StatComponent(8, 4, 1, 0, 1));
@@ -525,12 +542,12 @@ public class EntityConstructor {
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("turtle"),
                     atlas.findRegion("turtle2")
-            }, Animation.PlayMode.LOOP, 0.7f)));
+            }, Animation.PlayMode.LOOP, 0.7f, true)));
         else if (altColor >= 1)
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("turtleAlt"),
                     atlas.findRegion("turtle2Alt")
-            }, Animation.PlayMode.LOOP, 0.7f)));
+            }, Animation.PlayMode.LOOP, 0.7f, true)));
 
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 8, 3, 2, 1));
@@ -563,12 +580,12 @@ public class EntityConstructor {
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("fox"),
                     atlas.findRegion("fox2")
-            }, Animation.PlayMode.LOOP, 0.5f)));
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
         else if (altColor >= 1)
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("foxAlt"),
                     atlas.findRegion("fox2Alt")
-            }, Animation.PlayMode.LOOP, 0.5f)));
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
 
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 3, 2, 1, 2));
@@ -601,12 +618,12 @@ public class EntityConstructor {
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("thunderdog"),
                     atlas.findRegion("thunderdog2")
-            }, Animation.PlayMode.LOOP, 0.2f)));
+            }, Animation.PlayMode.LOOP, 0.2f, true)));
         else if (altColor >= 1)
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("thunderdogAlt"),
                     atlas.findRegion("thunderdog2Alt")
-            }, Animation.PlayMode.LOOP, 0.2f)));
+            }, Animation.PlayMode.LOOP, 0.2f, true)));
 
         entity.add(new BoardComponent());
         entity.add(new StatComponent(7, 5, 1, 0, 1));
@@ -639,12 +656,12 @@ public class EntityConstructor {
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("mummy"),
                     atlas.findRegion("mummy2")
-            }, Animation.PlayMode.LOOP, 0.3f)));
+            }, Animation.PlayMode.LOOP, 0.3f, true)));
         else if (altColor >= 1)
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("mummyAlt"),
                     atlas.findRegion("mummy2Alt")
-            }, Animation.PlayMode.LOOP, 0.3f)));
+            }, Animation.PlayMode.LOOP, 0.3f, true)));
 
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 5, 2, 1, 2));
@@ -677,12 +694,12 @@ public class EntityConstructor {
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("squid"),
                     atlas.findRegion("squid2")
-            }, Animation.PlayMode.LOOP, 0.7f)));
+            }, Animation.PlayMode.LOOP, 0.7f, true)));
         else if (altColor >= 1)
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("squidAlt"),
                     atlas.findRegion("squid2Alt")
-            }, Animation.PlayMode.LOOP, 0.7f)));
+            }, Animation.PlayMode.LOOP, 0.7f, true)));
 
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 9, 3, 0, 2));
@@ -715,12 +732,12 @@ public class EntityConstructor {
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("steamdragon"),
                     atlas.findRegion("steamdragon2")
-            }, Animation.PlayMode.LOOP, 0.5f)));
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
         else if (altColor >= 1)
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("steamdragonAlt"),
                     atlas.findRegion("steamdragon2Alt")
-            }, Animation.PlayMode.LOOP, 0.5f)));
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
 
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 6, 1, 0, 2));
@@ -753,12 +770,12 @@ public class EntityConstructor {
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("jellygirl"),
                     atlas.findRegion("jellygirl2")
-            }, Animation.PlayMode.LOOP, 0.7f)));
+            }, Animation.PlayMode.LOOP, 0.7f, true)));
         else if (altColor >= 1)
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("jellygirlAlt"),
                     atlas.findRegion("jellygirl2Alt")
-            }, Animation.PlayMode.LOOP, 0.7f)));
+            }, Animation.PlayMode.LOOP, 0.7f, true)));
 
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 10, 1, 0, 1));
@@ -791,12 +808,12 @@ public class EntityConstructor {
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("mirrorman"),
                     atlas.findRegion("mirrorman2")
-            }, Animation.PlayMode.LOOP, 0.3f)));
+            }, Animation.PlayMode.LOOP, 0.3f, true)));
         else if (altColor >= 1)
             entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                     atlas.findRegion("mirrormanAlt"),
                     atlas.findRegion("mirrorman2Alt")
-            }, Animation.PlayMode.LOOP, 0.3f)));
+            }, Animation.PlayMode.LOOP, 0.3f, true)));
 
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 12, 1, 1, 2));
@@ -832,7 +849,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("fireSpirit"),
                 atlas.findRegion("fireSpirit2")
-        }, Animation.PlayMode.LOOP, 0.4f)));
+        }, Animation.PlayMode.LOOP, 0.4f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(20, 6, 3, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -863,7 +880,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("waterSpirit"),
                 atlas.findRegion("waterSpirit2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(30, 7, 2, 1, 1));
         entity.add(new StatusEffectComponent());
@@ -894,7 +911,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("thunderSpirit"),
                 atlas.findRegion("thunderSpirit2")
-        }, Animation.PlayMode.LOOP, 0.2f)));
+        }, Animation.PlayMode.LOOP, 0.2f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(25, 10, 2, 1, 2));
         entity.add(new StatusEffectComponent());
@@ -925,7 +942,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("dragon"),
                 atlas.findRegion("dragon2")
-        }, Animation.PlayMode.LOOP, 1f)));
+        }, Animation.PlayMode.LOOP, 1f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(40, 10, 3, 1, 1));
         entity.add(new StatusEffectComponent());
@@ -938,21 +955,21 @@ public class EntityConstructor {
                 DamageAnimationConstructor.deathAnimationExplosive(entity, Color.YELLOW),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.dragonBreath2(entity),
                 MoveConstructor.flash(entity),
+                MoveConstructor.dragonBreath2(entity),
                 MoveConstructor.dragonRoar(entity),
-                MoveConstructor.raze(entity)
+                MoveConstructor.spectralBlast(entity)
         })));
         entity.add(new PhaseComponent(
                 new Phase(20, -999, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("dragonGlow"),
                         atlas.findRegion("dragon2Glow")},
-                        Animation.PlayMode.LOOP, .7f),
-                        new StatComponent(40, 10, 2, 0, 1)),
+                        Animation.PlayMode.LOOP, .7f, true),
+                        new StatComponent(40, 10, 5, 1, 2)),
                 new Phase(40, 20, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("dragon"),
                         atlas.findRegion("dragon2")},
-                        Animation.PlayMode.LOOP, 1f),
+                        Animation.PlayMode.LOOP, 1f, true),
                         new StatComponent(40, 10, 3, 1, 1))
         ));
 
@@ -970,7 +987,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("StoneLion"),
                 atlas.findRegion("StoneLion2")
-        }, Animation.PlayMode.LOOP, 0.8f)));
+        }, Animation.PlayMode.LOOP, 0.8f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(2, 2, 1, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -1001,7 +1018,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("lion"),
                 atlas.findRegion("lion2")
-        }, Animation.PlayMode.LOOP, 0.7f)));
+        }, Animation.PlayMode.LOOP, 0.7f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 5, 3, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -1031,7 +1048,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("yellowLion"),
                 atlas.findRegion("yellowLion2")
-        }, Animation.PlayMode.LOOP, 0.7f)));
+        }, Animation.PlayMode.LOOP, 0.7f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(7, 8, 4, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -1062,7 +1079,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("blueLion"),
                 atlas.findRegion("blueLion2")
-        }, Animation.PlayMode.LOOP, 0.7f)));
+        }, Animation.PlayMode.LOOP, 0.7f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(12, 4, 5, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -1095,7 +1112,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("gargoyle"),
                 atlas.findRegion("gargoyle2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 6, 2, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -1125,7 +1142,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("whiteGargoyle"),
                 atlas.findRegion("whiteGargoyle2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(8, 8, 2, 0, 3));
         entity.add(new StatusEffectComponent());
@@ -1158,7 +1175,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("scaleman"),
                 atlas.findRegion("scaleman2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(10, 5, 1, 1, 1));
         entity.add(new StatusEffectComponent());
@@ -1179,17 +1196,17 @@ public class EntityConstructor {
                 new Phase(3, -999, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("scalemanHigh"),
                         atlas.findRegion("scalemanHigh2")},
-                        Animation.PlayMode.LOOP, 0.1f),
+                        Animation.PlayMode.LOOP, 0.1f, true),
                         new StatComponent(10, 5, 4, 0, 3)),
                 new Phase(6, 3, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("scalemanMid"),
                         atlas.findRegion("scalemanMid2")},
-                        Animation.PlayMode.LOOP, 0.2f),
+                        Animation.PlayMode.LOOP, 0.2f, true),
                         new StatComponent(10, 5, 2, 0, 2)),
                 new Phase(10, 6, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("scaleman"),
                         atlas.findRegion("scaleman2")},
-                        Animation.PlayMode.LOOP, 0.5f),
+                        Animation.PlayMode.LOOP, 0.5f, true),
                         new StatComponent(10, 5, 1, 1, 1))
         ));
         return entity;
@@ -1204,7 +1221,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("brightScaleman"),
                 atlas.findRegion("brightScaleman2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(10, 7, 1, 1, 1));
         entity.add(new StatusEffectComponent());
@@ -1226,17 +1243,17 @@ public class EntityConstructor {
                 new Phase(3, -999, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("brightScalemanHigh"),
                         atlas.findRegion("brightScalemanHigh2")},
-                        Animation.PlayMode.LOOP, 0.1f),
+                        Animation.PlayMode.LOOP, 0.1f, true),
                         new StatComponent(10, 5, 3, 0, 3)),
                 new Phase(6, 3, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("brightScalemanMid"),
                         atlas.findRegion("brightScalemanMid2")},
-                        Animation.PlayMode.LOOP, 0.2f),
+                        Animation.PlayMode.LOOP, 0.2f, true),
                         new StatComponent(10, 7, 2, 1, 2)),
                 new Phase(10, 6, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("brightScaleman"),
                         atlas.findRegion("brightScaleman2")},
-                        Animation.PlayMode.LOOP, 0.5f),
+                        Animation.PlayMode.LOOP, 0.5f, true),
                         new StatComponent(10, 7, 1, 1, 1))
         ));
         return entity;
@@ -1253,7 +1270,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("slimeman"),
                 atlas.findRegion("slimeman2")
-        }, Animation.PlayMode.LOOP, .5f)));
+        }, Animation.PlayMode.LOOP, .5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 2, 1, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -1282,7 +1299,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("slimemanNeo"),
                 atlas.findRegion("slimemanNeo2")
-        }, Animation.PlayMode.LOOP, .5f)));
+        }, Animation.PlayMode.LOOP, .5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 4, 3, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -1311,7 +1328,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("slimemanDark"),
                 atlas.findRegion("slimemanDark2")
-        }, Animation.PlayMode.LOOP, .5f)));
+        }, Animation.PlayMode.LOOP, .5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 4, 3, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -1343,7 +1360,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("toxicCanMan"),
                 atlas.findRegion("toxicCanMan2")
-        }, Animation.PlayMode.LOOP, .5f)));
+        }, Animation.PlayMode.LOOP, .5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(2, 4, 1, 0, 3));
         entity.add(new StatusEffectComponent());
@@ -1372,7 +1389,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("acidicCanMan"),
                 atlas.findRegion("acidicCanMan2")
-        }, Animation.PlayMode.LOOP, .5f)));
+        }, Animation.PlayMode.LOOP, .5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 5, 1, 0, 3));
         entity.add(new StatusEffectComponent());
@@ -1402,7 +1419,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("healCanMan"),
                 atlas.findRegion("healCanMan2")
-        }, Animation.PlayMode.LOOP, .5f)));
+        }, Animation.PlayMode.LOOP, .5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(2, 7, 1, 0, 3));
         entity.add(new StatusEffectComponent());
@@ -1435,7 +1452,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("StoneGolem"),
                 atlas.findRegion("StoneGolem2")
-        }, Animation.PlayMode.LOOP, 1f)));
+        }, Animation.PlayMode.LOOP, 1f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(7, 2, 2, 1, 1));
         entity.add(new StatusEffectComponent());
@@ -1465,7 +1482,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("RedGolem"),
                 atlas.findRegion("RedGolem2")
-        }, Animation.PlayMode.LOOP, 1f)));
+        }, Animation.PlayMode.LOOP, 1f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(8, 3, 2, 1, 1));
         entity.add(new StatusEffectComponent());
@@ -1496,7 +1513,7 @@ public class EntityConstructor {
                 atlas.findRegion("betaGolem"),
                 atlas.findRegion("betaGolem2"),
                 atlas.findRegion("betaGolem3")
-        }, Animation.PlayMode.LOOP_PINGPONG, .4f)));
+        }, Animation.PlayMode.LOOP_PINGPONG, .4f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 5, 2, 1, 2));
         entity.add(new StatusEffectComponent());
@@ -1527,7 +1544,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("neoGolem"),
                 atlas.findRegion("neoGolem2")
-        }, Animation.PlayMode.LOOP_PINGPONG, .3f)));
+        }, Animation.PlayMode.LOOP_PINGPONG, .3f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(7, 7, 2, 1, 1));
         entity.add(new StatusEffectComponent());
@@ -1559,7 +1576,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("spider"),
                 atlas.findRegion("spider2")
-        }, Animation.PlayMode.LOOP, 0.3f)));
+        }, Animation.PlayMode.LOOP, 0.3f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 3, 1, 0, 3));
         entity.add(new StatusEffectComponent());
@@ -1589,7 +1606,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("toughspider"),
                 atlas.findRegion("toughspider2")
-        }, Animation.PlayMode.LOOP, 0.3f)));
+        }, Animation.PlayMode.LOOP, 0.3f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 4, 2, 0, 3));
         entity.add(new StatusEffectComponent());
@@ -1619,7 +1636,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("redSpider"),
                 atlas.findRegion("redSpider2")
-        }, Animation.PlayMode.LOOP, 0.15f)));
+        }, Animation.PlayMode.LOOP, 0.15f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 3, 6, 0, 3));
         entity.add(new StatusEffectComponent());
@@ -1651,7 +1668,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("stoneSword"),
                 atlas.findRegion("stoneSword2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(2, 0, 2, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -1679,7 +1696,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("possesedSwordBlue"),
                 atlas.findRegion("possesedSwordBlue2")
-        }, Animation.PlayMode.LOOP, 0.5f)));
+        }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 4, 5, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -1709,7 +1726,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("possesedBook"),
                 atlas.findRegion("possesedBook2")
-        }, Animation.PlayMode.LOOP, 0.4f)));
+        }, Animation.PlayMode.LOOP, 0.4f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 5, 2, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -1739,7 +1756,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("advancedBook"),
                 atlas.findRegion("advancedBook2")
-        }, Animation.PlayMode.LOOP, 0.4f)));
+        }, Animation.PlayMode.LOOP, 0.4f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 7, 3, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -1769,7 +1786,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("loveBook"),
                 atlas.findRegion("loveBook2")
-        }, Animation.PlayMode.LOOP, 0.4f)));
+        }, Animation.PlayMode.LOOP, 0.4f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 7, 1, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -1800,7 +1817,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("fancyBook"),
                 atlas.findRegion("fancyBook2")
-        }, Animation.PlayMode.LOOP, 0.4f)));
+        }, Animation.PlayMode.LOOP, 0.4f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 12, 3, 0, 2));
         stm.get(entity).obscureStatInfo = true;
@@ -1831,7 +1848,7 @@ public class EntityConstructor {
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Power Tower"));
 
-        entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("lightTower"), true, true)));
+        entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("lightTower"), true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 2, 0, 0, 0));
         entity.add(new StateComponent());
@@ -1855,7 +1872,7 @@ public class EntityConstructor {
             entity.add(new TeamComponent(team));
         entity.add(new NameComponent("Weaken Tower"));
 
-        entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("darkTower"), true, true)));
+        entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("darkTower"), true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 2, 0, 0, 0));
         entity.add(new StateComponent());
@@ -1882,7 +1899,7 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("whiteOrb"),
                 atlas.findRegion("whiteOrb2")
-        }, Animation.PlayMode.LOOP, .5f)));
+        }, Animation.PlayMode.LOOP, .5f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 3, 1, 40, 1));
         entity.add(new StatusEffectComponent());

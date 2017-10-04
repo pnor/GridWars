@@ -15,7 +15,7 @@ public class SpriteActor extends UIActor{
     private LerpColor lerpColor;
 
     /**
-     * Creates a {@code UIActor} with height and width determined by sprite size
+     * Creates a {@code UIActor} with height and width determined by sprite size. Is selectable by default
      * @param s sprite
      */
     public SpriteActor(Sprite s) {
@@ -27,53 +27,9 @@ public class SpriteActor extends UIActor{
      * Creates a {@code UIActor} with height and width determined by sprite size, and can be selected
      * @param s sprite
      */
-    public SpriteActor(Sprite s, boolean c, boolean isSelectable) {
-        super(c, s.getWidth(), s.getHeight());
+    public SpriteActor(Sprite s, boolean isSelectable) {
+        super(s.getWidth(), s.getHeight(), isSelectable);
         sprite = s;
-    }
-
-    /**
-     * Creates a {@code UIActor} with height and width determined by sprite size. Can chose whether
-     * the sprite centers when moved on board
-     * @param s Sprite
-     * @param c whether the sprite centers when moved on board
-     */
-    public SpriteActor(Sprite s, boolean c) {
-        super(s.getWidth(), s.getHeight(), c);
-        sprite = s;
-    }
-
-    /**
-     * Creates a {@code UIActor} with specified height and width
-     * @param s sprite
-     * @param h height
-     * @param w width
-     */
-    public SpriteActor(Sprite s, float h, float w) {
-        super(w, h, true);
-        sprite = s;
-    }
-
-    /**
-     * Creates a {@code UIActor} with specified height and width.  Can chose whether
-     * the sprite centers when moved on board.
-     * @param s sprite
-     * @param h height
-     * @param w width
-     * @param c whether the sprite centers when moved on board
-     */
-    public SpriteActor(Sprite s, float h, float w, boolean c) {
-        super(w, h, c);
-        sprite = s;
-    }
-
-    /**
-     * Creates a {@code UIActor} using a texture region
-     * @param tex texture region
-     */
-    public SpriteActor(TextureRegion tex) {
-        super(tex.getRegionWidth(), tex.getRegionHeight(), true);
-        sprite = new Sprite(tex);
     }
 
     /**

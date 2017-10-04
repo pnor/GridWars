@@ -59,7 +59,6 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         else if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             level--;
             backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
-
         }
     }
 
@@ -174,10 +173,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.gargoyle(1),
-                                EntityConstructor.chromeMan(1),
-                                EntityConstructor.chromeMan(1),
-                                EntityConstructor.golemMK3(1)
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1)
                         }));
             case 2 :
                 return new Team("Enemy",

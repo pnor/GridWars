@@ -62,7 +62,9 @@ public class BoardAndRuleConstructor {
             //endregion
             //region survival
             case 13:
+                return makeSurvivalHallwayCurved(screen, teams, boardManager);
             case 14:
+                return makeSurvivalHallwayOpen(screen, teams, boardManager);
             case 15:
             case 16:
             case 17:
@@ -72,7 +74,7 @@ public class BoardAndRuleConstructor {
             case 21:
             case 22:
             case 23:
-                return makeSurvivalNormal(screen, teams, boardManager);
+                return makeSurvivalHallwayOpen(screen, teams, boardManager);
             //endregion
         }
         return null;
@@ -579,7 +581,7 @@ public class BoardAndRuleConstructor {
     //endregion
 
     //region survival
-    public static Rules makeSurvivalNormal(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+    public static Rules makeSurvivalEntrance(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
         boardManager.setBoards(new Board(6, 6, Color.DARK_GRAY, Color.LIGHT_GRAY, 100), new CodeBoard(6, 6));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
         //place entities
@@ -609,6 +611,113 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.torch(), new BoardPosition(3, 0));
         boardManager.add(EntityConstructor.torch(), new BoardPosition(2, 5));
         boardManager.add(EntityConstructor.torch(), new BoardPosition(3, 5));
+
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeSurvivalHallwayOpen(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(7, 7, Color.DARK_GRAY, Color.LIGHT_GRAY, 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        int col = 1;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            if (col == 2)
+                col ++;
+            col++;
+        }
+        col = 5;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            if (col == 4)
+                col --;
+            col--;
+        }
+
+        //remove sides
+        for (int i = 0; i < boardManager.getBoard().getRowSize(); i++) {
+            if (i < 2 || i > 4) {
+                boardManager.getBoard().getTile(i, 0).setInvisible(true);
+                boardManager.getBoard().getTile(i, boardManager.getBoard().getColumnSize() - 1).setInvisible(true);
+            } else {
+                boardManager.add(EntityConstructor.pillar(), new BoardPosition(i, 0));
+                boardManager.add(EntityConstructor.pillar(), new BoardPosition(i, boardManager.getBoard().getColumnSize() - 1));
+            }
+
+        }
+
+        boardManager.getBoard().getTile(0, 0).setInvisible(true);
+        boardManager.getBoard().getTile(1, 0).setInvisible(true);
+        boardManager.getBoard().getTile(0, boardManager.getBoard().getColumnSize() - 1).setInvisible(true);
+        boardManager.getBoard().getTile(1, boardManager.getBoard().getColumnSize() - 1).setInvisible(true);
+
+        boardManager.getBoard().getTile(boardManager.getBoard().getRowSize() - 1, 0).setInvisible(true);
+        boardManager.getBoard().getTile(boardManager.getBoard().getRowSize() - 2, 0).setInvisible(true);
+        boardManager.getBoard().getTile(boardManager.getBoard().getRowSize() - 1, boardManager.getBoard().getColumnSize() - 1).setInvisible(true);
+        boardManager.getBoard().getTile(boardManager.getBoard().getRowSize() - 2, boardManager.getBoard().getColumnSize() - 1).setInvisible(true);
+
+
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeSurvivalHallwayCurved(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(7, 7, Color.DARK_GRAY, Color.LIGHT_GRAY, 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+
+        //remove edge
+        final int START_POS = 3;
+        final int CORNER_SIZE = 4 + START_POS;
+        for (int i = START_POS; i < CORNER_SIZE; i++) {
+            for (int j = START_POS; j < CORNER_SIZE; j++) {
+                boardManager.getBoard().getTile(i, j).setInvisible(true);
+            }
+        }
+
+        //place entities
+        int tryRow = 0;
+        int tryCol = maxSize;
+        for (int i = 0; i < teams.get(0).getEntities().size; i++) {
+            if (boardManager.getBoard().getTile(tryRow, tryCol).isInvisible()) {
+                tryRow = 0;
+                tryCol--;
+            }
+            boardManager.add(teams.get(0).getEntities().get(i), new BoardPosition(tryRow, tryCol));
+            tryRow++;
+        }
+        tryRow = maxSize;
+        tryCol = 0;
+        for (int i = 0; i < teams.get(1).getEntities().size; i++) {
+            if (boardManager.getBoard().getTile(tryRow, tryCol).isInvisible()) {
+                tryCol = 0;
+                tryRow--;
+            }
+            boardManager.add(teams.get(1).getEntities().get(i), new BoardPosition(tryRow, tryCol));
+            tryCol++;
+        }
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeSurvivalHallway(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(6, 6, Color.DARK_GRAY, Color.LIGHT_GRAY, 100), new CodeBoard(6, 6));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        int col = 1;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            col++;
+        }
+        col = 4;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            col--;
+        }
+
+        //remove sides
+        for (int i = 0; i < boardManager.getBoard().getRowSize(); i++) {
+            boardManager.getBoard().getTile(i, 0).setInvisible(true);
+
+            boardManager.getBoard().getTile(i, 5).setInvisible(true);
+        }
 
         return new Battle2PRules(screen, teams);
     }
