@@ -182,34 +182,37 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.blueLion(1),
-                                EntityConstructor.golemMK3(1),
-                                EntityConstructor.orb(1),
-                                EntityConstructor.golemMK3(1)
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.spider(1),
+                                EntityConstructor.spider(1),
+                                EntityConstructor.stoneLeo(1)
                         }));
             case 3 :
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.book(1),
                                 EntityConstructor.slimeman(1),
-                                EntityConstructor.book(1),
+                                EntityConstructor.spider(1),
+                                EntityConstructor.slimeman(1),
                                 EntityConstructor.slimeman(1)
                         }));
             case 4 :
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.immoralSpider(1),
-                                EntityConstructor.toxicCanman(1),
-                                EntityConstructor.scaleman(1),
-                                EntityConstructor.immoralSpider(1)
+                                EntityConstructor.canman(1),
+                                EntityConstructor.canman(1),
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.canman(1)
                         }));
             case 5 :
                 return new Team("Enemy",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.blazePneuma(1)
+                                EntityConstructor.canman(1),
+                                EntityConstructor.spider(1),
+                                EntityConstructor.spider(1),
+                                EntityConstructor.canman(1)
                         }));
             case 6 :
                 return new Team("Enemy",

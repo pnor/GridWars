@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.screens_ui.Background;
 import com.mygdx.game.screens_ui.screens.TitleScreen;
 
@@ -28,7 +29,7 @@ public class GridWars extends Game {
 	@Override
 	public void create() {
 		stage = new Stage();
-		stage.getViewport().setWorldSize(1000, 900);
+		stage.setViewport(new FitViewport(1000, 900));
 		stage.getViewport().setScreenSize(1000, 900);
 		engine = new Engine();
 		//set up assets
@@ -63,6 +64,12 @@ public class GridWars extends Game {
 		stage.clear();
 		engine.removeAllEntities();
 		super.setScreen(screen);
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		stage.getViewport().update(width, height, true);
 	}
 	
 	@Override

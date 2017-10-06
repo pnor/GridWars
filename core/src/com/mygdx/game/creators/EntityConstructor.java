@@ -312,7 +312,7 @@ public class EntityConstructor {
     public static Entity pillar() {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(6, 0, 0, 0, 0));
+        entity.add(new StatComponent(10, 0, 0, 0, 0));
         entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("pillar")), true)));
         entity.add(new NameComponent("Pillar"));
 
@@ -328,7 +328,7 @@ public class EntityConstructor {
     public static Entity brokenPillar() {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(4, 0, 0, 0, 0));
+        entity.add(new StatComponent(5, 0, 0, 0, 0));
         entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("pillar")), true)));
         entity.add(new NameComponent("Pillar"));
 

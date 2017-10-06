@@ -61,18 +61,25 @@ public class BoardAndRuleConstructor {
                 return makeIsland2PZone(screen, teams, boardManager);
             //endregion
             //region survival
-            case 13:
-                return makeSurvivalHallwayCurved(screen, teams, boardManager);
+            //1-10
+            case 13: // 1
+                return makeSurvivalEntrance(screen, teams, boardManager);
             case 14:
                 return makeSurvivalHallwayOpen(screen, teams, boardManager);
             case 15:
+                return makeSurvivalHallway(screen, teams, boardManager);
             case 16:
-            case 17:
+                return makeSurvivalHallwayCurved(screen, teams, boardManager);
+            case 17: // 5
+                return makeSurvivalTorchRoom(screen, teams, boardManager);
             case 18:
+                return makeSurvivalCircle(screen, teams, boardManager);
             case 19:
             case 20:
             case 21:
             case 22:
+
+            //11-20
             case 23:
                 return makeSurvivalHallwayOpen(screen, teams, boardManager);
             //endregion
@@ -634,7 +641,7 @@ public class BoardAndRuleConstructor {
             col--;
         }
 
-        //remove sides
+        //add things
         for (int i = 0; i < boardManager.getBoard().getRowSize(); i++) {
             if (i < 2 || i > 4) {
                 boardManager.getBoard().getTile(i, 0).setInvisible(true);
@@ -645,7 +652,13 @@ public class BoardAndRuleConstructor {
             }
 
         }
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(2, 1));
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(2, 5));
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(4, 1));
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(4, 5));
 
+
+        //remove corners
         boardManager.getBoard().getTile(0, 0).setInvisible(true);
         boardManager.getBoard().getTile(1, 0).setInvisible(true);
         boardManager.getBoard().getTile(0, boardManager.getBoard().getColumnSize() - 1).setInvisible(true);
@@ -694,6 +707,13 @@ public class BoardAndRuleConstructor {
             boardManager.add(teams.get(1).getEntities().get(i), new BoardPosition(tryRow, tryCol));
             tryCol++;
         }
+
+        //place things
+        boardManager.add(EntityConstructor.pillar(), new BoardPosition(0, 0));
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(0, 1));
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(1, 0));
+
+
         return new Battle2PRules(screen, teams);
     }
 
@@ -721,5 +741,106 @@ public class BoardAndRuleConstructor {
 
         return new Battle2PRules(screen, teams);
     }
+
+    public static Rules makeSurvivalTorchRoom(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(5, 5, Color.DARK_GRAY, Color.LIGHT_GRAY, 100), new CodeBoard(5, 5));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        //place entities
+        int col = 0;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            if (col == 1)
+                col ++;
+            col++;
+        }
+        col = 4;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            if (col == 3)
+                col--;
+            col--;
+        }
+
+        //add items
+
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(1, 0));
+        boardManager.add(EntityConstructor.stoneTorch(), new BoardPosition(1, 2));
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(1, 4));
+
+        boardManager.add(EntityConstructor.stoneTorch(), new BoardPosition(2, 0));
+        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(2, 2));
+        boardManager.add(EntityConstructor.stoneTorch(), new BoardPosition(2, 4));
+
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(3, 0));
+        boardManager.add(EntityConstructor.stoneTorch(), new BoardPosition(3, 2));
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(3, 4));
+
+
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeSurvivalCircle(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(6, 6, Color.DARK_GRAY, Color.LIGHT_GRAY, 100), new CodeBoard(6, 6));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        //place entities
+        int count = 0;
+        for (Entity e : teams.get(0).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(1, 1));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(0, 2));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(0, 3));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(1, 4));
+                    break;
+            }
+            count++;
+        }
+        count = 0;
+        for (Entity e : teams.get(1).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(maxSize - 1, 1));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(maxSize, 2));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(maxSize, 3));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(maxSize - 1, 4));
+                    break;
+            }
+            count++;
+        }
+
+        //remove corners
+        boardManager.getBoard().getTile(0, 0).setInvisible(true);
+        boardManager.getBoard().getTile(1, 0).setInvisible(true);
+        boardManager.getBoard().getTile(0, 1).setInvisible(true);
+
+        boardManager.getBoard().getTile(0, maxSize).setInvisible(true);
+        boardManager.getBoard().getTile(1, maxSize).setInvisible(true);
+        boardManager.getBoard().getTile(0, maxSize - 1).setInvisible(true);
+
+        boardManager.getBoard().getTile(maxSize, 0).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize - 1, 0).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize, 1).setInvisible(true);
+
+        boardManager.getBoard().getTile(maxSize, maxSize).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize - 1, maxSize).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize, maxSize - 1).setInvisible(true);
+
+        return new Battle2PRules(screen, teams);
+    }
+
     //endregion
 }
