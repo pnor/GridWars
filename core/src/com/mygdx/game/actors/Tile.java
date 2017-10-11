@@ -184,7 +184,7 @@ public class Tile extends Group {
      */
     public Tile copy(int rPos, int cPos) {
         if (usesCustomSprite)
-            return new Tile(rPos, cPos, isDark, getChildren().first().getColor(), ((SpriteActor) getChildren().first()).getSprite(), getWidth());
+            return new Tile(rPos, cPos, isDark, getChildren().first().getColor(), new Sprite(((SpriteActor) getChildren().first()).getSprite()), getWidth());
         else if (color == null)
             return new Tile(rPos, cPos, isDark, getWidth());
         else

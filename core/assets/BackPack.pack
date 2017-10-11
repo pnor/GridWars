@@ -5,154 +5,168 @@ filter: Nearest,Nearest
 repeat: none
 CheckerBackground
   rotate: false
-  xy: 1, 4709
+  xy: 1, 7213
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
 CloudBackground
   rotate: false
-  xy: 1, 3807
+  xy: 1, 6311
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
 CubeBackground
   rotate: false
-  xy: 2003, 4709
+  xy: 2003, 7213
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
 DiagCheckerBackground
   rotate: false
-  xy: 1, 2905
+  xy: 1, 5409
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
 DiagStripeHoriz
   rotate: false
-  xy: 2003, 3807
+  xy: 2003, 6311
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
 FadeBackground
   rotate: false
-  xy: 4005, 4709
+  xy: 4005, 7213
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
 FadeHoriz
   rotate: false
-  xy: 1, 2003
+  xy: 1, 4507
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
 HexagonBackground
   rotate: false
-  xy: 2003, 2905
+  xy: 2003, 5409
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
-RainBackground
-  rotate: false
-  xy: 1, 1
-  size: 900, 2000
-  orig: 900, 2000
-  offset: 0, 0
-  index: -1
 SharpDiagBackground
   rotate: false
-  xy: 4005, 3807
+  xy: 4005, 6311
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
 SimpleRoundedZag
   rotate: false
-  xy: 6007, 4709
+  xy: 6007, 7213
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
 SpeedBackground
   rotate: false
-  xy: 2003, 2003
+  xy: 1, 3605
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
-SqureStripHoriz
+SquareStripHoriz
   rotate: false
-  xy: 903, 1101
+  xy: 2003, 4507
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
 DiagStripeOverlay
   rotate: false
-  xy: 4005, 2455
+  xy: 4005, 4959
   size: 1500, 1350
   orig: 1500, 1350
   offset: 0, 0
   index: -1
+CheckerVert
+  rotate: false
+  xy: 1, 1803
+  size: 1000, 1800
+  orig: 1000, 1800
+  offset: 0, 0
+  index: -1
+RainVert
+  rotate: false
+  xy: 1, 1
+  size: 1000, 1800
+  orig: 1000, 1800
+  offset: 0, 0
+  index: -1
+SquareStripVert
+  rotate: false
+  xy: 1003, 1803
+  size: 1000, 1800
+  orig: 1000, 1800
+  offset: 0, 0
+  index: -1
 BlankBackground
   rotate: false
-  xy: 6007, 3807
+  xy: 2003, 3605
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 CubicBackground
   rotate: false
-  xy: 903, 199
+  xy: 6007, 6311
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 darkShadeOverlay
   rotate: false
-  xy: 2905, 1101
+  xy: 5507, 5409
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 shadeOverlay
   rotate: false
-  xy: 5507, 2905
+  xy: 1003, 901
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 SmudgeBackground
   rotate: false
-  xy: 1905, 199
+  xy: 2005, 2703
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 SmudgeInverseBackground
   rotate: false
-  xy: 7009, 3807
+  xy: 2005, 1801
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 TowerBackground
   rotate: false
-  xy: 6509, 2905
+  xy: 3005, 3605
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 WhiteDots
   rotate: false
-  xy: 2907, 199
+  xy: 7009, 6311
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0

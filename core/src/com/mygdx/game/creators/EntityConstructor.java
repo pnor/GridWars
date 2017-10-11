@@ -206,6 +206,22 @@ public class EntityConstructor {
         return entity;
     }
 
+    public static Entity spike() {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(10, 0, 0, 0, 0));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("floorSpike")))));
+        entity.add(new NameComponent("Spike"));
+
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+
+        return entity;
+    }
+
     public static Entity cactus() {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
@@ -329,8 +345,8 @@ public class EntityConstructor {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 0, 0, 0, 0));
-        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("pillar")), true)));
-        entity.add(new NameComponent("Pillar"));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("destroyedPillar")), true)));
+        entity.add(new NameComponent("Broken Pillar"));
 
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
@@ -914,6 +930,99 @@ public class EntityConstructor {
         }, Animation.PlayMode.LOOP, 0.2f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(25, 10, 2, 1, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimationExplosive(entity, Color.YELLOW),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.stab(entity),
+                MoveConstructor.fluxWave(entity),
+                MoveConstructor.disrupt(entity),
+                MoveConstructor.polarize(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity blazePneumaAlt(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Blaze Pneuma"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("fireSpiritAlt"),
+                atlas.findRegion("fireSpirit2Alt")
+        }, Animation.PlayMode.LOOP, 0.4f, true)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(15, 6, 3, 0, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimationExplosive(entity, Color.RED),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.fireSlash(entity),
+                MoveConstructor.chainFire(entity),
+                MoveConstructor.flameCharge(entity),
+                MoveConstructor.blueFlame(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity aquaPneumaAlt(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Aqua Pneuma"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("waterSpiritAlt"),
+                atlas.findRegion("waterSpirit2Alt")
+        }, Animation.PlayMode.LOOP, 0.5f, true)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(20, 7, 2, 1, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimationExplosive(entity, Color.BLUE),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.hammerStrike(entity),
+                MoveConstructor.gather(entity),
+                MoveConstructor.strengthen(entity),
+                MoveConstructor.KOStrike(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity electroPnuemaAlt(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Electro Pneuma"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("thunderSpiritAlt"),
+                atlas.findRegion("thunderSpirit2Alt")
+        }, Animation.PlayMode.LOOP, 0.2f, true)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(20, 10, 2, 1, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1668,9 +1777,9 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("stoneSword"),
                 atlas.findRegion("stoneSword2")
-        }, Animation.PlayMode.LOOP, 0.5f, true)));
+        }, Animation.PlayMode.LOOP, 0.35f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(2, 0, 2, 0, 2));
+        entity.add(new StatComponent(1, 0, 3, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1698,7 +1807,7 @@ public class EntityConstructor {
                 atlas.findRegion("possesedSwordBlue2")
         }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(3, 4, 5, 0, 2));
+        entity.add(new StatComponent(2, 4, 5, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;

@@ -63,11 +63,8 @@ public class BattleScreen implements Screen {
     //Background
     Background background;
 
-    //Board
-    //private final Board board = new Board(7, 7, new Color(221f / 255, 221f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1));
-        /*7 is the basic size. Requires no scaling with anything below 7 size
-        The math for scaling above 7 : 700 / size
-        */
+    //General Info
+    private final int TOTAL_ENTITIES_ON_TEAMS;
 
     //rules
     protected static Rules rules;
@@ -81,6 +78,9 @@ public class BattleScreen implements Screen {
     //Selection and Hover
     private Entity selectedEntity;
     private boolean checkedStats;
+    /** Used for selection using keyboard */
+    private byte hotkeyTeamsIndex;
+    private final LerpColor SELECTION_COLOR = new LerpColor(Color.BLUE, Color.WHITE, .4f);
 
     //Attack Processing
     private Move currentMove;
@@ -169,6 +169,11 @@ public class BattleScreen implements Screen {
             BoardComponent.boards = new BoardManager();
         rules = BoardAndRuleConstructor.getBoardAndRules(boardIndex, this, teams, BoardComponent.boards);
         background = BackgroundConstructor.getBackground(boardIndex);
+
+        int sum = 0;
+        for (int i = 0; i < teams.size; i++)
+            sum += teams.get(i).getEntities().size;
+        TOTAL_ENTITIES_ON_TEAMS = sum;
 
         MoveConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, stage, GRID_WARS);
         DamageAnimationConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine);
@@ -477,7 +482,7 @@ public class BattleScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //sync code board and ui board ---
+        //region Sync code board and ui board
         int rowSize = BoardComponent.boards.getBoard().getRowSize();
         int colSize = BoardComponent.boards.getBoard().getColumnSize();
         int curRow = 0;
@@ -490,52 +495,25 @@ public class BattleScreen implements Screen {
             curRow = cur / colSize;
         }
         boardTable.getCells();
+        //endregion
 
-        //region player input stuff (selection, attacks, etc.)
+        //region player input (selection, attacks, etc.)
         if (!gameHasEnded && !playingComputerTurn) {
-            //update last ENTITY selected ---
+            //update last ENTITY selected --- (Selecting an Entity)
             for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
                 if (am.get(e).actor.getLastSelected()) {
-                    try {   //removes previously highlighted tiles
-                        if (selectedEntity != null && stm.has(selectedEntity) && stm.get(selectedEntity).getModSpd(selectedEntity) > 0)
-                            removeMovementTiles();
-                    } catch (IndexOutOfBoundsException exc) {
-                    }
-
-                    if (Visuals.visualsArePlaying == 0 && selectedEntity != null) //stop orange highlight
-                        shadeBasedOnState(selectedEntity); //TODO make a way to show multiple status effects well
-
-                    selectedEntity = e; //selectedEntity changes to new entity from here on
-
-                    if (Visuals.visualsArePlaying == 0) {
-                        am.get(selectedEntity).actor.shade(Color.ORANGE);
-                        if (mayAttack(selectedEntity) && !attacksEnabled)
-                            enableAttacks();
-                    }
-
-                    //check if has a speed > 0, and can move. Also if it is not on another team/has no team
-                    if (mayMove(selectedEntity)) {
-                        try { // newly highlights spaces
-                            showMovementTiles();
-                        } catch (IndexOutOfBoundsException exc) {
-                        }
-                    }
-
-                    checkedStats = false;
+                    changeSelectedEntity(e);
                     am.get(e).actor.setLastSelected(false);
                 }
             }
 
-            //update last TILE selected ---
+            //update last TILE selected --- (Moving Entity by clicking)
             if (selectedEntity != null) {
                 for (Tile t : BoardComponent.boards.getBoard().getTiles()) {
                     if (t.getLastSelected()) {
                         t.setLastSelected(false);
-                        try {   //removes previously highlighted
-                            removeMovementTiles();
-                        } catch (IndexOutOfBoundsException exc) {
-                        }
-
+                        //remove highlighted tiles
+                        removeMovementTiles();
                         //move Entity location
                         BoardComponent.boards.move(selectedEntity, new BoardPosition(t.getRow(), t.getColumn()));
                         state.get(selectedEntity).canMove = false;
@@ -584,11 +562,12 @@ public class BattleScreen implements Screen {
         }
         //endregion
 
-        //computer Turn
+        //region updating computer Turn
         if (playingComputerTurn && !computer.getProcessing())
             processComputerTurn(delta);
+        //endregion
 
-        //playing current move animation
+        //region playing current move animation
         if (currentMove != null) {
             if (currentMove.getVisuals().getIsPlaying()) {
                 currentMove.updateVisuals(delta);
@@ -602,19 +581,47 @@ public class BattleScreen implements Screen {
                 currentMove = null;
             }
         }
+        //endregion
 
-        //update everything. (Graphics, engine, GRID_WARS.stage)
+        //region Hot keys
+        if (!gameHasEnded) { //Hot Keys should not work while game has ended
+            // During player turn and no Visuals
+            if (!playingComputerTurn && Visuals.visualsArePlaying == 0) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) { //SHIFT : Next turn hotkey
+                    removeAttackTiles();
+                    nextTurn();
+                }
+            }
+            // Anytime (No Visuals)
+            if (Visuals.visualsArePlaying == 0) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.D)) { //D : Scroll though forward
+                    hotkeyTeamsIndex = (byte) ((hotkeyTeamsIndex + 1) % TOTAL_ENTITIES_ON_TEAMS);
+                    changeSelectedEntity(getEntityFromIndex(true));
+                }
+                if (Gdx.input.isKeyJustPressed(Input.Keys.A)) { //A : Scroll though backward
+                    hotkeyTeamsIndex -= 1;
+                    if (hotkeyTeamsIndex < 0) hotkeyTeamsIndex = (byte) (TOTAL_ENTITIES_ON_TEAMS - 1);
+                    changeSelectedEntity(getEntityFromIndex(false));
+                }
+            }
+        }
+        //endregion
+
+        //region update everything. (Graphics, engine, GRID_WARS.stage)
         background.update(delta);
         stage.act(delta);
         engine.getSystem(DrawingSystem.class).drawBackground(background, delta);
         stage.draw();
         engine.update(delta);
-        //update LerpColor of teams
+        //endregion
+
+        //region update LerpColor of teams
         for (Team t : teams)
             if (t.getTeamColor() instanceof LerpColor)
                 ((LerpColor) t.getTeamColor()).update(delta);
+        //endregion
 
-        //Handling dead entities
+        //region Handling dead entities
         for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
             if (stm.has(e) && !stm.get(e).alive && stm.get(e).readyToRemoveFromGame) {
                 BoardComponent.boards.remove(e);
@@ -623,8 +630,9 @@ public class BattleScreen implements Screen {
                     infoLbl.setText(nm.get(e).name + " has been defeated!");
             }
         }
+        //endregion
 
-        //check win conditions
+        //region check win conditions and end game (Includes screen transitions, screen change, etc.)
         if (rules.checkWinConditions() != null && currentMove == null) {
             if (!gameHasEnded) {
                 System.out.println("-------------------------------GAME HAS ENDED---------------------------------");
@@ -643,8 +651,10 @@ public class BattleScreen implements Screen {
             if (Visuals.visualsArePlaying == 0)
                 changeScreenTimer += delta;
         }
+        //endregion
 
-        //debug
+        //region Debug
+        //checking if things are working as intended
         if (Visuals.visualsArePlaying < 0)
             throw (new IndexOutOfBoundsException("Visuals.visualsArePlaying is < 0"));
         for (Team t : teams) {
@@ -709,7 +719,65 @@ public class BattleScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) { // Turn Info
             System.out.println("ShowingEndTUrnMessage = " + showingEndTurnMessageTable);
         }
+        //endregion
+    }
 
+    public void changeSelectedEntity(Entity e) {
+        //Undoing effects of selecting previous entity---
+        //removes previously highlighted tiles
+        if (selectedEntity != null && stm.has(selectedEntity) && stm.get(selectedEntity).getModSpd(selectedEntity) > 0)
+            removeMovementTiles();
+
+        if (Visuals.visualsArePlaying == 0 && selectedEntity != null) //stop highlight
+            shadeBasedOnState(selectedEntity); //TODO make a way to show multiple status effects well
+
+        removeAttackTiles();
+        //---
+        selectedEntity = e; //selectedEntity changes to new entity from here on
+
+        if (Visuals.visualsArePlaying == 0) { //If no visuals are playing, color entity
+            am.get(selectedEntity).actor.shade(SELECTION_COLOR);
+            if (mayAttack(selectedEntity) && !attacksEnabled)
+                enableAttacks();
+        }
+
+        //check if has a speed > 0, and can move. Also if it is not on another team/has no team
+        if (mayMove(selectedEntity)) {
+            // newly highlights spaces
+            showMovementTiles();
+        }
+
+        checkedStats = false;
+    }
+
+    /**
+     * Gets an entity from all player and computer team's based on the value of hotkeyTeamsIndex.
+     * @param indexMovementDirection True if hotkeyTeamsIndex is incrementing. False if decrementing
+     * @return Entity from one of the teams contained in field teams.
+     */
+    public Entity getEntityFromIndex(boolean indexMovementDirection) {
+        Team team = null;
+        int sum = 0;
+        for (int i = 0; i < teams.size; i++) { //getting team within index range
+            if (hotkeyTeamsIndex < sum + teams.get(i).getEntities().size) {
+                team = teams.get(i);
+                break; // found team
+            }
+            sum += teams.get(i).getEntities().size;
+        }
+        Entity e = team.getEntities().get(hotkeyTeamsIndex - sum);
+        if (stm.get(e).alive) //live entity, then return it
+            return e;
+        else { //if dead, keeping going until it finds a live one
+            if (indexMovementDirection) {
+                hotkeyTeamsIndex = (byte) ((hotkeyTeamsIndex + 1) % TOTAL_ENTITIES_ON_TEAMS);
+                return getEntityFromIndex(indexMovementDirection);
+            } else {
+                hotkeyTeamsIndex -= 1;
+                if (hotkeyTeamsIndex < 0) hotkeyTeamsIndex = (byte) (TOTAL_ENTITIES_ON_TEAMS - 1);
+                return getEntityFromIndex(indexMovementDirection);
+            }
+        }
     }
 
     private void processComputerTurn(float delta) {

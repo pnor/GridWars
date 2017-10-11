@@ -36,7 +36,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
     private int spPowerUp;
     private Sprite backgroundProgressBar;
 
-    //TODO add highscore like statistics like highest floor reach, total turn count, damage taken, attacks used, etc.
+    //TODO add highscores like statistics like highest floor reach, total turn count, damage taken, attacks used, etc.
     public SurvivalTowerScreen(Team playerTeam, int towerLevel, int healingPowerUpAmount, int spUpPowerUpAmount, GridWars game) {
         super(game);
         team = playerTeam;
@@ -51,14 +51,29 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         backgroundProgressBar.draw(stage.getBatch());
         stage.getBatch().end();
         super.render(deltaTime);
+        //Press
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             level++;
             backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
+            System.out.println("Level : " + level);
 
         }
         else if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             level--;
             backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
+            System.out.println("Level : " + level);
+        }
+        //HOld
+        if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+            level++;
+            backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
+            System.out.println("Level : " + level);
+
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+            level--;
+            backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
+            System.out.println("Level : " + level);
         }
     }
 
@@ -169,9 +184,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
 
     private Team getFloorLevelTeam() {
         switch (level) {
+            //region level 1 - 10
             case 1 :
                 return new Team("Enemy",
-                        Color.WHITE,
+                        new Color(1, .7f, .7f, 1),
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.stoneLeo(1),
                                 EntityConstructor.stoneLeo(1),
@@ -180,7 +196,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         }));
             case 2 :
                 return new Team("Enemy",
-                        Color.WHITE,
+                        new Color(1, .8f, .8f, 1),
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.stoneLeo(1),
                                 EntityConstructor.spider(1),
@@ -189,7 +205,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         }));
             case 3 :
                 return new Team("Enemy",
-                        Color.WHITE,
+                        new Color(1, .8f, .8f, 1),
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.slimeman(1),
                                 EntityConstructor.spider(1),
@@ -198,7 +214,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         }));
             case 4 :
                 return new Team("Enemy",
-                        Color.WHITE,
+                        new Color(1, .8f, .8f, 1),
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.canman(1),
                                 EntityConstructor.canman(1),
@@ -207,51 +223,61 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         }));
             case 5 :
                 return new Team("Enemy",
-                        Color.WHITE,
+                        new Color(1, .8f, .8f, 1),
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.canman(1),
+                                EntityConstructor.lethalSpider(1),
                                 EntityConstructor.spider(1),
                                 EntityConstructor.spider(1),
-                                EntityConstructor.canman(1)
+                                EntityConstructor.lethalSpider(1)
                         }));
             case 6 :
                 return new Team("Enemy",
-                        Color.WHITE,
+                        new Color(1, .8f, .8f, 1),
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.golem(1),
                                 EntityConstructor.stoneSword(1),
-                                EntityConstructor.chemMan(1),
+                                EntityConstructor.stoneSword(1),
                                 EntityConstructor.golem(1)
                         }));
             case 7 :
                 return new Team("Enemy",
-                        Color.WHITE,
+                        new Color(1, .8f, .8f, 1),
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.advancedBook(1),
-                                EntityConstructor.redGolem(1),
-                                EntityConstructor.golemMK2(1),
-                                EntityConstructor.immoralSpider(1)
+                                EntityConstructor.canman(1),
+                                EntityConstructor.toxicCanman(1),
+                                EntityConstructor.golem(1),
+                                EntityConstructor.medicanMan(1)
                         }));
             case 8 :
                 return new Team("Enemy",
-                        Color.WHITE,
+                        new Color(1, .8f, .8f, 1),
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.lethalSpider(1),
-                                EntityConstructor.lethalSpider(1),
-                                EntityConstructor.fancyBook(1),
-                                EntityConstructor.golemMK3(1)
+                                EntityConstructor.spider(1),
+                                EntityConstructor.spider(1),
+                                EntityConstructor.golem(1),
+                                EntityConstructor.golem(1)
                         }));
             case 9 :
                 return new Team("Enemy",
-                        Color.WHITE,
+                        new Color(1, .8f, .8f, 1),
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.aquaPneuma(1)
+                                EntityConstructor.stoneLion(1)
                         }));
             case 10 :
                 return new Team("Enemy",
-                        Color.WHITE,
+                        new Color(1, .8f, .8f, 1),
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.electroPnuema(1)
+                                EntityConstructor.blazePneuma(1)
+                        }));
+            //endregion
+            case 11 :
+                return new Team("Enemy",
+                        new Color(1, .8f, .8f, 1),
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.book(1),
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.book(1)
                         }));
         }
         return null;

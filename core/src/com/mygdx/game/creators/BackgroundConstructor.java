@@ -1,11 +1,7 @@
 package com.mygdx.game.creators;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.components.PositionComponent;
-import com.mygdx.game.components.SpriteComponent;
 import com.mygdx.game.screens_ui.BackType;
 import com.mygdx.game.screens_ui.Background;
 
@@ -50,12 +46,25 @@ public class BackgroundConstructor {
             case 19:
             case 20:
             case 21:
-            case 22:
+                return makeSurvivalBackChecker();
+            case 22: //10
+                return makeSurvivalBackBlazePneuma();
             case 23:
+            case 24:
+            case 25:
+            case 26:
+            case 27:
+            case 28:
+            case 29:
+            case 30:
+            case 31:
+                return makeSurvivalBackBlueZags();
+            case 32: //20
+
+            default:
                 return makeSurvivalBackChecker();
             //endregion
         }
-        return null;
     }
 
     //region regular battle
@@ -78,7 +87,7 @@ public class BackgroundConstructor {
         back.setColor(new Color(.5f, .5f, .5f, 1));
         Sprite overlay = new Sprite(backAtlas.findRegion("DiagCheckerBackground"));
         overlay.setColor(new Color(.3f, .3f, .3f, 1));
-        Sprite overlay2 = new Sprite(backAtlas.findRegion("SqureStripHoriz"));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("SquareStripHoriz"));
         overlay2.setColor(new Color(.2f, .2f, .2f, 1f));
         return new Background(
                 back,
@@ -90,25 +99,16 @@ public class BackgroundConstructor {
     public static Background makeCompactBack() {
         Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
         back.setColor(Color.DARK_GRAY);
-        Entity backgroundEntity = new Entity();
-        backgroundEntity.add(new SpriteComponent(back));
-        backgroundEntity.add(new PositionComponent(new Vector2(0, 0), back.getHeight(), back.getWidth(), 0));
 
         Sprite overlay = new Sprite(backAtlas.findRegion("CheckerBackground"));
         overlay.setColor(Color.GRAY);
-        Entity overlayEntity = new Entity();
-        overlayEntity.add(new SpriteComponent(overlay));
-        overlayEntity.add(new PositionComponent(new Vector2(0, 0), overlay.getHeight(), overlay.getWidth(), 0));
 
-        Sprite overlay2 = new Sprite(backAtlas.findRegion("CheckerBackground"));
-        overlay2.setColor(Color.LIGHT_GRAY);
-        Entity overlayEntity2 = new Entity();
-        overlayEntity2.add(new SpriteComponent(overlay2));
-        overlayEntity2.add(new PositionComponent(new Vector2(-overlay2.getWidth() / 4, 0), overlay2.getHeight(), back.getWidth(), 90));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("CheckerVert"));
+        overlay2.setColor(new Color(.2f, .2f, .2f, .8f));
 
         return new Background(
                 back,
-                new Entity[] {overlayEntity, overlayEntity2},
+                new Sprite[] {overlay, overlay2},
                 new BackType[] {BackType.SCROLL_HORIZONTAL, BackType.SCROLL_VERTICAL_FAST},
                 null, null);
     }
@@ -161,6 +161,39 @@ public class BackgroundConstructor {
                 back,
                 new Sprite[] {overlay, overlay2},
                 new BackType[] {BackType.SCROLL_HORIZONTAL, BackType.SCROLL_HORIZONTAL_SLOW},
+                null, null);
+    }
+
+    public static Background makeSurvivalBackBlueZags() {
+        Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
+        back.setColor(new Color(.05f, .05f, .1f, 1));
+        Sprite glower = new Sprite(backAtlas.findRegion("CheckerBackground"));
+        glower.setColor(new Color(0, 0, .3f, .4f));
+        Sprite overlay = new Sprite(backAtlas.findRegion("SquareStripHoriz"));
+        overlay.setColor(new Color(.2f, .2f, .2f, .5f));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("SquareStripVert"));
+        overlay2.setColor(new Color(.2f, .2f, .2f, .5f));
+        return new Background(
+                back,
+                new Sprite[] {glower, overlay, overlay2},
+                new BackType[] {BackType.FADE_COLOR, BackType.SCROLL_HORIZONTAL_SLOW, BackType.SCROLL_VERTICAL_SLOW},
+                Color.DARK_GRAY, new Color(0, 0, .6f, 1));
+    }
+
+
+    public static Background makeSurvivalBackBlazePneuma() {
+        Sprite back = new Sprite(backAtlas.findRegion("SmudgeBackground"));
+        back.setColor(new Color(.2f, .1f, .1f, 1));
+        Sprite overlay = new Sprite(backAtlas.findRegion("DiagCheckerBackground"));
+        overlay.setColor(new Color(.4f, .3f, .3f, .4f));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("CheckerBackground"));
+        overlay2.setColor(new Color(.2f, .1f, .1f, .6f));
+        Sprite overlay3 = new Sprite(backAtlas.findRegion("SharpDiagBackground"));
+        overlay3.setColor(new Color(1, 0, 0, .1f));
+        return new Background(
+                back,
+                new Sprite[] {overlay, overlay2, overlay3},
+                new BackType[] {BackType.SCROLL_HORIZONTAL, BackType.SCROLL_HORIZONTAL_FAST, BackType.SCROLL_HORIZONTAL_FASTER},
                 null, null);
     }
     //endregion

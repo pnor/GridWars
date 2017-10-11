@@ -147,7 +147,7 @@ public class BoardState {
                 } else { //attacking on an empty space
                     //discourage attacking empty spaces compared to not attacking at all
                     //single hitting moves weighted heavier than spread attacks
-                    userEntity.arbitraryValue = (move.getRange().size == 1)?
+                    userEntity.arbitraryValue = (move.getRange().size <= 1)?
                             userEntity.arbitraryValue - 30 : userEntity.arbitraryValue - 30 / move.getRange().size;
                 }
             }
@@ -185,6 +185,7 @@ public class BoardState {
     public int evaluate(int homeTeam) {
         int val = 0;
         for (EntityValue e : entities.values()) {
+            //all entity dead check TODO add check that sees if all entities are dead
             //zone check
             if (zones != null && e.team != -1 && zones.get(e.team).contains(e.pos, false)) {
                 if (e.team == homeTeam)

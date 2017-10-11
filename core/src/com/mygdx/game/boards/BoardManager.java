@@ -63,6 +63,25 @@ public class BoardManager {
     }
 
     /**
+     * Adds an entity's data to a board and codeBoard. Doesn't add if there is an entity
+     * there already. Also scales added entity to board's size.
+     * @param e Entity. Must have a {@code ActorComponent}
+     * @param r row
+     * @param c column
+     * @return true if it added the entity
+     */
+    public boolean add(Entity e, int r, int c) {
+        if (codeBoard.get(r, c) != null)
+            //there's something there
+            return false;
+
+        codeBoard.add(e, new BoardPosition(r, c));
+        board.add(am.get(e).actor, r, c);
+        scaleEntity(e);
+        return true;
+    }
+
+    /**
      * Removes an entity's data to a board and codeBoard.
      * @param e Entity. Must have a {@code ActorComponent} and {@code BoardComponent}
      * @return true if it removed an entity

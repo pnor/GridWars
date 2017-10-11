@@ -16,6 +16,13 @@ public class ZoneRules extends Rules {
     /** rows represent which team, columns represent which spaces */
     private Array<Array<BoardPosition>> zones;
 
+    /**
+     * Creates rule set where landing on zones will lead to victory
+     * @param s {@link BattleScreen}
+     * @param teams {@link Team}s
+     * @param zone BoardPositions that are zones. Index the Array of positions corresponds to teams.
+     *            (Ex. : zones.get(0) is team 0's zones)
+     */
     public ZoneRules(BattleScreen s, Array<Team> teams, Array<Array<BoardPosition>> zone) {
         super(s, teams);
         zones = zone;
