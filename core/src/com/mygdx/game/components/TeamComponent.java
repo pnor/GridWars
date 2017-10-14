@@ -8,7 +8,7 @@ import com.badlogic.ashley.core.Component;
  */
 public class TeamComponent implements Component {
     /**
-     * Shouldn't be less than 0.
+     * Playable teams shouldn't be less than 0.
      */
     public int teamNumber;
 

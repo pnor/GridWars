@@ -203,7 +203,6 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
                                     new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else { //random
                             characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mystery")));
-                            //team.getEntities().add(EntityConstructor.AITester(0));
                             int randomIndex = MathUtils.random(0, 12);
                             int randomColor = (MathUtils.randomBoolean(.05f))? 1 : 0;
                             switch (randomIndex) {
@@ -478,7 +477,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
         super.render(dt);
 
         //alternate color number
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1))
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
             altNumber = 1;
         else
             altNumber = 0;

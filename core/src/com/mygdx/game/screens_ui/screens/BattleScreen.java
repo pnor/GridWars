@@ -92,7 +92,7 @@ public class BattleScreen implements Screen {
     public boolean attacksEnabled = true;
 
     //Computer Turn variables
-    private final ComputerPlayer computer;
+    protected final ComputerPlayer computer;
     /**
      * x-coordinate of the vector is team index. y-coordinate is the depth level.
      * <p> Easy -> 0 </p>
@@ -157,6 +157,7 @@ public class BattleScreen implements Screen {
     protected Label endTurnMessageLbl;
     protected Label turnCountLbl;
     protected boolean showingEndTurnMessageTable;
+    protected float displayEndTurnMessageTime;
     /** Pop up message that says the effects of a move. */
     protected Table helpTable;
     private Label moveDescriptionLbl;
@@ -192,12 +193,15 @@ public class BattleScreen implements Screen {
         if (AISpeed == 0) { //slow
             movementWaitTime = 1f;
             attackWaitTime = 1.5f;
+            displayEndTurnMessageTime = 1f;
         } else if (AISpeed == 1) { //normal
             movementWaitTime = .5f;
             attackWaitTime = 1f;
+            displayEndTurnMessageTime = 1f;
         } else { //fast
             movementWaitTime = .25f;
             attackWaitTime = .5f;
+            displayEndTurnMessageTime = .5f;
         }
     }
 
@@ -709,7 +713,9 @@ public class BattleScreen implements Screen {
             System.out.println("Computer Info: \nplayingComputerTurn = " + playingComputerTurn +
                     "\ncomputerControlledTeamsIndeces = " + contents +
                     "\ncurrentTeam = " + rules.getCurrentTeamNumber() +
-                    "\nCurrent Computer Controlled Entity = " + currentComputerControlledEntity);
+                    "\nCurrent Computer Controlled Entity = " + currentComputerControlledEntity +
+                    "\nComputer is always using first attack = " + computer.getUsingFirstAttack() +
+                    "\nIndex of first attack = " + computer.getIndexOfFirstAttack());
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) { // Turn Info
             System.out.println("Turn Info: \n" +
@@ -896,13 +902,18 @@ public class BattleScreen implements Screen {
                 playingComputerTurn = true;
                 computer.setTeamControlled((int) computerControlledTeamsIndex[controlledTeamIndex].x);
                 Vector2 v = computerControlledTeamsIndex[controlledTeamIndex];
-                if ((int) v.y == 1) { //easy
+                if ((int) v.y == 0) { //first attack
+                    computer.setGetFirstAttackAlways(true);
+                } else if ((int) v.y == 1) { //easy
+                    computer.setGetFirstAttackAlways(false);
                     computer.setDepthLevel(0);
                     computer.setForgetBestMoveChance(.5f);
                 } else if ((int) v.y == 2) { //normal
+                    computer.setGetFirstAttackAlways(false);
                     computer.setDepthLevel(3);
                     computer.setForgetBestMoveChance(.3f);
                 } if ((int) v.y == 3) { //hard
+                    computer.setGetFirstAttackAlways(false);
                     computer.setDepthLevel(5);
                     computer.setForgetBestMoveChance(.1f);
                 }
@@ -937,7 +948,7 @@ public class BattleScreen implements Screen {
         endTurnMessageTable.clearActions();
         SequenceAction sequence = new SequenceAction();
         sequence.addAction(Actions.fadeIn(.2f));
-        sequence.addAction(Actions.delay(1f));
+        sequence.addAction(Actions.delay(displayEndTurnMessageTime));
         sequence.addAction(Actions.fadeOut(.2f));
         sequence.addAction(new Action() {
             @Override

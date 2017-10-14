@@ -28,6 +28,11 @@ public class ComputerPlayer implements Runnable {
     private Array<Team> teams;
     private int depthLevel;
     /**
+     * Whether it should only get the first attack for all controlled entities on team
+     */
+    private boolean getFirstAttackAlways;
+    private int indexOfFirstAttackingTeams = -1;
+    /**
      * Whether it adds something between -1 and 1 to depth each time.
      */
     private boolean randomizeDepthLevel = false;
@@ -66,12 +71,16 @@ public class ComputerPlayer implements Runnable {
     public void run() {
         processing = true;
         decidedTurns.clear();
-        if (randomizeDepthLevel) {
-            int newDepth = depthLevel;
-            newDepth = MathUtils.clamp(newDepth + MathUtils.random(-1, 1), 0, 999);
-            decidedTurns = getBestTurnsBestTurnAssumption(currentBoardState, teamControlled, newDepth);
-        } else
-            decidedTurns = getBestTurnsBestTurnAssumption(currentBoardState, teamControlled, depthLevel);
+        if (getFirstAttackAlways) {
+            decidedTurns = getFirstAttacks(teamControlled);
+        } else {
+            if (randomizeDepthLevel) {
+                int newDepth = depthLevel;
+                newDepth = MathUtils.clamp(newDepth + MathUtils.random(-1, 1), 0, 999);
+                decidedTurns = getBestTurnsBestTurnAssumption(currentBoardState, teamControlled, newDepth);
+            } else
+                decidedTurns = getBestTurnsBestTurnAssumption(currentBoardState, teamControlled, depthLevel);
+        }
         System.out.println("TURNS PROCESSED : " + DEBUG_TURNS_PROCESSED);
         DEBUG_TURNS_PROCESSED = 0;
         processing = false;
@@ -80,7 +89,7 @@ public class ComputerPlayer implements Runnable {
 
     /**
      * Gets the best turn by seeing Turn returns the highest heuristic value. Does not use recursion, so it only goes
-     * to a depth of 1.
+     * to a depth of 1. (Changes the BoardState object that is passed into it)
      * @return Array of the best turns for each entity.
      */
     public Array<Turn> getBestTurns(BoardState board, int team) {
@@ -215,6 +224,12 @@ public class ComputerPlayer implements Runnable {
             teamNo = (teamNo + 1) % teams.size;
 
             //do turn
+            if (teamNo == indexOfFirstAttackingTeams) { //if on a team that only uses first attacks
+                i -= 1; //do not count in depth deepness
+                Array<Turn> firstAttackTurns = getFirstAttacks(teamNo);
+                for (Turn t : firstAttackTurns)
+                    newBoardState = newBoardState.tryTurn(t);
+            }
             newBoardState.doTurnEffects(teamNo);
             getBestTurns(newBoardState, teamNo);
         }
@@ -271,6 +286,31 @@ public class ComputerPlayer implements Runnable {
         //still a tie
         System.out.println("\nFull Tie !");
         return newBestTurns.random();
+    }
+
+    /**
+     * Gets the turn that uses the entities first move without rotating.
+     * @return Array of the turns that makes entity use first move
+     */
+    public Array<Turn> getFirstAttacks(int team) {
+        Array<Turn> turns = new Array<>();
+        Entity e;
+
+        for (int i = 0; i < teams.get(team).getEntities().size; i++) {
+            e = teams.get(team).getEntities().get(i);
+
+            Turn waveTurn = null;
+            if (mvm.get(e).moveList.first().spCost() > stm.get(e).sp) //not enough sp
+                waveTurn = new Turn(e, bm.get(e).pos.copy(), -1, 0);
+            else
+                waveTurn = new Turn(e, bm.get(e).pos.copy(), 0, 0);
+
+            turns.add(waveTurn);
+            System.out.println("First Turn Result: " + waveTurn);
+            System.out.println("************");
+        }
+
+        return turns;
     }
 
 
@@ -504,9 +544,11 @@ public class ComputerPlayer implements Runnable {
         forgetBestMoveChance = f;
     }
 
+    public void setGetFirstAttackAlways(boolean b) { getFirstAttackAlways = b; }
+
+    public void setIndexOfFirstAttackingTeams(int i) { indexOfFirstAttackingTeams = i; }
     /**
-     *
-     * @return
+     * @return turns resulting from AI processing
      */
     public Array<Turn> getDecidedTurns() {
         return decidedTurns;
@@ -517,6 +559,10 @@ public class ComputerPlayer implements Runnable {
     }
 
     public int getTeamSize() { return teams.get(teamControlled).getEntities().size; }
+
+    public boolean getUsingFirstAttack() {return getFirstAttackAlways; }
+    public int getIndexOfFirstAttack() { return indexOfFirstAttackingTeams; }
+
 
     public int getTeamControlled() { return teamControlled; }
 }

@@ -718,7 +718,7 @@ public class EntityConstructor {
             }, Animation.PlayMode.LOOP, 0.7f, true)));
 
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(4, 9, 3, 0, 2));
+        entity.add(new StatComponent(4, 6, 3, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1763,7 +1763,6 @@ public class EntityConstructor {
 
         return entity;
     }
-
     //endregion
 
     //region spirit
@@ -1838,6 +1837,7 @@ public class EntityConstructor {
         }, Animation.PlayMode.LOOP, 0.4f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 5, 2, 0, 2));
+        stm.get(entity).obscureStatInfo = true;
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1870,6 +1870,7 @@ public class EntityConstructor {
         entity.add(new StatComponent(4, 7, 3, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
+        stm.get(entity).obscureStatInfo = true;
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
@@ -1898,6 +1899,7 @@ public class EntityConstructor {
         }, Animation.PlayMode.LOOP, 0.4f, true)));
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 7, 1, 0, 2));
+        stm.get(entity).obscureStatInfo = true;
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;

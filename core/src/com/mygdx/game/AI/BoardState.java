@@ -131,7 +131,7 @@ public class BoardState {
 
                     //misc effects
                     if (move.moveInfo().miscEffects != null)
-                        move.moveInfo().miscEffects.doMiscEffects(e);
+                        move.moveInfo().miscEffects.doMiscEffects(e, userEntity);
 
                     //clamp hp to max hp
                     if (e.hp > e.maxHp)
@@ -185,7 +185,6 @@ public class BoardState {
     public int evaluate(int homeTeam) {
         int val = 0;
         for (EntityValue e : entities.values()) {
-            //all entity dead check TODO add check that sees if all entities are dead
             //zone check
             if (zones != null && e.team != -1 && zones.get(e.team).contains(e.pos, false)) {
                 if (e.team == homeTeam)

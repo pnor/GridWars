@@ -637,7 +637,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         super.render(dt);
         
         //alternate color number
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1))
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
             altNumber = 1;
         else
             altNumber = 0;

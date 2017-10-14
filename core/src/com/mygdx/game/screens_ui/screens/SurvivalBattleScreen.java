@@ -39,6 +39,14 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
         level = floorLevel;
     }
 
+    public SurvivalBattleScreen(Team team, Team enemyTeam, Team objectTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, GridWars game) {
+        super(new Array<Team>(new Team[]{team, enemyTeam, objectTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty), new Vector2(2, 0)}, game);
+        healthPowerUp = healthPowerUpNum;
+        spPowerUp = spPowerUpNum;
+        level = floorLevel;
+        computer.setIndexOfFirstAttackingTeams(2);
+    }
+
     @Override
     public void show() {
         super.show();
@@ -69,7 +77,7 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
         endTurnMessageTable.clearActions();
         SequenceAction sequence = new SequenceAction();
         sequence.addAction(Actions.fadeIn(.2f));
-        sequence.addAction(Actions.delay(1f));
+        sequence.addAction(Actions.delay(displayEndTurnMessageTime));
         sequence.addAction(Actions.fadeOut(.2f));
         sequence.addAction(new Action() {
             @Override

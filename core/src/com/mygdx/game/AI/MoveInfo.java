@@ -99,8 +99,9 @@ public class MoveInfo {
     public interface MiscEffects {
         /**
          * Miscellaneous effect caused from an attack
-         * @param entity enemy
+         * @param enemy enemy
+         * @param user user
          */
-        public void doMiscEffects(EntityValue entity);
+        public void doMiscEffects(EntityValue enemy, EntityValue user);
     }
 }

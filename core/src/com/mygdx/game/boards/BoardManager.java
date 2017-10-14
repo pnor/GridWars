@@ -174,7 +174,7 @@ public class BoardManager {
      * Scales an entity to the size of the board's tiles.
      * @param e Entity to be scaled
      */
-    private void scaleEntity(Entity e) {
+    public void scaleEntity(Entity e) {
         if (am.has(e))
             if (am.get(e).actor.getParent() != null)
                 am.get(e).actor.setScale(board.getScale());
