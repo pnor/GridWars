@@ -87,9 +87,16 @@ SquareStripHoriz
   orig: 2000, 900
   offset: 0, 0
   index: -1
+WavesHoriz
+  rotate: false
+  xy: 4005, 5409
+  size: 2000, 900
+  orig: 2000, 900
+  offset: 0, 0
+  index: -1
 DiagStripeOverlay
   rotate: false
-  xy: 4005, 4959
+  xy: 6007, 5861
   size: 1500, 1350
   orig: 1500, 1350
   offset: 0, 0
@@ -124,21 +131,21 @@ BlankBackground
   index: -1
 CubicBackground
   rotate: false
-  xy: 6007, 6311
+  xy: 4005, 4507
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 darkShadeOverlay
   rotate: false
-  xy: 5507, 5409
+  xy: 1003, 901
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 shadeOverlay
   rotate: false
-  xy: 1003, 901
+  xy: 3005, 3605
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
@@ -159,14 +166,14 @@ SmudgeInverseBackground
   index: -1
 TowerBackground
   rotate: false
-  xy: 3005, 3605
+  xy: 5007, 4507
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 WhiteDots
   rotate: false
-  xy: 7009, 6311
+  xy: 4007, 3605
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0

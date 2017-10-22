@@ -179,6 +179,27 @@ public class StatusEffectConstructor {
         return effect;
     }
 
+    public static StatusEffect pacifist(int duration) {
+        StatusEffect effect = new StatusEffect("Pacifist", duration, new LerpColor(Color.RED, Color.PINK, .3f, Interpolation.sineOut), (e) -> {
+            if (stm.has(e)) {
+                stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + 3, 0, stm.get(e).getModMaxHp(e));
+            }
+            if (vm.has(e) && !vm.get(e).shuffleAnimation.getIsPlaying())
+                vm.get(e).shuffleAnimation.setPlaying(true, true);
+        }, (entity -> entity.hp += 3));
+        effect.setStatChanges(1, 1, 0, 0, 1);
+        return effect;
+    }
+
+    public static StatusEffect restless(int duration) {
+        StatusEffect effect = new StatusEffect("Restless", duration, new LerpColor(Color.CYAN, Color.ORANGE, .3f, Interpolation.sineOut), (e) -> {
+            if (vm.has(e) && !vm.get(e).shuffleAnimation.getIsPlaying())
+                vm.get(e).shuffleAnimation.setPlaying(true, true);
+        }, null);
+        effect.setStatChanges(1, 0, .5f, 0, 2);
+        return effect;
+    }
+
     public static StatusEffect regeneration(int duration) {
         StatusEffect effect = new StatusEffect("Regeneration", duration, new LerpColor(Color.PINK, new Color(.8f, 1, .8f, 1f), .5f, Interpolation.sineOut), (e) -> {
             if (stm.has(e)) {

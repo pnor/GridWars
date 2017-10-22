@@ -1629,6 +1629,7 @@ public class EntityConstructor {
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
+
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
@@ -1637,7 +1638,7 @@ public class EntityConstructor {
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.slamRed(entity),
                 MoveConstructor.heavySlamRed(entity),
-                MoveConstructor.laserBeam(entity),
+                MoveConstructor.laserBeamRed(entity),
                 MoveConstructor.superGuard(entity)
         })));
 
@@ -1669,6 +1670,38 @@ public class EntityConstructor {
                 MoveConstructor.slamBlue(entity),
                 MoveConstructor.laserBeamBlue(entity),
                 MoveConstructor.ultimateGuard(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity telegolem(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("TeleGolem"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("antennaGolem"),
+                atlas.findRegion("antennaGolem2"),
+                atlas.findRegion("antennaGolem3")
+        }, Animation.PlayMode.LOOP_PINGPONG, .4f, true)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(7, 2, 2, 1, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.slam(entity),
+                MoveConstructor.heavySlam(entity),
+                MoveConstructor.powerWave(entity),
+                MoveConstructor.weakenWave(entity)
         })));
 
         return entity;
@@ -2005,7 +2038,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
-        entity.add(new NameComponent("Orbo"));
+        entity.add(new NameComponent("Orb"));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("whiteOrb"),
@@ -2024,7 +2057,96 @@ public class EntityConstructor {
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.monoplodeOrb(entity),
+                MoveConstructor.warWave(entity),
+                MoveConstructor.peaceWave(entity),
+                MoveConstructor.worryWave(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity redOrb(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Red Orb"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("redOrb"),
+                atlas.findRegion("redOrb2")
+        }, Animation.PlayMode.LOOP, .5f, true)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 3, 1, 40, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.monoplodeOrb(entity),
                 MoveConstructor.warWave(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity blueOrb(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Blue Orb"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("blueOrb"),
+                atlas.findRegion("blueOrb2")
+        }, Animation.PlayMode.LOOP, .5f, true)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 3, 1, 40, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.monoplodeOrb(entity),
+                MoveConstructor.worryWave(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity greenOrb(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Green Orb"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("greenOrb"),
+                atlas.findRegion("greenOrb2")
+        }, Animation.PlayMode.LOOP, .5f, true)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 3, 1, 40, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.monoplodeOrb(entity),
+                MoveConstructor.peaceWave(entity)
         })));
 
         return entity;

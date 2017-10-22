@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.screens_ui.LerpColor;
 
@@ -17,6 +18,7 @@ public class AnimationActor extends UIActor {
     private Animation animation;
     private Sprite currentFrame;
     private Color shadeColor;
+    private Vector2 size;
     private float time;
     private boolean stopUpdating;
 
@@ -59,11 +61,19 @@ public class AnimationActor extends UIActor {
     }
 
     @Override
+    public void setSize(float w, float h) {
+        super.setSize(h, w);
+        size = new Vector2(h, w);
+    }
+
+    @Override
     public void draw(Batch batch, float parentAlpha) {
         currentFrame.setPosition(getX(), getY());
         currentFrame.setScale(getScaleX());
         if (shadeColor != null && currentFrame.getColor() != shadeColor)
             currentFrame.setColor(shadeColor);
+        if (size != null)
+            currentFrame.setSize(size.x, size.y);
         currentFrame.draw(batch, parentAlpha);
     }
 

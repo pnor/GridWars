@@ -505,9 +505,11 @@ public class BattleScreen implements Screen {
         if (!gameHasEnded && !playingComputerTurn) {
             //update last ENTITY selected --- (Selecting an Entity)
             for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
-                if (am.get(e).actor.getLastSelected()) {
-                    changeSelectedEntity(e);
-                    am.get(e).actor.setLastSelected(false);
+                if (Visuals.visualsArePlaying == 0) {
+                    if (am.get(e).actor.getLastSelected()) {
+                        changeSelectedEntity(e);
+                        am.get(e).actor.setLastSelected(false);
+                    }
                 }
             }
 
@@ -595,9 +597,6 @@ public class BattleScreen implements Screen {
                     removeAttackTiles();
                     nextTurn();
                 }
-            }
-            // Anytime (No Visuals)
-            if (Visuals.visualsArePlaying == 0) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.D)) { //D : Scroll though forward
                     hotkeyTeamsIndex = (byte) ((hotkeyTeamsIndex + 1) % TOTAL_ENTITIES_ON_TEAMS);
                     changeSelectedEntity(getEntityFromIndex(true));

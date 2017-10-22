@@ -69,7 +69,7 @@ public class Visuals {
      * Plays the animation (Is called multiple times to play entire thing).
      */
     public void play() {
-        if (timer.checkIfFinished()) {
+        if (timer.checkIfFinished()) { //if its done
             isPlaying = false;
             Visuals.visualsArePlaying -= 1;
             if (autoReset) {
@@ -82,6 +82,16 @@ public class Visuals {
     }
 
     /**
+     * Resets this object so it can play from the start of its animation
+     */
+    public void reset() {
+        timer.setTime(0);
+        currentVisual = 0;
+        for (VisualEvent v : visuals)
+            v.resetRepeat();
+    }
+
+    /**
      * @return the next time at which a visual should play
      */
     private float getNextTargetTime() {
@@ -91,16 +101,6 @@ public class Visuals {
             target += visuals.get(i).getTriggerTime() * (visuals.get(i).getCurrentAmount());
 
         return target;
-    }
-
-    /**
-     * Resets this object so it can play from the start of its animation
-     */
-    public void reset() {
-        timer.setTime(0);
-        currentVisual = 0;
-        for (VisualEvent v : visuals)
-            v.resetRepeat();
     }
 
     /**

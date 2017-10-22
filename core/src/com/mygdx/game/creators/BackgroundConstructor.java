@@ -60,7 +60,21 @@ public class BackgroundConstructor {
             case 31:
                 return makeSurvivalBackBlueZags();
             case 32: //20
-
+                return makeSurvivalBackAquaPneuma();
+            case 33:
+            case 34:
+                return makeSurvivalBackYellow();
+            case 35:
+                return makeSurvivalBackYellowDark();
+            case 36:
+            case 37: //25
+            case 38:
+            case 39:
+            case 40:
+            case 41:
+                return makeSurvivalBackYellow();
+            case 42: // 30
+                return makeSurvivalBackChecker();
             default:
                 return makeSurvivalBackChecker();
             //endregion
@@ -180,6 +194,42 @@ public class BackgroundConstructor {
                 Color.DARK_GRAY, new Color(0, 0, .6f, 1));
     }
 
+    public static Background makeSurvivalBackYellow() {
+        Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
+        back.setColor(new Color(.1f, .1f, 0, 1));
+        Sprite glower = new Sprite(backAtlas.findRegion("DiagStripeOverlay"));
+        glower.setColor(new Color(.3f, .3f, 0, 1));
+        Sprite overlay = new Sprite(backAtlas.findRegion("SimpleRoundedZag"));
+        overlay.setColor(new Color(.6f, .6f, 0, .3f));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("SpeedBackground"));
+        overlay2.setColor(new Color(.9f, .9f, 0, .2f));
+        Sprite overlay3 = new Sprite(backAtlas.findRegion("FadeBackground"));
+        overlay3.setColor(new Color(0, 0, 0, .5f));
+        return new Background(
+                back,
+                new Sprite[] {glower, overlay, overlay2, overlay3},
+                new BackType[] {BackType.FADE_COLOR, BackType.SCROLL_HORIZONTAL, BackType.SCROLL_HORIZONTAL_SLOW ,BackType.NO_MOVE},
+                new Color(.3f, .3f, 0, 1), new Color(.7f, .7f, 0, .1f));
+    }
+
+    public static Background makeSurvivalBackYellowDark() {
+        Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
+        back.setColor(new Color(.05f, .05f, 0, 1));
+        Sprite glower = new Sprite(backAtlas.findRegion("DiagStripeOverlay"));
+        glower.setColor(new Color(0, 0, 0, 1));
+        Sprite overlay = new Sprite(backAtlas.findRegion("DiagCheckerBackground"));
+        overlay.setColor(new Color(.3f, .3f, 0, .3f));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("SpeedBackground"));
+        overlay2.setColor(new Color(.4f, .4f, 0, .2f));
+        Sprite overlay3 = new Sprite(backAtlas.findRegion("FadeBackground"));
+        overlay3.setColor(new Color(1, 1, 1, .3f));
+        return new Background(
+                back,
+                new Sprite[] {glower, overlay, overlay2, overlay3},
+                new BackType[] {BackType.FADE_COLOR, BackType.SCROLL_HORIZONTAL, BackType.SCROLL_HORIZONTAL_SLOW ,BackType.NO_MOVE},
+                new Color(0, 0, 0, 1), new Color(.4f, .4f, 0, .4f));
+    }
+
 
     public static Background makeSurvivalBackBlazePneuma() {
         Sprite back = new Sprite(backAtlas.findRegion("SmudgeBackground"));
@@ -195,6 +245,22 @@ public class BackgroundConstructor {
                 new Sprite[] {overlay, overlay2, overlay3},
                 new BackType[] {BackType.SCROLL_HORIZONTAL, BackType.SCROLL_HORIZONTAL_FAST, BackType.SCROLL_HORIZONTAL_FASTER},
                 null, null);
+    }
+
+    public static Background makeSurvivalBackAquaPneuma() {
+        Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
+        back.setColor(new Color(0, 0, .1f, 1));
+        Sprite overlay = new Sprite(backAtlas.findRegion("SimpleRoundedZag"));
+        overlay.setColor(new Color(0, 0, .1f, 1));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("CheckerVert"));
+        overlay2.setColor(new Color(0, 0, 1, .1f));
+        Sprite overlay3 = new Sprite(backAtlas.findRegion("CheckerBackground"));
+        overlay3.setColor(new Color(0, 0, 1, .1f));
+        return new Background(
+                back,
+                new Sprite[] {overlay, overlay2, overlay3},
+                new BackType[] {BackType.FADE_COLOR, BackType.SCROLL_VERTICAL_FAST, BackType.SCROLL_HORIZONTAL_FAST},
+                new Color(0, 0, .1f, 1), new Color(0, 0, .2f, 1));
     }
     //endregion
 }

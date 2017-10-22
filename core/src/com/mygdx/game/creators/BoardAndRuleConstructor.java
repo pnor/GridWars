@@ -106,7 +106,17 @@ public class BoardAndRuleConstructor {
             case 31:
                 return makeSNBasic2FocusOnFirst(screen, teams, boardManager);
             case 32: // 20
-
+                return makeSNAquaPneumaArena(screen, teams, boardManager);
+            case 33:
+                return makeSNHoles(screen, teams, boardManager);
+            case 34:
+                return makeSNHolesLarge(screen, teams, boardManager);
+            case 35:
+                return makeSNHolesLargeAltTowerPlacement(screen, teams, boardManager);
+            case 36:
+                return makeSNFatCross(screen, teams, boardManager);
+            case 37: //25
+                return null;
             //endregion
         }
         return null;
@@ -1026,7 +1036,6 @@ public class BoardAndRuleConstructor {
         boardManager.setBoards(new Board(5, 5, new Color(0, .3f, .8f, 1), Color.LIGHT_GRAY, 100), new CodeBoard(5, 5));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
         //place entities
-        //place entities
         int count = 0;
         for (Entity e : teams.get(0).getEntities()) {
             switch (count) {
@@ -1375,8 +1384,224 @@ public class BoardAndRuleConstructor {
 
         return new Battle2PRules(screen, teams);
     }
+    //endregion
+    //region Floor 21 - 29
+    public static Rules makeSNHoles(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(5, 5, new Color(.7f, .7f, 0, 1), Color.LIGHT_GRAY, 100), new CodeBoard(5, 5));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        int count = 0;
+        for (Entity e : teams.get(0).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(1, 0));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(0, 1));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(0, maxSize - 1));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(1, maxSize));
+                    break;
+            }
+            count++;
+        }
+        count = 0;
+        for (Entity e : teams.get(1).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(maxSize - 1, 0));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(maxSize, 1));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(maxSize - 1, maxSize));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(maxSize, maxSize - 1));
+                    break;
+            }
+            count++;
+        }
 
+        //remove spaces
+        boardManager.getBoard().getTile(0, 0).setInvisible(true);
+        boardManager.getBoard().getTile(0, 2).setInvisible(true);
+        boardManager.getBoard().getTile(0, maxSize).setInvisible(true);
+        boardManager.getBoard().getTile(2, 0).setInvisible(true);
+        boardManager.getBoard().getTile(2, 2).setInvisible(true);
+        boardManager.getBoard().getTile(2, maxSize).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize, 0).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize, 2).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize, maxSize).setInvisible(true);
 
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeSNHolesLarge(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(7, 7, new Color(.7f, .7f, 0, 1), Color.LIGHT_GRAY, 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        int count = 0;
+        for (Entity e : teams.get(0).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(1, 0));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(0, 1));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(0, maxSize - 1));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(1, maxSize));
+                    break;
+            }
+            count++;
+        }
+        count = 0;
+        for (Entity e : teams.get(1).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(maxSize - 1, 0));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(maxSize, 1));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(maxSize - 1, maxSize));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(maxSize, maxSize - 1));
+                    break;
+            }
+            count++;
+        }
+        count = 0;
+        for (Entity e : teams.get(2).getEntities()) { //towers
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(maxSize / 2, 0));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(maxSize / 2, maxSize));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(0, maxSize / 2));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(maxSize, maxSize / 2));
+                    break;
+            }
+            count++;
+        }
+
+        //remove spaces
+        for (int i = 0; i <= maxSize; i += 2) {
+            for (int j = 0; j <= maxSize; j += 2) {
+                boardManager.getBoard().getTile(i, j).setInvisible(true);
+            }
+        }
+
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeSNHolesLargeAltTowerPlacement(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(7, 7, new Color(.7f, .7f, 0, 1), Color.LIGHT_GRAY, 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        int count = 0;
+        for (Entity e : teams.get(0).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(1, 0));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(0, 1));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(0, maxSize - 1));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(1, maxSize));
+                    break;
+            }
+            count++;
+        }
+        count = 0;
+        for (Entity e : teams.get(1).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(maxSize - 1, 0));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(maxSize, 1));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(maxSize - 1, maxSize));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(maxSize, maxSize - 1));
+                    break;
+            }
+            count++;
+        }
+        count = 0;
+        for (Entity e : teams.get(2).getEntities()) { //towers
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(maxSize / 2, maxSize / 2));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(maxSize / 2, maxSize));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(0, maxSize / 2));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(maxSize, maxSize / 2));
+                    break;
+            }
+            count++;
+        }
+
+        //remove spaces
+        for (int i = 0; i <= maxSize; i += 2) {
+            for (int j = 0; j <= maxSize; j += 2) {
+                boardManager.getBoard().getTile(i, j).setInvisible(true);
+            }
+        }
+
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeSNFatCross(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(6, 6, new Color(.7f, .7f, 0, 1), Color.LIGHT_GRAY, 100), new CodeBoard(6, 6));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        int col = 1;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            col++;
+        }
+        col = maxSize - 1;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            col--;
+        }
+
+        //remove spaces
+        boardManager.getBoard().getTile(0, 0).setInvisible(true);
+        boardManager.getBoard().getTile(0, maxSize).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize, 0).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize, maxSize).setInvisible(true);
+
+        return new Battle2PRules(screen, teams);
+    }
 
     public static Rules makeSNCopmlexPaths(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
         boardManager.setBoards(new Board(9, 9, Color.DARK_GRAY, Color.LIGHT_GRAY, 700 / 9), new CodeBoard(9, 9));
@@ -1541,10 +1766,10 @@ public class BoardAndRuleConstructor {
 
         return new Battle2PRules(screen, teams);
     }
+    //endregion
 
 
-
-    //Boss Arenas
+    //region Boss Arenas
     public static Rules makeSNBlazePneumaArena(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
         Sprite lightTiles = atlas.createSprite("LightTileFancy");
         lightTiles.setColor(new Color(.4f, .1f, .1f, 1));
@@ -1588,5 +1813,48 @@ public class BoardAndRuleConstructor {
         return new Battle2PRules(screen, teams);
     }
 
+    public static Rules makeSNAquaPneumaArena(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        Sprite lightTiles = atlas.createSprite("LightTileFancy");
+        lightTiles.setColor(new Color(.2f, .4f, .9f, 1));
+        Sprite darkTiles = atlas.createSprite("DarkTileFancy");
+        darkTiles.setColor(new Color(0, .3f, .8f, 1));
+        boardManager.setBoards(new Board(5, 5, darkTiles, lightTiles, 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+
+        //place entities
+        int col = 4;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            if (col == 3)
+                col --;
+            col--;
+        }
+        int count = 0;
+        for (Entity e : teams.get(1).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(0, 2));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(0, 1));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(0, 3));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(1, 2));
+                    break;
+            }
+            count++;
+        }
+
+        //place things
+        boardManager.add(EntityConstructor.pillar(), new BoardPosition(1, 1));
+        boardManager.add(EntityConstructor.pillar(), new BoardPosition(1, maxSize - 1));
+        boardManager.add(EntityConstructor.pillar(), new BoardPosition(maxSize - 1, 1));
+        boardManager.add(EntityConstructor.pillar(), new BoardPosition(maxSize - 1, maxSize - 1));
+
+        return new Battle2PRules(screen, teams);
+    }
     //endregion
 }

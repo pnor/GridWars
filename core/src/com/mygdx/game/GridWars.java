@@ -25,6 +25,7 @@ public class GridWars extends Game {
 
 	//debug variables
 	public static boolean DEBUG_halfSpeed;
+	public static boolean DEBUG_doubleSpeed;
 
 	@Override
 	public void create() {
@@ -48,15 +49,26 @@ public class GridWars extends Game {
 	public void render() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		if (DEBUG_halfSpeed)
-			getScreen().render(Gdx.graphics.getDeltaTime() / 2);
-		else
+		if (DEBUG_halfSpeed || DEBUG_doubleSpeed) {
+			if (DEBUG_doubleSpeed && DEBUG_halfSpeed)
+				getScreen().render(Gdx.graphics.getDeltaTime() * 1.5f);
+			else if (DEBUG_doubleSpeed)
+				getScreen().render(Gdx.graphics.getDeltaTime() * 2);
+			else if (DEBUG_halfSpeed)
+				getScreen().render(Gdx.graphics.getDeltaTime() * .5f);
+		} else
 			getScreen().render(Gdx.graphics.getDeltaTime());
 		//debug
 		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
 			setScreen(new TitleScreen(this));
-		if (Gdx.input.isKeyJustPressed(Input.Keys.TAB))
+		if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) {
 			DEBUG_halfSpeed = !DEBUG_halfSpeed;
+			System.out.println("---HALF SPEED---");
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) {
+			DEBUG_doubleSpeed = !DEBUG_doubleSpeed;
+			System.out.println("+++DOUBLE SPEED+++");
+		}
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.mygdx.game.components.StatComponent;
-import com.mygdx.game.move_related.Visuals;
 
 import static com.mygdx.game.ComponentMappers.stm;
 import static com.mygdx.game.ComponentMappers.vm;
@@ -29,8 +28,17 @@ public class DamageDeathSystem extends IteratingSystem {
                 stm.get(e).alive = false;
                 if (vm.get(e).deathAnimation.getTimer().checkIfFinished()) {
                     //Compensate for unfinished damage animations
-                    if ((vm.get(e).damageAnimation != null && vm.get(e).damageAnimation.getIsPlaying()) || (vm.get(e).heavyDamageAnimation != null && vm.get(e).heavyDamageAnimation.getIsPlaying()))
-                        Visuals.visualsArePlaying -= 1;
+                    if ((vm.get(e).damageAnimation != null && vm.get(e).damageAnimation.getIsPlaying()) || (vm.get(e).heavyDamageAnimation != null && vm.get(e).heavyDamageAnimation.getIsPlaying())) {
+                        //Visuals.visualsArePlaying -= 1;
+                        if (vm.get(e).damageAnimation != null) {
+                            vm.get(e).damageAnimation.reset();
+                            vm.get(e).damageAnimation.setPlaying(false, false);
+                        }
+                        if (vm.get(e).heavyDamageAnimation != null) {
+                            vm.get(e).heavyDamageAnimation.reset();
+                            vm.get(e).heavyDamageAnimation.setPlaying(false, false);
+                        }
+                    }
                     stm.get(e).readyToRemoveFromGame = true;
                 }
 

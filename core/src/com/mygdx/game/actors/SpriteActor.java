@@ -62,6 +62,12 @@ public class SpriteActor extends UIActor{
         }
     }
 
+    @Override
+    public void setSize(float w, float h) {
+        super.setSize(h, w);
+        sprite.setSize(h, w);
+    }
+
     /**
      * @return the sprite. Note that it's NOT a copy!
      */
