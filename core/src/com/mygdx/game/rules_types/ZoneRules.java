@@ -59,9 +59,11 @@ public class ZoneRules extends Rules {
      * Colors the zones on the boards
      */
     public void colorZones() {
-        for (int i = 0; i < zones.size; i++)
-            for (BoardPosition bp : zones.get(i))
+        for (int i = 0; i < zones.size; i++) {
+            for (BoardPosition bp : zones.get(i)) {
                 BoardComponent.boards.getBoard().getTile(bp.r, bp.c).setColor(teams.get(i).getTeamColor());
+            }
+        }
     }
 
     public Array<Array<BoardPosition>> getZones() {

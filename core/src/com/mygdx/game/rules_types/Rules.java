@@ -96,7 +96,7 @@ public abstract class Rules {
                 stm.get(e).sp += 1;
 
             //status effects
-            if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
+            if (status.has(e) && stm.get(e).alive && status.get(e).getTotalStatusEffects() > 0) {
                 for (StatusEffect effect : status.get(e).statusEffects.values().toArray()) {
                     effect.doTurnEffect(e);
                     if (effect.getIsFinished())

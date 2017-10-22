@@ -5552,7 +5552,7 @@ public class MoveConstructor {
 
                 engine.addEntity(circles);
             }
-        }, 3f, 1);
+        }, 1.5f, 1);
 
         VisualEvent mirror = new VisualEvent(new VisualEffect() {
             @Override
@@ -9331,7 +9331,7 @@ public class MoveConstructor {
                     return;
                 }
                 startTilePosition = startTile.localToStageCoordinates(new Vector2(0, 0));
-                startTilePosition.add(25 * scale, 25 * scale);
+                //startTilePosition.add(25 * scale, 25 * scale);
 
                 Entity spark = new Entity();
                 Sprite s = atlas.createSprite("openCircle");
@@ -9453,7 +9453,7 @@ public class MoveConstructor {
             }
         }, .24f, 2);
 
-        return new Move("Roar", nm.get(user).name + " roared!", user, 3,
+        return new Move("Roar", nm.get(user).name + " roared!", user, 4,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
@@ -9466,7 +9466,7 @@ public class MoveConstructor {
 
                         if (status.has(enemy)) {
                             status.get(enemy).addStatusEffect(offenseless(3), enemy);
-                            status.get(enemy).addStatusEffect(petrify(3), enemy);
+                            status.get(enemy).addStatusEffect(paralyze(3), enemy);
                         }
 
                         if (vm.has(enemy) && vm.get(enemy).shuffleAnimation != null)
@@ -9475,7 +9475,7 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{  new BoardPosition(-1, 0),
                 new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
                 new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)}),
-                new Array<VisualEvent>(new VisualEvent[]{breath, explode, explodeBig, ripples})), new MoveInfo(false, 0, offenseless(3).createStatusEffectInfo(), petrify(3).createStatusEffectInfo()));
+                new Array<VisualEvent>(new VisualEvent[]{breath, explode, explodeBig, ripples})), new MoveInfo(false, 0, offenseless(3).createStatusEffectInfo(), paralyze(3).createStatusEffectInfo()));
     }
 
     public static Move prepare(Entity user) {
@@ -9861,7 +9861,7 @@ public class MoveConstructor {
             }
         }, .1f, 7);
 
-        return new Move("Neo-Roar", nm.get(user).name + "'s roar electrified the air!", user, 1,
+        return new Move("Neo-Roar", nm.get(user).name + "'s roar electrified the air!", user, 4,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
@@ -9873,7 +9873,7 @@ public class MoveConstructor {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
 
                         if (status.has(enemy)) {
-                            status.get(enemy).addStatusEffect(offenseless(2), enemy);
+                            status.get(enemy).addStatusEffect(defenseless(2), enemy);
                             status.get(enemy).addStatusEffect(paralyze(3), enemy);
                         }
 
@@ -9885,7 +9885,7 @@ public class MoveConstructor {
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
                         new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)}),
                 new Array<VisualEvent>(new VisualEvent[]{breath, explode, explodeBig, ripples, sparks})),
-                new MoveInfo(false, 0, offenseless(2).createStatusEffectInfo(), paralyze(3).createStatusEffectInfo()));
+                new MoveInfo(false, 0, defenseless(2).createStatusEffectInfo(), paralyze(3).createStatusEffectInfo()));
     }
 
     public static Move reflectionBeamLion(Entity user) {

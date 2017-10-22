@@ -27,8 +27,8 @@ public class DamageDeathSystem extends IteratingSystem {
             } else {
                 stm.get(e).alive = false;
                 if (vm.get(e).deathAnimation.getTimer().checkIfFinished()) {
-                    //Compensate for unfinished damage animations
-                    if ((vm.get(e).damageAnimation != null && vm.get(e).damageAnimation.getIsPlaying()) || (vm.get(e).heavyDamageAnimation != null && vm.get(e).heavyDamageAnimation.getIsPlaying())) {
+                    //Compensate for unfinished animations
+                    if (isDamageAnimationPlaying(e) || isHeavyDamageAnimationPlaying(e) || isShufflingAnimationPlaying(e)) {
                         //Visuals.visualsArePlaying -= 1;
                         if (vm.get(e).damageAnimation != null) {
                             vm.get(e).damageAnimation.reset();
@@ -37,6 +37,10 @@ public class DamageDeathSystem extends IteratingSystem {
                         if (vm.get(e).heavyDamageAnimation != null) {
                             vm.get(e).heavyDamageAnimation.reset();
                             vm.get(e).heavyDamageAnimation.setPlaying(false, false);
+                        }
+                        if (vm.get(e).shuffleAnimation != null) {
+                            vm.get(e).shuffleAnimation.reset();
+                            vm.get(e).shuffleAnimation.setPlaying(false, false);
                         }
                     }
                     stm.get(e).readyToRemoveFromGame = true;
@@ -69,5 +73,29 @@ public class DamageDeathSystem extends IteratingSystem {
                 }
             }
         }
+    }
+
+    /**
+     * @param e Entity being checked
+     * @return true if the entity has a damage animation and if its playing. False otherwise.
+     */
+    private boolean isDamageAnimationPlaying(Entity e) {
+        return vm.get(e).damageAnimation != null && vm.get(e).damageAnimation.getIsPlaying();
+    }
+
+    /**
+     * @param e Entity being checked
+     * @return true if the entity has a heavy damage animation and if its playing. False otherwise.
+     */
+    private boolean isHeavyDamageAnimationPlaying(Entity e) {
+        return vm.get(e).heavyDamageAnimation != null && vm.get(e).heavyDamageAnimation.getIsPlaying();
+    }
+
+    /**
+     * @param e Entity being checked
+     * @return true if the entity has a damage animation and if its playing. False otherwise.
+     */
+    private boolean isShufflingAnimationPlaying(Entity e) {
+        return vm.get(e).shuffleAnimation != null && vm.get(e).shuffleAnimation.getIsPlaying();
     }
 }

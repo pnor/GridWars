@@ -69,7 +69,9 @@ public class BackgroundConstructor {
             case 36:
             case 37: //25
             case 38:
+                return makeSurvivalBackYellow();
             case 39:
+                return makeSurvivalBackYellowDark();
             case 40:
             case 41:
                 return makeSurvivalBackYellow();

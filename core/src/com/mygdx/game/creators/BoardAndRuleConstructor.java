@@ -116,7 +116,11 @@ public class BoardAndRuleConstructor {
             case 36:
                 return makeSNFatCross(screen, teams, boardManager);
             case 37: //25
-                return null;
+                return makeSNCopmlexPaths(screen, teams, boardManager);
+            case 38:
+                return makeDiagDownSlantPillars(screen, teams, boardManager);
+            case 39:
+                return makeDiagUpSlantHoles(screen, teams, boardManager);
             //endregion
         }
         return null;
@@ -1604,7 +1608,7 @@ public class BoardAndRuleConstructor {
     }
 
     public static Rules makeSNCopmlexPaths(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
-        boardManager.setBoards(new Board(9, 9, Color.DARK_GRAY, Color.LIGHT_GRAY, 700 / 9), new CodeBoard(9, 9));
+        boardManager.setBoards(new Board(9, 9, new Color(.7f, .7f, 0, 1), Color.LIGHT_GRAY, 700 / 9), new CodeBoard(9, 9));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
 
         //place entities
@@ -1685,6 +1689,79 @@ public class BoardAndRuleConstructor {
 
         return new Battle2PRules(screen, teams);
     }
+
+    public static Rules makeDiagUpSlantHoles(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(7, 7, new Color(.7f, .7f, 0, 1), Color.LIGHT_GRAY, 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        int col = 1;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            if (col == 2)
+                col ++;
+            col++;
+        }
+        col = 5;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            if (col == 4)
+                col --;
+            col--;
+        }
+
+        boardManager.getBoard().getTile(0, 0).setInvisible(true);
+
+        boardManager.getBoard().getTile(3, 0).setInvisible(true);
+        boardManager.getBoard().getTile(2, 2).setInvisible(true);
+        boardManager.getBoard().getTile(1, 4).setInvisible(true);
+        boardManager.getBoard().getTile(0, maxSize).setInvisible(true);
+
+        boardManager.getBoard().getTile(maxSize, 0).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize - 1, 2).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize - 2, 4).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize - 3, maxSize).setInvisible(true);
+
+        boardManager.getBoard().getTile(maxSize, maxSize).setInvisible(true);
+
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeDiagDownSlantPillars(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(7, 7, new Color(.7f, .7f, 0, 1), Color.LIGHT_GRAY, 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        int col = 1;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            if (col == 2)
+                col ++;
+            col++;
+        }
+        col = 5;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            if (col == 4)
+                col --;
+            col--;
+        }
+
+        boardManager.add(EntityConstructor.pillar(), 0, maxSize);
+
+        boardManager.add(EntityConstructor.pillar(), 0, 0);
+        boardManager.add(EntityConstructor.pillar(), 1, 2);
+        boardManager.add(EntityConstructor.pillar(), 2, 4);
+        boardManager.add(EntityConstructor.pillar(), 3, maxSize);
+
+        boardManager.add(EntityConstructor.pillar(), maxSize - 3, 0);
+        boardManager.add(EntityConstructor.pillar(), maxSize - 2, 2);
+        boardManager.add(EntityConstructor.pillar(), maxSize - 1, 4);
+        boardManager.add(EntityConstructor.pillar(), maxSize, maxSize);
+
+        boardManager.add(EntityConstructor.pillar(), maxSize, 0);
+
+        return new Battle2PRules(screen, teams);
+    }
+
 
     public static Rules makeSNRoundAbout(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
         boardManager.setBoards(new Board(9, 9, new Color(0, .3f, .8f, 1), Color.LIGHT_GRAY, 700 / 9), new CodeBoard(9, 9));

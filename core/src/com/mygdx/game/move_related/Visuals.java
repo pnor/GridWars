@@ -73,7 +73,8 @@ public class Visuals {
             isPlaying = false;
             Visuals.visualsArePlaying -= 1;
             if (autoReset) {
-                autoReset = false;
+                autoReset = true;
+                isPlaying = false;
                 reset();
             }
         }
@@ -105,7 +106,7 @@ public class Visuals {
 
     /**
      * Updates this object's timer
-     * @param dt
+     * @param dt delta time
      */
     public void updateTimer(float dt) {
         timer.increaseTimer(dt);
