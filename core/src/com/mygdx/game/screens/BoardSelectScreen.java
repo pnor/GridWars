@@ -1,4 +1,4 @@
-package com.mygdx.game.screens_ui.screens;
+package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -13,9 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.rules_types.Team;
-import com.mygdx.game.screens_ui.BackType;
-import com.mygdx.game.screens_ui.Background;
-import com.mygdx.game.screens_ui.HoverButton;
+import com.mygdx.game.ui.BackType;
+import com.mygdx.game.ui.Background;
+import com.mygdx.game.ui.HoverButton;
 
 import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;

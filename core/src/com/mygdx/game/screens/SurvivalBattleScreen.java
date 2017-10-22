@@ -1,4 +1,4 @@
-package com.mygdx.game.screens_ui.screens;
+package com.mygdx.game.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Screen;
@@ -17,7 +17,7 @@ import com.mygdx.game.components.EventComponent;
 import com.mygdx.game.components.PositionComponent;
 import com.mygdx.game.components.SpriteComponent;
 import com.mygdx.game.rules_types.Team;
-import com.mygdx.game.screens_ui.LerpColor;
+import com.mygdx.game.ui.LerpColor;
 
 import static com.mygdx.game.ComponentMappers.sm;
 import static com.mygdx.game.GridWars.*;

@@ -1,11 +1,11 @@
-package com.mygdx.game.screens_ui.screens;
+package com.mygdx.game.screens;
 
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mygdx.game.GridWars;
-import com.mygdx.game.screens_ui.Background;
+import com.mygdx.game.ui.Background;
 import com.mygdx.game.systems.DrawingSystem;
 
 import static com.mygdx.game.GridWars.engine;

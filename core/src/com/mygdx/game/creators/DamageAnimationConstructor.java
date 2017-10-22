@@ -17,7 +17,7 @@ import com.mygdx.game.misc.EventCompUtil;
 import com.mygdx.game.move_related.VisualEffect;
 import com.mygdx.game.move_related.VisualEvent;
 import com.mygdx.game.move_related.Visuals;
-import com.mygdx.game.screens_ui.screens.BattleScreen;
+import com.mygdx.game.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.am;
 import static com.mygdx.game.ComponentMappers.bm;

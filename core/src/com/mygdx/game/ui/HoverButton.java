@@ -1,4 +1,4 @@
-package com.mygdx.game.screens_ui;
+package com.mygdx.game.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;

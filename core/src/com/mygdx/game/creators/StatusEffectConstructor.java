@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.game.move_related.StatusEffect;
-import com.mygdx.game.screens_ui.LerpColor;
+import com.mygdx.game.ui.LerpColor;
 
 import static com.mygdx.game.ComponentMappers.stm;
 import static com.mygdx.game.ComponentMappers.vm;

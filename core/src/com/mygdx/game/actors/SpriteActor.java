@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mygdx.game.screens_ui.LerpColor;
+import com.mygdx.game.ui.LerpColor;
 
 /**
  * Actor that displays a static sprite.

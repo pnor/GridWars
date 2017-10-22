@@ -12,8 +12,8 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.game.screens_ui.Background;
-import com.mygdx.game.screens_ui.screens.TitleScreen;
+import com.mygdx.game.ui.Background;
+import com.mygdx.game.screens.TitleScreen;
 
 public class GridWars extends Game {
 	//public AssetManager assets = new AssetManager();

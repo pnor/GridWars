@@ -22,7 +22,7 @@ import com.mygdx.game.misc.ColorUtils;
 import com.mygdx.game.misc.EventCompUtil;
 import com.mygdx.game.misc.GameEvent;
 import com.mygdx.game.move_related.*;
-import com.mygdx.game.screens_ui.screens.BattleScreen;
+import com.mygdx.game.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.atlas;

@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.components.BoardComponent;
 import com.mygdx.game.misc.Phase;
 import com.mygdx.game.move_related.StatusEffect;
-import com.mygdx.game.screens_ui.screens.BattleScreen;
+import com.mygdx.game.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.*;
 

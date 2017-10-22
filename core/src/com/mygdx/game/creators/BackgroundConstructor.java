@@ -2,8 +2,8 @@ package com.mygdx.game.creators;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.mygdx.game.screens_ui.BackType;
-import com.mygdx.game.screens_ui.Background;
+import com.mygdx.game.ui.BackType;
+import com.mygdx.game.ui.Background;
 
 import static com.mygdx.game.GridWars.backAtlas;
 

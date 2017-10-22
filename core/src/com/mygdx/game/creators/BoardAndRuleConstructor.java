@@ -13,7 +13,7 @@ import com.mygdx.game.rules_types.Battle2PRules;
 import com.mygdx.game.rules_types.Rules;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.rules_types.ZoneRules;
-import com.mygdx.game.screens_ui.screens.BattleScreen;
+import com.mygdx.game.screens.BattleScreen;
 
 import static com.mygdx.game.GridWars.atlas;
 

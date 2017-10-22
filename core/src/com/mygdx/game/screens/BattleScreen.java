@@ -1,4 +1,4 @@
-package com.mygdx.game.screens_ui.screens;
+package com.mygdx.game.screens;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -46,7 +46,7 @@ import com.mygdx.game.move_related.Visuals;
 import com.mygdx.game.rules_types.Rules;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.rules_types.ZoneRules;
-import com.mygdx.game.screens_ui.*;
+import com.mygdx.game.ui.*;
 import com.mygdx.game.systems.*;
 
 import static com.mygdx.game.ComponentMappers.*;

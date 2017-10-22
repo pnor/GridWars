@@ -6,9 +6,9 @@ import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mygdx.game.components.AnimationComponent;
 import com.mygdx.game.components.SpriteComponent;
-import com.mygdx.game.screens_ui.BackType;
-import com.mygdx.game.screens_ui.Background;
-import com.mygdx.game.screens_ui.LerpColor;
+import com.mygdx.game.ui.BackType;
+import com.mygdx.game.ui.Background;
+import com.mygdx.game.ui.LerpColor;
 
 import java.util.Comparator;
 

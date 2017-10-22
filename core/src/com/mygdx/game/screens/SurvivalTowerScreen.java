@@ -1,4 +1,4 @@
-package com.mygdx.game.screens_ui.screens;
+package com.mygdx.game.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -19,9 +19,9 @@ import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.SpriteActor;
 import com.mygdx.game.creators.EntityConstructor;
 import com.mygdx.game.rules_types.Team;
-import com.mygdx.game.screens_ui.BackType;
-import com.mygdx.game.screens_ui.Background;
-import com.mygdx.game.screens_ui.HoverButton;
+import com.mygdx.game.ui.BackType;
+import com.mygdx.game.ui.Background;
+import com.mygdx.game.ui.HoverButton;
 
 import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.*;

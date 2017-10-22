@@ -1,4 +1,4 @@
-package com.mygdx.game.screens_ui;
+package com.mygdx.game.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
@@ -132,5 +132,4 @@ public class LerpColor extends Color {
     public Color getMiddleColor() {
         return new Color((startColor.r + endColor.r) / 2f, (startColor.g + endColor.g) / 2f, (startColor.b + endColor.b) / 2f, (startColor.a + endColor.a) / 2f);
     }
-
 }
