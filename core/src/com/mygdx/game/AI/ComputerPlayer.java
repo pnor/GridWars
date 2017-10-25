@@ -320,7 +320,7 @@ public class ComputerPlayer implements Runnable {
      * @return {@link Array} of all possible moves for one Entity
      */
     private Array<Turn> getAllPossibleTurns(Entity e) {
-        if (status.has(e) && (status.get(e).statusEffects.containsKey("Petrify") || status.get(e).statusEffects.containsKey("Freeze"))) //handle petrify/freeze (non moving conditions)
+        if (status.has(e) && (status.get(e).contains("Petrify") || status.get(e).contains("Freeze"))) //handle petrify/freeze (non moving conditions)
             return new Array<Turn>(new Turn[]{new Turn(e, bm.get(e).pos.copy(), -1, 0)});
 
         Array<Turn> turns = new Array<>();

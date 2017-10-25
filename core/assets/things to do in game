@@ -1,0 +1,8 @@
+Sprites
+- unlockable player entities
+    + fighting flamingo
+
+Bugs
+- Jellymiss : using attacks out of board crashes game with mysterious LQJGL IndexOutOfBounds Exception
+- Shading black fails on some attacks (supercharge, jellymiss attacks) NOTE connected to status effects colors
+- AI jumps entities sometimes

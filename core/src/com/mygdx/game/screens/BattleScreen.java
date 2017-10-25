@@ -36,18 +36,15 @@ import com.mygdx.game.actors.UIActor;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.*;
-import com.mygdx.game.creators.BackgroundConstructor;
-import com.mygdx.game.creators.BoardAndRuleConstructor;
-import com.mygdx.game.creators.DamageAnimationConstructor;
-import com.mygdx.game.creators.MoveConstructor;
+import com.mygdx.game.creators.*;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.StatusEffect;
 import com.mygdx.game.move_related.Visuals;
 import com.mygdx.game.rules_types.Rules;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.rules_types.ZoneRules;
-import com.mygdx.game.ui.*;
 import com.mygdx.game.systems.*;
+import com.mygdx.game.ui.*;
 
 import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.*;
@@ -58,7 +55,8 @@ import static com.mygdx.game.GridWars.*;
 public class BattleScreen implements Screen {
 
     protected final GridWars GRID_WARS;
-    private BattleInputProcessor battleInputProcessor;
+    protected BattleInputProcessor battleInputProcessor;
+    protected LerpColorManager lerpColorManager;
 
     //Background
     Background background;
@@ -166,25 +164,38 @@ public class BattleScreen implements Screen {
     public BattleScreen(Array<Team> selectedTeams, int boardIndex, Vector2[] AIControlled, GridWars game) {
         GRID_WARS = game;
         teams = selectedTeams;
+
+        // initialize board and rule constructor first with lerpColorManager
+        setUpLerpColorManager();
+        BoardAndRuleConstructor.initialize(lerpColorManager);
+
         if (BoardComponent.boards == null)
             BoardComponent.boards = new BoardManager();
         rules = BoardAndRuleConstructor.getBoardAndRules(boardIndex, this, teams, BoardComponent.boards);
         background = BackgroundConstructor.getBackground(boardIndex);
 
-        int sum = 0;
-        for (int i = 0; i < teams.size; i++)
-            sum += teams.get(i).getEntities().size;
-        TOTAL_ENTITIES_ON_TEAMS = sum;
-
+        //Initialize Others Constructors
         MoveConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, stage, GRID_WARS);
         DamageAnimationConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine);
 
+        //Updating AI with information about rules
         if (rules instanceof ZoneRules)
             computer = new ComputerPlayer(BoardComponent.boards, teams, ((ZoneRules) rules).getZones(), 1, 1, true, 0);
         else
             computer = new ComputerPlayer(BoardComponent.boards, teams, 1, 1, true, 0);
-
         computerControlledTeamsIndex = AIControlled;
+
+        //get sum of all entities on teams in game + add lerpColors of teams to manager
+        int sum = 0;
+        for (int i = 0; i < teams.size; i++) {
+            sum += teams.get(i).getEntities().size;
+            if (teams.get(i).getTeamColor() instanceof LerpColor)
+                lerpColorManager.registerLerpColor((LerpColor) teams.get(i).getTeamColor());
+        }
+        TOTAL_ENTITIES_ON_TEAMS = sum;
+
+        //register lerpColors that will be used often
+        lerpColorManager.registerLerpColor(SELECTION_COLOR);
 
         //Options preferences
         Preferences pref = Gdx.app.getPreferences("Options");
@@ -197,11 +208,11 @@ public class BattleScreen implements Screen {
         } else if (AISpeed == 1) { //normal
             movementWaitTime = .5f;
             attackWaitTime = 1f;
-            displayEndTurnMessageTime = 1f;
-        } else { //fast
-            movementWaitTime = .25f;
-            attackWaitTime = .5f;
             displayEndTurnMessageTime = .5f;
+        } else { //fast
+            movementWaitTime = .1f;
+            attackWaitTime = .3f;
+            displayEndTurnMessageTime = .25f;
         }
     }
 
@@ -613,15 +624,10 @@ public class BattleScreen implements Screen {
         //region update everything. (Graphics, engine, GRID_WARS.stage)
         background.update(delta);
         stage.act(delta);
+        lerpColorManager.update(delta);
         engine.getSystem(DrawingSystem.class).drawBackground(background, delta);
         stage.draw();
         engine.update(delta);
-        //endregion
-
-        //region update LerpColor of teams
-        for (Team t : teams)
-            if (t.getTeamColor() instanceof LerpColor)
-                ((LerpColor) t.getTeamColor()).update(delta);
         //endregion
 
         //region Handling dead entities
@@ -727,6 +733,7 @@ public class BattleScreen implements Screen {
         //endregion
     }
 
+    //region selection related
     public void changeSelectedEntity(Entity e) {
         //Undoing effects of selecting previous entity---
         //removes previously highlighted tiles
@@ -784,7 +791,9 @@ public class BattleScreen implements Screen {
             }
         }
     }
+    //endregion
 
+    //region Computer things
     private void processComputerTurn(float delta) {
         //if game has ended stop
         if (gameHasEnded) {
@@ -857,26 +866,9 @@ public class BattleScreen implements Screen {
             turnPhase = 3;
         }
     }
+    //endregion
 
-    /**
-     * Shows the attack message of the Move stored in Current Move.
-     */
-    private void showAttackMessage(String name, Move move) {
-        if (move.getAttackMessage() == null || move.getAttackMessage().trim().equals("")) { //default case
-            if (name != null)
-                if (move.getAttackMessage() != null)
-                    infoLbl.setText(move.getAttackMessage());
-                else
-                    infoLbl.setText(name + " used " + move.getName() + "!");
-            else if (move.getAttackMessage() != null)
-                infoLbl.setText(move.getAttackMessage());
-            else
-                infoLbl.setText(move.getName() + " was used!");
-        } else {
-            infoLbl.setText(move.getAttackMessage());
-        }
-    }
-
+    //region Turns
     /**
      * Ends the current turn and starts the next.
      */
@@ -963,143 +955,9 @@ public class BattleScreen implements Screen {
             shadeBasedOnState(e);
         }
     }
+    //endregion
 
-    public void showMovementTiles() {
-        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity))) {
-            if (t.isOccupied())
-                continue;
-            if (!t.getIsListening()) {
-                t.shadeTile(Color.CYAN);
-                t.startListening();
-            }
-        }
-    }
-
-    /**
-     * Removes the movement tiles of the current selected entity. Can throw IndexOutOfBoundsExceptions if it goes outside
-     * the board, so a try catch loop should be written around it.
-     */
-    public void removeMovementTiles() {
-        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity)))
-            if (t != null) {
-                t.revertTileColor();
-                t.stopListening();
-            }
-    }
-
-    /**
-     * Algorithm that returns all tiles that can be moved to based on speed. Calls a recursive method. Takes into account barriers and blockades, while
-     * avoiding duplicates of the same tile. Note that this returns tiles horizontal of the entity multiple times.
-     * @param bp Position that is being branched from
-     * @param spd remaining tiles the entity can move
-     * @return {@link Array} of {@link Tile}s.
-     */
-    private Array<Tile> getMovableSquares(BoardPosition bp, int spd) {
-        BoardPosition next = new BoardPosition(-1, -1);
-        Array<Tile> tiles = new Array<>();
-
-        if (spd == 0)
-            return tiles;
-
-        //get spread of tiles upwards
-        getMovableSquaresSpread(bp, bp, spd, tiles, -1, 2, true);
-        //get spread of tiles downwards
-        getMovableSquaresSpread(bp, bp, spd, tiles, -1, 0, true);
-
-        return tiles;
-    }
-
-    /**
-     * Recursive algorithm that returns all tiles in one direction that can be moved to based on speed. Takes into account barriers and blockades.
-     * @param bp Position that is being branched from
-     * @param spd remaining tiles the entity can move
-     * @param tiles {@link Array} of tiles that can be moved on
-     * @param directionCameFrom direction the previous tile came from. Eliminates the need to check if the next tile is already in the
-     *                          {@link Array}.
-     *                          <p>-1: No direction(starting)
-     *                          <p>0: top
-     *                          <p>1: left
-     *                          <p>2: bottom
-     *                          <p>3: right
-     * @param sourceDirection the direction it is branching from. This prevents the "U-Turns" that would overlap with other directions
-     *                        <p>-1: No direction(starting)
-     *                          <p>0: top
-     *                          <p>1: left
-     *                          <p>2: bottom
-     *                          <p>3: right
-     * @return {@link Array} of {@link Tile}s.
-     */
-    private Array<Tile> getMovableSquaresSpread(BoardPosition sourceBp, BoardPosition bp, int spd, Array<Tile> tiles, int directionCameFrom, int sourceDirection, boolean includeHorizontalSpaces) {
-        BoardPosition next = new BoardPosition(-1, -1);
-
-        if (spd == 0)
-            return tiles;
-
-        for (int i = 0; i < 4; i++) {
-            if (directionCameFrom == i || sourceDirection == i) //Already checked tile -> skip!
-                continue;
-
-            if (i == 0) //set position
-                next.set(bp.r - 1, bp.c);
-            else if (i == 1)
-                next.set(bp.r, bp.c - 1);
-            else if (i == 2)
-                next.set(bp.r + 1, bp.c);
-            else if (i == 3)
-                next.set(bp.r, bp.c + 1);
-
-            //check if valid
-            if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
-                    || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
-                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied()
-                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isInvisible())
-                continue;
-
-            if (!includeHorizontalSpaces && next.r == sourceBp.r)
-                continue;
-
-            //recursively call other tiles
-            tiles.add(BoardComponent.boards.getBoard().getTile(next.r, next.c));
-            getMovableSquaresSpread(sourceBp, next, spd - 1, tiles, (i + 2) % 4, sourceDirection, includeHorizontalSpaces);
-        }
-
-        return tiles;
-    }
-
-    public void showAttackTiles() {
-        //show Attack Squares visual ---
-        if (selectedEntity != null && mvm.has(selectedEntity)) {
-            if (moveHover > -1) {
-                //highlight attack squares
-                if (mvm.get(selectedEntity).moveList.size > moveHover) {
-                    for (BoardPosition pos :  mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
-                        try {
-                            BoardComponent.boards.getBoard().getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c).shadeTile(Color.RED);
-                        } catch (IndexOutOfBoundsException e) { }
-                    }
-                }
-            }
-        }
-    }
-
-    public void removeAttackTiles() {
-        //remove attack squares
-        if (moveHover != -1) {
-            if (selectedEntity != null && mvm.has(selectedEntity) && mvm.get(selectedEntity).moveList.size > moveHover) {
-                //boolean wasBlue = false;
-                for (BoardPosition pos :  mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
-                    try {
-                        Tile currTile = BoardComponent.boards.getBoard().getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c);
-                        if (currTile.getIsListening())
-                            currTile.shadeTile(Color.CYAN);
-                        else
-                            currTile.revertTileColor();
-                    } catch (IndexOutOfBoundsException e) { }
-                }
-            }
-        }
-    }
-
+    //region Shading of Entities
     /**
      * Shades an entity based on its current state
      * @param e entity being shaded
@@ -1116,9 +974,12 @@ public class BattleScreen implements Screen {
             am.get(e).actor.shade(Color.GRAY);
         else if (rules.getCurrentTeamNumber() == team.get(e).teamNumber)
             am.get(e).actor.shade(rules.getCurrentTeam().getTeamColor());
-        //status effects
+            //status effects
         else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {
-            am.get(e).actor.shade(status.get(e).statusEffects.values().toArray().first().getColor());
+            Color color = status.get(e).getStatusEffects().get(status.get(e).getTotalStatusEffects() - 1).getColor();
+            if (color instanceof LerpColor)
+                lerpColorManager.registerLerpColor((LerpColor) color);
+            am.get(e).actor.shade(color);
         } else { //defaults
             if (team.get(e).teamNumber == rules.getCurrentTeamNumber())
                 am.get(e).actor.shade(rules.getCurrentTeam().getTeamColor().cpy());
@@ -1136,13 +997,12 @@ public class BattleScreen implements Screen {
         if (!state.has(e))
             return false;
 
-
         if (!(state.get(e).canMove || state.get(e).canAttack)) //shading to show cant attack/move
             return am.get(e).actor.getColor() == Color.GRAY;
         else if (!state.get(e).canMove && !state.get(e).canAttack)
             return am.get(e).actor.getColor() == Color.DARK_GRAY;
         else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0)  //status effect
-            return am.get(e).actor.getColor().equals(status.get(e).statusEffects.values().toArray().first().getColor());
+            return am.get(e).actor.getColor().equals(status.get(e).getStatusEffects().get(status.get(e).getTotalStatusEffects() - 1).getColor());
         else if (team.get(e).teamNumber == rules.getCurrentTeamNumber()) //defualts
             return am.get(e).actor.getColor() == rules.getCurrentTeam().getTeamColor();
         else
@@ -1165,12 +1025,33 @@ public class BattleScreen implements Screen {
             return Color.GRAY;
             //status effects
         else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0)
-            return status.get(e).statusEffects.values().toArray().first().getColor();
+            return status.get(e).getStatusEffects().get(status.get(e).getTotalStatusEffects() - 1).getColor();
         else { //defaults
             if (team.get(e).teamNumber == rules.getCurrentTeamNumber())
                 return rules.getCurrentTeam().getTeamColor();
             else
-              return Color.WHITE;
+                return Color.WHITE;
+        }
+    }
+    //endregion
+
+    //region UI related
+    /**
+     * Shows the attack message of the Move stored in Current Move.
+     */
+    private void showAttackMessage(String name, Move move) {
+        if (move.getAttackMessage() == null || move.getAttackMessage().trim().equals("")) { //default case
+            if (name != null)
+                if (move.getAttackMessage() != null)
+                    infoLbl.setText(move.getAttackMessage());
+                else
+                    infoLbl.setText(name + " used " + move.getName() + "!");
+            else if (move.getAttackMessage() != null)
+                infoLbl.setText(move.getAttackMessage());
+            else
+                infoLbl.setText(move.getName() + " was used!");
+        } else {
+            infoLbl.setText(move.getAttackMessage());
         }
     }
 
@@ -1208,7 +1089,7 @@ public class BattleScreen implements Screen {
             statusLbl.setColor(Color.GREEN);
             if (status.has(selectedEntity) && status.get(selectedEntity).getTotalStatusEffects() > 0) {
                 statusLbl.setColor(Color.ORANGE);
-                for (StatusEffect status : status.get(selectedEntity).statusEffects.values().toArray()) {
+                for (StatusEffect status : status.get(selectedEntity).getStatusEffects()) {
                     if (status.getStatChanges().maxHP > 1f && !hpLbl.getColor().equals(Color.RED) && !hpLbl.getColor().equals(Color.GREEN))
                         hpLbl.setColor(Color.GREEN);
                     else if (status.getStatChanges().maxHP < 1f && !hpLbl.getColor().equals(Color.RED))
@@ -1237,7 +1118,7 @@ public class BattleScreen implements Screen {
 
                 //status effect label
                 StringBuilder statusEffects = new StringBuilder();
-                for (StatusEffect effect : status.get(selectedEntity).statusEffects.values())
+                for (StatusEffect effect : status.get(selectedEntity).getStatusEffects())
                     statusEffects.append(effect.getName());
 
                 for (int i = 1; i < statusEffects.length(); i++) {
@@ -1360,10 +1241,6 @@ public class BattleScreen implements Screen {
         engine.addEntity(blackCover);
     }
 
-    public void goToNextScreen() {
-        GRID_WARS.setScreen(new EndResultsScreen(teams, teams.indexOf(rules.checkWinConditions(), true), rules, GRID_WARS));
-    }
-
     /**
      * Disables the user input of the battle screen.
      */
@@ -1398,6 +1275,9 @@ public class BattleScreen implements Screen {
         attacksEnabled = false;
     }
 
+    /**
+     * Enables attack buttons
+     */
     public void enableAttacks() {
         attackBtn1.setTouchable(Touchable.enabled);
         attackBtn1.setColor(Color.WHITE);
@@ -1409,7 +1289,149 @@ public class BattleScreen implements Screen {
         attackBtn4.setColor(Color.WHITE);
         attacksEnabled = true;
     }
+    //endregion
 
+    //region Changing Tiles and movements square related things
+    //Movement
+    public void showMovementTiles() {
+        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity))) {
+            if (t.isOccupied())
+                continue;
+            if (!t.getIsListening()) {
+                t.shadeTile(Color.CYAN);
+                t.startListening();
+            }
+        }
+    }
+
+    /**
+     * Removes the movement tiles of the current selected entity. Can throw IndexOutOfBoundsExceptions if it goes outside
+     * the board, so a try catch loop should be written around it.
+     */
+    public void removeMovementTiles() {
+        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity)))
+            if (t != null) {
+                t.revertTileColor();
+                t.stopListening();
+            }
+    }
+
+    /**
+     * Algorithm that returns all tiles that can be moved to based on speed. Calls a recursive method. Takes into account barriers and blockades, while
+     * avoiding duplicates of the same tile. Note that this returns tiles horizontal of the entity multiple times.
+     * @param bp Position that is being branched from
+     * @param spd remaining tiles the entity can move
+     * @return {@link Array} of {@link Tile}s.
+     */
+    private Array<Tile> getMovableSquares(BoardPosition bp, int spd) {
+        BoardPosition next = new BoardPosition(-1, -1);
+        Array<Tile> tiles = new Array<>();
+
+        if (spd == 0)
+            return tiles;
+
+        //get spread of tiles upwards
+        getMovableSquaresSpread(bp, bp, spd, tiles, -1, 2, true);
+        //get spread of tiles downwards
+        getMovableSquaresSpread(bp, bp, spd, tiles, -1, 0, true);
+
+        return tiles;
+    }
+
+    /**
+     * Recursive algorithm that returns all tiles in one direction that can be moved to based on speed. Takes into account barriers and blockades.
+     * @param bp Position that is being branched from
+     * @param spd remaining tiles the entity can move
+     * @param tiles {@link Array} of tiles that can be moved on
+     * @param directionCameFrom direction the previous tile came from. Eliminates the need to check if the next tile is already in the
+     *                          {@link Array}.
+     *                          <p>-1: No direction(starting)
+     *                          <p>0: top
+     *                          <p>1: left
+     *                          <p>2: bottom
+     *                          <p>3: right
+     * @param sourceDirection the direction it is branching from. This prevents the "U-Turns" that would overlap with other directions
+     *                        <p>-1: No direction(starting)
+     *                          <p>0: top
+     *                          <p>1: left
+     *                          <p>2: bottom
+     *                          <p>3: right
+     * @return {@link Array} of {@link Tile}s.
+     */
+    private Array<Tile> getMovableSquaresSpread(BoardPosition sourceBp, BoardPosition bp, int spd, Array<Tile> tiles, int directionCameFrom, int sourceDirection, boolean includeHorizontalSpaces) {
+        BoardPosition next = new BoardPosition(-1, -1);
+
+        if (spd == 0)
+            return tiles;
+
+        for (int i = 0; i < 4; i++) {
+            if (directionCameFrom == i || sourceDirection == i) //Already checked tile -> skip!
+                continue;
+
+            if (i == 0) //set position
+                next.set(bp.r - 1, bp.c);
+            else if (i == 1)
+                next.set(bp.r, bp.c - 1);
+            else if (i == 2)
+                next.set(bp.r + 1, bp.c);
+            else if (i == 3)
+                next.set(bp.r, bp.c + 1);
+
+            //check if valid
+            if (next.r >= BoardComponent.boards.getBoard().getRowSize() || next.r < 0
+                    || next.c >= BoardComponent.boards.getBoard().getColumnSize() || next.c < 0
+                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isOccupied()
+                    || BoardComponent.boards.getBoard().getTile(next.r, next.c).isInvisible())
+                continue;
+
+            if (!includeHorizontalSpaces && next.r == sourceBp.r)
+                continue;
+
+            //recursively call other tiles
+            tiles.add(BoardComponent.boards.getBoard().getTile(next.r, next.c));
+            getMovableSquaresSpread(sourceBp, next, spd - 1, tiles, (i + 2) % 4, sourceDirection, includeHorizontalSpaces);
+        }
+
+        return tiles;
+    }
+
+    //Attacks
+    public void showAttackTiles() {
+        //show Attack Squares visual ---
+        if (selectedEntity != null && mvm.has(selectedEntity)) {
+            if (moveHover > -1) {
+                //highlight attack squares
+                if (mvm.get(selectedEntity).moveList.size > moveHover) {
+                    for (BoardPosition pos :  mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
+                        try {
+                            BoardComponent.boards.getBoard().getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c).shadeTile(Color.RED);
+                        } catch (IndexOutOfBoundsException e) { }
+                    }
+                }
+            }
+        }
+    }
+
+    public void removeAttackTiles() {
+        //remove attack squares
+        if (moveHover != -1) {
+            if (selectedEntity != null && mvm.has(selectedEntity) && mvm.get(selectedEntity).moveList.size > moveHover) {
+                //boolean wasBlue = false;
+                for (BoardPosition pos :  mvm.get(selectedEntity).moveList.get(moveHover).getRange()) {
+                    try {
+                        Tile currTile = BoardComponent.boards.getBoard().getTile(pos.r + bm.get(selectedEntity).pos.r, pos.c + bm.get(selectedEntity).pos.c);
+                        if (currTile.getIsListening())
+                            currTile.shadeTile(Color.CYAN);
+                        else
+                            currTile.revertTileColor();
+                    } catch (IndexOutOfBoundsException e) { }
+                }
+            }
+        }
+    }
+    //endregion
+
+    //region Checking whether entities can attack/move
     /**
      * Checks if an entity has the criteria to use attacks.
      * Criteria : not null, has {@code MovesetComponent}, has {@code StateComponent}, can attack,
@@ -1419,7 +1441,7 @@ public class BattleScreen implements Screen {
      */
     public boolean mayAttack(Entity e) {
         return e != null && mvm.has(e) && state.has(e) && state.get(e).canAttack && team.has(e) &&
-                team.get(e).teamNumber == rules.getCurrentTeamNumber() && !(status.has(selectedEntity) && status.get(selectedEntity).statusEffects.containsKey("Petrify"));
+                team.get(e).teamNumber == rules.getCurrentTeamNumber() && !(status.has(selectedEntity) && status.get(selectedEntity).contains("Petrify"));
     }
 
     /**
@@ -1432,6 +1454,33 @@ public class BattleScreen implements Screen {
         return stm.has(e) && stm.get(e).getModSpd(e) > 0 && state.has(e) &&
                 state.get(e).canMove && team.has(e) && team.get(e).teamNumber == rules.getCurrentTeamNumber();
     }
+    //endregion
+
+    /**
+     * Creates a {@link LerpColorManager} for the screen, and initializes the {@link StatusEffectComponent} with it.
+     */
+    private void setUpLerpColorManager() {
+        lerpColorManager = new LerpColorManager();
+        StatusEffectComponent.setLerpColorManager(lerpColorManager);
+    }
+
+    /**
+     * Sets the {@link LerpColorManager} for the screen to null, and clears the {@link StatusEffectComponent} and {@link BoardAndRuleConstructor}.
+     */
+    private void disposeLerpColorManager() {
+        lerpColorManager = null;
+        StatusEffectComponent.setLerpColorManager(null);
+        BoardAndRuleConstructor.clear();
+    }
+
+    public void goToNextScreen() {
+        disposeLerpColorManager();
+        MoveConstructor.clear();
+        EntityConstructor.clear();
+        DamageAnimationConstructor.clear();
+        GRID_WARS.setScreen(new EndResultsScreen(teams, teams.indexOf(rules.checkWinConditions(), true), rules, GRID_WARS));
+    }
+
 
     @Override
     public void resize(int width, int height) {
@@ -1459,6 +1508,7 @@ public class BattleScreen implements Screen {
             engine.removeSystem(e);
     }
 
+    //region getters
     public int getMoveHover() {
         return moveHover;
     }
@@ -1478,4 +1528,5 @@ public class BattleScreen implements Screen {
     public Rules getRules() {
         return rules;
     }
+    //endregion
 }

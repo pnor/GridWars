@@ -114,8 +114,28 @@ public class LerpColor extends Color {
      * @param color LerpColor
      * @return true if equal, false otherwise
      */
-    public boolean equals(LerpColor color) {
-        return color != null && this.startColor == color.startColor && this.endColor == color.endColor;
+    @Override
+    public boolean equals(Object color) {
+            return color != null && color instanceof LerpColor &&
+                    this.startColor.equals(((LerpColor) color).startColor) && this.endColor.equals(((LerpColor) color).endColor);
+    }
+
+    @Override
+    public Color lerp(Color color, float progress) {
+        return new Color(super.lerp(color, progress));
+    }
+
+    @Override
+    public Color lerp(float r, float g, float b, float a, float progress) {
+        return new Color(super.lerp(r, g, b, a, progress));
+    }
+
+    /**
+     * @return Copy of this lerpColor.
+     */
+    @Override
+    public LerpColor cpy() {
+        return new LerpColor(startColor.cpy(), endColor.cpy(), timeToChange, interpolation);
     }
 
     public Color getStartColor() {

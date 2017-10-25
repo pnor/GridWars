@@ -14,6 +14,7 @@ import com.mygdx.game.rules_types.Rules;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.rules_types.ZoneRules;
 import com.mygdx.game.screens.BattleScreen;
+import com.mygdx.game.ui.LerpColorManager;
 
 import static com.mygdx.game.GridWars.atlas;
 
@@ -25,6 +26,29 @@ import static com.mygdx.game.GridWars.atlas;
  * @author Phillip O'Reggio
  */
 public class BoardAndRuleConstructor {
+    private static boolean ready;
+    private static LerpColorManager lerpColorManager;
+
+    /**
+     * Readies the {@link MoveConstructor} for use.
+     * @param colorManager LerpColor Manager of the {@link BattleScreen}
+     **/
+    public static void initialize(LerpColorManager colorManager) {
+        lerpColorManager = colorManager;
+        ready = true;
+    }
+
+    /**
+     * Clears static fields in {@link MoveConstructor}
+     */
+    public static void clear() {
+       lerpColorManager = null;
+       ready = false;
+    }
+
+    public static boolean isReady() {
+        return ready;
+    }
 
     /**
      * Creates the Board and Rules based on the board index. Indexes are arranged in groups of 3, with the 1st one being a standard
@@ -118,9 +142,27 @@ public class BoardAndRuleConstructor {
             case 37: //25
                 return makeSNCopmlexPaths(screen, teams, boardManager);
             case 38:
-                return makeDiagDownSlantPillars(screen, teams, boardManager);
+                return makeSNDiagDownSlantPillars(screen, teams, boardManager);
             case 39:
-                return makeDiagUpSlantHoles(screen, teams, boardManager);
+                return makeSNDiagUpSlantHoles(screen, teams, boardManager);
+            case 40:
+                return makeSNEmptyRowMiddle(screen, teams, boardManager);
+            case 41:
+                return makeSNFatCross(screen, teams, boardManager);
+            case 42: //30
+                return makeSNElectroPneumaArena(screen, teams, boardManager);
+            case 43:
+                return makeSNBasic3(screen, teams, boardManager);
+            case 44:
+            case 45:
+            case 46:
+            case 47:
+            case 48:
+            case 49:
+            case 50:
+            case 51:
+            case 52:
+            case 53:
             //endregion
         }
         return null;
@@ -185,7 +227,7 @@ public class BoardAndRuleConstructor {
         }
 
         //color zones
-        rules.colorZones();
+        rules.colorZones(lerpColorManager);
 
         return rules;
     }
@@ -270,7 +312,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.cube(), new BoardPosition(2, 4));
 
         //color zones
-        rules.colorZones();
+        rules.colorZones(lerpColorManager);
 
         return rules;
     }
@@ -325,7 +367,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.durableCube(), new BoardPosition(4, 3));
 
         //color zones
-        rules.colorZones();
+        rules.colorZones(lerpColorManager);
 
         return rules;
     }
@@ -410,7 +452,7 @@ public class BoardAndRuleConstructor {
         }
 
         //color zones
-        rules.colorZones();
+        rules.colorZones(lerpColorManager);
 
         return rules;
     }
@@ -485,7 +527,7 @@ public class BoardAndRuleConstructor {
         }
 
         //color zones
-        rules.colorZones();
+        rules.colorZones(lerpColorManager);
 
         return rules;
     }
@@ -619,7 +661,7 @@ public class BoardAndRuleConstructor {
         }
 
         //color zones
-        rules.colorZones();
+        rules.colorZones(lerpColorManager);
 
         return rules;
     }
@@ -1032,7 +1074,7 @@ public class BoardAndRuleConstructor {
         }));
 
         ZoneRules rules = new ZoneRules(screen, teams, zones);
-        rules.colorZones();
+        rules.colorZones(lerpColorManager);
         return rules;
     }
 
@@ -1094,7 +1136,7 @@ public class BoardAndRuleConstructor {
         }));
 
         ZoneRules rules = new ZoneRules(screen, teams, zones);
-        rules.colorZones();
+        rules.colorZones(lerpColorManager);
         return rules;
     }
 
@@ -1237,7 +1279,7 @@ public class BoardAndRuleConstructor {
         }));
 
         ZoneRules rules = new ZoneRules(screen, teams, zones);
-        rules.colorZones();
+        rules.colorZones(lerpColorManager);
         return rules;
     }
 
@@ -1344,7 +1386,7 @@ public class BoardAndRuleConstructor {
         }));
 
         ZoneRules rules = new ZoneRules(screen, teams, zones);
-        rules.colorZones();
+        rules.colorZones(lerpColorManager);
         return rules;
     }
 
@@ -1690,7 +1732,7 @@ public class BoardAndRuleConstructor {
         return new Battle2PRules(screen, teams);
     }
 
-    public static Rules makeDiagUpSlantHoles(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+    public static Rules makeSNDiagUpSlantHoles(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
         boardManager.setBoards(new Board(7, 7, new Color(.7f, .7f, 0, 1), Color.LIGHT_GRAY, 100), new CodeBoard(7, 7));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
         //place entities
@@ -1726,7 +1768,7 @@ public class BoardAndRuleConstructor {
         return new Battle2PRules(screen, teams);
     }
 
-    public static Rules makeDiagDownSlantPillars(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+    public static Rules makeSNDiagDownSlantPillars(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
         boardManager.setBoards(new Board(7, 7, new Color(.7f, .7f, 0, 1), Color.LIGHT_GRAY, 100), new CodeBoard(7, 7));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
         //place entities
@@ -1758,6 +1800,35 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.pillar(), maxSize, maxSize);
 
         boardManager.add(EntityConstructor.pillar(), maxSize, 0);
+
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeSNEmptyRowMiddle(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(7, 7, new Color(.7f, .7f, 0, 1), Color.LIGHT_GRAY, 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+        //place entities
+        int col = 1;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            if (col == 2)
+                col ++;
+            col++;
+        }
+        col = 5;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            if (col == 4)
+                col --;
+            col--;
+        }
+
+        //remove spaces
+        for (int i = 1; i <= maxSize; i += 2) {
+            for (int j = 1; j <= maxSize - 1; j ++) {
+                boardManager.getBoard().getTile(i, j).setInvisible(true);
+            }
+        }
 
         return new Battle2PRules(screen, teams);
     }
@@ -1844,6 +1915,38 @@ public class BoardAndRuleConstructor {
         return new Battle2PRules(screen, teams);
     }
     //endregion
+    //region Floor 31 - 39
+    public static Rules makeSNBasic3(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(7, 7, new Color(.2f, .7f, .2f, 1), new Color(.2f, .2f, .2f, 1), 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+
+        //place entities
+        int col = 1;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(0, col));
+            if (col == 2)
+                col ++;
+            col++;
+        }
+        col = 5;
+        for (Entity e : teams.get(1).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            if (col == 4)
+                col --;
+            col--;
+        }
+
+        //place things
+        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(1, 2));
+        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(1, 4));
+        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(5, 2));
+        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(5, 4));
+        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(3, 3));
+
+        return new Battle2PRules(screen, teams);
+    }
+
+    //endregion
 
 
     //region Boss Arenas
@@ -1895,7 +1998,7 @@ public class BoardAndRuleConstructor {
         lightTiles.setColor(new Color(.2f, .4f, .9f, 1));
         Sprite darkTiles = atlas.createSprite("DarkTileFancy");
         darkTiles.setColor(new Color(0, .3f, .8f, 1));
-        boardManager.setBoards(new Board(5, 5, darkTiles, lightTiles, 100), new CodeBoard(7, 7));
+        boardManager.setBoards(new Board(5, 5, darkTiles, lightTiles, 100), new CodeBoard(5, 5));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
 
         //place entities
@@ -1931,6 +2034,52 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(maxSize - 1, 1));
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(maxSize - 1, maxSize - 1));
 
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeSNElectroPneumaArena(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        Sprite lightTiles = atlas.createSprite("LightTileFancy");
+        lightTiles.setColor(new Color(.8f, .8f, .2f, 1));
+        Sprite darkTiles = atlas.createSprite("DarkTileFancy");
+        darkTiles.setColor(new Color(.3f, .3f, .3f, 1));
+        boardManager.setBoards(new Board(7, 7, darkTiles, lightTiles, 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+
+        //place entities
+        int col = 5;
+        for (Entity e : teams.get(0).getEntities()) {
+            boardManager.add(e, new BoardPosition(maxSize, col));
+            if (col == 4)
+                col --;
+            col--;
+        }
+        int count = 0;
+        for (Entity e : teams.get(1).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(0, 3));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(0, 4));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(0, 2));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(1, 3));
+                    break;
+            }
+            count++;
+        }
+
+        //place things
+        boardManager.add(EntityConstructor.brokenPillar(), new BoardPosition(1, 1));
+        boardManager.add(EntityConstructor.brokenPillar(), new BoardPosition(1, maxSize - 1));
+        boardManager.add(EntityConstructor.brokenPillar(), new BoardPosition(maxSize - 1, 1));
+        boardManager.add(EntityConstructor.pillar(), new BoardPosition(maxSize - 1, maxSize - 1));
+
+        //make invisible
+        boardManager.getBoard().getTile(3, 3).setInvisible(true);
         return new Battle2PRules(screen, teams);
     }
     //endregion

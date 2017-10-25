@@ -45,9 +45,9 @@ public class SpriteActor extends UIActor{
 
     @Override
     public void shade(Color tint) {
-        if (tint instanceof LerpColor)
+        if (tint instanceof LerpColor) { //new color is a lerpColor
             lerpColor = (LerpColor) tint;
-        else if (lerpColor != null) {
+        } else if (lerpColor != null) { //changing to a normal color from a lerpColor
             sprite.setColor(tint);
             lerpColor = null;
         } else
@@ -57,9 +57,6 @@ public class SpriteActor extends UIActor{
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (lerpColor != null) {
-            lerpColor.update(delta);
-        }
     }
 
     @Override

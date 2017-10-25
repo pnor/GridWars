@@ -1,6 +1,6 @@
 package com.mygdx.game.ui;
 
-import com.badlogic.gdx.utils.ObjectSet;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Manages all LerpColors in game and updates them. Will not store duplicates.
@@ -10,18 +10,24 @@ public class LerpColorManager {
     /**
      * All colors that will be updated
      */
-    private final ObjectSet<LerpColor> LERPCOLORS_IN_USE;
+    private final Array<LerpColor> LERPCOLORS_IN_USE;
 
     public LerpColorManager() {
-        LERPCOLORS_IN_USE = new ObjectSet<>();
+        LERPCOLORS_IN_USE = new Array<LerpColor>();
     }
 
     /**
      * Adds a lerp color to be updated by the game.
      * @param color being added
      */
-    public void registerLerpColor(LerpColor color) {
+    public boolean registerLerpColor(LerpColor color) {
+        //check if already contains color (Starting from end and going to beginning)
+        for (int i = LERPCOLORS_IN_USE.size - 1; i >= 0; i--) {
+            if (LERPCOLORS_IN_USE.get(i) == color) //if contains color, don't add
+                return false;
+        }
         LERPCOLORS_IN_USE.add(color);
+        return true;
     }
 
     /**
@@ -30,7 +36,7 @@ public class LerpColorManager {
      * @return True if LerpColor was in the set and operation was successful. False otherwise.
      */
     public boolean remove(LerpColor color) {
-        return LERPCOLORS_IN_USE.remove(color);
+        return LERPCOLORS_IN_USE.removeValue(color, true);
     }
 
     /**

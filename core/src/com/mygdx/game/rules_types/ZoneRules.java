@@ -1,10 +1,13 @@
 package com.mygdx.game.rules_types;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.BoardComponent;
 import com.mygdx.game.screens.BattleScreen;
+import com.mygdx.game.ui.LerpColor;
+import com.mygdx.game.ui.LerpColorManager;
 
 import static com.mygdx.game.ComponentMappers.bm;
 
@@ -58,10 +61,18 @@ public class ZoneRules extends Rules {
     /**
      * Colors the zones on the boards
      */
-    public void colorZones() {
+    public void colorZones(LerpColorManager lerpColorManager) { //TODO make both sides flash zone color
+        LerpColor lerpColor;
         for (int i = 0; i < zones.size; i++) {
-            for (BoardPosition bp : zones.get(i)) {
-                BoardComponent.boards.getBoard().getTile(bp.r, bp.c).setColor(teams.get(i).getTeamColor());
+            if (teams.get(i).getTeamColor() instanceof LerpColor) { //is already a lerpColor
+                lerpColor = (LerpColor) teams.get(i).getTeamColor();
+            } else {
+                lerpColor = new LerpColor(teams.get(i).getTeamColor(), Color.WHITE);
+                lerpColorManager.registerLerpColor(lerpColor);
+            }
+
+            for (BoardPosition bp : zones.get(i)) { //set color of tiles
+                BoardComponent.boards.getBoard().getTile(bp.r, bp.c).setColor(lerpColor);
             }
         }
     }

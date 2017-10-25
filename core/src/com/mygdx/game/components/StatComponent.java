@@ -99,7 +99,7 @@ public class StatComponent implements Component {
         if (!status.has(e))
             return maxHP;
 
-        for (StatusEffect status : status.get(e).statusEffects.values()) {
+        for (StatusEffect status : status.get(e).getStatusEffects()) {
             if (status.getStatChanges() == null) continue;
             newMaxHp = (int) (newMaxHp * status.getStatChanges().maxHP);
         }
@@ -115,7 +115,7 @@ public class StatComponent implements Component {
         if (!status.has(e))
             return maxSP;
 
-        for (StatusEffect status : status.get(e).statusEffects.values()) {
+        for (StatusEffect status : status.get(e).getStatusEffects()) {
             if (status.getStatChanges() == null) continue;
             newMaxSp = (int) (newMaxSp * status.getStatChanges().maxSP);
         }
@@ -132,7 +132,7 @@ public class StatComponent implements Component {
         if (!status.has(e))
             return atk;
 
-        for (StatusEffect status : status.get(e).statusEffects.values()) {
+        for (StatusEffect status : status.get(e).getStatusEffects()) {
             if (status.getStatChanges() == null) continue;
             newAtk = (int) (newAtk * status.getStatChanges().atk);
         }
@@ -148,7 +148,7 @@ public class StatComponent implements Component {
         if (!status.has(e))
             return newDef;
 
-        for (StatusEffect status : status.get(e).statusEffects.values()) {
+        for (StatusEffect status : status.get(e).getStatusEffects()) {
             if (status.getStatChanges() == null) continue;
             newDef = (int) (newDef * status.getStatChanges().def);
         }
@@ -164,7 +164,7 @@ public class StatComponent implements Component {
         if (!status.has(e))
             return spd;
 
-        for (StatusEffect status : status.get(e).statusEffects.values()) {
+        for (StatusEffect status : status.get(e).getStatusEffects()) {
             if (status.getStatChanges() == null) continue;
             newSpd = (int) (newSpd * status.getStatChanges().spd);
         }

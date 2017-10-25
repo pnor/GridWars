@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.ui.LerpColor;
 
 /**
  * Actor that displays an animation.
@@ -55,9 +54,6 @@ public class AnimationActor extends UIActor {
             if (currentFrame != new Sprite(animation.getKeyFrame(time)))
                 currentFrame = new Sprite(animation.getKeyFrame(time));
         }
-
-        if (shadeColor instanceof LerpColor)
-            ((LerpColor) shadeColor).update(delta);
     }
 
     @Override

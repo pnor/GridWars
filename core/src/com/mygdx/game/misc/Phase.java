@@ -49,7 +49,7 @@ public class Phase implements Comparable {
         else if (actor instanceof AnimationActor) {
             //changing to animation actor; will have to search status effects to see if its updating
             boolean hasNonAnimatingStatus = false;
-            for (StatusEffect s : status.get(e).statusEffects.values()) {
+            for (StatusEffect s : status.get(e).getStatusEffects()) {
                 if (s.stopsAnimation()) {
                     hasNonAnimatingStatus = true;
                     break;

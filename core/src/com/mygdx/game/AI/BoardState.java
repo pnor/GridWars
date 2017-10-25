@@ -34,8 +34,8 @@ public class BoardState {
                         value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, bm.get(entity).BOARD_ENTITY_ID, stm.get(entity).hp,
                                 stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, 0);
                     } else { //does have status effect
-                        Array<StatusEffect> currentStatusEffects = status.get(entity).statusEffects.values().toArray();
-                        StatusEffectInfo[] statusInfos = new StatusEffectInfo[status.get(entity).statusEffects.size];
+                        Array<StatusEffect> currentStatusEffects = status.get(entity).getStatusEffects();
+                        StatusEffectInfo[] statusInfos = new StatusEffectInfo[status.get(entity).getTotalStatusEffects()];
                         for (int i = 0; i < currentStatusEffects.size; i++)
                             statusInfos[i] = currentStatusEffects.get(i).createStatusEffectInfo();
 
@@ -47,8 +47,8 @@ public class BoardState {
                         value = new EntityValue(bm.get(entity).pos, -1, -1, stm.get(entity).hp,
                             stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, 0);
                     else {
-                        Array<StatusEffect> currentStatusEffects = status.get(entity).statusEffects.values().toArray();
-                        StatusEffectInfo[] statusInfos = new StatusEffectInfo[status.get(entity).statusEffects.size];
+                        Array<StatusEffect> currentStatusEffects = status.get(entity).getStatusEffects();
+                        StatusEffectInfo[] statusInfos = new StatusEffectInfo[status.get(entity).getTotalStatusEffects()];
                         for (int i = 0; i < currentStatusEffects.size; i++)
                             statusInfos[i] = currentStatusEffects.get(i).createStatusEffectInfo();
 

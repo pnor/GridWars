@@ -481,12 +481,5 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
             altNumber = 1;
         else
             altNumber = 0;
-
-        //LerpColors TODO make it work !
-        if (teamColor.getColor() instanceof LerpColor)
-            ((LerpColor) teamColor.getColor()).update(dt);
-        for (Image i : characterPortraits)
-            if (i.getColor() instanceof LerpColor)
-                ((LerpColor) i.getColor()).update(dt);
     }
 }

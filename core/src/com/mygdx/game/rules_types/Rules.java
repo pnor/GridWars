@@ -65,7 +65,7 @@ public abstract class Rules {
                 //toggle states
                 if (state.has(e)) {
                     state.get(e).canAttack = true; //TODO make it not redundant
-                    if (status.has(e) && (status.get(e).statusEffects.containsKey("Freeze") || status.get(e).statusEffects.containsKey("Petrify")))
+                    if (status.has(e) && (status.get(e).contains("Freeze") || status.get(e).contains("Petrify")))
                         state.get(e).canAttack = false;
                     state.get(e).canMove = true;
                     if (!screen.checkShading(e))
@@ -92,12 +92,12 @@ public abstract class Rules {
         }
         //do affects and stats (current Team only) --
         for (Entity e : teams.get(currentTeamTurn).getEntities()) { //increment sp
-            if (stm.has(e) && !(stm.get(e).sp >= stm.get(e).getModMaxSp(e)) && !(status.has(e) && status.get(e).statusEffects.containsKey("stillness"))) //check if it can
+            if (stm.has(e) && !(stm.get(e).sp >= stm.get(e).getModMaxSp(e)) && !(status.has(e) && status.get(e).contains("stillness"))) //check if it can
                 stm.get(e).sp += 1;
 
             //status effects
             if (status.has(e) && stm.get(e).alive && status.get(e).getTotalStatusEffects() > 0) {
-                for (StatusEffect effect : status.get(e).statusEffects.values().toArray()) {
+                for (StatusEffect effect : status.get(e).getStatusEffects()) {
                     effect.doTurnEffect(e);
                     if (effect.getIsFinished())
                         status.get(e).removeStatusEffect(e, effect.getName());

@@ -178,7 +178,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
 
         //Remove Status Effects from player team
         for (Entity e : team.getEntities()) {
-            if (status.has(e) && status.get(e).statusEffects.size >= 1)
+            if (status.has(e) && status.get(e).getTotalStatusEffects() >= 1)
                 status.get(e).removeAll(e);
         }
 
@@ -423,6 +423,39 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                                 EntityConstructor.fancyBook(1),
                                 EntityConstructor.fancyBook(1),
                                 EntityConstructor.redGolem(1)
+                        }));
+            case 28 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.book(1),
+                                EntityConstructor.golemMK2(1),
+                                EntityConstructor.immoralSpider(1),
+                                EntityConstructor.book(1)
+                        }));
+            case 29 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.telegolem(1),
+                                EntityConstructor.eliteSpider(1),
+                                EntityConstructor.eliteSpider(1),
+                                EntityConstructor.telegolem(1)
+                        }));
+            case 30 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.electroPnuema(1)
+                        }));
+            case 31 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.golemMK2(1),
+                                EntityConstructor.redGolem(1),
+                                EntityConstructor.greenOrb(1),
+                                EntityConstructor.golemMK2(1)
                         }));
         }
         return null;

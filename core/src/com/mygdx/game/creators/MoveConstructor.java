@@ -2795,7 +2795,7 @@ public class MoveConstructor {
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
 
                         if (status.has(enemy)) {
-                            if (!status.get(enemy).statusEffects.containsKey("Paralyze")) { //Not paralyzed
+                            if (!status.get(enemy).contains("Paralyze")) { //Not paralyzed
                                 if (MathUtils.randomBoolean(.5f))
                                     status.get(enemy).addStatusEffect(paralyze(3), enemy);
                             } else { //is paralyzed
@@ -2957,7 +2957,7 @@ public class MoveConstructor {
 
                 engine.addEntity(sparkle);
             }
-        }, .02f, 120);
+        }, .02f, 90);
 
         VisualEvent largeSparkle = new VisualEvent(new VisualEffect() {
             private float direction;
@@ -3289,7 +3289,7 @@ public class MoveConstructor {
                         int numStatuses = 0;
 
                         if (status.has(enemy))
-                            numStatuses = status.get(enemy).statusEffects.values().toArray().size;
+                            numStatuses = status.get(enemy).getTotalStatusEffects();
 
                         if (stm.has(enemy))
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) * numStatuses - stm.get(enemy).getModDef(enemy), 0, 999);
@@ -5181,7 +5181,9 @@ public class MoveConstructor {
                 progress = MathUtils.clamp(progress + .1f, 0, 1);
 
                 Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
+                System.out.println("CLASS : " + am.get(enemy).actor.getColor().getClass());
                 am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress));
+                System.out.println("CLASS : " + am.get(enemy).actor.getColor().getClass());
             }
         }, .05f, 10);
 
@@ -5194,7 +5196,11 @@ public class MoveConstructor {
                     return;
 
                 Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
+                System.out.println("CLASS : " + am.get(enemy).actor.getColor().getClass());
+
                 am.get(enemy).actor.shade(BattleScreen.getShadeColorBasedOnState(enemy));
+                System.out.println("CLASS : " + am.get(enemy).actor.getColor().getClass());
+
             }
         }, .05f, 1);
 
@@ -6230,7 +6236,7 @@ public class MoveConstructor {
                             status.get(enemy).addStatusEffect(berserk(10), enemy);
                         }
 
-                        if (status.has(e) && !status.get(e).statusEffects.containsKey("Defenseless"))
+                        if (status.has(e) && !status.get(e).contains("Defenseless"))
                             status.get(e).addStatusEffect(defenseless(1), e);
 
                         if (vm.has(enemy) && vm.get(enemy).shuffleAnimation != null)
@@ -6295,7 +6301,7 @@ public class MoveConstructor {
                             status.get(enemy).addStatusEffect(pacifist(3), enemy);
                         }
 
-                        if (status.has(e) && !status.get(e).statusEffects.containsKey("Defenseless"))
+                        if (status.has(e) && !status.get(e).contains("Defenseless"))
                             status.get(e).addStatusEffect(defenseless(1), e);
 
                         if (vm.has(enemy) && vm.get(enemy).shuffleAnimation != null)
@@ -6306,10 +6312,7 @@ public class MoveConstructor {
                 new BoardPosition(1, 0), new BoardPosition(1, 1), new BoardPosition(0, 1), new BoardPosition(-1, 1),
                 new BoardPosition(-2, 0), new BoardPosition(0, -2), new BoardPosition(2, 0), new BoardPosition(0, 2)
         }),
-                new Array<VisualEvent>(new VisualEvent[]{wave})), new MoveInfo(false, 0, new StatusEffectInfo[] {pacifist(3).createStatusEffectInfo()},
-                (enemy, userEntity) -> {
-
-                }));
+                new Array<VisualEvent>(new VisualEvent[]{wave})), new MoveInfo(false, 0, pacifist(3).createStatusEffectInfo()));
     }
 
     public static Move worryWave(Entity user) {
@@ -6360,7 +6363,7 @@ public class MoveConstructor {
                             status.get(enemy).addStatusEffect(restless(3), enemy);
                         }
 
-                        if (status.has(e) && !status.get(e).statusEffects.containsKey("Defenseless"))
+                        if (status.has(e) && !status.get(e).contains("Defenseless"))
                             status.get(e).addStatusEffect(defenseless(1), e);
 
                         if (vm.has(enemy) && vm.get(enemy).shuffleAnimation != null)
@@ -8031,7 +8034,7 @@ public class MoveConstructor {
             }
         }, .06f, 50);
 
-        return new Move("Disrupt", nm.get(user).name + " emitted a disruptive wave!", user, 1,
+        return new Move("Disrupt", nm.get(user).name + " emitted a disruptive wave!", user, 3,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0), new BoardPosition(-1, -1), new BoardPosition(0, -1), new BoardPosition(1, -1),
                         new BoardPosition(1, 0), new BoardPosition(1, 1), new BoardPosition(0, 1), new BoardPosition(-1, 1),
@@ -8043,7 +8046,7 @@ public class MoveConstructor {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
 
                         if (status.has(enemy)) {
-                            if (status.get(enemy).statusEffects.size > 0)
+                            if (status.get(enemy).getTotalStatusEffects() > 0)
                                 status.get(enemy).removeAll(enemy);
                             status.get(enemy).addStatusEffect(offenseless(3), enemy);
                             status.get(enemy).addStatusEffect(defenseless(2), enemy);
@@ -8068,7 +8071,8 @@ public class MoveConstructor {
                         enemy.statusEffectInfos.add(paralyze(3).createStatusEffectInfo());
                         enemy.statusEffectInfos.add(petrify(3).createStatusEffectInfo());
                         //encourage use if hits multiple entities
-                        enemy.arbitraryValue -= 30;
+                        if (enemy.statusEffectInfos.size >= 1)
+                            enemy.arbitraryValue -= 60;
                     }
         }
         ));
@@ -14832,7 +14836,7 @@ public class MoveConstructor {
         }, .01f, 1);
 
 
-        return new Move("Monoflash", nm.get(user).name + " uses a enigmatic spell!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+        return new Move("Monoflash", nm.get(user).name + " uses a enigmatic spell!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -15506,7 +15510,7 @@ public class MoveConstructor {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
-                        if (status.has(enemy) && status.get(enemy).statusEffects.size > 0)
+                        if (status.has(enemy) && status.get(enemy).getTotalStatusEffects() > 0)
                             status.get(enemy).removeAll(enemy);
 
                         if (stm.has(enemy))
