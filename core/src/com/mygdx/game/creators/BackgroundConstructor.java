@@ -78,8 +78,11 @@ public class BackgroundConstructor {
             case 42: // 30
                 return makeSurvivalElectroPneuma();
             case 43:
+                return makeSurvivalBackGlow(new Color(0, 1, 0, .2f), new Color(1, 0, 1, .2f));
             case 44:
+                return makeSurvivalBackGlow(new Color(1, .4f, 0, .2f), new Color(0, 0, .8f, .2f));
             case 45:
+                return makeSurvivalBackGlow(new Color(1, 0, 0, .4f), new Color(0, .1f, 0, .2f));
             case 46:
             case 47:
             case 48:
@@ -88,7 +91,6 @@ public class BackgroundConstructor {
             case 51:
             case 52:
             case 53:
-                return makeSurvivalBackGlow();
             default:
                 return makeSurvivalBackChecker();
             //endregion
@@ -294,18 +296,18 @@ public class BackgroundConstructor {
                 new Color(0, 0, 0, 1), new Color(.2f, .2f, 0, .7f));
     }
 
-    public static Background makeSurvivalBackGlow() {
+    public static Background makeSurvivalBackGlow(Color start, Color end) {
         Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
         back.setColor(new Color(0, 0, 0, 1));
         Sprite glower = new Sprite(backAtlas.findRegion("FadeBackground"));
-        glower.setColor(new Color(0, 1, 0, .2f));
+        glower.setColor(start);
         Sprite overlay = new Sprite(backAtlas.findRegion("CubeBackground"));
         overlay.setColor(new Color(1, 1, 1, .02f));
         return new Background(
                 back,
                 new Sprite[] {glower, overlay},
                 new BackType[] {BackType.FADE_COLOR, BackType.SCROLL_HORIZONTAL_SLOW},
-                new Color(0, 1, 0, .2f), new Color(1, 0, 1, .2f));
+                start, end);
     }
     //endregion
 }

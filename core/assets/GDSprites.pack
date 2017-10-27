@@ -507,56 +507,56 @@ eightCircles
   orig: 64, 64
   offset: 0, 0
   index: -1
-explode
+eliteBook
   rotate: false
   xy: 292, 807
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explode2
+eliteBook2
   rotate: false
   xy: 190, 755
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explode3
+eliteGolem
   rotate: false
   xy: 190, 689
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explode4
+eliteGolem2
   rotate: false
   xy: 256, 741
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explode5
+explode
   rotate: false
   xy: 256, 675
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explode6
+explode2
   rotate: false
   xy: 322, 741
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeBlue
+explode3
   rotate: false
   xy: 322, 675
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeBlue2
+explode4
   rotate: false
   xy: 358, 807
   size: 64, 64
@@ -570,903 +570,903 @@ beam
   orig: 57, 17
   offset: 0, 0
   index: -1
-explodeBlue3
+explode5
   rotate: false
   xy: 388, 741
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeBlue4
+explode6
   rotate: false
   xy: 388, 675
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeBlue5
+explodeBlue
   rotate: false
   xy: 424, 807
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeBlue6
+explodeBlue2
   rotate: false
   xy: 490, 827
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeGreen
+explodeBlue3
   rotate: false
   xy: 556, 827
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeGreen2
+explodeBlue4
   rotate: false
   xy: 622, 827
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeGreen3
+explodeBlue5
   rotate: false
   xy: 688, 827
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeGreen4
+explodeBlue6
   rotate: false
   xy: 754, 827
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeGreen5
+explodeGreen
   rotate: false
   xy: 820, 827
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-explodeGreen6
+explodeGreen2
   rotate: false
   xy: 886, 827
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fancyBook
+explodeGreen3
   rotate: false
   xy: 454, 741
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fancyBook2
+explodeGreen4
   rotate: false
   xy: 454, 675
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-firebull
+explodeGreen5
   rotate: false
   xy: 520, 761
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-firebull2
+explodeGreen6
   rotate: false
   xy: 520, 695
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-firebull2Alt
+fancyBook
   rotate: false
   xy: 586, 761
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-firebullAlt
+fancyBook2
   rotate: false
   xy: 586, 695
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fireSpirit
+firebull
   rotate: false
   xy: 652, 761
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fireSpirit2
+firebull2
   rotate: false
   xy: 652, 695
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fireSpirit2Alt
+firebull2Alt
   rotate: false
   xy: 718, 761
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fireSpiritAlt
+firebullAlt
   rotate: false
   xy: 718, 695
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fish
+fireSpirit
   rotate: false
   xy: 784, 761
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fish2
+fireSpirit2
   rotate: false
   xy: 784, 695
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fish2Alt
+fireSpirit2Alt
   rotate: false
   xy: 850, 761
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fishAlt
+fireSpiritAlt
   rotate: false
   xy: 850, 695
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-flame
+fish
   rotate: false
   xy: 916, 761
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-flame2
+fish2
   rotate: false
   xy: 916, 695
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-flame3
+fish2Alt
   rotate: false
   xy: 952, 827
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-floorSpike
+fishAlt
   rotate: false
   xy: 520, 629
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-flowercactus
+flame
   rotate: false
   xy: 586, 629
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fourCircles
+flame2
   rotate: false
   xy: 652, 629
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fox
+flame3
   rotate: false
   xy: 718, 629
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fox2
+floorSpike
   rotate: false
   xy: 784, 629
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fox2Alt
+flowercactus
   rotate: false
   xy: 850, 629
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-foxAlt
+fourCircles
   rotate: false
   xy: 916, 629
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-freeze1
+fox
   rotate: false
   xy: 235, 609
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-freeze2
+fox2
   rotate: false
   xy: 301, 609
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-freeze3
+fox2Alt
   rotate: false
   xy: 367, 609
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-gargoyle
+foxAlt
   rotate: false
   xy: 433, 609
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-gargoyle2
+freeze1
   rotate: false
   xy: 285, 543
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-gargoyleStatue
+freeze2
   rotate: false
   xy: 351, 543
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-greenOrb
+freeze3
   rotate: false
   xy: 417, 543
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-greenOrb2
+gargoyle
   rotate: false
   xy: 331, 477
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-healCanMan
+gargoyle2
   rotate: false
   xy: 331, 411
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-healCanMan2
+gargoyleStatue
   rotate: false
   xy: 397, 477
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-hexagon
+greenOrb
   rotate: false
   xy: 331, 345
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-hole
+greenOrb2
   rotate: false
   xy: 397, 411
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-ice
+healCanMan
   rotate: false
   xy: 331, 279
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-icebird
+healCanMan2
   rotate: false
   xy: 397, 345
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-icebird2
+hexagon
   rotate: false
   xy: 331, 213
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-icebird2Alt
+hole
   rotate: false
   xy: 397, 279
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-icebirdAlt
+ice
   rotate: false
   xy: 331, 147
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-iceSpike
+icebird
   rotate: false
   xy: 397, 213
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-jellygirl
+icebird2
   rotate: false
   xy: 331, 81
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-jellygirl2
+icebird2Alt
   rotate: false
   xy: 397, 147
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-jellygirl2Alt
+icebirdAlt
   rotate: false
   xy: 397, 81
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-jellygirlAlt
+iceSpike
   rotate: false
   xy: 331, 15
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-lightTower
+jellygirl
   rotate: false
   xy: 397, 15
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-lion
+jellygirl2
   rotate: false
   xy: 463, 477
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-lion2
+jellygirl2Alt
   rotate: false
   xy: 463, 411
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-loveBook
+jellygirlAlt
   rotate: false
   xy: 463, 345
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-loveBook2
+lightTower
   rotate: false
   xy: 463, 279
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mirror
+lion
   rotate: false
   xy: 463, 213
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mirror2
+lion2
   rotate: false
   xy: 463, 147
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mirror3
+loveBook
   rotate: false
   xy: 463, 81
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mirrorman
+loveBook2
   rotate: false
   xy: 463, 15
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mirrorman2
+mirror
   rotate: false
   xy: 483, 543
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mirrorman2Alt
+mirror2
   rotate: false
   xy: 549, 563
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mirrormanAlt
+mirror3
   rotate: false
   xy: 615, 563
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mountainTree
+mirrorman
   rotate: false
   xy: 681, 563
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mummy
+mirrorman2
   rotate: false
   xy: 747, 563
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mummy2
+mirrorman2Alt
   rotate: false
   xy: 813, 563
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mummy2Alt
+mirrormanAlt
   rotate: false
   xy: 879, 563
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mummyAlt
+mountainTree
   rotate: false
   xy: 945, 563
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-mystery
+mummy
   rotate: false
   xy: 529, 477
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-neoGolem
+mummy2
   rotate: false
   xy: 529, 411
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-neoGolem2
+mummy2Alt
   rotate: false
   xy: 529, 345
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-openCircle
+mummyAlt
   rotate: false
   xy: 529, 279
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-openCircle2
+mystery
   rotate: false
   xy: 529, 213
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-openCircle3
+neoGolem
   rotate: false
   xy: 529, 147
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-openCircle4
+neoGolem2
   rotate: false
   xy: 529, 81
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-openCircle5
+openCircle
   rotate: false
   xy: 529, 15
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-openSquare
+openCircle2
   rotate: false
   xy: 595, 497
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-pierce
+openCircle3
   rotate: false
   xy: 595, 431
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-pierce2
+openCircle4
   rotate: false
   xy: 661, 497
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-pillar
+openCircle5
   rotate: false
   xy: 595, 365
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-possesedBook
+openSquare
   rotate: false
   xy: 661, 431
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-possesedBook2
+pierce
   rotate: false
   xy: 727, 497
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-possesedSwordBlue
+pierce2
   rotate: false
   xy: 595, 299
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-possesedSwordBlue2
+pillar
   rotate: false
   xy: 661, 365
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-pyramid
+possesedBook
   rotate: false
   xy: 727, 431
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-RedGolem
+possesedBook2
   rotate: false
   xy: 793, 497
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-RedGolem2
+possesedSwordBlue
   rotate: false
   xy: 595, 233
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-redOrb
+possesedSwordBlue2
   rotate: false
   xy: 661, 299
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-redOrb2
+pyramid
   rotate: false
   xy: 727, 365
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-redSpider
+RedGolem
   rotate: false
   xy: 793, 431
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-redSpider2
+RedGolem2
   rotate: false
   xy: 859, 497
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-robot
+redOrb
   rotate: false
   xy: 595, 167
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-robotghost2
+redOrb2
   rotate: false
   xy: 661, 233
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-scaleman
+redSpider
   rotate: false
   xy: 727, 299
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-scaleman2
+redSpider2
   rotate: false
   xy: 793, 365
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-scalemanHigh
+robot
   rotate: false
   xy: 859, 431
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-scalemanHigh2
+robotghost2
   rotate: false
   xy: 925, 497
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-scalemanMid
+scaleman
   rotate: false
   xy: 595, 101
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-scalemanMid2
+scaleman2
   rotate: false
   xy: 661, 167
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-sixCircles
+scalemanHigh
   rotate: false
   xy: 727, 233
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-slimeman
+scalemanHigh2
   rotate: false
   xy: 793, 299
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-slimeman2
+scalemanMid
   rotate: false
   xy: 859, 365
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-slimemanDark
+scalemanMid2
   rotate: false
   xy: 925, 431
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-slimemanDark2
+sixCircles
   rotate: false
   xy: 595, 35
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-slimemanNeo
+slimeman
   rotate: false
   xy: 661, 101
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-slimemanNeo2
+slimeman2
   rotate: false
   xy: 727, 167
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-spark1
+slimemanDark
   rotate: false
   xy: 793, 233
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-spark2
+slimemanDark2
   rotate: false
   xy: 859, 299
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-spark3
+slimemanNeo
   rotate: false
   xy: 925, 365
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-spider
+slimemanNeo2
   rotate: false
   xy: 661, 35
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-spider2
+spark1
   rotate: false
   xy: 727, 101
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-spiderAdvance
+spark2
   rotate: false
   xy: 793, 167
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-spiderAdvance2
+spark3
   rotate: false
   xy: 859, 233
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-spinCut
+spider
   rotate: false
   xy: 925, 299
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-spirit
+spider2
   rotate: false
   xy: 727, 35
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-spirit2
+spiderAdvance
   rotate: false
   xy: 793, 101
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-squid
+spiderAdvance2
   rotate: false
   xy: 859, 167
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-squid2
+spinCut
   rotate: false
   xy: 925, 233
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-squid2Alt
+spirit
   rotate: false
   xy: 793, 35
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-squidAlt
+spirit2
   rotate: false
   xy: 859, 101
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-steamdragon
+squid
   rotate: false
   xy: 925, 167
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-steamdragon2
+squid2
   rotate: false
   xy: 859, 35
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-steamdragon2Alt
+squid2Alt
   rotate: false
   xy: 925, 101
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-steamdragonAlt
+squidAlt
   rotate: false
   xy: 925, 35
   size: 64, 64
@@ -1653,324 +1653,352 @@ GDSprites2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+steamdragon
+  rotate: false
+  xy: 1, 443
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+steamdragon2
+  rotate: false
+  xy: 1, 377
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+steamdragon2Alt
+  rotate: false
+  xy: 67, 443
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+steamdragonAlt
+  rotate: false
+  xy: 1, 311
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 StoneGolem
   rotate: false
-  xy: 1, 189
+  xy: 67, 377
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 StoneGolem2
   rotate: false
-  xy: 1, 123
+  xy: 133, 443
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 StoneLion
   rotate: false
-  xy: 67, 189
+  xy: 1, 245
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 StoneLion2
   rotate: false
-  xy: 1, 57
+  xy: 67, 311
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 stoneSword
   rotate: false
-  xy: 67, 123
+  xy: 133, 377
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 stoneSword2
   rotate: false
-  xy: 133, 189
+  xy: 199, 443
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 stoneTorch
   rotate: false
-  xy: 67, 57
+  xy: 1, 179
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 stoneTorch2
   rotate: false
-  xy: 133, 123
+  xy: 67, 245
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tester
   rotate: false
-  xy: 199, 189
+  xy: 133, 311
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 thunderdog
   rotate: false
-  xy: 133, 57
+  xy: 199, 377
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 thunderdog2
   rotate: false
-  xy: 199, 123
+  xy: 265, 443
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 thunderdog2Alt
   rotate: false
-  xy: 265, 189
+  xy: 1, 113
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 thunderdogAlt
   rotate: false
-  xy: 199, 57
+  xy: 67, 179
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 thunderSpirit
   rotate: false
-  xy: 265, 123
+  xy: 133, 245
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 thunderSpirit2
   rotate: false
-  xy: 331, 189
+  xy: 199, 311
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 thunderSpirit2Alt
   rotate: false
-  xy: 265, 57
+  xy: 265, 377
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 thunderSpiritAlt
   rotate: false
-  xy: 331, 123
+  xy: 331, 443
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 torch
   rotate: false
-  xy: 397, 189
+  xy: 1, 47
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 torch2
   rotate: false
-  xy: 331, 57
+  xy: 67, 113
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 toughspider
   rotate: false
-  xy: 397, 123
+  xy: 133, 179
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 toughspider2
   rotate: false
-  xy: 463, 189
+  xy: 199, 245
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 toxicCanMan
   rotate: false
-  xy: 397, 57
+  xy: 265, 311
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 toxicCanMan2
   rotate: false
-  xy: 463, 123
+  xy: 331, 377
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tree
   rotate: false
-  xy: 529, 189
+  xy: 397, 443
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 turtle
   rotate: false
-  xy: 463, 57
+  xy: 67, 47
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 turtle2
   rotate: false
-  xy: 529, 123
+  xy: 133, 113
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 turtle2Alt
   rotate: false
-  xy: 595, 189
+  xy: 199, 179
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 turtleAlt
   rotate: false
-  xy: 529, 57
+  xy: 265, 245
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 water
   rotate: false
-  xy: 595, 123
+  xy: 331, 311
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 water2
   rotate: false
-  xy: 661, 189
+  xy: 397, 377
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 waterSpirit
   rotate: false
-  xy: 595, 57
+  xy: 133, 47
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 waterSpirit2
   rotate: false
-  xy: 661, 123
+  xy: 199, 113
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 waterSpirit2Alt
   rotate: false
-  xy: 727, 189
+  xy: 265, 179
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 waterSpiritAlt
   rotate: false
-  xy: 661, 57
+  xy: 331, 245
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 whiteGargoyle
   rotate: false
-  xy: 727, 123
+  xy: 397, 311
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 whiteGargoyle2
   rotate: false
-  xy: 793, 189
+  xy: 199, 47
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 whiteOrb
   rotate: false
-  xy: 727, 57
+  xy: 265, 113
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 whiteOrb2
   rotate: false
-  xy: 793, 123
+  xy: 331, 179
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 yellowLion
   rotate: false
-  xy: 859, 189
+  xy: 397, 245
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 yellowLion2
   rotate: false
-  xy: 793, 57
+  xy: 265, 47
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 robot2
   rotate: false
-  xy: 859, 123
+  xy: 331, 113
   size: 63, 64
   orig: 63, 64
   offset: 0, 0
   index: -1
 rock
   rotate: false
-  xy: 925, 192
+  xy: 397, 182
   size: 64, 61
   orig: 64, 61
   offset: 0, 0
   index: -1
 shuriken
   rotate: false
-  xy: 1, 1
+  xy: 331, 57
   size: 54, 54
   orig: 54, 54
   offset: 0, 0
   index: -1
 shuriken2
   rotate: false
-  xy: 859, 67
+  xy: 331, 1
   size: 54, 54
   orig: 54, 54
   offset: 0, 0
   index: -1
 diamonds
   rotate: false
-  xy: 57, 1
+  xy: 387, 57
   size: 53, 54
   orig: 53, 54
   offset: 0, 0
   index: -1
 openDiamonds
   rotate: false
-  xy: 112, 1
+  xy: 387, 1
   size: 53, 54
   orig: 53, 54
   offset: 0, 0

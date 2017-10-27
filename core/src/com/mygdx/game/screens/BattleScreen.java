@@ -46,6 +46,8 @@ import com.mygdx.game.rules_types.ZoneRules;
 import com.mygdx.game.systems.*;
 import com.mygdx.game.ui.*;
 
+import java.util.Iterator;
+
 import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.*;
 
@@ -1117,18 +1119,20 @@ public class BattleScreen implements Screen {
                 }
 
                 //status effect label
-                StringBuilder statusEffects = new StringBuilder();
-                for (StatusEffect effect : status.get(selectedEntity).getStatusEffects())
-                    statusEffects.append(effect.getName());
-
-                for (int i = 1; i < statusEffects.length(); i++) {
-                    if (statusEffects.charAt(i) == statusEffects.toString().toUpperCase().charAt(i)) {
-                        statusEffects.insert(i, ", ");
-                        i += 2;
-                    }
-                }
                 statusLbl.reset();
-                statusLbl.setText(statusEffects.toString());
+                if (status.get(selectedEntity).getTotalStatusEffects() == 1) //only one status effect
+                    statusLbl.setText(status.get(selectedEntity).getStatusEffects().first().getName());
+                else { //more than one status effect
+                    StringBuilder statusEffects = new StringBuilder();
+                    Iterator iterator = status.get(selectedEntity).getStatusEffects().iterator();
+                    do {
+                        statusEffects.append(((StatusEffect) iterator.next()).getName());
+                        if (iterator.hasNext()) //still more elements to go
+                            statusEffects.append(", ");
+                    } while (iterator.hasNext());
+
+                    statusLbl.setText(statusEffects.toString());
+                }
             } else if (status.has(selectedEntity))
                 statusLbl.setText("Healthy");
             else

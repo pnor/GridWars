@@ -229,6 +229,20 @@ public class StatusEffectConstructor {
         effect.setStatChanges(1, 1, 1, 1, 1);
         return effect;
     }
+
+    public static StatusEffect spUp(int duration) {
+        StatusEffect effect = new StatusEffect("SP-Up", duration, new LerpColor(Color.WHITE, Color.GOLD, Interpolation.sineOut), (e) -> {
+            if (stm.has(e)) {
+                stm.get(e).sp = MathUtils.clamp(stm.get(e).sp + 2, 0, stm.get(e).getModMaxHp(e));
+            }
+            if (vm.has(e) && !vm.get(e).shuffleAnimation.getIsPlaying())
+                vm.get(e).shuffleAnimation.setPlaying(true, true);
+        }, (entity -> {
+            entity.sp += 2;
+        }));
+        effect.setStatChanges(1, 1, 1, 1, 1);
+        return effect;
+    }
     //endregion
 
     //TODO create status effect info creator methods for each status effect (is more efficient). Should be done AFTER above TODO!

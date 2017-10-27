@@ -154,7 +154,9 @@ public class BoardAndRuleConstructor {
             case 43:
                 return makeSNBasic3(screen, teams, boardManager);
             case 44:
+                return makeSNBasic3Alt(screen, teams, boardManager);
             case 45:
+                return makeSNObstacleCircle(screen, teams, boardManager);
             case 46:
             case 47:
             case 48:
@@ -897,7 +899,6 @@ public class BoardAndRuleConstructor {
     public static Rules makeSNCircle(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
         boardManager.setBoards(new Board(6, 6, Color.DARK_GRAY, Color.LIGHT_GRAY, 100), new CodeBoard(6, 6));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
-        //place entities
         //place entities
         int count = 0;
         for (Entity e : teams.get(0).getEntities()) {
@@ -1921,6 +1922,144 @@ public class BoardAndRuleConstructor {
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
 
         //place entities
+        int count = 0;
+        for (Entity e : teams.get(0).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(0, 2));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(0, 3));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(0, 4));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(1, 3));
+                    break;
+            }
+            count++;
+        }
+        count = 0;
+        for (Entity e : teams.get(1).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(maxSize, 2));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(maxSize, 3));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(maxSize, 4));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(maxSize - 1, 3));
+                    break;
+            }
+            count++;
+        }
+
+        //place things
+        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(1, 2));
+        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(1, 4));
+        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(5, 2));
+        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(5, 4));
+        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(3, 3));
+
+        boardManager.getBoard().getTile(0, 0).setInvisible(true);
+        boardManager.getBoard().getTile(0, 1).setInvisible(true);
+        boardManager.getBoard().getTile(1, 0).setInvisible(true);
+
+        boardManager.getBoard().getTile(0, maxSize).setInvisible(true);
+        boardManager.getBoard().getTile(1, maxSize).setInvisible(true);
+        boardManager.getBoard().getTile(0, maxSize - 1).setInvisible(true);
+
+        boardManager.getBoard().getTile(maxSize, 0).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize - 1, 0).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize, 1).setInvisible(true);
+
+        boardManager.getBoard().getTile(maxSize, maxSize).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize, maxSize - 1).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize - 1, maxSize).setInvisible(true);
+
+
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeSNBasic3Alt(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(7, 7, new Color(.9f, .5f, .3f, 1), new Color(.2f, .2f, .2f, 1), 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+
+        //place entities
+        int count = 0;
+        for (Entity e : teams.get(0).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(0, 2));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(0, 3));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(0, 4));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(1, 3));
+                    break;
+            }
+            count++;
+        }
+        count = 0;
+        for (Entity e : teams.get(1).getEntities()) {
+            switch (count) {
+                case 0:
+                    boardManager.add(e, new BoardPosition(maxSize, 2));
+                    break;
+                case 1:
+                    boardManager.add(e, new BoardPosition(maxSize, 3));
+                    break;
+                case 2:
+                    boardManager.add(e, new BoardPosition(maxSize, 4));
+                    break;
+                case 3:
+                    boardManager.add(e, new BoardPosition(maxSize - 1, 3));
+                    break;
+            }
+            count++;
+        }
+
+        //place things
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(2, 2));
+        boardManager.add(EntityConstructor.stoneTorch(), new BoardPosition(1, 4));
+        boardManager.add(EntityConstructor.stoneTorch(), new BoardPosition(5, 2));
+        boardManager.add(EntityConstructor.stoneTorch(), new BoardPosition(4, 4));
+        boardManager.add(EntityConstructor.torch(), new BoardPosition(3, 3));
+
+        boardManager.getBoard().getTile(0, 0).setInvisible(true);
+        boardManager.getBoard().getTile(0, 1).setInvisible(true);
+        boardManager.getBoard().getTile(1, 0).setInvisible(true);
+
+        boardManager.getBoard().getTile(0, maxSize).setInvisible(true);
+        boardManager.getBoard().getTile(1, maxSize).setInvisible(true);
+        boardManager.getBoard().getTile(0, maxSize - 1).setInvisible(true);
+
+        boardManager.getBoard().getTile(maxSize, 0).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize - 1, 0).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize, 1).setInvisible(true);
+
+        boardManager.getBoard().getTile(maxSize, maxSize).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize, maxSize - 1).setInvisible(true);
+        boardManager.getBoard().getTile(maxSize - 1, maxSize).setInvisible(true);
+
+
+        return new Battle2PRules(screen, teams);
+    }
+
+    public static Rules makeSNObstacleCircle(BattleScreen screen, Array<Team>  teams, BoardManager boardManager) {
+        boardManager.setBoards(new Board(7, 7, new Color(.9f, .2f, .2f, 1), new Color(.2f, .2f, .2f, 1), 100), new CodeBoard(7, 7));
+        final int maxSize = boardManager.getBoard().getColumnSize() - 1;
+
+        //place entities
         int col = 1;
         for (Entity e : teams.get(0).getEntities()) {
             boardManager.add(e, new BoardPosition(0, col));
@@ -1937,11 +2076,18 @@ public class BoardAndRuleConstructor {
         }
 
         //place things
-        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(1, 2));
-        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(1, 4));
-        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(5, 2));
-        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(5, 4));
-        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(3, 3));
+        for (int i = 1; i < maxSize; i += 4) { //horiz
+            for (int j = 1; j < maxSize; j++) {
+                boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(i, j));
+            }
+        }
+
+        for (int i = 2; i <= maxSize - 2; i++) { //vert
+            for (int j = 1; j <= maxSize - 1; j += 4) {
+                boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(i, j));
+            }
+        }
+
 
         return new Battle2PRules(screen, teams);
     }

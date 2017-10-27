@@ -1654,9 +1654,9 @@ public class EntityConstructor {
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("neoGolem"),
                 atlas.findRegion("neoGolem2")
-        }, Animation.PlayMode.LOOP_PINGPONG, .3f, true)));
+        }, Animation.PlayMode.LOOP_PINGPONG, .25f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(7, 7, 2, 1, 1));
+        entity.add(new StatComponent(10, 7, 2, 1, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1669,6 +1669,37 @@ public class EntityConstructor {
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.slamBlue(entity),
                 MoveConstructor.laserBeamBlue(entity),
+                MoveConstructor.ultimateGuard(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity golemTypeX(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Golem Type-X"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("eliteGolem"),
+                atlas.findRegion("eliteGolem2")
+        }, Animation.PlayMode.LOOP_PINGPONG, .34f, true)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(8, 7, 3, 1, 3));
+        stm.get(entity).obscureStatInfo = true;
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.slamRed(entity),
+                MoveConstructor.reflectionBeam(entity),
+                MoveConstructor.heavySlamRed(entity),
                 MoveConstructor.ultimateGuard(entity)
         })));
 
@@ -2009,6 +2040,38 @@ public class EntityConstructor {
                 MoveConstructor.monoplode3(entity),
                 MoveConstructor.enchant(entity),
                 MoveConstructor.transfer(entity),
+                MoveConstructor.combubulate(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity eliteBook(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Spooky Manifesto"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("eliteBook"),
+                atlas.findRegion("eliteBook2")
+        }, Animation.PlayMode.LOOP, 0.4f, true)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(9, 30, 3, 0, 2));
+        stm.get(entity).obscureStatInfo = true;
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.monoplode4(entity),
+                MoveConstructor.superTransfer(entity),
+                MoveConstructor.monoflash(entity),
                 MoveConstructor.combubulate(entity)
         })));
 

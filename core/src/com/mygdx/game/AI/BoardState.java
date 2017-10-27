@@ -116,10 +116,15 @@ public class BoardState {
                 if (entities.containsKey(newPos)) {
                     EntityValue e = entities.get(newPos); //entity targeted by attack
                     //damage
+                    int oldHp = e.hp;
                     if (move.moveInfo().pierces)
                         e.hp = MathUtils.clamp(e.hp - (int) (move.moveInfo().ampValue * userEntity.getModAtk()), 0, e.maxHp);
                     else
                         e.hp = MathUtils.clamp(e.hp - (MathUtils.clamp((int) (move.moveInfo().ampValue * userEntity.getModAtk()) - e.getModDef(), 0, 999)), 0, e.maxHp);
+
+                    //discourage hitting allies with damaging attacks
+                    if (userEntity.team == e.team && oldHp > e.hp)
+                        e.arbitraryValue -= 30 * (oldHp - e.hp);
 
                     //status
                     if (move.moveInfo().statusEffects != null && e.acceptsStatusEffects) {
@@ -136,10 +141,6 @@ public class BoardState {
                     //clamp hp to max hp
                     if (e.hp > e.maxHp)
                         e.hp = e.maxHp;
-
-                    //discourage hitting allies slightly
-                    if (userEntity.team == e.team)
-                        e.arbitraryValue -= 5;
 
                     //remove dead
                     if (e.hp <= 0)
