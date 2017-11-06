@@ -56,21 +56,6 @@ public abstract class Rules {
         //toggle states + process PhaseComponent entities
         for (Team t : teams) {
             for (Entity e : t.getEntities()) {
-                //clamp sp and hp values to max
-                if (stm.get(e).hp > stm.get(e).getModMaxHp(e))
-                    stm.get(e).hp = stm.get(e).getModMaxHp(e);
-                if (stm.get(e).sp > stm.get(e).getModMaxSp(e))
-                    stm.get(e).sp = stm.get(e).getModMaxSp(e);
-
-                //toggle states
-                if (state.has(e)) {
-                    state.get(e).canAttack = true; //TODO make it not redundant
-                    if (status.has(e) && (status.get(e).contains("Freeze") || status.get(e).contains("Petrify")))
-                        state.get(e).canAttack = false;
-                    state.get(e).canMove = true;
-                    if (!screen.checkShading(e))
-                        screen.shadeBasedOnState(e);
-                }
                 //phase component
                 if (phase.has(e) && stm.get(e).alive) {
                     for (int i = 0; i < phase.get(e).phases.size; i++) {
@@ -87,6 +72,22 @@ public abstract class Rules {
                             break;
                         }
                     }
+                }
+
+                //clamp sp and hp values to max
+                if (stm.get(e).hp > stm.get(e).getModMaxHp(e))
+                    stm.get(e).hp = stm.get(e).getModMaxHp(e);
+                if (stm.get(e).sp > stm.get(e).getModMaxSp(e))
+                    stm.get(e).sp = stm.get(e).getModMaxSp(e);
+
+                //toggle states
+                if (state.has(e)) {
+                    state.get(e).canAttack = true; //TODO make it not redundant
+                    if (status.has(e) && (status.get(e).contains("Freeze") || status.get(e).contains("Petrify")))
+                        state.get(e).canAttack = false;
+                    state.get(e).canMove = true;
+                    if (!screen.checkShading(e))
+                        screen.shadeBasedOnState(e);
                 }
             }
         }

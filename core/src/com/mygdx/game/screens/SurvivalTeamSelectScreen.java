@@ -120,7 +120,9 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
                 new ImageButton(new TextureRegionDrawable(atlas.findRegion("fox"))), new ImageButton(new TextureRegionDrawable(atlas.findRegion("thunderdog"))),
                 new ImageButton(new TextureRegionDrawable(atlas.findRegion("mummy"))), new ImageButton(new TextureRegionDrawable(atlas.findRegion("squid"))),
                 new ImageButton(new TextureRegionDrawable(atlas.findRegion("steamdragon"))), new ImageButton(new TextureRegionDrawable(atlas.findRegion("jellygirl"))),
-                new ImageButton(new TextureRegionDrawable(atlas.findRegion("mirrorman"))), new ImageButton(new TextureRegionDrawable(atlas.findRegion("mystery")))
+                new ImageButton(new TextureRegionDrawable(atlas.findRegion("mirrorman"))), new ImageButton(new TextureRegionDrawable(atlas.findRegion("pheonix"))),
+                new ImageButton(new TextureRegionDrawable(atlas.findRegion("acidsnake"))),
+                new ImageButton(new TextureRegionDrawable(atlas.findRegion("mystery")))
         });
         //set up character portraits
         characterPortraits = new Array<Image>(new Image[]{new Image(
@@ -201,9 +203,17 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
                             team.getEntities().add(EntityConstructor.mirrorman(0, altNumber));
                             characterPortraits.get(currentEntity).setDrawable(
                                     new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
+                        } else if (actor == characterBtns.get(13)) {
+                            team.getEntities().add(EntityConstructor.pheonix(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
+                        } else if (actor == characterBtns.get(14)) {
+                            team.getEntities().add(EntityConstructor.acidsnake(0, altNumber));
+                            characterPortraits.get(currentEntity).setDrawable(
+                                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else { //random
                             characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mystery")));
-                            int randomIndex = MathUtils.random(0, 12);
+                            int randomIndex = MathUtils.random(0, 14);
                             int randomColor = (MathUtils.randomBoolean(.05f))? 1 : 0;
                             switch (randomIndex) {
                                 case 0 :
@@ -244,6 +254,12 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
                                     break;
                                 case 12 :
                                     team.getEntities().add(EntityConstructor.mirrorman(0, randomColor));
+                                    break;
+                                case 13 :
+                                    team.getEntities().add(EntityConstructor.pheonix(0, randomColor));
+                                    break;
+                                case 14 :
+                                    team.getEntities().add(EntityConstructor.acidsnake(0, randomColor));
                                     break;
                             }
                         }
@@ -318,9 +334,9 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
         for (int i = 0; i < 2; i++) {
             for (int j = 1; j <= characterBtns.size / 2; j++) {
                 if (j == characterBtns.size / 2)
-                    characterBtnTable.add(characterBtns.get( ((i*7) + j) - 1 ) ).row();
+                    characterBtnTable.add(characterBtns.get( ((i*8) + j) - 1 ) ).row();
                 else
-                    characterBtnTable.add(characterBtns.get( ((i*7) + j) - 1 ) );
+                    characterBtnTable.add(characterBtns.get( ((i*8) + j) - 1 ) );
             }
         }
         characterBtnTable.setBackground(tableBackground);

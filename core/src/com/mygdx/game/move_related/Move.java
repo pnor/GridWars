@@ -25,7 +25,6 @@ public class Move {
     private Array<BoardPosition> range;
 
     private Entity user;
-
     private MoveInfo moveInfo; //for AI
 
     /**

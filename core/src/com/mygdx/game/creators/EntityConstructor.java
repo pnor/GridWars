@@ -95,7 +95,8 @@ public class EntityConstructor {
                 DamageAnimationConstructor.deathAnimation(entity),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity),
-                MoveConstructor.bodySlam(entity)})));
+                MoveConstructor.bodySlam(entity)
+        })));
         entity.add(new NameComponent("Robo - Beta"));
 
         return entity;
@@ -378,7 +379,7 @@ public class EntityConstructor {
             }, Animation.PlayMode.LOOP, 0.5f, true)));
         
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(2, 4, 2, 0, 3));
+        entity.add(new StatComponent(2, 4, 2, 0, 4));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -390,7 +391,8 @@ public class EntityConstructor {
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.swordSlice(entity),
-                MoveConstructor.Bark(entity),
+                MoveConstructor.bark(entity),
+                MoveConstructor.yelp(entity),
                 MoveConstructor.chargedSlice(entity)
         })));
 
@@ -851,6 +853,82 @@ public class EntityConstructor {
 
         return entity;
     }
+
+    public static Entity pheonix(int team, int altColor) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Pheonix"));
+
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("pheonix"),
+                    atlas.findRegion("pheonix2")
+            }, Animation.PlayMode.LOOP, 0.4f, true)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("pheonixAlt"),
+                    atlas.findRegion("pheonix2Alt")
+            }, Animation.PlayMode.LOOP, 0.4f, true)));
+
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 6, 4, 0, 3));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.peck(entity),
+                MoveConstructor.vigorate(entity),
+                MoveConstructor.selfPurge(entity),
+                MoveConstructor.rejunevate(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity acidsnake(int team, int altColor) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Corrosnake"));
+
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("acidsnake"),
+                    atlas.findRegion("acidsnake2")
+            }, Animation.PlayMode.LOOP, 0.4f, true)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("acidsnakeAlt"),
+                    atlas.findRegion("acidsnake2Alt")
+            }, Animation.PlayMode.LOOP, 0.4f, true)));
+
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(4, 5, 1, 1, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.bite(entity),
+                MoveConstructor.toxicBite(entity),
+                MoveConstructor.toxicBreathSnake(entity),
+                MoveConstructor.berserkBite(entity)
+        })));
+
+        return entity;
+    }
     //endregion
 
     //region Survival enemy entities
@@ -953,7 +1031,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
-        entity.add(new NameComponent("Blaze Pneuma"));
+        entity.add(new NameComponent("Blaze Memory"));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("fireSpiritAlt"),
@@ -984,7 +1062,7 @@ public class EntityConstructor {
         Entity entity = new Entity();
         if (team > -1)
             entity.add(new TeamComponent(team));
-        entity.add(new NameComponent("Aqua Pneuma"));
+        entity.add(new NameComponent("Aqua Memory"));
 
         entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
                 atlas.findRegion("waterSpiritAlt"),
@@ -1686,7 +1764,7 @@ public class EntityConstructor {
                 atlas.findRegion("eliteGolem2")
         }, Animation.PlayMode.LOOP_PINGPONG, .34f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(8, 7, 3, 1, 3));
+        entity.add(new StatComponent(7, 7, 3, 1, 2));
         stm.get(entity).obscureStatInfo = true;
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -2088,14 +2166,14 @@ public class EntityConstructor {
 
         entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("lightTower"), true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(6, 2, 0, 0, 0));
+        entity.add(new StatComponent(6, 4, 0, 0, 0));
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.deathAnimationSteamy(entity),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.powerWave(entity)
@@ -2112,14 +2190,14 @@ public class EntityConstructor {
 
         entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("darkTower"), true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(6, 2, 0, 0, 0));
+        entity.add(new StatComponent(6, 4, 0, 0, 0));
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
         state.get(entity).canMove = true;
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.deathAnimationSteamy(entity),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.weakenWave(entity)
@@ -2147,7 +2225,7 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.deathAnimationSteamy(entity),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.monoplodeOrb(entity),
@@ -2178,7 +2256,7 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.deathAnimationSteamy(entity),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.monoplodeOrb(entity),
@@ -2207,7 +2285,7 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.deathAnimationSteamy(entity),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.monoplodeOrb(entity),
@@ -2236,7 +2314,7 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.deathAnimationSteamy(entity),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.monoplodeOrb(entity),

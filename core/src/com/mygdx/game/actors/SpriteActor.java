@@ -81,11 +81,6 @@ public class SpriteActor extends UIActor{
     }
 
     @Override
-    public void setColor(Color c) {
-        sprite.setColor(c);
-    }
-
-    @Override
     public void draw(Batch batch, float parentAlpha) {
         sprite.setPosition(getX(), getY());
         sprite.setScale(getScaleX());

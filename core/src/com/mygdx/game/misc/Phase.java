@@ -5,6 +5,7 @@ import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.UIActor;
 import com.mygdx.game.components.StatComponent;
 import com.mygdx.game.move_related.StatusEffect;
+import com.mygdx.game.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.*;
 
@@ -58,6 +59,8 @@ public class Phase implements Comparable {
             ((AnimationActor) actor).setStopUpdating(hasNonAnimatingStatus);
         }
         am.get(e).actor = actor;
+        //shade proper color
+        am.get(e).actor.shade(BattleScreen.getShadeColorBasedOnState(e));
     }
 
     /**

@@ -2,6 +2,7 @@ package com.mygdx.game.rules_types;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.BoardComponent;
@@ -67,7 +68,7 @@ public class ZoneRules extends Rules {
             if (teams.get(i).getTeamColor() instanceof LerpColor) { //is already a lerpColor
                 lerpColor = (LerpColor) teams.get(i).getTeamColor();
             } else {
-                lerpColor = new LerpColor(teams.get(i).getTeamColor(), Color.WHITE);
+                lerpColor = new LerpColor(teams.get(i).getTeamColor(), Color.WHITE, 2f, Interpolation.pow5In);
                 lerpColorManager.registerLerpColor(lerpColor);
             }
 

@@ -301,7 +301,7 @@ public class BattleScreen implements Screen {
         spdLbl = new Label("-", skin);
         spdLblID.setColor(Color.PINK);
         param.size = 17;
-        statusLbl = new NewsTickerLabel(new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE), "Healthy", 12, .05f, .3f);
+        statusLbl = new NewsTickerLabel(new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE), "Healthy", 16, .05f, .3f);
         statsTable.add().size(70, 0); statsTable.add().size(70, 0).row();
         statsTable.add(nameLbl).colspan(2).padBottom(10f).row(); //set up table
         nameLbl.setAlignment(Align.center);
@@ -1003,9 +1003,9 @@ public class BattleScreen implements Screen {
             return am.get(e).actor.getColor() == Color.GRAY;
         else if (!state.get(e).canMove && !state.get(e).canAttack)
             return am.get(e).actor.getColor() == Color.DARK_GRAY;
-        else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0)  //status effect
-            return am.get(e).actor.getColor().equals(status.get(e).getStatusEffects().get(status.get(e).getTotalStatusEffects() - 1).getColor());
-        else if (team.get(e).teamNumber == rules.getCurrentTeamNumber()) //defualts
+        else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {  //status effect
+                return am.get(e).actor.getColor().equals(status.get(e).getStatusEffects().get(status.get(e).getTotalStatusEffects() - 1).getColor());
+        } else if (team.get(e).teamNumber == rules.getCurrentTeamNumber()) //defualts
             return am.get(e).actor.getColor() == rules.getCurrentTeam().getTeamColor();
         else
             return am.get(e).actor.getColor() == Color.WHITE;

@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -171,15 +172,26 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         offsetTable.add(new Label("Remaining : " + spPowerUp, skin)).colspan(2).size(80, 40).padBottom(20f).row();
         offsetTable.add(btnContinue).colspan(4).size(180, 40).padBottom(10f).row();
         //offsetTable.debug();
-
         //offsetTable.setPosition(offsetTable.getX() + 200, offsetTable.getY());
         table.add().padRight(200f);
         table.add(offsetTable);
 
-        //Remove Status Effects from player team
+        //Healing Player Team somewhat
         for (Entity e : team.getEntities()) {
+            //has status effects
             if (status.has(e) && status.get(e).getTotalStatusEffects() >= 1)
                 status.get(e).removeAll(e);
+
+            //healing entities
+            //if alive, add one third of total health. Always heals at least 1 and at most 4.
+            if (stm.get(e).alive)
+                stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + MathUtils.clamp(stm.get(e).maxHP / 3, 1, 4), 0, stm.get(e).maxHP);
+            else {
+                stm.get(e).setAlive();
+                stm.get(e).hp = 1;
+                stm.get(e).sp = 0;
+            }
+
         }
 
     }
@@ -361,6 +373,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                                 EntityConstructor.aquaPneuma(1)
                         }));
             //endregion
+            //region level 21 - 30
             case 21 :
                 return new Team("Enemy",
                         Color.RED,
@@ -448,6 +461,8 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.electroPnuema(1)
                         }));
+            //endregion
+            //region Level 31 - 40
             case 31 :
                 return new Team("Enemy",
                         Color.RED,
@@ -472,9 +487,100 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.stoneLion(1),
                                 EntityConstructor.redOrb(1),
-                                EntityConstructor.yellowLion(1),
+                                EntityConstructor.stoneLion(1),
                                 EntityConstructor.stoneLion(1)
                         }));
+            case 34 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.alkaliMan(1),
+                                EntityConstructor.eliteSpider(1),
+                                EntityConstructor.alkaliMan(1),
+                                EntityConstructor.golemMK3(1)
+                        }));
+            case 35 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.eliteSpider(1),
+                                EntityConstructor.advancedBook(1),
+                                EntityConstructor.golemMK3(1),
+                                EntityConstructor.fancyBook(1)
+                        }));
+            case 36 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.redOrb(1),
+                                EntityConstructor.scaleman(1),
+                                EntityConstructor.telegolem(1),
+                                EntityConstructor.scaleman(1)
+                        }));
+            case 37 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.chromeMan(1),
+                                EntityConstructor.chromeMan(1)
+                        }));
+            case 38 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.chemMan(1),
+                                EntityConstructor.orb(1),
+                                EntityConstructor.alkaliMan(1),
+                                EntityConstructor.golem(1)
+                        }));
+            case 39 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.chromeMan(1),
+                                EntityConstructor.chromeMan(1),
+                                EntityConstructor.telegolem(1),
+                                EntityConstructor.chromeMan(1)
+                        }));
+            case 40 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.romanceBook(1),
+                                EntityConstructor.blazePneumaAlt(1),
+                                EntityConstructor.blazePneumaAlt(1),
+                                EntityConstructor.blueOrb(1)
+                        }));
+            //endregion
+            //region 41 - 50
+            case 41 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.telegolem(1),
+                                EntityConstructor.eliteSpider(1),
+                                EntityConstructor.eliteSpider(1),
+                                EntityConstructor.eliteSpider(1)
+                        }));
+            case 42 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.golemTypeX(1),
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.stoneLeo(1),
+                                EntityConstructor.golemTypeX(1)
+                        }));
+            case 43 :
+                return new Team("Enemy",
+                        Color.RED,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.aquaPneumaAlt(1),
+                                EntityConstructor.greenOrb(1),
+                                EntityConstructor.romanceBook(1),
+                                EntityConstructor.blueOrb(1)
+                        }));
+            //endregion
         }
         return null;
     }
@@ -500,6 +606,19 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.powerTower(1)
+                        }));
+            case 35 :
+                return new Team("Enemy",
+                        Color.WHITE,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.weakenTower(1)
+                        }));
+            case 43 :
+                return new Team("Enemy",
+                        Color.WHITE,
+                        new Array<Entity>(new Entity[] {
+                                EntityConstructor.powerTower(1),
+                                EntityConstructor.weakenTower(1)
                         }));
             default: return null;
         }

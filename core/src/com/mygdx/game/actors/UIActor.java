@@ -42,6 +42,16 @@ public abstract class UIActor extends Actor {
         setPosition((getParent().getWidth() - getWidth()) / 2, (getParent().getHeight() - getHeight()) / 2);
     }
 
+    @Override
+    public void setColor(Color color) {
+       shade(color);
+    }
+
+    @Override
+    public void setColor(float r, float g, float b, float a) {
+        shade(new Color(r, g, b, a));
+    }
+
     public boolean getLastSelected() {
         return lastSelected;
     }

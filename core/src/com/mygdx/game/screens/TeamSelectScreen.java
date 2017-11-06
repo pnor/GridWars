@@ -173,7 +173,9 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                 new ImageButton(new TextureRegionDrawable(atlas.findRegion("fox"))), new ImageButton(new TextureRegionDrawable(atlas.findRegion("thunderdog"))),
                 new ImageButton(new TextureRegionDrawable(atlas.findRegion("mummy"))), new ImageButton(new TextureRegionDrawable(atlas.findRegion("squid"))),
                 new ImageButton(new TextureRegionDrawable(atlas.findRegion("steamdragon"))), new ImageButton(new TextureRegionDrawable(atlas.findRegion("jellygirl"))),
-                new ImageButton(new TextureRegionDrawable(atlas.findRegion("mirrorman"))), new ImageButton(new TextureRegionDrawable(atlas.findRegion("mystery")))
+                new ImageButton(new TextureRegionDrawable(atlas.findRegion("mirrorman"))), new ImageButton(new TextureRegionDrawable(atlas.findRegion("pheonix"))),
+                new ImageButton(new TextureRegionDrawable(atlas.findRegion("acidsnake"))),
+                new ImageButton(new TextureRegionDrawable(atlas.findRegion("mystery")))
         });
         //set up character portraits
         characterPortraits = new Array<Image>(new Image[]{new Image(
@@ -257,6 +259,14 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                         teams.get(curTeam).getEntities().add(EntityConstructor.mirrorman(curTeam, altNumber));
                         characterPortraits.get(currentEntity).setDrawable(
                                 new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
+                    } else if (actor == characterBtns.get(13)) {
+                        teams.get(curTeam).getEntities().add(EntityConstructor.pheonix(0, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
+                    } else if (actor == characterBtns.get(14)) {
+                    teams.get(curTeam).getEntities().add(EntityConstructor.acidsnake(0, altNumber));
+                        characterPortraits.get(currentEntity).setDrawable(
+                                new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else { //random
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mystery")));
                         //teams.get(curTeam).getEntities().add(EntityConstructor.AITester(curTeam, altNumber));
@@ -301,6 +311,12 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                                 break;
                             case 12 :
                                 teams.get(curTeam).getEntities().add(EntityConstructor.mirrorman(curTeam, randomColor));
+                                break;
+                            case 13 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.pheonix(curTeam, randomColor));
+                                break;
+                            case 14 :
+                                teams.get(curTeam).getEntities().add(EntityConstructor.acidsnake(curTeam, randomColor));
                                 break;
                         }
                     }
@@ -382,9 +398,9 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         for (int i = 0; i < 2; i++) {
             for (int j = 1; j <= characterBtns.size / 2; j++) {
                 if (j == characterBtns.size / 2)
-                    characterBtnTable.add(characterBtns.get( ((i*7) + j) - 1 ) ).row();
+                    characterBtnTable.add(characterBtns.get( ((i*8) + j) - 1 ) ).row();
                 else
-                    characterBtnTable.add(characterBtns.get( ((i*7) + j) - 1 ) );
+                    characterBtnTable.add(characterBtns.get( ((i*8) + j) - 1 ) );
             }
         }
         table.add(characterBtnTable).colspan(2).padBottom(20f).row();

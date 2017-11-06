@@ -196,7 +196,7 @@ public class StatusEffectConstructor {
             if (vm.has(e) && !vm.get(e).shuffleAnimation.getIsPlaying())
                 vm.get(e).shuffleAnimation.setPlaying(true, true);
         }, null);
-        effect.setStatChanges(1, 0, .5f, 0, 2);
+        effect.setStatChanges(1, 0, 0, 0, 2);
         return effect;
     }
 
@@ -241,6 +241,20 @@ public class StatusEffectConstructor {
             entity.sp += 2;
         }));
         effect.setStatChanges(1, 1, 1, 1, 1);
+        return effect;
+    }
+
+    public static StatusEffect exhausted(int duration) {
+        StatusEffect effect = new StatusEffect("Exhausted", duration, new LerpColor(Color.BLACK, Color.LIGHT_GRAY, .3f, Interpolation.sineOut), (e) -> {
+            if (stm.has(e)) {
+                stm.get(e).sp = MathUtils.clamp(stm.get(e).hp - 1, 0, stm.get(e).getModMaxHp(e));
+            }
+            if (vm.has(e) && !vm.get(e).shuffleAnimation.getIsPlaying())
+                vm.get(e).shuffleAnimation.setPlaying(true, true);
+        }, (entity -> {
+            entity.sp -= 1;
+        }));
+        effect.setStatChanges(1, 1, 0, 0, .5f);
         return effect;
     }
     //endregion

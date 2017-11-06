@@ -5,175 +5,199 @@ filter: Nearest,Nearest
 repeat: none
 CheckerBackground
   rotate: false
-  xy: 1, 7213
+  xy: 1, 3155
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
 CloudBackground
   rotate: false
-  xy: 1, 6311
+  xy: 2003, 3155
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
+CheckerVert
+  rotate: false
+  xy: 1, 1353
+  size: 1000, 1800
+  orig: 1000, 1800
+  offset: 0, 0
+  index: -1
+DiagStripeOverlay
+  rotate: false
+  xy: 1, 1
+  size: 1500, 1350
+  orig: 1500, 1350
+  offset: 0, 0
+  index: -1
+RainVert
+  rotate: false
+  xy: 1003, 1353
+  size: 1000, 1800
+  orig: 1000, 1800
+  offset: 0, 0
+  index: -1
 CubeBackground
   rotate: false
-  xy: 2003, 7213
+  xy: 2005, 2253
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
 DiagCheckerBackground
   rotate: false
-  xy: 1, 5409
+  xy: 2005, 1351
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
 DiagStripeHoriz
   rotate: false
-  xy: 2003, 6311
+  xy: 1503, 449
   size: 2000, 900
   orig: 2000, 900
   offset: 0, 0
   index: -1
-FadeBackground
-  rotate: false
-  xy: 4005, 7213
-  size: 2000, 900
-  orig: 2000, 900
-  offset: 0, 0
-  index: -1
-FadeHoriz
-  rotate: false
-  xy: 1, 4507
-  size: 2000, 900
-  orig: 2000, 900
-  offset: 0, 0
-  index: -1
-HexagonBackground
-  rotate: false
-  xy: 2003, 5409
-  size: 2000, 900
-  orig: 2000, 900
-  offset: 0, 0
-  index: -1
-SharpDiagBackground
-  rotate: false
-  xy: 4005, 6311
-  size: 2000, 900
-  orig: 2000, 900
-  offset: 0, 0
-  index: -1
-SimpleRoundedZag
-  rotate: false
-  xy: 6007, 7213
-  size: 2000, 900
-  orig: 2000, 900
-  offset: 0, 0
-  index: -1
-SpeedBackground
-  rotate: false
-  xy: 1, 3605
-  size: 2000, 900
-  orig: 2000, 900
-  offset: 0, 0
-  index: -1
-SquareStripHoriz
-  rotate: false
-  xy: 2003, 4507
-  size: 2000, 900
-  orig: 2000, 900
-  offset: 0, 0
-  index: -1
-WavesHoriz
-  rotate: false
-  xy: 4005, 5409
-  size: 2000, 900
-  orig: 2000, 900
-  offset: 0, 0
-  index: -1
-DiagStripeOverlay
-  rotate: false
-  xy: 6007, 5861
-  size: 1500, 1350
-  orig: 1500, 1350
-  offset: 0, 0
-  index: -1
-CheckerVert
-  rotate: false
-  xy: 1, 1803
-  size: 1000, 1800
-  orig: 1000, 1800
-  offset: 0, 0
-  index: -1
-RainVert
-  rotate: false
-  xy: 1, 1
-  size: 1000, 1800
-  orig: 1000, 1800
-  offset: 0, 0
-  index: -1
-SquareStripVert
-  rotate: false
-  xy: 1003, 1803
-  size: 1000, 1800
-  orig: 1000, 1800
-  offset: 0, 0
-  index: -1
+
+BackPack2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 BlankBackground
   rotate: false
-  xy: 2003, 3605
+  xy: 1, 2707
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 CubicBackground
   rotate: false
-  xy: 4005, 4507
+  xy: 1003, 2707
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 darkShadeOverlay
   rotate: false
-  xy: 1003, 901
+  xy: 2005, 2707
+  size: 1000, 900
+  orig: 1000, 900
+  offset: 0, 0
+  index: -1
+geometric
+  rotate: false
+  xy: 3007, 2707
+  size: 1000, 900
+  orig: 1000, 900
+  offset: 0, 0
+  index: -1
+FadeBackground
+  rotate: false
+  xy: 1, 1805
+  size: 2000, 900
+  orig: 2000, 900
+  offset: 0, 0
+  index: -1
+FadeHoriz
+  rotate: false
+  xy: 2003, 1805
+  size: 2000, 900
+  orig: 2000, 900
+  offset: 0, 0
+  index: -1
+HexagonBackground
+  rotate: false
+  xy: 1, 903
+  size: 2000, 900
+  orig: 2000, 900
+  offset: 0, 0
+  index: -1
+RadiusFade
+  rotate: false
+  xy: 2003, 903
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 shadeOverlay
   rotate: false
-  xy: 3005, 3605
+  xy: 3005, 903
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
+SharpDiagBackground
+  rotate: false
+  xy: 1, 1
+  size: 2000, 900
+  orig: 2000, 900
+  offset: 0, 0
+  index: -1
+SimpleRoundedZag
+  rotate: false
+  xy: 2003, 1
+  size: 2000, 900
+  orig: 2000, 900
+  offset: 0, 0
+  index: -1
+
+BackPack3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+SpeedBackground
+  rotate: false
+  xy: 1, 2705
+  size: 2000, 900
+  orig: 2000, 900
+  offset: 0, 0
+  index: -1
+SquareStripHoriz
+  rotate: false
+  xy: 1, 1803
+  size: 2000, 900
+  orig: 2000, 900
+  offset: 0, 0
+  index: -1
+WavesHoriz
+  rotate: false
+  xy: 2003, 2705
+  size: 2000, 900
+  orig: 2000, 900
+  offset: 0, 0
+  index: -1
+SquareStripVert
+  rotate: false
+  xy: 1, 1
+  size: 1000, 1800
+  orig: 1000, 1800
+  offset: 0, 0
+  index: -1
 SmudgeBackground
   rotate: false
-  xy: 2005, 2703
+  xy: 2003, 1803
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 SmudgeInverseBackground
   rotate: false
-  xy: 2005, 1801
+  xy: 1003, 901
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 TowerBackground
   rotate: false
-  xy: 5007, 4507
+  xy: 3005, 1803
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0
   index: -1
 WhiteDots
   rotate: false
-  xy: 4007, 3605
+  xy: 2005, 901
   size: 1000, 900
   orig: 1000, 900
   offset: 0, 0

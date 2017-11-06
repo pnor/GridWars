@@ -42,6 +42,8 @@ public class BoardManager {
     public void setBoards(Board b, CodeBoard cb) {
         board = b;
         codeBoard = cb;
+        if (b.getRowSize() * b.getColumnSize() != cb.getRows() * cb.getColumns())
+            throw new ExceptionInInitializerError("Boards of unequal size");
     }
 
     /**
