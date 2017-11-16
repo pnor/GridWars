@@ -6373,9 +6373,10 @@ public class MoveConstructor {
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
 
-                        if (stm.has(enemy) && status.has(enemy))
+                        if (stm.has(enemy) && status.has(enemy)) {
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
                             status.get(enemy).addStatusEffect(poison(2), enemy);
+                        }
 
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
@@ -6916,7 +6917,7 @@ public class MoveConstructor {
             }
         }, .01f, 6);
 
-        return new Move("Heavy Slam", nm.get(user).name + " slammed into the opponent", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        return new Move("Heavy Slam", nm.get(user).name + " slammed into the opponent", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -9359,7 +9360,7 @@ public class MoveConstructor {
             }
         }, .06f, 50);
 
-        return new Move("Disrupt", nm.get(user).name + " emitted a disruptive wave!", user, 3,
+        return new Move("Disrupt", nm.get(user).name + " emitted a disruptive wave!", user, 4,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0), new BoardPosition(-1, -1), new BoardPosition(0, -1), new BoardPosition(1, -1),
                         new BoardPosition(1, 0), new BoardPosition(1, 1), new BoardPosition(0, 1), new BoardPosition(-1, 1),
@@ -10165,7 +10166,7 @@ public class MoveConstructor {
             }
         }, .03f, 25);
 
-        return new Move("Flash", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        return new Move("Spectral Flash", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -10498,7 +10499,7 @@ public class MoveConstructor {
                 }
             }
         }, .01f, 4);
-        
+
         VisualEvent sparks = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
@@ -11484,13 +11485,13 @@ public class MoveConstructor {
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
                         if (stm.has(enemy))
-                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) / 2f - stm.get(enemy).getModDef(enemy), 0, 999);
 
                         if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0), new BoardPosition(-4, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{preBoom, explode1, sparkle1, explode2, sparkle2, explode3, sparkle3, explode4, sparkle4})), new MoveInfo(false, 1));
+                new Array<VisualEvent>(new VisualEvent[]{preBoom, explode1, sparkle1, explode2, sparkle2, explode3, sparkle3, explode4, sparkle4})), new MoveInfo(false, .5f));
     }
 
     //scaleman
@@ -13783,7 +13784,7 @@ public class MoveConstructor {
             }
         }, .01f, 6);
 
-        return new Move("Heavy Slam", nm.get(user).name + " slammed into the opponent", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        return new Move("Heavy Slam", nm.get(user).name + " slammed into the opponent", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -16022,7 +16023,7 @@ public class MoveConstructor {
                         boards.getTileHeight() / 2 - entitySize.y / 2f);
 
                 Entity boom = new Entity();
-                boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-150 * scale, 150 * scale), MathUtils.random(-150 * scale, 150 * scale)),
+                boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-110 * scale, 110 * scale), MathUtils.random(-110 * scale, 110 * scale)),
                         entitySize.x, entitySize.y, 0));
                 boom.add(new LifetimeComponent(0, .3f));
                 Sprite sprite = atlas.createSprite("hexagon");
@@ -16033,7 +16034,7 @@ public class MoveConstructor {
 
                 engine.addEntity(boom);
             }
-        }, .005f, 60);
+        }, .003f, 80);
 
         //Move
         return new Move("Monoplode", nm.get(user).name + " uses a spell!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
@@ -16847,8 +16848,16 @@ public class MoveConstructor {
                 progress = MathUtils.clamp(progress + .1f, 0, 1);
 
                 Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
-                if (enemy != null)
-                    am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress));
+                try {
+                    if (enemy != null)
+                        am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress));
+                } catch (Exception e) {
+                    System.out.println("Threw " + e + "in a Visual Event in MoveConstructor...");
+                    System.out.println("Entity name : " + nm.get(enemy).name);
+                    System.out.println("Actor : " + am.get(enemy));
+                    System.out.println("Actor .getColor() : " + am.get(enemy).actor.getColor());
+                    am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress)); //to crash progream
+                }
             }
         }, .05f, 10);
 
@@ -17131,4 +17140,19 @@ public class MoveConstructor {
                 }));
     }
     //endregion
+
+    /*
+    //TODO replace all instances of this debug line:
+    try {
+                    if (enemy != null)
+                        am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress));
+                } catch (Exception e) {
+                    System.out.println("Threw " + e + "in a Visual Event in MoveConstructor...");
+                    System.out.println("Entity name : " + nm.get(enemy).name);
+                    System.out.println("Actor : " + am.get(enemy));
+                    System.out.println("Actor .getColor() : " + am.get(enemy).actor.getColor());
+                    am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress)); //to crash progream
+                }
+                */
+
 }

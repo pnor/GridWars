@@ -103,11 +103,17 @@ public class BackgroundConstructor {
             case 55:
                 return makeSurvivalBackAquaMemory();
             case 56:
-                return makeSurvivalBackShapeGlow();
             case 57: //45
             case 58:
+                return makeSurvivalBackShapeGlow();
             case 59:
-
+                return makeSurvivalElectroMemory();
+            case 60:
+                return makeSurvivalBackColorGlow();
+            case 61:
+                return makeSurvivalBackSecondToLast();
+            case 62: //50
+                return makeSurvivalFinal();
             default:
                 return makeSurvivalBackChecker();
             //endregion
@@ -319,6 +325,40 @@ public class BackgroundConstructor {
                 new BackType[] {BackType.NO_MOVE, BackType.SCROLL_HORIZONTAL_FASTER},
                 null, null);
     }
+
+    public static Background makeSurvivalBackColorGlow() {
+        Sprite back = new Sprite(backAtlas.findRegion("geometric"));
+        back.setColor(new Color(.14f, .07f, .05f, 1));
+        Sprite overlay = new Sprite(backAtlas.findRegion("RadiusFade"));
+        overlay.setColor(new Color(.8f, .8f, 1, .13f));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("FadeHoriz"));
+        overlay2.setColor(new Color(1, .8f, .8f, .13f));
+        Sprite overlay3 = new Sprite(backAtlas.findRegion("WavesHoriz"));
+        overlay3.setColor(new Color(0f, 0.9f, 0.8f, .1f));
+
+        return new Background(
+                back,
+                new Sprite[] { overlay, overlay2, overlay3},
+                new BackType[] {BackType.NO_MOVE, BackType.FADE_COLOR, BackType.SCROLL_HORIZONTAL_FASTER},
+                new Color(1, .8f, .8f, .13f), new Color(1, 1, 1, .13f));
+    }
+
+    public static Background makeSurvivalBackSecondToLast() {
+        Sprite back = new Sprite(backAtlas.findRegion("geometric"));
+        back.setColor(new Color(.8f, .8f, .8f, 1));
+        Sprite overlay = new Sprite(backAtlas.findRegion("FadeBackground"));
+        overlay.setColor(new Color(0, 0, 0, .13f));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("DiagCheckerBackground"));
+        overlay2.setColor(new Color(0, 0, 0, .7f));
+        Sprite overlay3 = new Sprite(backAtlas.findRegion("CheckerVert"));
+        overlay3.setColor(new Color(0, 0, 0, .4f));
+
+        return new Background(
+                back,
+                new Sprite[] { overlay, overlay2, overlay3},
+                new BackType[] {BackType.NO_MOVE, BackType.SCROLL_HORIZONTAL, BackType.SCROLL_VERTICAL},
+                null, null);
+    }
     //endregion
     //region boss stages
     public static Background makeSurvivalBackBlazePneuma() {
@@ -401,6 +441,42 @@ public class BackgroundConstructor {
                 new Sprite[] {overlay, overlay2, overlay3},
                 new BackType[] {BackType.FADE_COLOR, BackType.SCROLL_VERTICAL_FAST, BackType.SCROLL_HORIZONTAL_FAST},
                 new Color(0, 0, .1f, 1), new Color(0, 0, .2f, 1));
+    }
+
+    public static Background makeSurvivalElectroMemory() {
+        Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
+        back.setColor(new Color(.03f, .08f, .1f, 1));
+        Sprite glower = new Sprite(backAtlas.findRegion("DiagStripeOverlay"));
+        glower.setColor(new Color(0, 0, 0, 1));
+        Sprite overlay = new Sprite(backAtlas.findRegion("WavesHoriz"));
+        overlay.setColor(new Color(.1f, .3f, 0.5f, .3f));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("HexagonBackground"));
+        overlay2.setColor(new Color(.1f, .3f, 0.4f, .2f));
+        Sprite overlay3 = new Sprite(backAtlas.findRegion("FadeBackground"));
+        overlay3.setColor(new Color(1, 1, 0, .1f));
+        return new Background(
+                back,
+                new Sprite[] {glower, overlay, overlay2, overlay3},
+                new BackType[] {BackType.FADE_COLOR, BackType.SCROLL_HORIZONTAL, BackType.SCROLL_HORIZONTAL_SLOW ,BackType.NO_MOVE},
+                new Color(0, 0, 0, 1), new Color(.2f, .2f, 0, .7f));
+    }
+
+    public static Background makeSurvivalFinal() {
+        Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
+        back.setColor(new Color(0.4f, .7f, 1f, 1));
+        Sprite sun = new Sprite(backAtlas.findRegion("RadiusFade"));
+        sun.setColor(new Color(1, .4f, 0, .7f));
+        Sprite overlay = new Sprite(backAtlas.findRegion("DiagStripeHoriz"));
+        overlay.setColor(new Color(1, 1, 1, .2f));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("DiagCheckerBackground"));
+        overlay2.setColor(new Color(1, 1, 1, .1f));
+        Sprite overlay3 = new Sprite(backAtlas.findRegion("CloudBackground"));
+        overlay3.setColor(new Color(1, 1, 1, .3f));
+        return new Background(
+                back,
+                new Sprite[] {sun, overlay, overlay2, overlay3},
+                new BackType[] {BackType.NO_MOVE, BackType.SCROLL_HORIZONTAL_FAST, BackType.SCROLL_HORIZONTAL_SLOW ,BackType.SCROLL_HORIZONTAL},
+                null, null);
     }
     //endregion
     //endregion

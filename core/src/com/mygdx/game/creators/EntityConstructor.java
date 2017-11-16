@@ -357,6 +357,54 @@ public class EntityConstructor {
 
         return entity;
     }
+
+    public static Entity wall() {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(8, 0, 0, 0, 0));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("wall")), true)));
+        entity.add(new NameComponent("Wall"));
+
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+
+        return entity;
+    }
+
+    public static Entity toughWall() {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(8, 0, 0, 1, 0));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("goldWall")), true)));
+        entity.add(new NameComponent("Tough Wall"));
+
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+
+        return entity;
+    }
+
+    public static Entity superWall() {
+        Entity entity = new Entity();
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 0, 0, 10, 0));
+        entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("diamondWall")), true)));
+        entity.add(new NameComponent("Super Wall"));
+
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+
+        return entity;
+    }
     //endregion
 
     //Game Piece Entity ------------
@@ -1207,7 +1255,7 @@ public class EntityConstructor {
                 atlas.findRegion("lion2")
         }, Animation.PlayMode.LOOP, 0.7f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(6, 5, 3, 0, 2));
+        entity.add(new StatComponent(6, 5, 2, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1237,7 +1285,7 @@ public class EntityConstructor {
                 atlas.findRegion("yellowLion2")
         }, Animation.PlayMode.LOOP, 0.7f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(7, 8, 4, 0, 2));
+        entity.add(new StatComponent(7, 8, 3, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1268,7 +1316,7 @@ public class EntityConstructor {
                 atlas.findRegion("blueLion2")
         }, Animation.PlayMode.LOOP, 0.7f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(12, 4, 5, 0, 2));
+        entity.add(new StatComponent(12, 4, 4, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -2201,6 +2249,30 @@ public class EntityConstructor {
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.weakenWave(entity)
+        })));
+
+        return entity;
+    }
+
+    public static Entity guardTower(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Guard Tower"));
+
+        entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("shadeTower"), true)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(6, 4, 0, 0, 0));
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimationSteamy(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.shieldWave(entity)
         })));
 
         return entity;
