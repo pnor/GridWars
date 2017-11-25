@@ -971,9 +971,83 @@ public class EntityConstructor {
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.bite(entity),
                 MoveConstructor.toxicBite(entity),
-                MoveConstructor.toxicBreathSnake(entity),
+                MoveConstructor.warpBite(entity),
                 MoveConstructor.berserkBite(entity)
         })));
+
+        return entity;
+    }
+
+    public static Entity dragonPneumaPlayer(int team, int altColor) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Draco Pneuma"));
+        if (altColor == 0) {
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("dragonAlt"),
+                    atlas.findRegion("dragonAlt2")
+            }, Animation.PlayMode.LOOP, 1f, true)));
+        } else {
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("dragon"),
+                    atlas.findRegion("dragon2")
+            }, Animation.PlayMode.LOOP, 1f, true)));
+        }
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(15, 10, 3, 1, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimationExplosive(entity, Color.CYAN),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.flash(entity),
+                MoveConstructor.dragonBreath2(entity),
+                MoveConstructor.raze(entity),
+                MoveConstructor.dragonFluxwave(entity)
+        })));
+        if (altColor == 0) {
+            entity.add(new PhaseComponent(
+                    new Phase(5, -999, new AnimationActor(new TextureRegion[]{
+                            atlas.findRegion("dragonAltUp"),
+                            atlas.findRegion("dragonAltUp2")},
+                            Animation.PlayMode.LOOP, .5f, true),
+                            new StatComponent(15, 10, 6, 0, 2)),
+                    new Phase(10, 5, new AnimationActor(new TextureRegion[]{
+                            atlas.findRegion("dragonAltGlow"),
+                            atlas.findRegion("dragonAlt2Glow")},
+                            Animation.PlayMode.LOOP, .6f, true),
+                            new StatComponent(15, 10, 3, 1, 2)),
+                    new Phase(15, 10, new AnimationActor(new TextureRegion[]{
+                            atlas.findRegion("dragonAlt"),
+                            atlas.findRegion("dragonAlt2")},
+                            Animation.PlayMode.LOOP, 1f, true),
+                            new StatComponent(15, 10, 2, 1, 1))
+            ));
+        } else {
+            entity.add(new PhaseComponent(
+                    new Phase(5, -999, new AnimationActor(new TextureRegion[]{
+                            atlas.findRegion("dragonUp"),
+                            atlas.findRegion("dragonUp2")},
+                            Animation.PlayMode.LOOP, .5f, true),
+                            new StatComponent(40, 10, 6, 0, 2)),
+                    new Phase(10, 5, new AnimationActor(new TextureRegion[]{
+                            atlas.findRegion("dragonGlow"),
+                            atlas.findRegion("dragon2Glow")},
+                            Animation.PlayMode.LOOP, .6f, true),
+                            new StatComponent(40, 10, 3, 1, 2)),
+                    new Phase(15, 10, new AnimationActor(new TextureRegion[]{
+                            atlas.findRegion("dragon"),
+                            atlas.findRegion("dragon2")},
+                            Animation.PlayMode.LOOP, 1f, true),
+                            new StatComponent(40, 10, 2, 1, 1))
+            ));
+        }
 
         return entity;
     }
@@ -1187,25 +1261,30 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimationExplosive(entity, Color.YELLOW),
+                DamageAnimationConstructor.deathAnimationExplosive(entity, Color.WHITE),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.flash(entity),
                 MoveConstructor.dragonBreath2(entity),
-                MoveConstructor.dragonRoar(entity),
-                MoveConstructor.spectralBlast(entity)
+                MoveConstructor.raze(entity),
+                MoveConstructor.dragonFluxwave(entity)
         })));
         entity.add(new PhaseComponent(
-                new Phase(20, -999, new AnimationActor(new TextureRegion[]{
+                new Phase(15, -999, new AnimationActor(new TextureRegion[]{
+                        atlas.findRegion("dragonUp"),
+                        atlas.findRegion("dragonUp2")},
+                        Animation.PlayMode.LOOP, .5f, true),
+                        new StatComponent(40, 10, 6, 0, 2)),
+                new Phase(25, 15, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("dragonGlow"),
                         atlas.findRegion("dragon2Glow")},
-                        Animation.PlayMode.LOOP, .7f, true),
-                        new StatComponent(40, 10, 5, 1, 2)),
-                new Phase(40, 20, new AnimationActor(new TextureRegion[]{
+                        Animation.PlayMode.LOOP, .6f, true),
+                        new StatComponent(40, 10, 3, 1, 2)),
+                new Phase(40, 25, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("dragon"),
                         atlas.findRegion("dragon2")},
                         Animation.PlayMode.LOOP, 1f, true),
-                        new StatComponent(40, 10, 3, 1, 1))
+                        new StatComponent(40, 10, 2, 1, 1))
         ));
 
         return entity;

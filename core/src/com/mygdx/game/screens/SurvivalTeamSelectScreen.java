@@ -32,6 +32,7 @@ import static com.mygdx.game.GridWars.*;
  * @author Phillip O'Reggio
  */
 public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
+
     private Label titleLbl;
 
     //team info
@@ -152,7 +153,6 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
                     if (actor != null) {
                         if (actor == characterBtns.get(0)) {
                             team.getEntities().add(EntityConstructor.canight(0, altNumber));
-                            //team.getEntities().add(EntityConstructor.orb(0));
                             characterPortraits.get(currentEntity).setDrawable(
                                     new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
                         } else if (actor == characterBtns.get(1)) {
@@ -488,6 +488,11 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
         return colorChoices.get(s.trim().toLowerCase());
     }
 
+    private boolean checkSecretCombo() {
+        //SHIFT left + SHIFT right + TAB
+        return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT) && Gdx.input.isKeyJustPressed(Input.Keys.TAB);
+    }
+
     @Override
     public void render(float dt) {
         super.render(dt);
@@ -497,5 +502,16 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
             altNumber = 1;
         else
             altNumber = 0;
+
+        //bonus survival character (only if game has been beaten) //TODO add in if game is beaten
+        if (checkSecretCombo() && team.getEntities().size <= 3) {
+            if (Gdx.input.isKeyPressed(Input.Keys.BACKSLASH))
+                team.getEntities().add(EntityConstructor.dragonPneumaPlayer(0, 1));
+            else
+                team.getEntities().add(EntityConstructor.dragonPneumaPlayer(0, 0));
+            characterPortraits.get(currentEntity).setDrawable(
+                    new TextureRegionDrawable(am.get(team.getEntities().peek()).actor.getSprite()));
+            currentEntity++;
+        }
     }
 }

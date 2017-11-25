@@ -18,6 +18,7 @@ public class StatusEffectConstructor {
     //TODO combine same status effects (offenseless and offenseless2 can be 1 method called offenseless that takes a parameter)
 
     //region Status Effects
+    //negative
     public static StatusEffect poison(int duration) {
         StatusEffect statusEffect = new StatusEffect("Poison", duration, new LerpColor(Color.GREEN, new Color(201f / 255f, 1f, 0f, 1f)), (e) -> {
             stm.get(e).hp -= 1;
@@ -116,54 +117,6 @@ public class StatusEffectConstructor {
         return effect;
     }
 
-    public static StatusEffect speedUp(int duration) {
-        StatusEffect effect = new StatusEffect("Quick", duration, new LerpColor(Color.WHITE, Color.CYAN, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 1, 2);
-        return effect;
-    }
-
-    public static StatusEffect speedUpAmp(int duration) {
-        StatusEffect effect = new StatusEffect("QuickII", duration, new LerpColor(Color.WHITE, Color.CYAN, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 1, 3);
-        return effect;
-    }
-
-    public static StatusEffect attackUp(int duration) {
-        StatusEffect effect = new StatusEffect("Power", duration, new LerpColor(Color.WHITE, Color.ORANGE, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 2, 1, 1);
-        return effect;
-    }
-
-    public static StatusEffect guardUp(int duration) {
-        StatusEffect effect = new StatusEffect("Guard", duration, new LerpColor(Color.WHITE, Color.BLUE, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 2, 1);
-        return effect;
-    }
-
-    public static StatusEffect guardUpAmp(int duration) {
-        StatusEffect effect = new StatusEffect("GuardII", duration, new LerpColor(Color.WHITE, Color.BLUE, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 3, 1);
-        return effect;
-    }
-
-    public static StatusEffect healthUp(int duration) {
-        StatusEffect effect = new StatusEffect("Durability", duration, new LerpColor(Color.WHITE, Color.GREEN, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(2, 1, 1, 1, 1);
-        return effect;
-    }
-
-    public static StatusEffect charged(int duration) {
-        StatusEffect effect = new StatusEffect("Charged", duration, new LerpColor(Color.ORANGE, Color.YELLOW, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 2, 2, 1, 2);
-        return effect;
-    }
-
-    public static StatusEffect supercharged(int duration) {
-        StatusEffect effect = new StatusEffect("Supercharged", duration, new LerpColor(Color.ORANGE, Color.CYAN, .3f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 2, 5, 1, 3);
-        return effect;
-    }
-
     public static StatusEffect berserk(int duration) {
         StatusEffect effect = new StatusEffect("Berserk", duration, new LerpColor(Color.RED, Color.BLUE, .2f, Interpolation.sine), (e) -> {
             stm.get(e).hp -= 1;
@@ -197,6 +150,81 @@ public class StatusEffectConstructor {
                 vm.get(e).shuffleAnimation.setPlaying(true, true);
         }, null);
         effect.setStatChanges(1, 0, 0, 0, 2);
+        return effect;
+    }
+
+    public static StatusEffect exhausted(int duration) {
+        StatusEffect effect = new StatusEffect("Exhausted", duration, new LerpColor(Color.BLACK, Color.LIGHT_GRAY, .3f, Interpolation.sineOut), (e) -> {
+            if (stm.has(e)) {
+                stm.get(e).sp = MathUtils.clamp(stm.get(e).hp - 1, 0, stm.get(e).getModMaxHp(e));
+            }
+            if (vm.has(e) && !vm.get(e).shuffleAnimation.getIsPlaying())
+                vm.get(e).shuffleAnimation.setPlaying(true, true);
+        }, (entity -> {
+            entity.sp -= 1;
+        }));
+        effect.setStatChanges(1, 1, 0, 0, .5f);
+        return effect;
+    }
+
+    //boost up
+    public static StatusEffect speedUp(int duration) {
+        StatusEffect effect = new StatusEffect("Quick", duration, new LerpColor(Color.WHITE, Color.CYAN, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
+        effect.setStatChanges(1, 1, 1, 1, 2);
+        return effect;
+    }
+
+    public static StatusEffect speedUp2(int duration) {
+        StatusEffect effect = new StatusEffect("Quick II", duration, new LerpColor(Color.WHITE, Color.CYAN, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
+        effect.setStatChanges(1, 1, 1, 1, 3);
+        return effect;
+    }
+
+    public static StatusEffect attackUp(int duration) {
+        StatusEffect effect = new StatusEffect("Power", duration, new LerpColor(Color.WHITE, Color.ORANGE, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
+        effect.setStatChanges(1, 1, 2, 1, 1);
+        return effect;
+    }
+
+    public static StatusEffect attackUp2(int duration) {
+        StatusEffect effect = new StatusEffect("Power II", duration, new LerpColor(Color.WHITE, Color.ORANGE, .25f, Interpolation.fade), (e) -> {/*nothing*/}, null);
+        effect.setStatChanges(1, 1, 3, 1, 1);
+        return effect;
+    }
+
+    public static StatusEffect attackUp3(int duration) {
+        StatusEffect effect = new StatusEffect("Power III", duration, new LerpColor(Color.WHITE, Color.RED, .15f, Interpolation.fade), (e) -> {/*nothing*/}, null);
+        effect.setStatChanges(1, 1, 4, 1, 1);
+        return effect;
+    }
+
+    public static StatusEffect guardUp(int duration) {
+        StatusEffect effect = new StatusEffect("Guard", duration, new LerpColor(Color.WHITE, Color.BLUE, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
+        effect.setStatChanges(1, 1, 1, 2, 1);
+        return effect;
+    }
+
+    public static StatusEffect guardUp2(int duration) {
+        StatusEffect effect = new StatusEffect("Guard II", duration, new LerpColor(Color.WHITE, Color.BLUE, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
+        effect.setStatChanges(1, 1, 1, 3, 1);
+        return effect;
+    }
+
+    public static StatusEffect healthUp(int duration) {
+        StatusEffect effect = new StatusEffect("Durability", duration, new LerpColor(Color.WHITE, Color.GREEN, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
+        effect.setStatChanges(2, 1, 1, 1, 1);
+        return effect;
+    }
+
+    public static StatusEffect charged(int duration) {
+        StatusEffect effect = new StatusEffect("Charged", duration, new LerpColor(Color.ORANGE, Color.YELLOW, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
+        effect.setStatChanges(1, 2, 2, 1, 2);
+        return effect;
+    }
+
+    public static StatusEffect supercharged(int duration) {
+        StatusEffect effect = new StatusEffect("Supercharged", duration, new LerpColor(Color.ORANGE, Color.CYAN, .3f, Interpolation.fade), (e) -> {/*nothing*/}, null);
+        effect.setStatChanges(1, 2, 5, 1, 3);
         return effect;
     }
 
@@ -241,20 +269,6 @@ public class StatusEffectConstructor {
             entity.sp += 2;
         }));
         effect.setStatChanges(1, 1, 1, 1, 1);
-        return effect;
-    }
-
-    public static StatusEffect exhausted(int duration) {
-        StatusEffect effect = new StatusEffect("Exhausted", duration, new LerpColor(Color.BLACK, Color.LIGHT_GRAY, .3f, Interpolation.sineOut), (e) -> {
-            if (stm.has(e)) {
-                stm.get(e).sp = MathUtils.clamp(stm.get(e).hp - 1, 0, stm.get(e).getModMaxHp(e));
-            }
-            if (vm.has(e) && !vm.get(e).shuffleAnimation.getIsPlaying())
-                vm.get(e).shuffleAnimation.setPlaying(true, true);
-        }, (entity -> {
-            entity.sp -= 1;
-        }));
-        effect.setStatChanges(1, 1, 0, 0, .5f);
         return effect;
     }
     //endregion
