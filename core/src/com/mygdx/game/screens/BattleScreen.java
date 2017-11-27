@@ -735,6 +735,9 @@ public class BattleScreen implements Screen {
         //endregion
     }
 
+    //region Render Loop Methods
+    //endregion
+
     //region selection related
     public void changeSelectedEntity(Entity e) {
         //Undoing effects of selecting previous entity---
@@ -1477,12 +1480,24 @@ public class BattleScreen implements Screen {
         BoardAndRuleConstructor.clear();
     }
 
+    /**
+     * Disposes of resources used by {@link BattleScreen} to prepare for the next screen
+     */
     public void goToNextScreen() {
         disposeLerpColorManager();
         MoveConstructor.clear();
         EntityConstructor.clear();
         DamageAnimationConstructor.clear();
         GRID_WARS.setScreen(new EndResultsScreen(teams, teams.indexOf(rules.checkWinConditions(), true), rules, GRID_WARS));
+    }
+
+    /**
+     * Adds a entity meant to act as a visual particle effect (Ex. a sparkle or explosion). This method is not how
+     * {@link Move}s and Death/Damage visuals act.
+     * @param e Entity being added
+     */
+    public void addParticleEntity(Entity e) {
+        engine.addEntity(e);
     }
 
 

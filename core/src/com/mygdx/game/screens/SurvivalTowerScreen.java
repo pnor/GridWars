@@ -95,7 +95,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
     public void show() {
         super.show();
 
-        //set up engine with more systems
+        //set up engine with more systems (For particle effects)
         engine.addSystem(new EventSystem());
         engine.addSystem(new LifetimeSystem());
         engine.addSystem(new MovementSystem());
@@ -143,6 +143,9 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                                 stm.get(e).hp = stm.get(e).maxHP;
                                 status.get(e).removeAll(e);
                                 stm.get(e).setAlive();
+                            }
+                            for (Image image : teamImages) {
+                                image.setColor(Color.WHITE);
                             }
                         }
                     } else if (actor == btnSpUp) {
