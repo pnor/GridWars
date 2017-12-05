@@ -18,13 +18,14 @@ import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
 
 /**
+ * Screen containing buttons to go to Survival mode's high score table, or start the Survival
  * @author Phillip O'Reggio
  */
-public class ModeSelectScreen extends MenuScreen implements Screen {
+public class SurvivalModeOptions extends MenuScreen implements Screen {
     private Label titleLbl;
-    private HoverButton twoPlayerDeathMatch, twoPlayerZones, survival;
+    private HoverButton startBtn, highScoreBtn;
 
-    public ModeSelectScreen(GridWars gridWars) {
+    public SurvivalModeOptions(GridWars gridWars) {
         super(gridWars);
     }
 
@@ -35,20 +36,17 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
         titleLbl = new Label("Select A Game Mode", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
-        twoPlayerDeathMatch = new HoverButton("2-Player Death Match", skin, Color.CYAN, Color.DARK_GRAY);
-        twoPlayerZones = new HoverButton("2-Player Zone Match", skin, Color.GREEN, Color.DARK_GRAY);
-        survival = new HoverButton("Survival", skin, Color.NAVY, Color.DARK_GRAY);
+        startBtn = new HoverButton("Start", skin, Color.LIGHT_GRAY, Color.BLUE);
+        highScoreBtn = new HoverButton("High Scores", skin, Color.LIGHT_GRAY, Color.ORANGE);
 
         ChangeListener listener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
-                    if (actor == twoPlayerDeathMatch) {
-                        GRID_WARS.setScreen(new TeamSelectScreen(2, false, GRID_WARS));
-                    } else if (actor == twoPlayerZones) {
-                        GRID_WARS.setScreen(new TeamSelectScreen(2, true, GRID_WARS));
-                    } else if (actor == survival) {
-                        GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
+                    if (actor == startBtn) {
+                        GRID_WARS.setScreen(new SurvivalTeamSelectScreen(GRID_WARS));
+                    } else if (actor == highScoreBtn) {
+                        GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
                     }
                 }
             }
@@ -56,19 +54,17 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
         Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
         backgroundLay.setColor(Color.DARK_GRAY);
         Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeHoriz")));
-        topLayer.setColor(Color.GRAY);
+        topLayer.setColor(Color.BLUE);
         background = new Background(backgroundLay,
                 new Sprite[]{topLayer},
                 new BackType[]{BackType.SCROLL_HORIZONTAL},
                 null, null);
 
-        twoPlayerDeathMatch.addListener(listener);
-        twoPlayerZones.addListener(listener);
-        survival.addListener(listener);
+        startBtn.addListener(listener);
+        highScoreBtn.addListener(listener);
         table.add(titleLbl).padBottom(40).row();
-        table.add(twoPlayerDeathMatch).size(350, 90).padBottom(10f).row();
-        table.add(twoPlayerZones).size(350, 90).padBottom(10f).row();
-        table.add(survival).size(350, 90).padBottom(10f).row();
+        table.add(startBtn).size(350, 90).padBottom(10f).row();
+        table.add(highScoreBtn).size(350, 90).padBottom(10f).row();
 
     }
 }

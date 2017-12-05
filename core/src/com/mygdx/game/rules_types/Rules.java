@@ -67,7 +67,7 @@ public abstract class Rules {
                             phase.get(e).currentPhaseIndex = i;
                             BoardComponent.boards.getBoard().remove(am.get(e).actor, bm.get(e).pos.r, bm.get(e).pos.c);
                             curPhase.applyPhase(e);
-                            //BoardComponent.boards.scaleEntity(e);
+                            BoardComponent.boards.scaleEntity(e);
                             BoardComponent.boards.getBoard().add(am.get(e).actor, bm.get(e).pos.r, bm.get(e).pos.c);
                             break;
                         }

@@ -43,19 +43,25 @@ import static com.mygdx.game.GridWars.*;
  */
 public class SurvivalTowerScreen extends MenuScreen implements Screen {
     private Team team;
-    Image[] teamImages;
+    private Image[] teamImages;
     private int level;
     private int healingPowerUp;
     private int spPowerUp;
     private Sprite backgroundProgressBar;
+    //score keeping
+    private int points;
+    private int numberOfTurns;
 
     //TODO add highscores like statistics like highest floor reach, total turn count, damage taken, attacks used, etc.
-    public SurvivalTowerScreen(Team playerTeam, int towerLevel, int healingPowerUpAmount, int spUpPowerUpAmount, GridWars game) {
+    public SurvivalTowerScreen(Team playerTeam, int towerLevel, int healingPowerUpAmount, int spUpPowerUpAmount,
+                               int points, int turnCount, GridWars game) {
         super(game);
         team = playerTeam;
         level = towerLevel;
         healingPowerUp = healingPowerUpAmount;
         spPowerUp = spUpPowerUpAmount;
+        this.points = points;
+        numberOfTurns = turnCount;
     }
 
     @Override
@@ -160,9 +166,12 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                     } else if (actor == btnContinue) {
                         Team attackingObjectsTeam = getFloorLevelAttackingObjects();
                         if (attackingObjectsTeam == null) // floor has no attacking objects
-                            GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), getComputerDifficulty(), level, healingPowerUp, spPowerUp, GRID_WARS));
+                            GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), getComputerDifficulty(),
+                                    level, healingPowerUp, spPowerUp, points, numberOfTurns, GRID_WARS));
                         else
-                            GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), attackingObjectsTeam, getComputerDifficulty(), level, healingPowerUp, spPowerUp, GRID_WARS));
+                            GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), attackingObjectsTeam,
+                                    getComputerDifficulty(), level, healingPowerUp, spPowerUp,  points, numberOfTurns,
+                                    GRID_WARS));
                     }
                 }
             }
@@ -183,7 +192,9 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         offsetTable.add();
         offsetTable.add().row();
         offsetTable.add(titleLbl).colspan(4).padBottom(40).row();
-        offsetTable.add(new Label("Level " + level, skin)).colspan(4).padBottom(20).row();
+        offsetTable.add(new Label("Level " + level, skin)).colspan(4).padBottom(10).row();
+        offsetTable.add(new Label("Points : " + points, skin)).colspan(4).padBottom(10).row();
+        offsetTable.add(new Label("Turn Count : " + numberOfTurns, skin)).colspan(4).padBottom(20).row();
         offsetTable.add(teamImages[0]).padRight(20f).padBottom(20f);
         offsetTable.add(teamImages[1]).padRight(20f).padBottom(20f);
         offsetTable.add(teamImages[2]).padRight(20f).padBottom(20f);
@@ -759,7 +770,6 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             Vector2 position;
             position = teamImages[i].localToStageCoordinates(new Vector2(0, 0));
             position.add(-teamImages[i].getWidth(), -teamImages[i].getHeight());
-            //position.add(300, 300);
             System.out.println(position);
             engine.addEntity(createParticle(position, particleType));
         }

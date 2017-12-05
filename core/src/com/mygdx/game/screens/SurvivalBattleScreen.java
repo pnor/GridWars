@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -20,6 +21,7 @@ import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.LerpColor;
 
 import static com.mygdx.game.ComponentMappers.sm;
+import static com.mygdx.game.ComponentMappers.stm;
 import static com.mygdx.game.GridWars.*;
 
 /**
@@ -31,20 +33,27 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
     private int level;
     private int healthPowerUp;
     private int spPowerUp;
+    //score keeping
+    private int points;
+    private int numberOfTurns;
 
-    public SurvivalBattleScreen(Team team, Team enemyTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, GridWars game) {
+    public SurvivalBattleScreen(Team team, Team enemyTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, int points, int turnCount, GridWars game) {
         super(new Array<Team>(new Team[]{team, enemyTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty)}, game);
         healthPowerUp = healthPowerUpNum;
         spPowerUp = spPowerUpNum;
         level = floorLevel;
+        this.points = points;
+        numberOfTurns = turnCount;
     }
 
-    public SurvivalBattleScreen(Team team, Team enemyTeam, Team objectTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, GridWars game) {
+    public SurvivalBattleScreen(Team team, Team enemyTeam, Team objectTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, int points, int turnCount, GridWars game) {
         super(new Array<Team>(new Team[]{team, enemyTeam, objectTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty), new Vector2(2, 0)}, game);
         healthPowerUp = healthPowerUpNum;
         spPowerUp = spPowerUpNum;
         level = floorLevel;
         computer.setIndexOfFirstAttackingTeams(2);
+        this.points = points;
+        numberOfTurns = turnCount;
     }
 
     @Override
@@ -97,15 +106,27 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
     @Override
     public void doScreenTransitionAnimation() {
         if (rules.checkWinConditions() == teams.first()) { //victory
-            Entity blackCover = new Entity();
-            Sprite darkness = (atlas.createSprite("DarkTile"));
-            darkness.setColor(new Color(0, 0, 0, 0));
-            blackCover.add(new SpriteComponent(darkness));
-            blackCover.add(new PositionComponent(new Vector2(0, 0), stage.getHeight(), stage.getWidth(), 0));
-            blackCover.add(new EventComponent(.005f, 0, true, true, (entity, engine) -> {
-                sm.get(entity).sprite.setColor(sm.get(entity).sprite.getColor().cpy().add(0, 0, 0, .05f));
-            }));
-            engine.addEntity(blackCover);
+            if (level == 50) { //last stage transition
+                Entity whiteCover = new Entity();
+                Sprite brightness = (atlas.createSprite("LightTile"));
+                whiteCover.add(new SpriteComponent(brightness));
+                brightness.setColor(new Color(1, 1, 1, 0));
+                whiteCover.add(new PositionComponent(new Vector2(0, 0), stage.getHeight(), stage.getWidth(), 0));
+                whiteCover.add(new EventComponent(.005f, 0, true, true, (entity, engine) -> {
+                    sm.get(entity).sprite.setColor(sm.get(entity).sprite.getColor().cpy().add(0, 0, 0, .05f));
+                }));
+                engine.addEntity(whiteCover);
+            } else { //all other transition
+                Entity blackCover = new Entity();
+                Sprite darkness = (atlas.createSprite("DarkTile"));
+                darkness.setColor(new Color(0, 0, 0, 0));
+                blackCover.add(new SpriteComponent(darkness));
+                blackCover.add(new PositionComponent(new Vector2(0, 0), stage.getHeight(), stage.getWidth(), 0));
+                blackCover.add(new EventComponent(.005f, 0, true, true, (entity, engine) -> {
+                    sm.get(entity).sprite.setColor(sm.get(entity).sprite.getColor().cpy().add(0, 0, 0, .05f));
+                }));
+                engine.addEntity(blackCover);
+            }
         } else { //loss
             Entity whiteCover = new Entity();
             Sprite brightness = (atlas.createSprite("LightTile"));
@@ -121,14 +142,25 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
 
     @Override
     public void goToNextScreen() {
+        numberOfTurns += rules.getTurnCount();
+        points += calculatePoints();
         if (rules.checkWinConditions() == teams.first()) { //victory
             if (level < 50)
                 //is not 50th floor:
-                GRID_WARS.setScreen(new SurvivalTowerScreen(teams.first(), ++level, healthPowerUp++, spPowerUp++, GRID_WARS));
+                GRID_WARS.setScreen(new SurvivalTowerScreen(teams.first(), ++level, healthPowerUp++, spPowerUp++, points, numberOfTurns, GRID_WARS));
             else
-                GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
+                GRID_WARS.setScreen(new SurvivalResultsScreen(teams.first(), GRID_WARS, points, numberOfTurns));
         } else { //loss
             GRID_WARS.setScreen(new GameOverScreen(level, GRID_WARS));
         }
+    }
+
+    public int calculatePoints() {
+        int points = 0;
+        points += MathUtils.clamp((30 - rules.getTurnCount()) * 30, 0, 900);
+        for (Entity e : teams.first().getEntities()) {
+            points += stm.get(e).hp * 20;
+        }
+        return points;
     }
 }

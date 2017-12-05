@@ -63,11 +63,11 @@ public class GridWars extends Game {
 			setScreen(new TitleScreen(this));
 		if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) {
 			DEBUG_halfSpeed = !DEBUG_halfSpeed;
-			System.out.println("---HALF SPEED---");
+			System.out.println("---HALF SPEED = " + DEBUG_halfSpeed + "---");
 		}
 		if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) {
 			DEBUG_doubleSpeed = !DEBUG_doubleSpeed;
-			System.out.println("+++DOUBLE SPEED+++");
+			System.out.println("+++DOUBLE SPEED = " + DEBUG_doubleSpeed + "+++");
 		}
 	}
 

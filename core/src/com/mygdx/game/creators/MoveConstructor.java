@@ -10103,7 +10103,7 @@ public class MoveConstructor {
 
                 engine.addEntity(fist);
             }
-        }, .01f, 70);
+        }, .01f, 50);
 
         VisualEvent largerRadiusBooms = new VisualEvent(new VisualEffect() {
             @Override
@@ -10132,7 +10132,7 @@ public class MoveConstructor {
 
                 engine.addEntity(boom);
             }
-        }, .004f, 60);
+        }, .004f, 40);
 
         VisualEvent sparkleOut = new VisualEvent(new VisualEffect() {
             private float direction;
@@ -10200,7 +10200,7 @@ public class MoveConstructor {
 
                 engine.addEntity(sparkle);
             }
-        }, .09f, 15);
+        }, .09f, 7);
 
         VisualEvent sparkle = new VisualEvent(new VisualEffect() {
             @Override
@@ -10229,7 +10229,7 @@ public class MoveConstructor {
 
                 engine.addEntity(sparkle);
             }
-        }, .03f, 25);
+        }, .03f, 15);
 
         return new Move("Spectral Flash", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {

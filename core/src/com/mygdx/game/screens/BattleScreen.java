@@ -499,170 +499,17 @@ public class BattleScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //region Sync code board and ui board
-        int rowSize = BoardComponent.boards.getBoard().getRowSize();
-        int colSize = BoardComponent.boards.getBoard().getColumnSize();
-        int curRow = 0;
-        int cur = 0;
-        Array<Cell> cells = boardTable.getCells();
-
-        for (int i = 0; i < BoardComponent.boards.getBoard().getRowSize() * BoardComponent.boards.getBoard().getColumnSize(); i++) {
-            cells.get(i).setActor(BoardComponent.boards.getBoard().getTile(curRow, cur % rowSize));
-            cur += 1;
-            curRow = cur / colSize;
-        }
-        boardTable.getCells();
-        //endregion
-
-        //region player input (selection, attacks, etc.)
-        if (!gameHasEnded && !playingComputerTurn) {
-            //update last ENTITY selected --- (Selecting an Entity)
-            for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
-                if (Visuals.visualsArePlaying == 0) {
-                    if (am.get(e).actor.getLastSelected()) {
-                        changeSelectedEntity(e);
-                        am.get(e).actor.setLastSelected(false);
-                    }
-                }
-            }
-
-            //update last TILE selected --- (Moving Entity by clicking)
-            if (selectedEntity != null) {
-                for (Tile t : BoardComponent.boards.getBoard().getTiles()) {
-                    if (t.getLastSelected()) {
-                        t.setLastSelected(false);
-                        //remove highlighted tiles
-                        removeMovementTiles();
-                        //move Entity location
-                        BoardComponent.boards.move(selectedEntity, new BoardPosition(t.getRow(), t.getColumn()));
-                        state.get(selectedEntity).canMove = false;
-                    }
-                }
-            }
-
-            //updating attack squares
-            if (!mayAttack(selectedEntity) && attacksEnabled) {
-                disableAttacks();
-            } else if (mayAttack(selectedEntity) && !attacksEnabled && Visuals.visualsArePlaying == 0)
-                enableAttacks();
-
-            if (!hoverChanged) {
-                if (attackBtn1.getHover()) {
-                    moveHover = 0;
-                    showAttackTiles();
-                    hoverChanged = true;
-                } else if (attackBtn2.getHover()) {
-                    moveHover = 1;
-                    showAttackTiles();
-                    hoverChanged = true;
-                } else if (attackBtn3.getHover()) {
-                    moveHover = 2;
-                    showAttackTiles();
-                    hoverChanged = true;
-                } else if (attackBtn4.getHover()) {
-                    moveHover = 3;
-                    showAttackTiles();
-                    hoverChanged = true;
-                }
-            }
-            if (hoverChanged && !((attackBtn1.getHover() || attackBtn2.getHover() || attackBtn3.getHover() || attackBtn4.getHover()))) {
-                removeAttackTiles();
-                moveHover = -1;
-                hoverChanged = false;
-            }
-
-            if (selectedEntity != null) {
-                //show selected stats ---
-                if (!checkedStats) {
-                    updateStatsAndMoves();
-                    checkedStats = true;
-                }
-            }
-        }
-        //endregion
-
-        //region updating computer Turn
+        syncBoards();
+        if (!gameHasEnded && !playingComputerTurn)
+            processPlayerInput();
         if (playingComputerTurn && !computer.getProcessing())
-            processComputerTurn(delta);
-        //endregion
-
-        //region playing current move animation
-        if (currentMove != null) {
-            if (currentMove.getVisuals().getIsPlaying()) {
-                currentMove.updateVisuals(delta);
-                currentMove.getVisuals().play();
-            } else {
-                currentMove.getVisuals().reset();
-                if (!playingComputerTurn)
-                    enableUI();
-                if (selectedEntity != null)
-                    updateStatsAndMoves();
-                currentMove = null;
-            }
-        }
-        //endregion
-
-        //region Hot keys
-        if (!gameHasEnded) { //Hot Keys should not work while game has ended
-            // During player turn and no Visuals
-            if (!playingComputerTurn && Visuals.visualsArePlaying == 0) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) { //SHIFT : Next turn hotkey
-                    removeAttackTiles();
-                    nextTurn();
-                }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.D)) { //D : Scroll though forward
-                    hotkeyTeamsIndex = (byte) ((hotkeyTeamsIndex + 1) % TOTAL_ENTITIES_ON_TEAMS);
-                    changeSelectedEntity(getEntityFromIndex(true));
-                }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.A)) { //A : Scroll though backward
-                    hotkeyTeamsIndex -= 1;
-                    if (hotkeyTeamsIndex < 0) hotkeyTeamsIndex = (byte) (TOTAL_ENTITIES_ON_TEAMS - 1);
-                    changeSelectedEntity(getEntityFromIndex(false));
-                }
-            }
-        }
-        //endregion
-
-        //region update everything. (Graphics, engine, GRID_WARS.stage)
-        background.update(delta);
-        stage.act(delta);
-        lerpColorManager.update(delta);
-        engine.getSystem(DrawingSystem.class).drawBackground(background, delta);
-        stage.draw();
-        engine.update(delta);
-        //endregion
-
-        //region Handling dead entities
-        for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
-            if (stm.has(e) && !stm.get(e).alive && stm.get(e).readyToRemoveFromGame) {
-                BoardComponent.boards.remove(e);
-                engine.removeEntity(e);
-                if (nm.has(e)) //TODO make death messages not overwrite whatever message is supposed to show. perhaps have a message queue thing
-                    infoLbl.setText(nm.get(e).name + " has been defeated!");
-            }
-        }
-        //endregion
-
-        //region check win conditions and end game (Includes screen transitions, screen change, etc.)
-        if (rules.checkWinConditions() != null && currentMove == null) {
-            if (!gameHasEnded) {
-                System.out.println("-------------------------------GAME HAS ENDED---------------------------------");
-                endTurnBtn.setDisabled(true);
-                gameHasEnded = true;
-            }
-
-            //fade to black
-            if (changeScreenTimer >= 2)
-                doScreenTransitionAnimation();
-
-            //go to results screen
-            if (changeScreenTimer >= 3)
-                goToNextScreen();
-
-            if (Visuals.visualsArePlaying == 0)
-                changeScreenTimer += delta;
-        }
-        //endregion
+            updateComputerTurn(delta);
+        playCurrentMoveAnimation(delta);
+        if (!gameHasEnded) //Hot Keys should not work while game has ended
+            checkHotKeys();
+        updateAndDraw(delta);
+        handleDeadEntities();
+        checkWinConditions(delta);
 
         //region Debug
         //checking if things are working as intended
@@ -736,6 +583,189 @@ public class BattleScreen implements Screen {
     }
 
     //region Render Loop Methods
+
+    /**
+     * Syncs up the BoardComponent with the board displayed on the screen.
+     */
+    protected void syncBoards() {
+        int rowSize = BoardComponent.boards.getBoard().getRowSize();
+        int colSize = BoardComponent.boards.getBoard().getColumnSize();
+        int curRow = 0;
+        int cur = 0;
+        Array<Cell> cells = boardTable.getCells();
+
+        for (int i = 0; i < BoardComponent.boards.getBoard().getRowSize() * BoardComponent.boards.getBoard().getColumnSize(); i++) {
+            cells.get(i).setActor(BoardComponent.boards.getBoard().getTile(curRow, cur % rowSize));
+            cur += 1;
+            curRow = cur / colSize;
+        }
+        boardTable.getCells();
+    }
+
+    /**
+     * Processes the player input. If the player clicks an entity,
+     * it will be selected, and its information displayed. If the player hovers their cursor on the attack buttons, it will
+     * show the range, as long the buttons are enabled.
+     */
+    protected void processPlayerInput() {
+        //update last ENTITY selected --- (Selecting an Entity)
+        for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
+            if (Visuals.visualsArePlaying == 0) {
+                if (am.get(e).actor.getLastSelected()) {
+                    changeSelectedEntity(e);
+                    am.get(e).actor.setLastSelected(false);
+                }
+            }
+        }
+
+        //update last TILE selected --- (Moving Entity by clicking)
+        if (selectedEntity != null) {
+            for (Tile t : BoardComponent.boards.getBoard().getTiles()) {
+                if (t.getLastSelected()) {
+                    t.setLastSelected(false);
+                    //remove highlighted tiles
+                    removeMovementTiles();
+                    //move Entity location
+                    BoardComponent.boards.move(selectedEntity, new BoardPosition(t.getRow(), t.getColumn()));
+                    state.get(selectedEntity).canMove = false;
+                }
+            }
+        }
+
+        //updating attack squares
+        if (!mayAttack(selectedEntity) && attacksEnabled) {
+            disableAttacks();
+        } else if (mayAttack(selectedEntity) && !attacksEnabled && Visuals.visualsArePlaying == 0)
+            enableAttacks();
+
+        if (!hoverChanged) {
+            if (attackBtn1.getHover()) {
+                moveHover = 0;
+                showAttackTiles();
+                hoverChanged = true;
+            } else if (attackBtn2.getHover()) {
+                moveHover = 1;
+                showAttackTiles();
+                hoverChanged = true;
+            } else if (attackBtn3.getHover()) {
+                moveHover = 2;
+                showAttackTiles();
+                hoverChanged = true;
+            } else if (attackBtn4.getHover()) {
+                moveHover = 3;
+                showAttackTiles();
+                hoverChanged = true;
+            }
+        }
+        if (hoverChanged && !((attackBtn1.getHover() || attackBtn2.getHover() || attackBtn3.getHover() || attackBtn4.getHover()))) {
+            removeAttackTiles();
+            moveHover = -1;
+            hoverChanged = false;
+        }
+
+        if (selectedEntity != null) {
+            //show selected stats ---
+            if (!checkedStats) {
+                updateStatsAndMoves();
+                checkedStats = true;
+            }
+        }
+    }
+
+    /**
+     * Updates the computer with the delta time.
+     */
+    protected void updateComputerTurn(float deltaTime) {
+        processComputerTurn(deltaTime);
+    }
+
+    /**
+     * Plays a Move's animation if an entity used a move. When a move is done playing, {@code currentMove} is set to null.
+     */
+    protected void playCurrentMoveAnimation(float deltaTime) {
+        if (currentMove != null) {
+            if (currentMove.getVisuals().getIsPlaying()) {
+                currentMove.updateVisuals(deltaTime);
+                currentMove.getVisuals().play();
+            } else {
+                currentMove.getVisuals().reset();
+                if (!playingComputerTurn)
+                    enableUI();
+                if (selectedEntity != null)
+                    updateStatsAndMoves();
+                currentMove = null;
+            }
+        }
+    }
+
+    /**
+     * Checks if any hot keys have been pressed.
+     */
+    protected void checkHotKeys() {
+        // During player turn and no Visuals
+        if (!playingComputerTurn && Visuals.visualsArePlaying == 0) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) { //SHIFT : Next turn hotkey
+                removeAttackTiles();
+                nextTurn();
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.D)) { //D : Scroll though forward
+                hotkeyTeamsIndex = (byte) ((hotkeyTeamsIndex + 1) % TOTAL_ENTITIES_ON_TEAMS);
+                changeSelectedEntity(getEntityFromIndex(true));
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.A)) { //A : Scroll though backward
+                hotkeyTeamsIndex -= 1;
+                if (hotkeyTeamsIndex < 0) hotkeyTeamsIndex = (byte) (TOTAL_ENTITIES_ON_TEAMS - 1);
+                changeSelectedEntity(getEntityFromIndex(false));
+            }
+        }
+    }
+
+    protected void updateAndDraw(float deltaTime) {
+        background.update(deltaTime);
+        stage.act(deltaTime);
+        lerpColorManager.update(deltaTime);
+        engine.getSystem(DrawingSystem.class).drawBackground(background, deltaTime);
+        stage.draw();
+        engine.update(deltaTime);
+    }
+
+    /**
+     * Remove dead entities from the board and engine once they have finished playing animations.
+     */
+    protected void handleDeadEntities() {
+        for (Entity e : BoardComponent.boards.getCodeBoard().getEntities()) {
+            if (stm.has(e) && !stm.get(e).alive && stm.get(e).readyToRemoveFromGame) {
+                BoardComponent.boards.remove(e);
+                engine.removeEntity(e);
+                if (nm.has(e)) //TODO make death messages not overwrite whatever message is supposed to show. perhaps have a message queue thing
+                    infoLbl.setText(nm.get(e).name + " has been defeated!");
+            }
+        }
+    }
+
+    /**
+     * Checks the win condition of the game. If the game has ended, then it does a transition to the next screen.
+     */
+    protected void checkWinConditions(float deltaTime) {
+        if (rules.checkWinConditions() != null && currentMove == null) {
+            if (!gameHasEnded) {
+                System.out.println("-------------------------------GAME HAS ENDED---------------------------------");
+                endTurnBtn.setDisabled(true);
+                gameHasEnded = true;
+            }
+
+            //fade to black
+            if (changeScreenTimer >= 2)
+                doScreenTransitionAnimation();
+
+            //go to results screen
+            if (changeScreenTimer >= 3)
+                goToNextScreen();
+
+            if (Visuals.visualsArePlaying == 0)
+                changeScreenTimer += deltaTime;
+        }
+    }
     //endregion
 
     //region selection related

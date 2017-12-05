@@ -1003,7 +1003,7 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimationExplosive(entity, Color.CYAN),
+                DamageAnimationConstructor.deathAnimationFinal(entity),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.flash(entity),
@@ -1035,17 +1035,17 @@ public class EntityConstructor {
                             atlas.findRegion("dragonUp"),
                             atlas.findRegion("dragonUp2")},
                             Animation.PlayMode.LOOP, .5f, true),
-                            new StatComponent(40, 10, 6, 0, 2)),
+                            new StatComponent(15, 10, 6, 0, 2)),
                     new Phase(10, 5, new AnimationActor(new TextureRegion[]{
                             atlas.findRegion("dragonGlow"),
                             atlas.findRegion("dragon2Glow")},
                             Animation.PlayMode.LOOP, .6f, true),
-                            new StatComponent(40, 10, 3, 1, 2)),
+                            new StatComponent(15, 10, 3, 1, 2)),
                     new Phase(15, 10, new AnimationActor(new TextureRegion[]{
                             atlas.findRegion("dragon"),
                             atlas.findRegion("dragon2")},
                             Animation.PlayMode.LOOP, 1f, true),
-                            new StatComponent(40, 10, 2, 1, 1))
+                            new StatComponent(15, 10, 2, 1, 1))
             ));
         }
 
@@ -1261,7 +1261,7 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimationExplosive(entity, Color.WHITE),
+                DamageAnimationConstructor.deathAnimationFinal(entity),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.flash(entity),
