@@ -4,7 +4,7 @@ Grid Wars is a Chess-Like Turn-Based game written in Java using libgdx libraries
 I made the project to work on when I have free time, so I could familiarize myself more with the Java and programming in gneneral while working towards a cool end product. 
 
 ## Running the Game
-Head over to the releases sections, then download the jar file of the most recent version. Make sure you have at least Java 8 installed.
+Head over to the Releases sections, then download the jar file of the most recent version. Make sure you have at least Java 8 installed.
 
 ## How to Play
 After selecting teams in the Team Select menu, you will be placed right into the Battle Screen. Your goal is to defeat the other team by defeating all members of the opposing team (or place one of your pieces onto the opponent's Zone if it is a Zone Match).
