@@ -657,5 +657,11 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
             altNumber = 1;
         else
             altNumber = 0;
+
+        //back a screen
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
+        }
+
     }
 }

@@ -149,9 +149,9 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
                 //is not 50th floor:
                 GRID_WARS.setScreen(new SurvivalTowerScreen(teams.first(), ++level, healthPowerUp++, spPowerUp++, points, numberOfTurns, GRID_WARS));
             else
-                GRID_WARS.setScreen(new SurvivalResultsScreen(teams.first(), GRID_WARS, points, numberOfTurns));
+                GRID_WARS.setScreen(new SurvivalResultsScreen(51, points, numberOfTurns, teams.first(), GRID_WARS));
         } else { //loss
-            GRID_WARS.setScreen(new GameOverScreen(level, GRID_WARS));
+            GRID_WARS.setScreen(new GameOverScreen(level, points, numberOfTurns, teams.get(0), GRID_WARS));
         }
     }
 

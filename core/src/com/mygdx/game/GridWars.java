@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.highscores.HighScoreManager;
 import com.mygdx.game.screens.TitleScreen;
 import com.mygdx.game.ui.Background;
 
@@ -27,6 +28,9 @@ public class GridWars extends Game {
 	public static boolean DEBUG_halfSpeed;
 	public static boolean DEBUG_doubleSpeed;
 
+	//high scores
+	public static HighScoreManager highScoreManager;
+
 	@Override
 	public void create() {
 		stage = new Stage();
@@ -38,10 +42,12 @@ public class GridWars extends Game {
 		skin.addRegions( new TextureAtlas("uiskin.atlas"));
 		atlas = new TextureAtlas(Gdx.files.internal("GDSprites.pack"));
 		backAtlas = new TextureAtlas(Gdx.files.internal("BackPack.pack"));
-
 		//set up options related things
 		Background.setAnimateBackground(Gdx.app.getPreferences("Options").getBoolean("Animate Background"));
-
+		//set up highscore things
+		highScoreManager = new HighScoreManager();
+		highScoreManager.prepopulate();
+		highScoreManager.saveHighScores();
 		setScreen(new TitleScreen(this));
 	}
 
@@ -58,8 +64,8 @@ public class GridWars extends Game {
 				getScreen().render(Gdx.graphics.getDeltaTime() * .5f);
 		} else
 			getScreen().render(Gdx.graphics.getDeltaTime());
-		//debug
-		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+		//debug --
+		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB) && Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT))
 			setScreen(new TitleScreen(this));
 		if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) {
 			DEBUG_halfSpeed = !DEBUG_halfSpeed;

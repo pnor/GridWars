@@ -1,6 +1,7 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -67,4 +68,14 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
         table.add(highScoreBtn).size(350, 90).padBottom(10f).row();
 
     }
+
+    @Override
+    public void render(float deltaTime) {
+        super.render(deltaTime);
+        //go back a screen
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
+        }
+    }
+
 }

@@ -1,8 +1,8 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -11,14 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
-import com.mygdx.game.misc.HighScore;
+import com.mygdx.game.highscores.HighScore;
 
 import static com.mygdx.game.GridWars.atlas;
+import static com.mygdx.game.GridWars.highScoreManager;
 
 /**
+ * Screen that displays the top 5 highscores.
  * @author Phillip O'Reggio
  */
 public class HighScoreScreen extends MenuScreen implements Screen {
@@ -36,39 +37,59 @@ public class HighScoreScreen extends MenuScreen implements Screen {
         Label lblTitle;
         Table scoreTable = new Table();
 
-        //prepopulate
-        prepopulateHighScores();
-
         //get high scores
-        Json json = new Json();
-        FileHandle scoreFile = Gdx.files.local("GridWarsHighScores.json");
-        String jsonScores = scoreFile.readString();
-        Array<HighScore> highScores = json.fromJson(Array.class, jsonScores);
+        Array<HighScore> highScores = highScoreManager.getHighScores();
 
         //title
         param.size = 50;
         lblTitle = new Label("High Scores", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
 
-        //put in each score into table
+        //different font sizes
         param.size = 16;
         BitmapFont smallFont = fontGenerator.generateFont(param);
         param.size = 20;
         BitmapFont bigFont = fontGenerator.generateFont(param);
-        scoreTable.add().colspan(7).row();
+        //constant spacing values
+        final float HORIZ_SPACING = 150f;
+        final float HORIZ_SPACING_BETWEEN_MEMBERS = 9f;
+        final float VERT_SPACING = 40f;
+
+        //set table structure
+        scoreTable.add().colspan(8).padBottom(20).row();
+        scoreTable.add().padRight(HORIZ_SPACING);
+        scoreTable.add().padRight(HORIZ_SPACING);
+        scoreTable.add().padRight(HORIZ_SPACING);
+        scoreTable.add().padRight(HORIZ_SPACING_BETWEEN_MEMBERS);
+        scoreTable.add().padRight(HORIZ_SPACING_BETWEEN_MEMBERS);
+        scoreTable.add().padRight(HORIZ_SPACING_BETWEEN_MEMBERS);
+        scoreTable.add().padRight(HORIZ_SPACING_BETWEEN_MEMBERS);
+        scoreTable.add().row();
+
+        //add header
+        scoreTable.add(new Label("Name", new Label.LabelStyle(bigFont, Color.WHITE)));
+        scoreTable.add(new Label("Score", new Label.LabelStyle(bigFont, Color.WHITE)));
+        scoreTable.add(new Label("Turns", new Label.LabelStyle(bigFont, Color.WHITE)));
+        scoreTable.add(new Label("Members", new Label.LabelStyle(bigFont, Color.WHITE))).colspan(4);
+        scoreTable.add(new Label("Floor", new Label.LabelStyle(bigFont, Color.WHITE)));
+        //add entries
         for (int i = 0; i < highScores.size; i++) {
+            scoreTable.row().padBottom(VERT_SPACING);
             HighScore curScore = highScores.get(i);
             scoreTable.add(new Label(curScore.getTeamName(), new Label.LabelStyle(bigFont, Color.YELLOW)));
             scoreTable.add(new Label("" + curScore.getScore(), new Label.LabelStyle(smallFont, Color.WHITE)));
             scoreTable.add(new Label("" + curScore.getTurns(), new Label.LabelStyle(smallFont, Color.WHITE)));
             //add image
-            SpriteDrawable[] spriteDrawables = curScore.getSprites();
-            for (int j = 0; j < spriteDrawables.length; j++) {
-                if (spriteDrawables.length < j) //add normally
-                    scoreTable.add(new Image(spriteDrawables[j]));
+            int[] spriteDrawables = curScore.getTeamSprites();
+            for (int j = 0; j < 4; j++) {
+                if (j < spriteDrawables.length) //add normally
+                    scoreTable.add(new Image(new SpriteDrawable(HighScore.getSpriteFromNumber(spriteDrawables[j]))));
                 else //no more entities; place defaults
                     scoreTable.add(new Image(new SpriteDrawable(atlas.createSprite("cube"))));
             }
-
+            if (curScore.getLastFloor() > 50)
+                scoreTable.add(new Label("50+", new Label.LabelStyle(smallFont, Color.CYAN)));
+            else
+                scoreTable.add(new Label("" + curScore.getTurns(), new Label.LabelStyle(smallFont, Color.WHITE)));
         }
 
         table.add(lblTitle).padBottom(20).row();
@@ -78,13 +99,14 @@ public class HighScoreScreen extends MenuScreen implements Screen {
         fontGenerator.dispose();
     }
 
-    public void prepopulateHighScores() {
-        Array<HighScore> highScores = new Array<>();
-        for (int i = 0; i < 10; i++) {
-            highScores.add(new HighScore("---", 0, 0, new SpriteDrawable(atlas.createSprite("robot")), new SpriteDrawable(atlas.createSprite("robot"))));
+    @Override
+    public void render(float deltaTime) {
+        super.render(deltaTime);
+        //go back a screen
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
         }
-        FileHandle scoreFile = Gdx.files.local("GridWarsHighScores.json");
-        Json json = new Json();
-        scoreFile.writeString(json.prettyPrint(highScores), false);
     }
+
+
 }

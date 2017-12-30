@@ -737,32 +737,12 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
     }
 
     private int getComputerDifficulty() {
-        /*
-        switch (level) {
-            case 1 :
-            case 2 :
-            case 3 :
-            case 4 :
-            case 5 :
-            case 6 :
-            case 7 :
-            case 8 :
-            case 9 :
-            case 10 :
-            case 11 :
-            case 12 :
-            case 11 :
-            case 11 :
-            case 11 :
-            case 11 :
-            case 11 :
-            case 11 :
-            case 11 :
-                return 3;
-        }
-        return -999;
-        */
-        return 3;
+        if (level > 0 && level <= 12)
+            return 1;
+        else if (level > 12 && level <= 28)
+            return 2;
+        else
+            return 3;
     }
 
     private void createParticleEffect(int particleType) {

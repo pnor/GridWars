@@ -29,6 +29,7 @@ import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
 
 /**
+ * Shows the results of a 2 player Zone or Death match.
  * @author Phillip O'Reggio
  */
 public class EndResultsScreen extends MenuScreen implements Screen {

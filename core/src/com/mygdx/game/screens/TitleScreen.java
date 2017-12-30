@@ -70,5 +70,7 @@ public class TitleScreen extends MenuScreen implements Screen {
         table.add(titleLbl).padBottom(80f).row();
         table.add(startBtn).size(300, 90).padBottom(40).row();
         table.add(optionBtn).size(300, 90);
+
+        fontGenerator.dispose();
     }
 }

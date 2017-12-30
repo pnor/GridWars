@@ -29,6 +29,7 @@ import static com.mygdx.game.ComponentMappers.am;
 import static com.mygdx.game.GridWars.*;
 
 /**
+ * Screen that allows the player to choose pieces to use in Survival mode
  * @author Phillip O'Reggio
  */
 public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
@@ -58,6 +59,8 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
      * 11 : jellygirl <p>
      * 12 : mirrorman <p>
      * 13 : random <p>
+     * 14 : pheonix <p>
+     * 15 : acidsnake <p>
      */
     private Array<ImageButton> characterBtns;
 
@@ -496,6 +499,10 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
     @Override
     public void render(float dt) {
         super.render(dt);
+        //go back a screen
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
+        }
 
         //alternate color number
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))

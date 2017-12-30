@@ -1,62 +1,50 @@
 [
 {
-	class: com.mygdx.game.misc.HighScore
-	teamName: ---
-	score: 0
-	turns: 0
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Grid Warriors
+	score: 8810
+	turns: 55
+	lastFloor: 10
+	teamSprites: [ 13, 14, 11, 9 ]
 }
 {
-	class: com.mygdx.game.misc.HighScore
-	teamName: ---
-	score: 0
-	turns: 0
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Expert E
+	score: 51
+	turns: 51
+	lastFloor: 51
+	teamSprites: [ -2, -2, -2, -2 ]
 }
 {
-	class: com.mygdx.game.misc.HighScore
-	teamName: ---
-	score: 0
-	turns: 0
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Good Group
+	score: 30
+	turns: 1000
+	lastFloor: 1
+	teamSprites: [ -2, -2, -2, -2 ]
 }
 {
-	class: com.mygdx.game.misc.HighScore
-	teamName: ---
-	score: 0
-	turns: 0
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Adequate Allies
+	score: 20
+	turns: 500
+	lastFloor: 1
+	teamSprites: [ -2, -2, -2, -2 ]
 }
 {
-	class: com.mygdx.game.misc.HighScore
-	teamName: ---
-	score: 0
-	turns: 0
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Mediocre Mashup
+	score: 10
+	turns: 100
+	lastFloor: 1
+	teamSprites: [ -2, -2, -2, -2 ]
 }
 {
-	class: com.mygdx.game.misc.HighScore
-	teamName: ---
-	score: 0
-	turns: 0
-}
-{
-	class: com.mygdx.game.misc.HighScore
-	teamName: ---
-	score: 0
-	turns: 0
-}
-{
-	class: com.mygdx.game.misc.HighScore
-	teamName: ---
-	score: 0
-	turns: 0
-}
-{
-	class: com.mygdx.game.misc.HighScore
-	teamName: ---
-	score: 0
-	turns: 0
-}
-{
-	class: com.mygdx.game.misc.HighScore
-	teamName: ---
-	score: 0
-	turns: 0
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Grid Warriors
+	score: 8810
+	turns: 55
+	lastFloor: 10
+	teamSprites: [ 13, 14, 11, 9 ]
 }
 ]

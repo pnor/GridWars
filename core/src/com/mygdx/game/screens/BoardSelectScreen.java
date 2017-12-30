@@ -1,6 +1,7 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -21,6 +22,7 @@ import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
 
 /**
+ * Screen that allows the player to select what board they want to go on.
  * @author Phillip O'Reggio
  */
 public class BoardSelectScreen extends MenuScreen implements Screen {
@@ -113,5 +115,14 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
         table.add(desert).size(300, 70).padBottom(20f).row();
         table.add(forest).size(300, 70).padRight(20f);
         table.add(island).size(300, 70);
+    }
+
+    @Override
+    public void render(float deltaTime) {
+        super.render(deltaTime);
+        //go back a screen
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GRID_WARS.setScreen(new TeamSelectScreen(maxTeams, zoneRules, GRID_WARS));
+        }
     }
 }

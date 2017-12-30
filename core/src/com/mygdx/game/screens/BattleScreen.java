@@ -52,6 +52,7 @@ import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.*;
 
 /**
+ * SCreen where the battles take place.
  * @author pnore_000
  */
 public class BattleScreen implements Screen {
@@ -491,8 +492,16 @@ public class BattleScreen implements Screen {
     }
 
     /**
-     * !! WHEN I DO THIS, DESCRIBE THE RENDER LOOP PROCESS BY PROCESS !!
-     * @param delta
+     * Game loop of the Battle Screen. In order of operations : <p>
+     * 1 : Syncs Visual board with BoardManager boards <p>
+     * 2 : If the game hasnt ended and it is the player's turn, process Player Input (selecting entities and attacks <p>
+     * 3 : If it is the computer's turn and the computer has gotten its actions for the turn, then it should play those actions out on screen <p>
+     * 4 : Play any move animations <p>
+     * 5 : If the game is still going, check and perform actions if any Hot Keys were pressed <p>
+     * 6 : update game engine and screen and draw onto screen <p>
+     * 7 : Remove dead entities and play their animations <p>
+     * 8 : Check win conditions to see if game has ended <p>
+     * 9 : Any debug actions <p>
      */
     @Override
     public void render(float delta) {

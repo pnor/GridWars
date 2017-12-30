@@ -11,53 +11,77 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.GridWars;
+import com.mygdx.game.highscores.HighScore;
+import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
 
 import static com.mygdx.game.GridWars.atlas;
+import static com.mygdx.game.GridWars.highScoreManager;
 import static com.mygdx.game.GridWars.skin;
 
 /**
+ * Screen that is displayed when you get a Game Over in Survival mode
  * @author Phillip O'Reggio
  */
 public class GameOverScreen extends MenuScreen implements Screen {
-    private int lastLevel;
+    private HighScore playerScore;
     private Label lblGameOver;
     private Label lblLastLevelReached;
+    private Label lblScore;
     private HoverButton btnReturn;
 
     private float time = 0f;
     private int progress = 0;
 
+    //which type of game over is it?
+    private boolean playerGotNewHighScore;
 
-    public GameOverScreen(int level, GridWars gridWars) {
+    public GameOverScreen(int level, int score, int turns, Team team, GridWars gridWars) {
         super(gridWars);
-        lastLevel = level;
+        playerScore = new HighScore(team.getTeamName(), score, turns, level);
+        playerScore.setTeamSprites(team);
+
     }
 
     @Override
     public void show() {
         super.show();
+
+        //determine if player got a high score
+        if (highScoreManager.getLowestScore().getScore() <= playerScore.getScore()) {
+            playerGotNewHighScore = true;
+        }
+        //if they did add to highscores
+        highScoreManager.addHighScoreObject(playerScore);
+        highScoreManager.saveHighScores();
+
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
         lblGameOver = new Label("Game Over", new Label.LabelStyle(fontGenerator.generateFont(param), Color.BLACK));
         lblGameOver.setColor(new Color(1, 1, 1, 0));
         param.size = 30;
-        lblLastLevelReached = new Label("Floor : " + lastLevel, new Label.LabelStyle(fontGenerator.generateFont(param), Color.BLACK));
+        lblLastLevelReached = new Label("Floor : " + playerScore.getLastFloor(), new Label.LabelStyle(fontGenerator.generateFont(param), Color.BLACK));
         lblLastLevelReached.setColor(new Color(1, 1, 1, 0));
-
+        lblScore = new Label("Score : " + playerScore.getScore(), new Label.LabelStyle(fontGenerator.generateFont(param), Color.BLACK));
+        lblScore.setColor(new Color(1, 1, 1, 0));
         btnReturn = new HoverButton("Return", skin, Color.BLACK, Color.WHITE);
         btnReturn.setDisabled(true);
         btnReturn.setVisible(false);
+
 
         ChangeListener listener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
-                    if (actor == btnReturn)
-                        GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
+                    if (actor == btnReturn) {
+                        if (playerGotNewHighScore)
+                            GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
+                        else
+                            GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
+                    }
                 }
             }
         };
@@ -65,6 +89,7 @@ public class GameOverScreen extends MenuScreen implements Screen {
         //set up tables and labels
         table.add(lblGameOver).padBottom(40).row();
         table.add(lblLastLevelReached).padBottom(60).row();
+        table.add(lblScore).padBottom(60).row();
         table.add(btnReturn).size(160, 60);
 
         //set up background
@@ -102,6 +127,13 @@ public class GameOverScreen extends MenuScreen implements Screen {
                     MathUtils.clamp(time - 2f, 0, 1)
             ));
         else if (progress == 3)
+            lblScore.setColor(new Color(
+                    1,
+                    1,
+                    1,
+                    MathUtils.clamp(time - 2f, 0, 1)
+            ));
+        else if (progress == 4)
             btnReturn.setColor(new Color(
                     0,
                     0,
@@ -115,9 +147,11 @@ public class GameOverScreen extends MenuScreen implements Screen {
             progress = 2;
         }  else if (time >= 3f && progress == 2) {
             progress= 3;
-            btnReturn.setVisible(true);
         }  else if (time >= 4f && progress == 3) {
-            progress= 4;
+            progress = 4;
+            btnReturn.setVisible(true);
+        } else if (time >= 5f && progress == 4) {
+            progress = 6;
             btnReturn.setDisabled(false);
         }
     }

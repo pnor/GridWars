@@ -1,6 +1,7 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -18,6 +19,7 @@ import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
 
 /**
+ * Screen that allows the player to choose between Zone rules or Death Match rules for a normal battle.
  * @author Phillip O'Reggio
  */
 public class ModeSelectScreen extends MenuScreen implements Screen {
@@ -70,5 +72,15 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
         table.add(twoPlayerZones).size(350, 90).padBottom(10f).row();
         table.add(survival).size(350, 90).padBottom(10f).row();
 
+        fontGenerator.dispose();
+    }
+
+    @Override
+    public void render(float deltaTime) {
+        super.render(deltaTime);
+        //go back a screen
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
+        }
     }
 }

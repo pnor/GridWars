@@ -13,6 +13,7 @@ import static com.mygdx.game.GridWars.skin;
 import static com.mygdx.game.GridWars.stage;
 
 /**
+ * Abstract subclass that all the menu classes derive from. provides the main table for UI elements and the background
  * @author Phillip O'Reggio
  */
 public abstract class MenuScreen implements Screen{

@@ -14,6 +14,7 @@ import com.mygdx.game.components.*;
 import com.mygdx.game.misc.Phase;
 import com.mygdx.game.move_related.Move;
 
+import static com.mygdx.game.ComponentMappers.nm;
 import static com.mygdx.game.ComponentMappers.state;
 import static com.mygdx.game.ComponentMappers.stm;
 import static com.mygdx.game.GridWars.atlas;
@@ -443,7 +444,7 @@ public class EntityConstructor {
                 MoveConstructor.yelp(entity),
                 MoveConstructor.chargedSlice(entity)
         })));
-
+        nm.get(entity).serializeID = 0;
         return entity;
     }
 
@@ -481,6 +482,7 @@ public class EntityConstructor {
                 MoveConstructor.electricalFire(entity),
                 MoveConstructor.laserSpray(entity)
         })));
+        nm.get(entity).serializeID = 1;
 
         return entity;
     }
@@ -518,6 +520,7 @@ public class EntityConstructor {
                 MoveConstructor.sear(entity),
                 MoveConstructor.wildFire(entity)
         })));
+        nm.get(entity).serializeID = 2;
 
         return entity;
     }
@@ -556,6 +559,7 @@ public class EntityConstructor {
                 MoveConstructor.twister(entity),
                 MoveConstructor.freezeAttack(entity)
         })));
+        nm.get(entity).serializeID = 3;
 
         return entity;
     }
@@ -594,6 +598,7 @@ public class EntityConstructor {
                 MoveConstructor.recover(entity),
                 MoveConstructor.submerge(entity)
         })));
+        nm.get(entity).serializeID = 4;
 
         return entity;
     }
@@ -632,6 +637,7 @@ public class EntityConstructor {
                 MoveConstructor.electrocute(entity),
                 MoveConstructor.cometShower(entity)
         })));
+        nm.get(entity).serializeID = 5;
 
         return entity;
     }
@@ -670,6 +676,7 @@ public class EntityConstructor {
                 MoveConstructor.pierceSwordSlice(entity),
                 MoveConstructor.poisonBlade(entity)
         })));
+        nm.get(entity).serializeID = 6;
 
         return entity;
     }
@@ -708,6 +715,7 @@ public class EntityConstructor {
                 MoveConstructor.superCharge(entity),
                 MoveConstructor.voltDeluge(entity)
         })));
+        nm.get(entity).serializeID = 7;
 
         return entity;
     }
@@ -746,6 +754,7 @@ public class EntityConstructor {
                 MoveConstructor.basiliskPunch(entity),
                 MoveConstructor.curseAttack(entity)
         })));
+        nm.get(entity).serializeID = 8;
 
         return entity;
     }
@@ -784,6 +793,7 @@ public class EntityConstructor {
                 MoveConstructor.drench2(entity),
                 MoveConstructor.cometShowerClose(entity)
         })));
+        nm.get(entity).serializeID = 9;
 
         return entity;
     }
@@ -822,6 +832,7 @@ public class EntityConstructor {
                 MoveConstructor.freshBreath(entity),
                 MoveConstructor.spaBreath(entity)
         })));
+        nm.get(entity).serializeID = 10;
 
         return entity;
     }
@@ -860,6 +871,7 @@ public class EntityConstructor {
                 MoveConstructor.boost(entity),
                 MoveConstructor.transfer(entity)
         })));
+        nm.get(entity).serializeID = 11;
 
         return entity;
     }
@@ -898,6 +910,7 @@ public class EntityConstructor {
                 MoveConstructor.rouletteReflect(entity),
                 MoveConstructor.clear(entity)
         })));
+        nm.get(entity).serializeID = 12;
 
         return entity;
     }
@@ -936,6 +949,8 @@ public class EntityConstructor {
                 MoveConstructor.selfPurge(entity),
                 MoveConstructor.rejunevate(entity)
         })));
+        nm.get(entity).serializeID = 13;
+
 
         return entity;
     }
@@ -974,6 +989,7 @@ public class EntityConstructor {
                 MoveConstructor.warpBite(entity),
                 MoveConstructor.berserkBite(entity)
         })));
+        nm.get(entity).serializeID = 14;
 
         return entity;
     }
@@ -1048,6 +1064,7 @@ public class EntityConstructor {
                             new StatComponent(15, 10, 2, 1, 1))
             ));
         }
+        nm.get(entity).serializeID = 15;
 
         return entity;
     }

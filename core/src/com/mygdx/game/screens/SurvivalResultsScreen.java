@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.components.*;
+import com.mygdx.game.highscores.HighScore;
 import com.mygdx.game.misc.EventCompUtil;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.systems.EventSystem;
@@ -30,6 +31,7 @@ import static com.mygdx.game.ComponentMappers.sm;
 import static com.mygdx.game.GridWars.*;
 
 /**
+ * Screen that shows the player results after completing all 50 floors of Survival
  * @author Phillip O'Reggio
  */
 public class SurvivalResultsScreen extends MenuScreen implements Screen {
@@ -42,6 +44,10 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
     private Label lblPoints;
     private Label lblTotalTurns;
 
+    //highscore related
+    private boolean playerGotNewHighScore;
+    private HighScore playerScore;
+
     //time keeping
     private float currentTime;
     private int displayProgress;
@@ -50,11 +56,10 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
     /** Time before doing anything on the screen */
     private final float BUFFER_TIME = 1f;
 
-    public SurvivalResultsScreen(Team team, GridWars gridWars, int points, int turnCount) {
+    public SurvivalResultsScreen(int level, int score, int turns, Team team, GridWars gridWars) {
         super(gridWars);
-        this.team = team;
-        this.points = points;
-        this.turnCount = turnCount;
+        playerScore = new HighScore(team.getTeamName(), score, turns, level);
+        playerScore.setTeamSprites(team);
     }
 
     @Override
@@ -65,6 +70,14 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
         engine.addSystem(new EventSystem());
         engine.addSystem(new LifetimeSystem());
         engine.addSystem(new MovementSystem());
+
+        //determine if player got a high score
+        if (highScoreManager.getLowestScore().getScore() <= playerScore.getScore()) {
+            playerGotNewHighScore = true;
+        }
+        //if they did add to highscores
+        highScoreManager.addHighScoreObject(playerScore);
+        highScoreManager.saveHighScores();
 
         //create Labels
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Rubik-Regular.ttf"));

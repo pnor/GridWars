@@ -1,6 +1,7 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -17,6 +18,7 @@ import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
 
 /**
+ * Screen that allows the player to set certain Options for the game.
  * @author Phillip O'Reggio
  */
 public class OptionsScreen extends MenuScreen implements Screen {
@@ -147,5 +149,14 @@ public class OptionsScreen extends MenuScreen implements Screen {
                 new Sprite[]{topLayer},
                 new BackType[]{BackType.FADE_COLOR},
                 Color.DARK_GRAY, Color.GRAY);
+    }
+
+    @Override
+    public void render(float deltaTime) {
+        super.render(deltaTime);
+        //go back a screen
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
+        }
     }
 }
