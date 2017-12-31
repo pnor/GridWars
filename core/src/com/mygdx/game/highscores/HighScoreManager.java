@@ -50,26 +50,19 @@ public class HighScoreManager {
     public void addHighScoreObject(HighScore score) {
         highScores.add(score);
         highScores.sort();
-        highScores.truncate(maxEntries);
-        /*
-        for (int i = 0; i < highScores.size; i++) {
-            if (highScores.get(i).getScore() <= score.getScore()) {
-                highScores.set(i, score);
-                sameAsFile = false;
-            }
+        //remove excess
+        while (highScores.size > maxEntries) {
+            highScores.removeIndex(maxEntries);
         }
-        highScores.truncate(maxEntries);
-        */
-        highScores.add(score);
     }
 
     public void prepopulate() {
         highScores = new Array<>();
         highScores.add(new HighScore("Poor Party", 1, 0, 1, -2, -2, -2, -2));
-        highScores.add(new HighScore("Mediocre Mashup", 10, 100, 1, -2, -2, -2, -2));
-        highScores.add(new HighScore("Adequate Allies", 20, 500, 1, -2, -2, -2, -2));
-        highScores.add(new HighScore("Good Group", 30, 1000, 1, -2, -2, -2, -2));
-        highScores.add(new HighScore("Expert E", 51, 51, 51, -2, -2, -2, -2));
+        highScores.add(new HighScore("Mediocre Mashup", 100, 10, 5, -2, -2, -2, -2));
+        highScores.add(new HighScore("Adequate Allies", 500, 20, 10, -2, -2, -2, -2));
+        highScores.add(new HighScore("Good Group", 1000, 30, 15, -2, -2, -2, -2));
+        highScores.add(new HighScore("Expert E", 5500, 40, 51, -2, -2, -2, -2));
         highScores.sort();
         sameAsFile = false;
     }
