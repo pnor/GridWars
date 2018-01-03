@@ -159,10 +159,17 @@ public class BattleScreen implements Screen {
     protected Label turnCountLbl;
     protected boolean showingEndTurnMessageTable;
     protected float displayEndTurnMessageTime;
+
     /** Pop up message that says the effects of a move. */
     protected Table helpTable;
+    private Label moveTitleLbl;
+    /** displays range of an attack */
+    private Table moveRangeTable;
+    /** displays description of a move's effects */
     private Label moveDescriptionLbl;
+    /** closes the help menu*/
     private HoverButton closeHelpMenuBtn;
+    protected boolean showingHelpMenu;
 
     public BattleScreen(Array<Team> selectedTeams, int boardIndex, Vector2[] AIControlled, GridWars game) {
         GRID_WARS = game;
@@ -235,14 +242,14 @@ public class BattleScreen implements Screen {
         infoTable = new Table();
         teamTable = new Table();
         endTurnMessageTable = new Table();
-        //helpTable = new Table();
+        helpTable = new Table();
         stage.addActor(boardTable);
         stage.addActor(statsTable);
         stage.addActor(attackTable);
         stage.addActor(infoTable);
         stage.addActor(teamTable);
         stage.addActor(endTurnMessageTable);
-        //stage.addActor(helpTable);
+        stage.addActor(helpTable);
         battleInputProcessor = new BattleInputProcessor(this);
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, battleInputProcessor));
 
@@ -451,42 +458,37 @@ public class BattleScreen implements Screen {
         endTurnMessageTable.setColor(Color.WHITE);
         endTurnMessageTable.addAction(Actions.fadeOut(0f));
 
-       /*
-        moveDescriptionLbl = new Label("88888888888", skin);
+        //set up help menu
+        moveTitleLbl = new Label("~_~_~_", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        moveDescriptionLbl = new Label("-----", skin);
+        moveDescriptionLbl.setWrap(true);
+        moveRangeTable = new Table();
+        moveRangeTable.add(new Image(atlas.createSprite("wall")));
         closeHelpMenuBtn = new HoverButton("Close", skin, Color.WHITE, Color.CYAN);
         closeHelpMenuBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
-
+                    hideHelpMenu();
                 }
             }
         });
-        helpTable.add(moveDescriptionLbl).padBottom(20f).row();
+        helpTable.add(moveTitleLbl).padBottom(20f).row();
+        helpTable.add(moveRangeTable).padBottom(20f).row();
+        helpTable.add(moveDescriptionLbl).width(450f).padBottom(20f).row();
         helpTable.add(closeHelpMenuBtn);
         helpTable.setBackground(tableBackground);
         helpTable.pack();
-        helpTable.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
-        helpTable.setSize(stage.getWidth() / 3f, stage.getHeight() / 3);
-        */
+        helpTable.setSize(stage.getWidth() / 2f, stage.getHeight() / 1.5f);
+        helpTable.setPosition(stage.getWidth() / 2 - helpTable.getWidth() / 2, stage.getHeight() / 2 - helpTable.getHeight() / 2);
+
+        helpTable.addAction(Actions.fadeOut(0f));
+
+        helpTable.debug();
+        moveRangeTable.debug();
 
         //Start first turn
         nextTurn();
-
-        /*
-        endTurnMessageLbl.setText("" + rules.getCurrentTeam().getTeamName() + " turn!");
-        turnCountLbl.setText("Turn " + rules.getTurnCount());
-        turnCountLbl.setColor(new Color(1,1,1,1).lerp(Color.ORANGE, (float) rules.getTurnCount() / 100f));
-        endTurnMessageTable.setColor(rules.getCurrentTeam().getTeamColor());
-        endTurnMessageTable.clearActions();
-        SequenceAction sequence = new SequenceAction();
-        sequence.addAction(Actions.fadeIn(.2f));
-        sequence.addAction(Actions.delay(1.5f));
-        sequence.addAction(Actions.fadeOut(.2f));
-        endTurnMessageTable.addAction(sequence);
-        for (Entity e : rules.getCurrentTeam().getEntities())
-            shadeBasedOnState(e);
-            */
 
         fontGenerator.dispose();
     }
@@ -586,7 +588,17 @@ public class BattleScreen implements Screen {
                     "\nTeam Number = " + rules.getCurrentTeamNumber());
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) { // Turn Info
-            System.out.println("ShowingEndTUrnMessage = " + showingEndTurnMessageTable);
+            System.out.println("ShowingEndTurnMessage = " + showingEndTurnMessageTable);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) { // Turn Info
+            if (selectedEntity != null) {
+                System.out.println("Showing help menu!");
+                showHelpMenu(mvm.get(selectedEntity).moveList.random());
+                System.out.println("help menu visible = " + showingHelpMenu);
+
+            } else {
+                System.out.println("No selected entity = no move to show");
+            }
         }
         //endregion
     }
@@ -1080,6 +1092,80 @@ public class BattleScreen implements Screen {
     //endregion
 
     //region UI related
+    /**
+     * Shows the window that displays attack information
+     * @param move that is having its information displayed
+     */
+    protected void showHelpMenu(Move move) {
+        //show help menu pop up
+        showingHelpMenu = true;
+        //update display
+        moveTitleLbl.setText(move.getName());
+        //region create the attack range map
+        moveRangeTable.clear();
+        //get the largest distance of the attack's affected squares to create a box
+        Array<BoardPosition> moveRange = move.getRange();
+        int largestXRange = 0;
+        int largestYRange = 0;
+        for (BoardPosition bp : moveRange) {
+            if (Math.abs(bp.r) > largestXRange) {
+                largestXRange = Math.abs(bp.r);
+            }
+            if (Math.abs(bp.c) > largestYRange) {
+                largestYRange = Math.abs(bp.c);
+            }
+        }
+        largestXRange += 1;
+        largestYRange += 1;
+        System.out.println("largest x : " + largestXRange);
+        System.out.println("largest y : " + largestYRange);
+        int boxRadius = Math.max(largestXRange, largestYRange); // size from edge to tile right before center
+        int squareSideLength = boxRadius * 2 + 1; // size of the side lengths
+        //fill in the square centered around target entity
+        for (int i = -boxRadius; i <= boxRadius; i++) {
+            for (int j = -boxRadius; j <= boxRadius; j++) {
+                Sprite curSprite;
+                if (i == 0 && j == 0) {
+                    curSprite = atlas.createSprite("robot");
+                } else {
+                    curSprite = atlas.createSprite("LightTile");
+                }
+                moveRangeTable.add(new Image(curSprite)).size(200f / squareSideLength, 200f / squareSideLength);
+            }
+            moveRangeTable.row();
+        }
+        //color attack tiles
+        Array<Cell> tableCells = moveRangeTable.getCells();
+        for (BoardPosition bp : moveRange) {
+            //get middle
+            int index = squareSideLength * squareSideLength / 2;
+            //displace by move location
+            index += bp.r * squareSideLength + bp.c;
+            tableCells.get(index).getActor().setColor(Color.RED);
+        }
+        //endregion
+        moveDescriptionLbl.setText("This move has quite the effect. Right now it will make something happen on screen, which " +
+        "may or may not be a good thing, depending on your perspective. This move may or may not be helpful to the team you are " +
+        "playing as. To be completely honest, right now the move description test is not yet implemented so this message is just " +
+        "filler text to occupy that space and see how a lengthy description will look in practice. However, you'll find that this description" +
+        " was not completely useless; it was not wrong. The move will certainly do something, whether it will help you or not.");
+
+        moveRangeTable.pack();
+        //fade in animation
+        helpTable.clearActions();
+        helpTable.addAction(Actions.fadeIn(.2f));
+    }
+
+    /**
+     * Hides the help menu from view
+     */
+    protected void hideHelpMenu() {
+        showingHelpMenu = false;
+        //fade out animation
+        helpTable.clearActions();
+        helpTable.addAction(Actions.fadeOut(.2f));
+    }
+
     /**
      * Shows the attack message of the Move stored in Current Move.
      */

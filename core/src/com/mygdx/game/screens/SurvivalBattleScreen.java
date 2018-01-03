@@ -151,6 +151,7 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
             else
                 GRID_WARS.setScreen(new SurvivalResultsScreen(51, points, numberOfTurns, teams.first(), GRID_WARS));
         } else { //loss
+            System.out.println("Level : " + level + ", num turns: " + numberOfTurns);
             GRID_WARS.setScreen(new GameOverScreen(level, points, numberOfTurns, teams.get(0), GRID_WARS));
         }
     }

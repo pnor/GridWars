@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Json;
  */
 public class HighScoreManager {
     //high score related
-    private FileHandle highscoreFile;
+    private final FileHandle HIGH_SCORE_FILE;
     private Array<HighScore> highScores;
     /** Total amount of highscores this game will store */
     private final int maxEntries = 5;
@@ -19,8 +19,9 @@ public class HighScoreManager {
     private boolean sameAsFile;
 
     public HighScoreManager() {
-        highscoreFile = Gdx.files.local("GridWarsHighScores.json");
-        updateHighScoresWithFile();
+        HIGH_SCORE_FILE = Gdx.files.local("GridWarsHighScores.json");
+        if (HIGH_SCORE_FILE.exists())
+            updateHighScoresWithFile();
     }
 
     /**
@@ -28,8 +29,7 @@ public class HighScoreManager {
      */
     public void updateHighScoresWithFile() {
         Json json = new Json();
-        highscoreFile = Gdx.files.local("GridWarsHighScores.json");
-        String jsonScores = highscoreFile.readString();
+        String jsonScores = HIGH_SCORE_FILE.readString();
         highScores = json.fromJson(Array.class, jsonScores);
         sameAsFile = true;
     }
@@ -39,7 +39,7 @@ public class HighScoreManager {
      */
     public void saveHighScores() {
         Json json = new Json();
-        highscoreFile.writeString(json.prettyPrint(highScores), false);
+        HIGH_SCORE_FILE.writeString(json.prettyPrint(highScores), false);
         sameAsFile = true;
     }
 
@@ -62,7 +62,7 @@ public class HighScoreManager {
         highScores.add(new HighScore("Mediocre Mashup", 100, 10, 5, -2, -2, -2, -2));
         highScores.add(new HighScore("Adequate Allies", 500, 20, 10, -2, -2, -2, -2));
         highScores.add(new HighScore("Good Group", 1000, 30, 15, -2, -2, -2, -2));
-        highScores.add(new HighScore("Expert E", 5500, 40, 51, -2, -2, -2, -2));
+        highScores.add(new HighScore("Expert E", 5500, 40, 50, -2, -2, -2, -2));
         highScores.sort();
         sameAsFile = false;
     }
@@ -88,5 +88,12 @@ public class HighScoreManager {
      */
     public boolean isSynced() {
         return sameAsFile;
+    }
+
+    /**
+     * @return whether the high score file exists (if it doesn't that means this it was deleted or this is their first time playing)
+     */
+    public boolean fileHandleExists() {
+        return HIGH_SCORE_FILE.exists();
     }
 }

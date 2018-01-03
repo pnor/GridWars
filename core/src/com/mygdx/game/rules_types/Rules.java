@@ -38,8 +38,10 @@ public abstract class Rules {
      * Changes the turn to the next player. Applies effects caused by turn shift as well.
      */
     public void nextTurn() {
+        //increment turn count
         currentTeamTurn = (currentTeamTurn + 1) % totalTeams;
         turnCount = currentTeamTurn == 0 ? turnCount + 1 : turnCount;
+        //remove movement tiles
         if (screen.getSelectedEntity() != null)
             if (screen.getSelectedEntity() != null && stm.has(screen.getSelectedEntity()) && stm.get(screen.getSelectedEntity()).getModSpd(screen.getSelectedEntity()) > 0)
                 try {
@@ -93,7 +95,7 @@ public abstract class Rules {
         }
         //do affects and stats (current Team only) --
         for (Entity e : teams.get(currentTeamTurn).getEntities()) { //increment sp
-            if (stm.has(e) && !(stm.get(e).sp >= stm.get(e).getModMaxSp(e)) && !(status.has(e) && status.get(e).contains("stillness"))) //check if it can
+            if (stm.has(e) && stm.get(e).alive && !(stm.get(e).sp >= stm.get(e).getModMaxSp(e)) && !(status.has(e) && status.get(e).contains("stillness"))) //check if it can
                 stm.get(e).sp += 1;
 
             //status effects

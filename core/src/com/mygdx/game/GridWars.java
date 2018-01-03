@@ -45,9 +45,11 @@ public class GridWars extends Game {
 		//set up options related things
 		Background.setAnimateBackground(Gdx.app.getPreferences("Options").getBoolean("Animate Background"));
 		//set up highscore things
-		highScoreManager = new HighScoreManager();
-		highScoreManager.prepopulate();
-		highScoreManager.saveHighScores();
+			highScoreManager = new HighScoreManager();
+		if (!highScoreManager.fileHandleExists()) {
+			highScoreManager.prepopulate();
+			highScoreManager.saveHighScores();
+		}
 		setScreen(new TitleScreen(this));
 	}
 
@@ -65,7 +67,7 @@ public class GridWars extends Game {
 		} else
 			getScreen().render(Gdx.graphics.getDeltaTime());
 		//debug --
-		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB) && Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT))
+		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB)) //escape to title
 			setScreen(new TitleScreen(this));
 		if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) {
 			DEBUG_halfSpeed = !DEBUG_halfSpeed;
