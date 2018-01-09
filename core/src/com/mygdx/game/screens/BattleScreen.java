@@ -161,13 +161,13 @@ public class BattleScreen implements Screen {
     protected float displayEndTurnMessageTime;
 
     /** Pop up message that says the effects of a move. */
+    protected Dialog helpDialog;
     protected Table helpTable;
     private Label moveTitleLbl;
     /** displays range of an attack */
     private Table moveRangeTable;
     /** displays description of a move's effects */
     private Label moveDescriptionLbl;
-    /** closes the help menu*/
     private HoverButton closeHelpMenuBtn;
     protected boolean showingHelpMenu;
 
@@ -459,12 +459,13 @@ public class BattleScreen implements Screen {
         endTurnMessageTable.addAction(Actions.fadeOut(0f));
 
         //set up help menu
+        helpDialog = new Dialog("Help", skin);
         moveTitleLbl = new Label("~_~_~_", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         moveDescriptionLbl = new Label("-----", skin);
         moveDescriptionLbl.setWrap(true);
         moveRangeTable = new Table();
         moveRangeTable.add(new Image(atlas.createSprite("wall")));
-        closeHelpMenuBtn = new HoverButton("Close", skin, Color.WHITE, Color.CYAN);
+        closeHelpMenuBtn = new HoverButton("Close", skin, Color.WHITE, Color.RED);
         closeHelpMenuBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -476,16 +477,9 @@ public class BattleScreen implements Screen {
         helpTable.add(moveTitleLbl).padBottom(20f).row();
         helpTable.add(moveRangeTable).padBottom(20f).row();
         helpTable.add(moveDescriptionLbl).width(450f).padBottom(20f).row();
-        helpTable.add(closeHelpMenuBtn);
-        helpTable.setBackground(tableBackground);
-        helpTable.pack();
-        helpTable.setSize(stage.getWidth() / 2f, stage.getHeight() / 1.5f);
-        helpTable.setPosition(stage.getWidth() / 2 - helpTable.getWidth() / 2, stage.getHeight() / 2 - helpTable.getHeight() / 2);
-
-        helpTable.addAction(Actions.fadeOut(0f));
-
-        helpTable.debug();
-        moveRangeTable.debug();
+        helpTable.add(closeHelpMenuBtn).size(120f, 40f).padBottom(10f);
+        //add to dialog window
+        helpDialog.add(helpTable).row();
 
         //Start first turn
         nextTurn();
@@ -1101,7 +1095,7 @@ public class BattleScreen implements Screen {
         showingHelpMenu = true;
         //update display
         moveTitleLbl.setText(move.getName());
-        //region create the attack range map
+        //region Create the attack range map
         moveRangeTable.clear();
         //get the largest distance of the attack's affected squares to create a box
         Array<BoardPosition> moveRange = move.getRange();
@@ -1129,6 +1123,12 @@ public class BattleScreen implements Screen {
                     curSprite = atlas.createSprite("robot");
                 } else {
                     curSprite = atlas.createSprite("LightTile");
+                    //checkerboard coloring TODO make this work!!!
+                    if (Math.abs(i) % 2 == 0 && Math.abs(j) % 2 == 0) {
+                        curSprite.setColor(Color.LIGHT_GRAY);
+                    } else if (Math.abs(i) % 2 == 1 && Math.abs(j) % 2 == 1) {
+                        curSprite.setColor(Color.LIGHT_GRAY);
+                    }
                 }
                 moveRangeTable.add(new Image(curSprite)).size(200f / squareSideLength, 200f / squareSideLength);
             }
@@ -1152,8 +1152,11 @@ public class BattleScreen implements Screen {
 
         moveRangeTable.pack();
         //fade in animation
+        /*
         helpTable.clearActions();
         helpTable.addAction(Actions.fadeIn(.2f));
+        */
+        helpDialog.show(stage);
     }
 
     /**
@@ -1162,8 +1165,11 @@ public class BattleScreen implements Screen {
     protected void hideHelpMenu() {
         showingHelpMenu = false;
         //fade out animation
+        /*
         helpTable.clearActions();
         helpTable.addAction(Actions.fadeOut(.2f));
+        */
+        helpDialog.hide();
     }
 
     /**
