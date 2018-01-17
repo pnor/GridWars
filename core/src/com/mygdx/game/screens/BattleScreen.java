@@ -1115,22 +1115,32 @@ public class BattleScreen implements Screen {
         System.out.println("largest y : " + largestYRange);
         int boxRadius = Math.max(largestXRange, largestYRange); // size from edge to tile right before center
         int squareSideLength = boxRadius * 2 + 1; // size of the side lengths
+        System.out.println("box radius : " + boxRadius);
+        System.out.println("square side length : " + squareSideLength);
         //fill in the square centered around target entity
         for (int i = -boxRadius; i <= boxRadius; i++) {
             for (int j = -boxRadius; j <= boxRadius; j++) {
-                Sprite curSprite;
+                Image curImage;
                 if (i == 0 && j == 0) {
-                    curSprite = atlas.createSprite("robot");
+                    curImage = new Image(atlas.createSprite("robot"));
                 } else {
-                    curSprite = atlas.createSprite("LightTile");
-                    //checkerboard coloring TODO make this work!!!
-                    if (Math.abs(i) % 2 == 0 && Math.abs(j) % 2 == 0) {
-                        curSprite.setColor(Color.LIGHT_GRAY);
-                    } else if (Math.abs(i) % 2 == 1 && Math.abs(j) % 2 == 1) {
-                        curSprite.setColor(Color.LIGHT_GRAY);
+                    curImage = new Image(atlas.createSprite("LightTile"));
+                    //checkerboard coloring
+                    if (Math.abs(j) % 2 == 0) {
+                        if (Math.abs(i) % 2 == 0) {
+                            curImage.setColor(Color.LIGHT_GRAY);
+                        } else {
+                            curImage.setColor(Color.WHITE);
+                        }
+                    } else {
+                        if (Math.abs(i) % 2 == 0) {
+                            curImage.setColor(Color.WHITE);
+                        } else {
+                            curImage.setColor(Color.LIGHT_GRAY);
+                        }
                     }
                 }
-                moveRangeTable.add(new Image(curSprite)).size(200f / squareSideLength, 200f / squareSideLength);
+                moveRangeTable.add(curImage).size(200f / squareSideLength, 200f / squareSideLength);
             }
             moveRangeTable.row();
         }

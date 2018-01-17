@@ -107,7 +107,7 @@ public class MoveConstructor {
             }
         }, .2f, 4);
 
-        return new Move("Tackle", null, user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Tackle", null, user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -120,6 +120,9 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{TackleVis.copy(0.1f, 1), TackleVis})), new MoveInfo(false, 1));
+        
+        move.setAttackDescription("Rams into the opponent in a comical way. DEBUG (this is the very first attack created)");
+        return move;
     }
 
     public static Move StarSpin(Entity user) {
@@ -154,7 +157,7 @@ public class MoveConstructor {
             }
         }, 0f, 1);
 
-        return new Move("Star Spin", "Something spun around!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+        Move move = new Move("Star Spin", "Something spun around!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -170,6 +173,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Array<VisualEvent>(new VisualEvent[]{spin})), new MoveInfo(false, 5));
+        move.setAttackDescription("Attacks the opponent with a spinning star several times in rapid succession. Deals half the user's attack power 5 times. DEBUG");
+        return move;
     }
 
     //Vulpedge
@@ -228,7 +233,7 @@ public class MoveConstructor {
             }
         }, .21f, 1);
 
-        return new Move("Slice", nm.get(user).name + " sliced its blade!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Slice", nm.get(user).name + " sliced its blade!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -241,6 +246,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{sliceVis, crossSliceVis})), new MoveInfo(false, 1));
+        move.setAttackDescription("Slices the opponent with a sharp edge. Deals regular damage.");
+        return move;
     }
 
     public static Move pierceSwordSlice(Entity user) {
@@ -329,7 +336,7 @@ public class MoveConstructor {
         }, .2f, 1);
 
         //Move
-        return new Move("Piercing Slice", nm.get(user).name + " delivered a piercing blow!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Piercing Slice", nm.get(user).name + " delivered a piercing blow!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -342,6 +349,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{glow ,sliceVis, crossSliceVis})), new MoveInfo(true, 1.5f));
+        move.setAttackDescription("Pierces the opponent's defenses with a sharp edge. Ignores the opponent's defense and inflicts 1.5x damage.");
+        return move;
     }
 
     public static Move guardPiercer(Entity user) {
@@ -442,7 +451,7 @@ public class MoveConstructor {
         }, .2f, 1);
 
         //Move
-        return new Move("Breaking Slice", nm.get(user).name + " delivered a crippling blow!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Breaking Slice", nm.get(user).name + " delivered a crippling blow!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -458,6 +467,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{circles.copy(.1f, 5), circles ,sliceVis, crossSliceVis})), new MoveInfo(true, 1, defenseless(1).createStatusEffectInfo()));
+        move.setAttackDescription("Slices the opponent while exposing their weak points. Deals piercing damage and makes the target's defense 0 for 1 turn.");
+        return move;
     }
 
     public static Move poisonBlade(Entity user) {
@@ -556,7 +567,7 @@ public class MoveConstructor {
         }, .21f, 1);
 
         //Move
-        return new Move("Poison Blade", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Poison Blade", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -572,6 +583,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{circles.copy(.1f, 5), circles, sliceVis, crossSliceVis})), new MoveInfo(false, 1, poison(2).createStatusEffectInfo()));
+        move.setAttackDescription("Slices the opponent with a poison-tipped edge. Deals regular damage and inflicts the target with Poison for 2 turns.");
+        return move;
     }
 
     //Canight
@@ -661,7 +674,7 @@ public class MoveConstructor {
             }
         }, .11f, 1);
 
-        return new Move("Blade Flurry", nm.get(user).name + " let loose with a flurry of attacks!", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Blade Flurry", nm.get(user).name + " let loose with a flurry of attacks!", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -675,6 +688,8 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{curveSliceVis, crossSliceVis.copy(), sliceVis, crossSliceVis.copy(), curveSliceVis.copy(), sliceVis.copy()})),
                 new MoveInfo(false, 3));
+        move.setAttackDescription("Attacks the opponent with a flurry of blows. Deals 3x damage.");
+        return move;
     }
 
     public static Move bark(Entity user) {
@@ -737,7 +752,7 @@ public class MoveConstructor {
         }, .5f, 1);
 
         //Move
-        return new Move("Bark", nm.get(user).name + " barked intimidatingly!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Bark", nm.get(user).name + " barked intimidatingly!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -752,6 +767,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{bark.copy(.1f), bark2.copy(.1f), bark.copy(.1f), bark2.copy(.1f) ,bark, bark2})), new MoveInfo(false, 0, offenseless(2).createStatusEffectInfo()));
+        move.setAttackDescription(nm.get(user).name + " barks intimidatingly at the opponent. Halves the attack of the target for 2 turns.");
+        return move;
     }
 
     public static Move yelp(Entity user) {
@@ -814,7 +831,7 @@ public class MoveConstructor {
         }, .5f, 1);
 
         //Move
-        return new Move("Yelp", nm.get(user).name + " yelped in a cute way!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Yelp", nm.get(user).name + " yelped in a cute way!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -829,6 +846,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{bark.copy(.1f), bark2.copy(.1f), bark.copy(.1f), bark2.copy(.1f) ,bark, bark2})), new MoveInfo(false, 0, defenseless(2).createStatusEffectInfo()));
+        move.setAttackDescription(nm.get(user).name + " yelps in order to lower the opponents guard. Brings the target's defense to 0 for 2 turns.");
+        return move;
     }
 
     //Catdroid
@@ -865,7 +884,7 @@ public class MoveConstructor {
             }
         }, .21f, 1);
 
-        return new Move("Metal Claw", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Metal Claw", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -878,6 +897,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{claw})), new MoveInfo(false, 1));
+        move.setAttackDescription("Claws at the opponent with metallic claws or talons. Deals regular damage.");
+        return move;
     }
 
     public static Move laserBeam(Entity user) {
@@ -965,7 +986,7 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
-        return new Move("Laser Beam", nm.get(user).name + " shot a laser beam!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}),
+        Move move = new Move("Laser Beam", nm.get(user).name + " shot a laser beam!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -978,6 +999,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{laser, explode})), new MoveInfo(false, 1));
+        move.setAttackDescription("Fires a laser beam that attacks all in its way. Deals regular damage.");
+        return move;
     }
 
     public static Move electricalFire(Entity user) {
@@ -1041,7 +1064,7 @@ public class MoveConstructor {
             }
         }, .1f, 1);
 
-        return new Move("Electrical Fire", null, user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Electrical Fire", null, user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1056,6 +1079,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explosions, fire})), new MoveInfo(false, 1, burn(3).createStatusEffectInfo()));
+        move.setAttackDescription("Starts a fire using live wires and electricity. Deals regular damage. and Burns the opponent for 3 turns.");
+        return move;
     }
 
     public static Move laserSpray(Entity user) {
@@ -1156,7 +1181,7 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
-        return new Move("Laser Spread", nm.get(user).name + " sprayed laser beams!", user, 4,
+        Move move = new Move("Laser Spread", nm.get(user).name + " sprayed laser beams!", user, 4,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
@@ -1177,6 +1202,8 @@ public class MoveConstructor {
                 new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
                 new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)}),
                 new Array<VisualEvent>(new VisualEvent[]{laser, explode})), new MoveInfo(false, 1));
+        move.setAttackDescription("Fires a laser that sweeps across the battlefield. Has a large, wide range. Deals regular damage.");
+        return move;
     }
 
     //Pyrobull
@@ -1238,7 +1265,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        return new Move("Body Slam", nm.get(user).name + " charged forward!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Body Slam", nm.get(user).name + " charged forward!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1251,6 +1278,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, bam})), new MoveInfo(false, 1));
+        move.setAttackDescription(nm.get(user).name + " slams into the opponent with full force. Deals regular damage.");
+        return move;
     }
 
     public static Move sear(Entity user) {
@@ -1284,7 +1313,7 @@ public class MoveConstructor {
             }
         }, .3f, 8);
 
-        return new Move("Sear", null, user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Sear", null, user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1298,6 +1327,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{fire})), new MoveInfo(false, 0, burn(3).createStatusEffectInfo()));
+        move.setAttackDescription(nm.get(user).name + " creates intensely hot flames. Burns the opponent for 3 turns.");
+        return move;
     }
 
     public static Move wildFire(Entity user) {
@@ -1333,7 +1364,7 @@ public class MoveConstructor {
             }
         }, .03f, 30);
 
-        return new Move("Wild Fire", user, 4, new Array<BoardPosition>(new BoardPosition[]{
+        Move move = new Move("Wild Fire", user, 4, new Array<BoardPosition>(new BoardPosition[]{
                 new BoardPosition(-1, -1), new BoardPosition(-1, 0),
                 new BoardPosition(-1, 1), new BoardPosition(0, 1),
                 new BoardPosition(1, 1), new BoardPosition(0, -1),
@@ -1357,6 +1388,8 @@ public class MoveConstructor {
                     if (enemy.acceptsStatusEffects && MathUtils.randomBoolean(.7f))
                         enemy.statusEffectInfos.add(burn(3).createStatusEffectInfo());
                 }));
+        move.setAttackDescription("Causes a violent explosion around itself. Deals 1/2x damage. Has a 70% chance to Burn targets for 3 turns.");
+        return move;
     }
 
     //Freezird
@@ -1419,7 +1452,7 @@ public class MoveConstructor {
             }
         }, .1f, 8);
 
-        return new Move("Chill", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+        Move move = new Move("Chill", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1435,6 +1468,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Array<VisualEvent>(new VisualEvent[]{freeze, sparkle})), new MoveInfo(false, 1, shivers(2).createStatusEffectInfo()));
+        move.setAttackDescription("Creates a blast of cold air. Deals regular damage and gives the opponent the Shivers for 2 turns.");
+        return move;
     }
 
     public static Move tailwind(Entity user) {
@@ -1505,7 +1540,7 @@ public class MoveConstructor {
             }
         }, .2f, 2);
 
-        return new Move("Tailwind", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+        Move move = new Move("Tailwind", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1516,6 +1551,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Array<VisualEvent>(new VisualEvent[]{largeSparkle, sparkle, largeSparkle.copy(), sparkle.copy()})), new MoveInfo(false, 0, speedUp(1).createStatusEffectInfo()));
+        move.setAttackDescription("Summons a supportive tailwind to help the target's mobility. Increases the target's speed for 1 turn.");
+        return move;
     }
 
     public static Move twister(Entity user) {
@@ -1682,7 +1719,7 @@ public class MoveConstructor {
         }, .01f, 1);
 
 
-        return new Move("Twister", user, 3, new Array<BoardPosition>(new BoardPosition[]{
+        Move move = new Move("Twister", user, 3, new Array<BoardPosition>(new BoardPosition[]{
                 new BoardPosition(-3, 0),
                 new BoardPosition(-3, 1), new BoardPosition(-3, -1),
                 new BoardPosition(-2, 0), new BoardPosition(-4, -0)}),
@@ -1702,6 +1739,8 @@ public class MoveConstructor {
                 new BoardPosition(-3, 1), new BoardPosition(-3, -1),
                 new BoardPosition(-2, 0), new BoardPosition(-4, -0)}),
                 new Array<VisualEvent>(new VisualEvent[]{flash, shuriken, sparkle, explode})), new MoveInfo(false, 1));
+        move.setAttackDescription("Summons a vicious twister. Deals regular damage.");
+        return move;
     }
 
     public static Move freezeAttack(Entity user) {
@@ -1761,7 +1800,7 @@ public class MoveConstructor {
             }
         }, .2f, 9);
 
-        return new Move("Freeze", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+        Move move = new Move("Freeze", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1772,6 +1811,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Array<VisualEvent>(new VisualEvent[]{freeze, sparkle})), new MoveInfo(false, 0, freeze(3).createStatusEffectInfo()));
+        move.setAttackDescription("Freezes an opponent in ice, stopping them from moving and lowering their defense. Inflicts Freeze for 3 turns.");
+        return move;
     }
 
     //Medicarp
@@ -1878,7 +1919,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Assist", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Assist", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1891,6 +1932,8 @@ public class MoveConstructor {
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
                     enemy.hp += 2;
                 }));
+        move.setAttackDescription(nm.get(user).name + " uses supportive powers to heal the target. Always heals the target by 2 points.");
+        return move;
     }
 
     public static Move clear(Entity user) {
@@ -1996,7 +2039,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Clear", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Clear", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -2007,6 +2050,8 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{changeToBlue, sparkle, explode, returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, (enemy, userEntity) -> {if (enemy.acceptsStatusEffects) enemy.statusEffectInfos.clear();}));
+        move.setAttackDescription(nm.get(user).name + " uses mystic powers to remove all status effects from the target. Clears the target of all status effects.");
+        return move;
     }
 
     public static Move recover(Entity user) {
@@ -2066,7 +2111,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Recover", nm.get(user).name + " began to recover.", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Recover", nm.get(user).name + " began to recover.", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -2077,6 +2122,8 @@ public class MoveConstructor {
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
                     enemy.hp += 2;
                 }));
+        move.setAttackDescription(nm.get(user) + " focuses its energy to recover. Heals 3 points to itself.");
+        return move;
     }
 
     public static Move submerge(Entity user) {
@@ -2234,7 +2281,7 @@ public class MoveConstructor {
             }
         }, .15f, 6);
 
-        return new Move("Submerge", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-3, 0)}),
+        Move move = new Move("Submerge", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-3, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -2247,6 +2294,9 @@ public class MoveConstructor {
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
                     enemy.hp -= 3;
                 }));
+        move.setAttackDescription(nm.get(user) + " uses mysterious powers to submerge the target in water. This" +
+                " always inflicts 3 points of damage regardless of the target's stats or condition.");
+        return move;
     }
 
     //Thoughtoise
@@ -2344,7 +2394,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Rest Mind", nm.get(user).name + " began to rest its mind.", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Rest Mind", nm.get(user).name + " began to rest its mind.", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -2360,6 +2410,9 @@ public class MoveConstructor {
                     if (userEntity.acceptsStatusEffects)
                         userEntity.statusEffectInfos.add(defenseless(1).createStatusEffectInfo());
                 }));
+        move.setAttackDescription(nm.get(user) + " focuses its mind in order to prepare its next move. The user gains one SP point, but lowers the user's " +
+        "defense to 0 for 1 turn.");
+        return move;
     }
 
     public static Move drench(Entity user) {
@@ -2491,7 +2544,7 @@ public class MoveConstructor {
             }
         }, .01f, 7);
 
-        return new Move("Drench", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Drench", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -2504,6 +2557,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{bubble, sparkle, ripple, largeSparkle})), new MoveInfo(false, 1));
+        move.setAttackDescription("Summons a rush of water to drench the opponent. Deals regular damage.");
+        return move;
     }
 
     public static Move electrocute(Entity user) {
@@ -2645,7 +2700,7 @@ public class MoveConstructor {
             }
         }, .01f, 7);
 
-        return new Move("Electrocute", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Electrocute", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -2661,6 +2716,9 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{spinning, ripple, shock, largeSparkle})), new MoveInfo(false, .5f, paralyze(3).createStatusEffectInfo()));
+        move.setAttackDescription("Uses arcane powers to induce a current in the opponent. Deals 1/2x damage and inflicts the" +
+        " user with paralysis.");
+        return move;
     }
 
     public static Move cometShower(Entity user) {
@@ -2774,7 +2832,7 @@ public class MoveConstructor {
             }
         }, .2f, 2);
 
-        return new Move("Comet Shower", user, 6, new Array<BoardPosition>(new BoardPosition[]{
+        Move move = new Move("Comet Shower", user, 6, new Array<BoardPosition>(new BoardPosition[]{
                     new BoardPosition(-2, 0), new BoardPosition(-1, -1),  new BoardPosition(2, 0),  new BoardPosition(1, 1),
                     new BoardPosition(-2, 1),  new BoardPosition(0, -3),  new BoardPosition(2, -1), new BoardPosition(0, 3),
                     new BoardPosition(-4, 1),  new BoardPosition(1, -4),  new BoardPosition(3, -1), new BoardPosition(1, 3),
@@ -2797,6 +2855,8 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{
                         preSparkles.copy(), preBooms.copy(), preSparkles.copy(), preBooms.copy(),
                         comets.copy(), ripple.copy(), comets.copy(), ripple.copy(), comets.copy(), ripple, comets, preBooms.copy(), preBooms})), new MoveInfo(false, 2f));
+        move.setAttackDescription(nm.get(user).name + " uses most of its energy to summon a flurry of comets onto the field. Deals 2x damage.");
+        return move;
     }
 
     //Thundog
@@ -2863,7 +2923,7 @@ public class MoveConstructor {
         }, .01f, 1);
 
 
-        return new Move("Shock Claw", nm.get(user).name + " scraped the opponent!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Shock Claw", nm.get(user).name + " scraped the opponent!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -2877,7 +2937,7 @@ public class MoveConstructor {
                                     status.get(enemy).addStatusEffect(paralyze(3), enemy);
                             } else { //is paralyzed
                                 status.get(enemy).removeStatusEffect(enemy, "Paralyze"); //cure their paralysis
-                                stm.get(e).sp = MathUtils.clamp(stm.get(e).sp + 1, 0, stm.get(e).getModMaxSp(e)); //recover sp
+                                stm.get(e).sp = MathUtils.clamp(stm.get(e).sp + 2, 0, stm.get(e).getModMaxSp(e)); //recover sp
                             }
                         }
 
@@ -2886,9 +2946,19 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{shock, claw})), new MoveInfo(false, 1, (enemy, userEntity) -> {
-                    if (enemy.acceptsStatusEffects && MathUtils.randomBoolean(.5f))
-                        enemy.statusEffectInfos.add(paralyze(3).createStatusEffectInfo());
+                    if (enemy.acceptsStatusEffects) {
+                        if (enemy.statusEffectInfos.contains(paralyze(3).createStatusEffectInfo(), false)) { //already paralyzed->cure and heal self
+                            enemy.statusEffectInfos.removeValue(paralyze(3).createStatusEffectInfo(), false);
+                            userEntity.sp+=2;
+                        } else { // chance to paralyze
+                            if (MathUtils.randomBoolean(.5f))
+                                enemy.statusEffectInfos.add(paralyze(3).createStatusEffectInfo());
+                        }
+                    }
                 }));
+        move.setAttackDescription("Slashes the target with electrically charged claws. Deals regular damage. Has a 50% chance to paralyze the target for 3 turns. If this move is used" +
+        " on a paralyzed target, it will cure their paralysis and increase the user's SP by 2 points.");
+        return move;
     }
 
     public static Move charge(Entity user) {
@@ -2987,7 +3057,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Charge", nm.get(user).name + " gained electric energy.", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Charge", nm.get(user).name + " gained electric energy.", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -3003,6 +3073,8 @@ public class MoveConstructor {
                     if (userEntity.acceptsStatusEffects)
                         userEntity.statusEffectInfos.add(charged(3).createStatusEffectInfo());
                 }));
+        move.setAttackDescription("Gathers electric energy to increase its Max SP, Attack, and Speed for 3 turns. Clears any status effects beforehand.");
+        return move;
     }
 
     public static Move superCharge(Entity user) {
@@ -3097,7 +3169,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Supercharge", nm.get(user).name + " gained a large amount of electric energy!", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Supercharge", nm.get(user).name + " gained a large amount of electric energy!", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -3114,6 +3186,9 @@ public class MoveConstructor {
                         userEntity.statusEffectInfos.add(supercharged(4).createStatusEffectInfo());
                 })
         );
+        move.setAttackDescription("Gathers a large amount of electric energy to greatly increase its Max SP, Attack, and Speed for 4 turns. Clears" +
+        " any status effect beforehand.");
+        return move;
     }
 
     public static Move voltDeluge(Entity user) {
@@ -3224,7 +3299,7 @@ public class MoveConstructor {
             }
         }, .1f, 2);
 
-        return new Move("Volt Deluge", user, 5, new Array<BoardPosition>(new BoardPosition[]{
+        Move move = new Move("Volt Deluge", user, 5, new Array<BoardPosition>(new BoardPosition[]{
                 new BoardPosition(-1, 1), new BoardPosition(-1, -1),  new BoardPosition(-2, 0),  new BoardPosition(-3, 1), new BoardPosition(-3, -1)}),
                 new Attack() {
                     @Override
@@ -3233,8 +3308,10 @@ public class MoveConstructor {
                         if (stm.has(enemy))
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
 
-                        if (status.has(enemy) && MathUtils.randomBoolean(.75f))
+                        if (status.has(enemy) && MathUtils.randomBoolean(.8f)) {
                             status.get(enemy).addStatusEffect(paralyze(3), enemy);
+                            status.get(enemy).addStatusEffect(defenseless(3), enemy);
+                        }
 
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
@@ -3244,10 +3321,15 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{
                         ions, doNothing, rippleOut.copy(), shocking.copy(), rippleOut, shocking})),
                 new MoveInfo(false, 1, (enemy, userEntity) -> {
-                    if (MathUtils.randomBoolean(.75f) && enemy.acceptsStatusEffects)
+                    if (MathUtils.randomBoolean(.8f) && enemy.acceptsStatusEffects) {
                         enemy.statusEffectInfos.add(paralyze(3).createStatusEffectInfo());
+                        enemy.statusEffectInfos.add(defenseless(3).createStatusEffectInfo());
+                    }
                 })
         );
+        move.setAttackDescription("Causes a shower of electricity to rain near the user. Deals regular damage, and has an 80% chance to inflict targets with" +
+        " paralysis and defenseless.");
+        return move;
     }
 
     //Mummy
@@ -3281,7 +3363,7 @@ public class MoveConstructor {
             }
         }, .1f, 5);
 
-        return new Move("Barrage", null, user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Barrage", null, user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -3358,7 +3440,7 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
-        return new Move("Feint", nm.get(user).name + " struck where the enemy was vulnerable!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Feint", nm.get(user).name + " struck where the enemy was vulnerable!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -3478,7 +3560,7 @@ public class MoveConstructor {
             }
         }, .19f, 2);
 
-        return new Move("Basilisk Strike", "The target was petrified!", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Basilisk Strike", "The target was petrified!", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -3611,7 +3693,7 @@ public class MoveConstructor {
             }
         }, .19f, 2);
 
-        return new Move("Curse", nm.get(user).name + " placed a curse.", user, 5, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Curse", nm.get(user).name + " placed a curse.", user, 5, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -3722,7 +3804,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Rest Body", nm.get(user).name + " began to rest its body.", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Rest Body", nm.get(user).name + " began to rest its body.", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -3901,7 +3983,7 @@ public class MoveConstructor {
             }
         }, .01f, 6);
 
-        return new Move("Ignite", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Ignite", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -4052,7 +4134,7 @@ public class MoveConstructor {
             }
         }, .01f, 7);
 
-        return new Move("Drench", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Drench", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -4178,7 +4260,7 @@ public class MoveConstructor {
             }
         }, .2f, 2);
 
-        return new Move("Meteor Shower", user, 6, new Array<BoardPosition>(new BoardPosition[]{
+        Move move = new Move("Meteor Shower", user, 6, new Array<BoardPosition>(new BoardPosition[]{
                 new BoardPosition(-1, 0), new BoardPosition(-1, -1),  new BoardPosition(-1, 1),
                 new BoardPosition(0, 1),  new BoardPosition(0, -1),
                 new BoardPosition(1, 0),  new BoardPosition(1, -1),  new BoardPosition(1, 1)}),
@@ -4325,7 +4407,7 @@ public class MoveConstructor {
             }
         }, .2f, 3);
 
-        return new Move("Dragon Breath", nm.get(user).name + " spewed dragon breath!", user, 1,
+        Move move = new Move("Dragon Breath", nm.get(user).name + " spewed dragon breath!", user, 1,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)
@@ -4459,7 +4541,7 @@ public class MoveConstructor {
             }
         }, .2f, 2);
 
-        return new Move("Toxic Breath", nm.get(user).name + " spewed a poisonous breath!", user, 2,
+        Move move = new Move("Toxic Breath", nm.get(user).name + " spewed a poisonous breath!", user, 2,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)
@@ -4632,7 +4714,7 @@ public class MoveConstructor {
             }
         }, .2f, 2);
 
-        return new Move("Fresh Breath", nm.get(user).name + " breathed refreshing air!", user, 1,
+        Move move = new Move("Fresh Breath", nm.get(user).name + " breathed refreshing air!", user, 1,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)
@@ -4807,7 +4889,7 @@ public class MoveConstructor {
             }
         }, .2f, 2);
 
-        return new Move("Spa Breath", nm.get(user).name + " breathed a soothing air!", user, 2,
+        Move move = new Move("Spa Breath", nm.get(user).name + " breathed a soothing air!", user, 2,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)
@@ -4944,7 +5026,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Restore", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Restore", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5078,7 +5160,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Regen", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Regen", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5276,7 +5358,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Boost", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Boost", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5408,7 +5490,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Transfer", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Transfer", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5492,7 +5574,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        return new Move("Reflect Move", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Reflect Move", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5576,7 +5658,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        return new Move("Mirror Move", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Mirror Move", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5660,7 +5742,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        return new Move("Roulette Reflect", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Roulette Reflect", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5724,7 +5806,7 @@ public class MoveConstructor {
             }
         }, .08f, 6);
 
-        return new Move("Peck", nm.get(user).name + " attacked!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Peck", nm.get(user).name + " attacked!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5935,7 +6017,7 @@ public class MoveConstructor {
         }, .05f, 1);
 
         //Move
-        return new Move("Vigorate", nm.get(user).name + " gave the target a powerful energy.", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Vigorate", nm.get(user).name + " gave the target a powerful energy.", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -6148,7 +6230,7 @@ public class MoveConstructor {
         }, .05f, 1);
 
         //Move
-        return new Move("Rejuvenate", nm.get(user).name + " gave the target a powerful rejuvenating energy.", user, 6, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Rejuvenate", nm.get(user).name + " gave the target a powerful rejuvenating energy.", user, 6, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -6255,7 +6337,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Status-Purge", nm.get(user).name + " removed itself of any status effects.", user, 6, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Status-Purge", nm.get(user).name + " removed itself of any status effects.", user, 6, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -6367,7 +6449,7 @@ public class MoveConstructor {
             }
         }, .08f, 7);
 
-        return new Move("Bite", nm.get(user).name + " bit the opponent!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Bite", nm.get(user).name + " bit the opponent!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -6492,7 +6574,7 @@ public class MoveConstructor {
             }
         }, .08f, 7);
 
-        return new Move("Toxic Bite", nm.get(user).name + " bit the opponent with a deadly toxin!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Toxic Bite", nm.get(user).name + " bit the opponent with a deadly toxin!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -6619,7 +6701,7 @@ public class MoveConstructor {
             }
         }, .08f, 7);
 
-        return new Move("Boost Toxin", nm.get(user).name + " bit the opponent with an unpredictable, dangerous toxin!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Boost Toxin", nm.get(user).name + " bit the opponent with an unpredictable, dangerous toxin!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -6794,7 +6876,7 @@ public class MoveConstructor {
             }
         }, .08f, 7);
 
-        return new Move("Berserk Bite", nm.get(user).name + " bit the opponent with an aggravating toxin!", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Berserk Bite", nm.get(user).name + " bit the opponent with an aggravating toxin!", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -6873,7 +6955,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        return new Move("Slam", nm.get(user).name + " slammed into the opponent", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Slam", nm.get(user).name + " slammed into the opponent", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -6982,7 +7064,7 @@ public class MoveConstructor {
             }
         }, .01f, 6);
 
-        return new Move("Heavy Slam", nm.get(user).name + " slammed into the opponent", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Heavy Slam", nm.get(user).name + " slammed into the opponent", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -7030,7 +7112,7 @@ public class MoveConstructor {
             }
         }, .21f, 1);
 
-        return new Move("Claw", nm.get(user).name + " slashed its claws!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Claw", nm.get(user).name + " slashed its claws!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -7079,7 +7161,7 @@ public class MoveConstructor {
             }
         }, .21f, 1);
 
-        return new Move("Claw", nm.get(user).name + " slashed its claws!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Claw", nm.get(user).name + " slashed its claws!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -7199,7 +7281,7 @@ public class MoveConstructor {
         }, .1f, 1);
 
         //Move
-        return new Move("Monoplode+", nm.get(user).name + " uses a defense piercing spell!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Monoplode+", nm.get(user).name + " uses a defense piercing spell!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -7251,7 +7333,7 @@ public class MoveConstructor {
             }
         }, .4f, 3);
         
-        return new Move("Power Wave", "The " + nm.get(user).name + " emitted a strengthening wave!", user, 2,
+        Move move = new Move("Power Wave", "The " + nm.get(user).name + " emitted a strengthening wave!", user, 2,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0), new BoardPosition(-1, -1), new BoardPosition(0, -1), new BoardPosition(1, -1),
                         new BoardPosition(1, 0), new BoardPosition(1, 1), new BoardPosition(0, 1), new BoardPosition(-1, 1),
@@ -7312,7 +7394,7 @@ public class MoveConstructor {
             }
         }, .4f, 3);
 
-        return new Move("Weaken Wave", "The " + nm.get(user).name + " emitted a weakening wave!", user, 2,
+        Move move = new Move("Weaken Wave", "The " + nm.get(user).name + " emitted a weakening wave!", user, 2,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0), new BoardPosition(-1, -1), new BoardPosition(0, -1), new BoardPosition(1, -1),
                         new BoardPosition(1, 0), new BoardPosition(1, 1), new BoardPosition(0, 1), new BoardPosition(-1, 1),
@@ -7375,7 +7457,7 @@ public class MoveConstructor {
             }
         }, .4f, 3);
 
-        return new Move("Shield Wave", "The " + nm.get(user).name + " emitted a defense boosting wave!", user, 2,
+        Move move = new Move("Shield Wave", "The " + nm.get(user).name + " emitted a defense boosting wave!", user, 2,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0), new BoardPosition(-1, -1), new BoardPosition(0, -1), new BoardPosition(1, -1),
                         new BoardPosition(1, 0), new BoardPosition(1, 1), new BoardPosition(0, 1), new BoardPosition(-1, 1),
@@ -7514,7 +7596,7 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
-        return new Move("War Wave", "The " + nm.get(user).name + " emitted a maddening wave!", user, 1,
+        Move move = new Move("War Wave", "The " + nm.get(user).name + " emitted a maddening wave!", user, 1,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0), new BoardPosition(-1, -1), new BoardPosition(0, -1), new BoardPosition(1, -1),
                         new BoardPosition(1, 0), new BoardPosition(1, 1), new BoardPosition(0, 1), new BoardPosition(-1, 1),
@@ -7644,7 +7726,7 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
-        return new Move("Peace Wave", "The " + nm.get(user).name + " emitted a peaceful wave!", user, 1,
+        Move move = new Move("Peace Wave", "The " + nm.get(user).name + " emitted a peaceful wave!", user, 1,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0), new BoardPosition(-1, -1), new BoardPosition(0, -1), new BoardPosition(1, -1),
                         new BoardPosition(1, 0), new BoardPosition(1, 1), new BoardPosition(0, 1), new BoardPosition(-1, 1),
@@ -7740,7 +7822,7 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
-        return new Move("Worry Wave", "The " + nm.get(user).name + " emitted an unsettling wave!", user, 1,
+        Move move = new Move("Worry Wave", "The " + nm.get(user).name + " emitted an unsettling wave!", user, 1,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0), new BoardPosition(-1, -1), new BoardPosition(0, -1), new BoardPosition(1, -1),
                         new BoardPosition(1, 0), new BoardPosition(1, 1), new BoardPosition(0, 1), new BoardPosition(-1, 1),
@@ -7865,7 +7947,7 @@ public class MoveConstructor {
             }
         }, .05f, 12);
 
-        return new Move("Slash", nm.get(user).name + " slashed the opponent", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Slash", nm.get(user).name + " slashed the opponent", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -7977,7 +8059,7 @@ public class MoveConstructor {
             }
         }, .03f, 10);
 
-        return new Move("Chain Fire", user, 2, new Array<BoardPosition>(
+        Move move = new Move("Chain Fire", user, 2, new Array<BoardPosition>(
                 new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0), new BoardPosition(-4, 0)}),
                 new Attack() {
                     @Override
@@ -8169,7 +8251,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Flame Charge", nm.get(user).name + " began heating up!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Flame Charge", nm.get(user).name + " began heating up!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -8449,7 +8531,7 @@ public class MoveConstructor {
         }, .006f, 30);
 
         //Move
-        return new Move("Blue Flame", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Blue Flame", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -8555,7 +8637,7 @@ public class MoveConstructor {
             }
         }, .19f, 9);
 
-        return new Move("Hammer Strike", nm.get(user).name + " slammed the opponent with its hammer!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Hammer Strike", nm.get(user).name + " slammed the opponent with its hammer!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -8746,7 +8828,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Gather", nm.get(user).name + " began gathering water molecules to regenerate itself!", user, 5, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Gather", nm.get(user).name + " began gathering water molecules to regenerate itself!", user, 5, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -8960,7 +9042,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Strengthen", nm.get(user).name + " increased its attack power using water molecules!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Strengthen", nm.get(user).name + " increased its attack power using water molecules!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -9118,7 +9200,7 @@ public class MoveConstructor {
             }
         }, .03f, 10);
 
-        return new Move("KO Strike", nm.get(user).name + " knocked the opponent out!", user, 7, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("KO Strike", nm.get(user).name + " knocked the opponent out!", user, 7, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -9163,7 +9245,7 @@ public class MoveConstructor {
             }
         }, .06f, 8);
 
-        return new Move("Spear Stab", nm.get(user).name + " pierced defenses!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Spear Stab", nm.get(user).name + " pierced defenses!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -9335,7 +9417,7 @@ public class MoveConstructor {
             }
         }, .03f, 15);
 
-        return new Move("Flux Wave", user, 1, new Array<BoardPosition>(new BoardPosition[]{
+        Move move = new Move("Flux Wave", user, 1, new Array<BoardPosition>(new BoardPosition[]{
                 new BoardPosition(0, -1), new BoardPosition(0, -2), new BoardPosition(-1, -2), new BoardPosition(1, -2), new BoardPosition(0, -3)
             }),
                 new Attack() {
@@ -9425,7 +9507,7 @@ public class MoveConstructor {
             }
         }, .06f, 50);
 
-        return new Move("Disrupt", nm.get(user).name + " emitted a disruptive wave!", user, 4,
+        Move move = new Move("Disrupt", nm.get(user).name + " emitted a disruptive wave!", user, 4,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0), new BoardPosition(-1, -1), new BoardPosition(0, -1), new BoardPosition(1, -1),
                         new BoardPosition(1, 0), new BoardPosition(1, 1), new BoardPosition(0, 1), new BoardPosition(-1, 1),
@@ -9631,7 +9713,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Polarize", nm.get(user).name + "'s charges become polarized!", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Polarize", nm.get(user).name + "'s charges become polarized!", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -9754,7 +9836,7 @@ public class MoveConstructor {
             }
         }, .06f, 10);
 
-        return new Move("Dragon Breath", nm.get(user).name + " spewed dragon breath!", user, 2,
+        Move move = new Move("Dragon Breath", nm.get(user).name + " spewed dragon breath!", user, 2,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)
@@ -9970,7 +10052,7 @@ public class MoveConstructor {
             }
         }, .05f, 15);
 
-        return new Move("Roar", nm.get(user).name + "'s roar scared the enemy!", user, 2,
+        Move move = new Move("Roar", nm.get(user).name + "'s roar scared the enemy!", user, 2,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
@@ -10231,7 +10313,7 @@ public class MoveConstructor {
             }
         }, .03f, 15);
 
-        return new Move("Spectral Flash", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Spectral Flash", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -10445,7 +10527,7 @@ public class MoveConstructor {
 
         }, .02f, 25);
 
-        return new Move("Fluxwave", nm.get(user).name + " caused major disturbances!", user, 4,
+        Move move = new Move("Fluxwave", nm.get(user).name + " caused major disturbances!", user, 4,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(0, -2)
                 }),
@@ -10597,7 +10679,7 @@ public class MoveConstructor {
             }
         }, .05f, 15);
 
-        return new Move("Raze", nm.get(user).name + " unleashed a surge of energy!", user, 6,
+        Move move = new Move("Raze", nm.get(user).name + " unleashed a surge of energy!", user, 6,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
@@ -10681,7 +10763,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        return new Move("Stone Glare", nm.get(user).name + " petrified the opponent with a glare!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Stone Glare", nm.get(user).name + " petrified the opponent with a glare!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -10847,7 +10929,7 @@ public class MoveConstructor {
             }
         }, .24f, 2);
 
-        return new Move("Roar", nm.get(user).name + " roared!", user, 4,
+        Move move = new Move("Roar", nm.get(user).name + " roared!", user, 4,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
@@ -10959,7 +11041,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Prepare", nm.get(user).name + " readied its body to pounce!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Prepare", nm.get(user).name + " readied its body to pounce!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -11058,7 +11140,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Ready", nm.get(user).name + " readied its body to attack!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Ready", nm.get(user).name + " readied its body to attack!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -11255,7 +11337,7 @@ public class MoveConstructor {
             }
         }, .1f, 7);
 
-        return new Move("Neo-Roar", nm.get(user).name + "'s roar electrified the air!", user, 4,
+        Move move = new Move("Neo-Roar", nm.get(user).name + "'s roar electrified the air!", user, 4,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
@@ -11537,7 +11619,7 @@ public class MoveConstructor {
             }
         }, .1f, 1);
 
-        return new Move("Reflect Beam", nm.get(user).name + " shot off a beam of reflected light!", user, 2, new Array<BoardPosition>(
+        Move move = new Move("Reflect Beam", nm.get(user).name + " shot off a beam of reflected light!", user, 2, new Array<BoardPosition>(
                 new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 0),
@@ -11814,7 +11896,7 @@ public class MoveConstructor {
             }
         }, .1f, 1);
 
-        return new Move("Reflect Beam", nm.get(user).name + " shot off a beam of reflected light!", user, 0, new Array<BoardPosition>(
+        Move move = new Move("Reflect Beam", nm.get(user).name + " shot off a beam of reflected light!", user, 0, new Array<BoardPosition>(
                 new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 0),
@@ -12094,7 +12176,7 @@ public class MoveConstructor {
             }
         }, .1f, 1);
 
-        return new Move("Refract Beam", nm.get(user).name + " shot off a beam of refracted light!", user, 0, new Array<BoardPosition>(
+        Move move = new Move("Refract Beam", nm.get(user).name + " shot off a beam of refracted light!", user, 0, new Array<BoardPosition>(
                 new BoardPosition[]{
                         new BoardPosition(-1, -1),
                         new BoardPosition(-1, 1),
@@ -12149,7 +12231,7 @@ public class MoveConstructor {
             }
         }, .06f, 8);
 
-        return new Move("Poison Punch", nm.get(user).name + " attacks!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Poison Punch", nm.get(user).name + " attacks!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -12297,7 +12379,7 @@ public class MoveConstructor {
             }
         }, .12f, 4);
 
-        return new Move("Immobilize", "The target was drenched in immobilizing goo!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Immobilize", "The target was drenched in immobilizing goo!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -12346,7 +12428,7 @@ public class MoveConstructor {
             }
         }, .06f, 8);
 
-        return new Move("Stun Punch", nm.get(user).name + " attacks!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Stun Punch", nm.get(user).name + " attacks!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -12435,7 +12517,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Recover", nm.get(user).name + " began to regenerate.", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Recover", nm.get(user).name + " began to regenerate.", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -12543,7 +12625,7 @@ public class MoveConstructor {
             }
         }, .02f, 20);
 
-        return new Move("Mystery Strike", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Mystery Strike", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -12688,7 +12770,7 @@ public class MoveConstructor {
                 engine.addEntity(boom);
             }
         }, .01f, 1);
-        return new Move("Accursed Sludge", "The target was cursed!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Accursed Sludge", "The target was cursed!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -12800,7 +12882,7 @@ public class MoveConstructor {
             }
         }, .08f, 7);
 
-        return new Move("Sludge Throw", nm.get(user).name + " threw sludge!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Sludge Throw", nm.get(user).name + " threw sludge!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -12925,7 +13007,7 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
-        return new Move("Suppress", "The target's attack was lowered!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Suppress", "The target's attack was lowered!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -13044,7 +13126,7 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
-        return new Move("Suppress", "The target's defense was lowered!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Suppress", "The target's defense was lowered!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -13155,7 +13237,7 @@ public class MoveConstructor {
             }
         }, .08f, 7);
 
-        return new Move("Sludge Throw", nm.get(user).name + " threw sludge!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Sludge Throw", nm.get(user).name + " threw sludge!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -13280,7 +13362,7 @@ public class MoveConstructor {
             }
         }, .08f, 7);
 
-        return new Move("Toxic Throw", nm.get(user).name + " threw toxic waste!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Toxic Throw", nm.get(user).name + " threw toxic waste!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -13442,7 +13524,7 @@ public class MoveConstructor {
             }
         }, .08f, 7);
 
-        return new Move("Suppress", "A move is now unusable!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Suppress", "A move is now unusable!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -13590,7 +13672,7 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
-        return new Move("Medical Throw", "The target was hit with medical substances!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Medical Throw", "The target was hit with medical substances!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -13663,7 +13745,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        return new Move("Slam", nm.get(user).name + " slammed into the opponent", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Slam", nm.get(user).name + " slammed into the opponent", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -13737,7 +13819,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        return new Move("Slam", nm.get(user).name + " slammed into the opponent", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Slam", nm.get(user).name + " slammed into the opponent", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -13848,7 +13930,7 @@ public class MoveConstructor {
             }
         }, .01f, 6);
 
-        return new Move("Heavy Slam", nm.get(user).name + " slammed into the opponent", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Heavy Slam", nm.get(user).name + " slammed into the opponent", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -13948,7 +14030,7 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
-        return new Move("Laser Beam", nm.get(user).name + " shot a laser beam!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}),
+        Move move = new Move("Laser Beam", nm.get(user).name + " shot a laser beam!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -13978,7 +14060,7 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
-        return new Move("Guard", nm.get(user).name + " raised its guard.", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Guard", nm.get(user).name + " raised its guard.", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -14036,7 +14118,7 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
-        return new Move("Super Guard", nm.get(user).name + " assumed a defensive stance.", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Super Guard", nm.get(user).name + " assumed a defensive stance.", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -14097,7 +14179,7 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
-        return new Move("Ultimate Guard", nm.get(user).name + " assumed a perfect defensive stance.", user, 6, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Ultimate Guard", nm.get(user).name + " assumed a perfect defensive stance.", user, 6, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -14196,7 +14278,7 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
-        return new Move("Laser Beam", nm.get(user).name + " shot a laser beam!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}),
+        Move move = new Move("Laser Beam", nm.get(user).name + " shot a laser beam!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -14278,7 +14360,7 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
-        return new Move("Slash", nm.get(user).name + " attacks!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Slash", nm.get(user).name + " attacks!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -14361,7 +14443,7 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
-        return new Move("Toxic Slash", nm.get(user).name + " attacks with a poison!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Toxic Slash", nm.get(user).name + " attacks with a poison!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -14475,7 +14557,7 @@ public class MoveConstructor {
             }
         }, .01f, 25);
 
-        return new Move("Immobite", "The target's attack paralyzed the opponent!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Immobite", "The target's attack paralyzed the opponent!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -14586,7 +14668,7 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
-        return new Move("Steal Skill", nm.get(user).name + " tried to steal skill points!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Steal Skill", nm.get(user).name + " tried to steal skill points!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -14709,7 +14791,7 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
-        return new Move("Steal Health", nm.get(user).name + " tried to steal health!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Steal Health", nm.get(user).name + " tried to steal health!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -14851,7 +14933,7 @@ public class MoveConstructor {
         }, .3f, 1);
 
         //Move
-        return new Move("Demoralizing Blow", nm.get(user).name + " delivered a demoralizing blow!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Demoralizing Blow", nm.get(user).name + " delivered a demoralizing blow!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -14935,7 +15017,7 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
-        return new Move("Slash", nm.get(user).name + " attacks!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Slash", nm.get(user).name + " attacks!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -15055,7 +15137,7 @@ public class MoveConstructor {
             }
         }, .01f, 6);
 
-        return new Move("Crush Claw", nm.get(user).name + " crushed the opponent!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Crush Claw", nm.get(user).name + " crushed the opponent!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -15180,7 +15262,7 @@ public class MoveConstructor {
         }, .06f, 5);
 
 
-        return new Move("Penetrate", nm.get(user).name + " attacked through defenses!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Penetrate", nm.get(user).name + " attacked through defenses!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -15254,7 +15336,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        return new Move("Judging Glare", nm.get(user).name + " gave the opponent a judging glare!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Judging Glare", nm.get(user).name + " gave the opponent a judging glare!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -15527,7 +15609,7 @@ public class MoveConstructor {
             }
         }, .1f, 1);
 
-        return new Move("Beam", nm.get(user).name + " shot off a beam!", user, 1, new Array<BoardPosition>(
+        Move move = new Move("Beam", nm.get(user).name + " shot off a beam!", user, 1, new Array<BoardPosition>(
                 new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 0),
@@ -15663,7 +15745,7 @@ public class MoveConstructor {
         }, .1f, 1);
 
         //Move
-        return new Move("Monoplode", nm.get(user).name + " uses a spell!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Monoplode", nm.get(user).name + " uses a spell!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -15788,7 +15870,7 @@ public class MoveConstructor {
         }, .1f, 1);
 
         //Move
-        return new Move("Monoplode", nm.get(user).name + " uses a spell!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Monoplode", nm.get(user).name + " uses a spell!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -15947,7 +16029,7 @@ public class MoveConstructor {
         }, .01f, 10);
 
         //Move
-        return new Move("Monoplode", nm.get(user).name + " uses a spell!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Monoplode", nm.get(user).name + " uses a spell!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -16101,7 +16183,7 @@ public class MoveConstructor {
         }, .003f, 80);
 
         //Move
-        return new Move("Monoplode", nm.get(user).name + " uses a spell!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Monoplode", nm.get(user).name + " uses a spell!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -16197,7 +16279,7 @@ public class MoveConstructor {
         }, .05f, 1);
 
 
-        return new Move("Monopierce", nm.get(user).name + " uses a mystifying spell!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+        Move move = new Move("Monopierce", nm.get(user).name + " uses a mystifying spell!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -16380,7 +16462,7 @@ public class MoveConstructor {
         }, .01f, 1);
 
 
-        return new Move("Monoflash", nm.get(user).name + " uses a enigmatic spell!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+        Move move = new Move("Monoflash", nm.get(user).name + " uses a enigmatic spell!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -16634,7 +16716,7 @@ public class MoveConstructor {
             }
         }, .3f, 1);
 
-        return new Move("Combobulate", nm.get(user).name + " uses enigmatic wizardry!", user, 4,
+        Move move = new Move("Combobulate", nm.get(user).name + " uses enigmatic wizardry!", user, 4,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, -1), new BoardPosition(-2, -2), new BoardPosition(-3, -3),
                         new BoardPosition(-1, 1), new BoardPosition(-2, 2), new BoardPosition(-3, 3)
@@ -16748,7 +16830,7 @@ public class MoveConstructor {
         }, .05f, 1);
 
         //Move
-        return new Move("Enchant", nm.get(user).name + " used a supportive spell!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Enchant", nm.get(user).name + " used a supportive spell!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -16852,7 +16934,7 @@ public class MoveConstructor {
         }, .05f, 1);
 
         //Move
-        return new Move("Ward", nm.get(user).name + " used a defensive spell!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Ward", nm.get(user).name + " used a defensive spell!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -16939,7 +17021,7 @@ public class MoveConstructor {
         }, .05f, 1);
 
 
-        return new Move("Disarm", nm.get(user).name + " uses a weakening spell!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Disarm", nm.get(user).name + " uses a weakening spell!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -17057,7 +17139,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Full Restore", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Full Restore", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -17182,7 +17264,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        return new Move("Transfer", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Transfer", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {

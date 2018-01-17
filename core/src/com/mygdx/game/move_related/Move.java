@@ -14,6 +14,10 @@ import static com.mygdx.game.ComponentMappers.bm;
  */
 public class Move {
     private String name;
+    /**
+     * Displayed in help menu
+     */
+    private String attackDescription;
     private String attackMessage;
     private int spCost;
     private Attack attack;
@@ -28,7 +32,7 @@ public class Move {
     private MoveInfo moveInfo; //for AI
 
     /**
-     * Creates a move that can be used. The move's attack message is displayed when it is used.
+     * Creates a move that can be used. The move's attack message is displayed when it is used. Has no move description.
      * @param name2 name
      * @param message message that is displayed when move is used. {@code null} will show the default message.
      * @param usr user of move
@@ -50,8 +54,32 @@ public class Move {
     }
 
     /**
+     * Creates a move that can be used. The move's attack message is displayed when it is used. Has a move description.
+     * @param name2 name
+     * @param description move description displayed in help menu
+     * @param message message that is displayed when move is used. {@code null} will show the default message.
+     * @param usr user of move
+     * @param cost amount of sp to use the move
+     * @param rnge range
+     * @param atk effect of attack
+     * @param vis visual effect
+     */
+    public Move(String name2, String description, String message, Entity usr, int cost, Array<BoardPosition> rnge,
+                Attack atk, Visuals vis, MoveInfo info) {
+        name = name2;
+        attackDescription = description;
+        attackMessage = message;
+        user = usr;
+        spCost = cost;
+        range = rnge;
+        attack  = atk;
+        visuals = vis;
+        moveInfo = info;
+    }
+
+    /**
      * Creates a move that can be used. The generic message, "(move name) was used" or "(Entity name) used (move name)", is displayed
-     * when used
+     * when used. Has no move description
      *
      * @param name2 name
      * @param usr user of move
@@ -160,12 +188,20 @@ public class Move {
         return boardPositions;
     }
 
+    public void setAttackDescription(String description) {
+        attackDescription = description;
+    }
+
     public void updateVisuals(float dt) {
         visuals.updateTimer(dt);
     }
 
     public int spCost() {
         return spCost;
+    }
+
+    public String getAttackDescription() {
+        return attackDescription;
     }
 
     public Visuals getVisuals() {
@@ -191,6 +227,6 @@ public class Move {
         for (BoardPosition bp : range)
             newRange.add(bp.copy());
 
-         return new Move(name, attackMessage, newUser, spCost, newRange, attack, visuals.createCopy(newUser), moveInfo);
+         return new Move(name, attackDescription, attackMessage, newUser, spCost, newRange, attack, visuals.createCopy(newUser), moveInfo);
     }
 }

@@ -15,7 +15,6 @@ import static com.mygdx.game.ComponentMappers.vm;
  * @author Phillip O'Reggio
  */
 public class StatusEffectConstructor {
-    //TODO combine same status effects (offenseless and offenseless2 can be 1 method called offenseless that takes a parameter)
 
     //region Status Effects
     //negative
@@ -156,7 +155,7 @@ public class StatusEffectConstructor {
     public static StatusEffect exhausted(int duration) {
         StatusEffect effect = new StatusEffect("Exhausted", duration, new LerpColor(Color.BLACK, Color.LIGHT_GRAY, .3f, Interpolation.sineOut), (e) -> {
             if (stm.has(e)) {
-                stm.get(e).sp = MathUtils.clamp(stm.get(e).hp - 1, 0, stm.get(e).getModMaxHp(e));
+                stm.get(e).sp = MathUtils.clamp(stm.get(e).sp - 1, 0, stm.get(e).getModMaxSp(e));
             }
             if (vm.has(e) && !vm.get(e).shuffleAnimation.getIsPlaying())
                 vm.get(e).shuffleAnimation.setPlaying(true, true);
