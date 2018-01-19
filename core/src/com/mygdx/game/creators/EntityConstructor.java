@@ -986,7 +986,7 @@ public class EntityConstructor {
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.bite(entity),
                 MoveConstructor.toxicBite(entity),
-                MoveConstructor.warpBite(entity),
+                MoveConstructor.boostToxin(entity),
                 MoveConstructor.berserkBite(entity)
         })));
         nm.get(entity).serializeID = 14;

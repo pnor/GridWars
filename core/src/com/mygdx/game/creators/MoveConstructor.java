@@ -3376,6 +3376,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{barrage})), new MoveInfo(false, 1));
+        move.setAttackDescription("Attacks the target with a flurry of fists. Deals regular damage.");
+        return move;
     }
 
     public static Move feint(Entity user) {
@@ -3463,6 +3465,9 @@ public class MoveConstructor {
                         enemy.hp -= userEntity.attack * enemy.statusEffectInfos.size;
                 })
         );
+        move.setAttackDescription("Tricks the target with a fake strike before going in with a barrage of punches. Deals damage equal to the " +
+        "user's attack multiplied by the number of status effects the target has.");
+        return move;
     }
 
     public static Move basiliskPunch(Entity user) {
@@ -3577,6 +3582,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{barrage, doNothing, sparkle.copy(), bubble.copy(), sparkle, bubble})), new MoveInfo(false, 1, petrify(2).createStatusEffectInfo()));
+        move.setAttackDescription("Strikes the target with a fist imbued in a mysterious poison. Deals regular damage and inflicts the target with Petrify for 2 turns.");
+        return move;
     }
 
     public static Move curseAttack(Entity user) {
@@ -3707,6 +3714,9 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{fire, spinningDiamond.copy(), sparkle.copy(), spinningDiamond, sparkle})), new MoveInfo(false, 0, curse(3).createStatusEffectInfo()));
+        move.setAttackDescription(nm.get(user).name + " uses arcane rituals to cast a curse on the target. Inflicts the target with Curse for 3 turns, lowering all " +
+        "of their stats.");
+        return move;
     }
 
     //squizzerd
@@ -3821,6 +3831,8 @@ public class MoveConstructor {
                         userEntity.statusEffectInfos.clear();
                 })
         );
+        move.setAttackDescription(nm.get(user) + " relaxes tension in its body. Recovers 1 point of health and cures all of the user's status effects.");
+        return move;
     }
 
     public static Move ignite(Entity user) {
@@ -4003,6 +4015,8 @@ public class MoveConstructor {
             if (enemy.acceptsStatusEffects && MathUtils.randomBoolean(.5f)) {
                 enemy.statusEffectInfos.add(burn(3).createStatusEffectInfo());
             }}));
+        move.setAttackDescription("Sets the target on fire utilizing mystic powers. Deals regular damage and has a 50% chance to Burn the target for 3 turns.");
+        return move;
     }
 
     public static Move drench2(Entity user) {
@@ -4147,6 +4161,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{bubble, sparkle, ripple, largeSparkle})), new MoveInfo(false, 1));
+        move.setAttackDescription("Summons a rush of water to drench the opponent. Deals regular damage.");
+        return move;
     }
 
     public static Move cometShowerClose(Entity user) {
@@ -4281,6 +4297,8 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{
                         preSparkles.copy(), preBooms.copy(), preSparkles.copy(), preBooms.copy(),
                         comets.copy(), ripple.copy(), comets.copy(), ripple.copy(), comets.copy(), ripple, comets, preBooms.copy(), preBooms})), new MoveInfo(true, 2));
+        move.setAttackDescription(nm.get(user).name + " uses most of its energy to summon a flurry of comets near itself. Ignores the opponents defense and deals 2x damage.");
+        return move;
     }
 
     //wyvrapor
@@ -4425,6 +4443,8 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0),
                 new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)}),
                 new Array<VisualEvent>(new VisualEvent[]{breath, fires})), new MoveInfo(false, 1));
+        move.setAttackDescription("Breathes a gaseous flame in a wide arc in front of itself. Deals regular damage.");
+        return move;
     }
 
     public static Move toxicBreath(Entity user) {
@@ -4560,6 +4580,8 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0),
                 new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)}),
                 new Array<VisualEvent>(new VisualEvent[]{breath, ripples})), new MoveInfo(false, 0, poison(2).createStatusEffectInfo()));
+        move.setAttackDescription("Breathes a poisonous gas in front of itself. Inflicts poison for 2 turns.");
+        return move;
     }
 
     public static Move freshBreath(Entity user) {
@@ -4738,6 +4760,8 @@ public class MoveConstructor {
                         enemy.statusEffectInfos.clear();
                 })
         );
+        move.setAttackDescription("Breathes a refreshing wind in a wide arc in front of itself. Removes the status effects of the targets.");
+        return move;
     }
 
     public static Move spaBreath(Entity user) {
@@ -4912,6 +4936,8 @@ public class MoveConstructor {
                     enemy.hp = MathUtils.clamp(enemy.hp + 3, 0, enemy.maxHp);
                 })
         );
+        move.setAttackDescription("Breathes a soothing wind in a wide arc in front of itself. Heals the targets' health by 3 points.");
+        return move;
     }
 
     //jellymiss
@@ -5040,6 +5066,8 @@ public class MoveConstructor {
                     enemy.hp = MathUtils.clamp(enemy.hp + enemy.maxHp / 2, 0, enemy.maxHp);
                 })
         );
+        move.setAttackDescription("Restores wounds using warm water. Restores the health of the target by 1/2 of their max health.");
+        return move;
     }
 
     public static Move regen(Entity user) {
@@ -5175,6 +5203,8 @@ public class MoveConstructor {
                     enemy.statusEffectInfos.add(regeneration(3).createStatusEffectInfo());
                 })
         );
+        move.setAttackDescription("Uses heated water to slowly heal wounds over time. Gives the target Regeneration for 3 turns.");
+        return move;
     }
 
     public static Move boost(Entity user) {
@@ -5368,7 +5398,6 @@ public class MoveConstructor {
                             status.get(enemy).addStatusEffect(speedUp(2), enemy);
                             status.get(enemy).addStatusEffect(attackUp(2), enemy);
                             status.get(enemy).addStatusEffect(guardUp(2), enemy);
-
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
@@ -5383,6 +5412,8 @@ public class MoveConstructor {
                     }
                 })
         );
+        move.setAttackDescription("Invigorates the energy of the target. Gives the target Regeneration and a boost to Attack, Defense, and Speed for 2 turns.");
+        return move;
     }
 
     public static Move transfer(Entity user) {
@@ -5504,6 +5535,8 @@ public class MoveConstructor {
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
                     enemy.sp += 2;
                 }));
+        move.setAttackDescription("Transfers the user's energy to any object or character. Increases the target's SP by 2 points.");
+        return move;
     }
 
     //mirrorman
@@ -5589,6 +5622,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})), new MoveInfo(false, 0, (enemy, userEntity) -> userEntity.arbitraryValue += 50));
+        move.setAttackDescription("Uses reflection to copy the target's fighting tactics. Copies the target's first move and replaces the user's last move with it.");
+        return move;
     }
 
     public static Move mirrorMove(Entity user) {
@@ -5672,6 +5707,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})), new MoveInfo(false, 0, (enemy, userEntity) -> userEntity.arbitraryValue += 50));
+        move.setAttackDescription("Uses mirrors to copy the target's alternate fighting tactics. Copies the target's last move and replaces the user's last move with it.");
+        return move;
     }
 
     public static Move rouletteReflect(Entity user) {
@@ -5753,6 +5790,9 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{mirror, spinning})), new MoveInfo(false, 0, (enemy, userEntity) -> userEntity.arbitraryValue += 50));
+        move.setAttackDescription("Uses reflection, mirrors, and a bit of luck to copy the target's fighting actions. Copies one of the target's moves at random and " +
+                "replaces the user's last move with it.");
+        return move;
     }
 
     //pheonix
@@ -5819,6 +5859,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{bash})), new MoveInfo(false, 1));
+        move.setAttackDescription("Pecks with a fiery beak. Deals regular damage.");
+        return move;
     }
 
     public static Move vigorate(Entity user) {
@@ -6030,6 +6072,8 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{changeToBlack, fire, sparkles, smallBooms, explodeBig,
                         largerRadiusBooms, returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, attackUp(2).createStatusEffectInfo()));
+        move.setAttackDescription("Uses spare energy to grant the target a powerful energy. Increases the target's attack for 2 turns.");
+        return move;
     }
 
     public static Move rejunevate(Entity user) {
@@ -6241,6 +6285,8 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{changeToBlack, fire, sparkles, smallBooms, explodeBig,
                         sparkleUp, returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, (entity, userEntity) -> userEntity.hp = userEntity.maxHp));
+        move.setAttackDescription("Uses a large amount of spare energy to grant the target life energy. Heals all of the target's health points.");
+        return move;
     }
 
     public static Move selfPurge(Entity user) {
@@ -6351,6 +6397,8 @@ public class MoveConstructor {
                         userEntity.statusEffectInfos.clear();
                 })
         );
+        move.setAttackDescription("Forces its body to burn hotter, removing any negative status effects.");
+        return move;
     }
 
     //acidsnake
@@ -6465,6 +6513,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{booms, bubble, sludge})), new MoveInfo(false, 1, poison(2).createStatusEffectInfo()));
+        move.setAttackDescription("Bites with a poison drenched mouth. Deals regular damage and has a chance to inflict Poison for 2 turns.");
+        return move;
     }
 
     public static Move toxicBite(Entity user) {
@@ -6591,9 +6641,11 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{
                         booms, sparkOut, booms.copy(), sparkOut.copy(), booms.copy(), sparkOut.copy(), booms.copy(), sparkOut.copy(), sludge
                 })), new MoveInfo(false, 1, toxic(2).createStatusEffectInfo()));
+        move.setAttackDescription("Mixes existing poison to make an even more lethal toxin. Deals regular damage and has a chance to inflict Toxic for 2 turns.");
+        return move;
     }
 
-    public static Move warpBite(Entity user) {
+    public static Move boostToxin(Entity user) {
         VisualEvent booms = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
@@ -6713,28 +6765,58 @@ public class MoveConstructor {
                         if (status.has(enemy)) {
                             status.get(enemy).addStatusEffect(poison(2), enemy);
                             float chance = (float) Math.random();
-                            if (chance <= .33f) { // 33%
-                                status.get(enemy).addStatusEffect(attackUp(2), enemy);
-                            } else if (chance > .33f && chance <= .66f) { // 33%
-                                status.get(enemy).addStatusEffect(speedUp(2), enemy);
-                            } else if (chance > .66f && chance <= .9f) { // 24%
-                                status.get(enemy).addStatusEffect(guardUp(2), enemy);
-                            } else { //remaining 10%: splits into more trees:
-                                chance = (float) Math.random();
-                                if (chance <= .33f) { // 33%
-                                    status.get(enemy).addStatusEffect(attackUp3(2), enemy);
-                                } else if (chance > .33f && chance <= .66f) { // 33%
-                                    status.get(enemy).addStatusEffect(attackUp2(2), enemy);
-                                    status.get(enemy).addStatusEffect(guardUp2(2), enemy);
-                                } else if (chance > .66f && chance <= .86f) { // 20%
+                            if (MathUtils.randomBoolean()) { //1 tree of possible effects (all stat boosters)
+                                if (chance <= .25f) { // 25%
                                     status.get(enemy).addStatusEffect(attackUp(2), enemy);
-                                    status.get(enemy).addStatusEffect(guardUp(2), enemy);
+                                } else if (chance > .25f && chance <= .5f) { // 25%
                                     status.get(enemy).addStatusEffect(speedUp(2), enemy);
-                                } else if (chance > .86f && chance <= .9f) { // 4%
-                                    status.get(enemy).addStatusEffect(spUp(2), enemy);
+                                } else if (chance > .5f && chance <= .75f) { // 25%
+                                    status.get(enemy).addStatusEffect(guardUp(2), enemy);
+                                } else { //remaining 25%: splits into more trees:
+                                    chance = (float) Math.random();
+                                    if (chance <= .33f) { // 33%
+                                        status.get(enemy).addStatusEffect(attackUp3(2), enemy);
+                                    } else if (chance > .33f && chance <= .66f) { // 33%
+                                        status.get(enemy).addStatusEffect(attackUp2(2), enemy);
+                                        status.get(enemy).addStatusEffect(guardUp2(2), enemy);
+                                    } else if (chance > .66f && chance <= .86f) { // 20%
+                                        status.get(enemy).addStatusEffect(attackUp(2), enemy);
+                                        status.get(enemy).addStatusEffect(guardUp(2), enemy);
+                                        status.get(enemy).addStatusEffect(speedUp(2), enemy);
+                                    } else if (chance > .86f && chance <= .9f) { // 4%
+                                        status.get(enemy).addStatusEffect(spUp(2), enemy);
+                                        status.get(enemy).addStatusEffect(speedUp2(2), enemy);
+                                    } else { //10%
+                                        status.get(enemy).addStatusEffect(supercharged(2), enemy);
+                                    }
+                                }
+                            } else { //another tree of possible effects (more harmful/unpredictable)
+                                if (chance <= .25f) { // 25%
                                     status.get(enemy).addStatusEffect(speedUp2(2), enemy);
-                                } else {
-                                    status.get(enemy).addStatusEffect(supercharged(2), enemy);
+                                } else if (chance > .25f && chance <= .5f) { // 25%
+                                    status.get(enemy).addStatusEffect(petrify(2), enemy);
+                                } else if (chance > .5f && chance <= .75f) { // 25%
+                                    status.get(enemy).addStatusEffect(freeze(2), enemy);
+                                } else { //remaining 25%: splits into more trees:
+                                    chance = (float) Math.random();
+                                    if (chance <= .33f) { // 33%
+                                        status.get(enemy).addStatusEffect(attackUp3(2), enemy);
+                                        status.get(enemy).addStatusEffect(guardUp2(2), enemy);
+                                        status.get(enemy).addStatusEffect(speedUp2(2), enemy);
+                                        status.get(enemy).addStatusEffect(toxic(2), enemy);
+                                    } else if (chance > .33f && chance <= .66f) { // 33%
+                                        status.get(enemy).addStatusEffect(unstable(2), enemy);
+                                    } else if (chance > .66f && chance <= .72f) { // 6%
+                                        status.get(enemy).addStatusEffect(exhausted(2), enemy);
+                                    } else if (chance > .72f && chance <= .86f) { // 14%
+                                        status.get(enemy).addStatusEffect(berserk(2), enemy);
+                                    } else if (chance > .86f && chance <= .9f) { // 4%
+                                        status.get(enemy).addStatusEffect(unstable(2), enemy);
+                                        status.get(enemy).addStatusEffect(supercharged(2), enemy);
+                                    } else { //10%
+                                        status.get(enemy).addStatusEffect(burn(2), enemy);
+                                        status.get(enemy).addStatusEffect(curse(2), enemy);
+                                    }
                                 }
                             }
                         }
@@ -6777,6 +6859,9 @@ public class MoveConstructor {
                 }        
             }
         ));
+        move.setAttackDescription("Mixes toxins to create a highly unpredictable substance. Deals regular damage and has a chance to inflict " +
+        "Poison and a random combination of (mostly positive) status effects on the target for 2 turns.");
+        return move;
     }
 
     public static Move berserkBite(Entity user) {
@@ -6891,6 +6976,9 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{booms, bubble, sludge})), new MoveInfo(false, 1, berserk(2).createStatusEffectInfo()));
+        move.setAttackDescription("Mixes toxins to create a extremely virulent acid. Deals regular damage and has a chance to inflict Berserk for 2 turns, which " +
+                "drastically raises attack but halves health and cuases gradual damage.");
+        return move;
     }
 
     //endregion

@@ -166,6 +166,40 @@ public class StatusEffectConstructor {
         return effect;
     }
 
+    public static StatusEffect unstable(int duration) {
+        StatusEffect effect = new StatusEffect("Unstable", duration, new LerpColor(Color.RED, new Color(.2f, 0, 1f, .5f), .05f, Interpolation.sineOut), (e) -> {
+            if (stm.has(e)) {
+                if (MathUtils.randomBoolean()) { //hp random effect
+                    stm.get(e).hp += 2;
+                } else {
+                    stm.get(e).hp -= 1;
+                }
+                if (MathUtils.randomBoolean()) { //sp random effect
+                    stm.get(e).sp += MathUtils.random(-5, 5);
+                }
+            }
+            if (vm.has(e) && !vm.get(e).shuffleAnimation.getIsPlaying())
+                vm.get(e).shuffleAnimation.setPlaying(true, true);
+        }, (entity -> {
+            if (MathUtils.randomBoolean()) { //hp random effect
+                entity.hp += 2;
+            } else {
+                entity.hp -= 1;
+            }
+            if (MathUtils.randomBoolean()) { //sp random effect
+                entity.sp += MathUtils.random(-5, 5);
+            }
+        }));
+        effect.setStatChanges(
+                MathUtils.random(.5f, 3),
+                MathUtils.random(0, 2),
+                MathUtils.random(0, 3),
+                MathUtils.random(0, 3),
+                MathUtils.random(0, 3)
+        );
+        return effect;
+    }
+
     //boost up
     public static StatusEffect speedUp(int duration) {
         StatusEffect effect = new StatusEffect("Quick", duration, new LerpColor(Color.WHITE, Color.CYAN, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
