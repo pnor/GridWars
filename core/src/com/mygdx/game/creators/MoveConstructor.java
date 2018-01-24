@@ -4015,7 +4015,7 @@ public class MoveConstructor {
             if (enemy.acceptsStatusEffects && MathUtils.randomBoolean(.5f)) {
                 enemy.statusEffectInfos.add(burn(3).createStatusEffectInfo());
             }}));
-        move.setAttackDescription("Sets the target on fire utilizing mystic powers. Deals regular damage and has a 50% chance to Burn the target for 3 turns.");
+        move.setAttackDescription("Sets the target on fire using mystic powers. Deals regular damage and has a 50% chance to Burn the target for 3 turns.");
         return move;
     }
 
@@ -6977,7 +6977,7 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{booms, bubble, sludge})), new MoveInfo(false, 1, berserk(2).createStatusEffectInfo()));
         move.setAttackDescription("Mixes toxins to create a extremely virulent acid. Deals regular damage and has a chance to inflict Berserk for 2 turns, which " +
-                "drastically raises attack but halves health and cuases gradual damage.");
+                "drastically raises attack but halves health and causes gradual damage.");
         return move;
     }
 
@@ -7056,6 +7056,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, bam})), new MoveInfo(false, 1));
+        move.setAttackDescription(nm.get(user) + " slams into the opponent dealing regular damage.");
+        return move;
     }
 
     public static Move heavySlam(Entity user) {
@@ -7165,6 +7167,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{sphereOut, explode, bam})), new MoveInfo(false, 2));
+        move.setAttackDescription(nm.get(user) + " slams into the opponent with great force. Deals 2x damage.");
+        return move;
     }
 
     public static Move claw(Entity user) {
@@ -7213,6 +7217,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{claw})), new MoveInfo(false, 1));
+        move.setAttackDescription(nm.get(user) + " slashes at the opponent dealing regular damage.");
+        return move;
     }
 
     public static Move blueClaw(Entity user) {
@@ -7262,6 +7268,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{claw})), new MoveInfo(false, 1));
+        move.setAttackDescription(nm.get(user) + " slashes at the opponent dealing regular damage.");
+        return move;
     }
 
     public static Move monoplodeOrb(Entity user) {
@@ -7385,6 +7393,9 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{circles, explode, explodeBig})), new MoveInfo(true, 1));
+        move.setAttackDescription("Attacks the target with dangerous magic orbs. Ignores the opponents defense and deals regular damage. Reduces the user's" +
+        " defense to 0 for 1 turn.");
+        return move;
     }
     //---Tower Waves (from top of entity)
     public static Move powerWave(Entity user) {
@@ -7446,6 +7457,8 @@ public class MoveConstructor {
                 }),
                 new Array<VisualEvent>(new VisualEvent[]{wave})),
                 new MoveInfo(false, 0, new StatusEffectInfo[]{attackUp(2).createStatusEffectInfo(), speedUp(2).createStatusEffectInfo()}, (entity, userEntity) -> entity.arbitraryValue += 30));
+        move.setAttackDescription("Emits an invigorating energy wave. Increases the target's attack and speed for 2 turns.");
+        return move;
     }
 
     public static Move weakenWave(Entity user) {
@@ -7509,6 +7522,8 @@ public class MoveConstructor {
         }),
                 new Array<VisualEvent>(new VisualEvent[]{wave})), new MoveInfo(false, 0,
                         offenseless(3).createStatusEffectInfo(), paralyze(3).createStatusEffectInfo(), defenseless(2).createStatusEffectInfo()));
+        move.setAttackDescription("Emits a weakening wave. Reduces the target's attack for 3 turns, speed for 1 turn, and defense for 2 turns.");
+        return move;
     }
 
     public static Move shieldWave(Entity user) {
@@ -7568,6 +7583,8 @@ public class MoveConstructor {
                 new BoardPosition(-2, 0), new BoardPosition(0, -2), new BoardPosition(2, 0), new BoardPosition(0, 2)
         }),
                 new Array<VisualEvent>(new VisualEvent[]{wave})), new MoveInfo(false, 0, guardUp(2).createStatusEffectInfo()));
+        move.setAttackDescription("Emits a protective wave, increasing the target's defense for 2 turns.");
+        return move;
     }
     //waves coming out of center of entity --
     public static Move warWave(Entity user) {
@@ -7713,6 +7730,9 @@ public class MoveConstructor {
                 (enemy, userEntity) -> {
 
                 }));
+        move.setAttackDescription("Emits a chaotic wave. Inflicts Berserk for 2 turns, which drastically raises attack but halves health and causes gradual damage. " +
+                "Reduces the user's defense to 0 for 1 turn. ");
+        return move;
     }
 
     public static Move peaceWave(Entity user) {
@@ -7840,6 +7860,9 @@ public class MoveConstructor {
                 new BoardPosition(-2, 0), new BoardPosition(0, -2), new BoardPosition(2, 0), new BoardPosition(0, 2)
         }),
                 new Array<VisualEvent>(new VisualEvent[]{wave, sparkle, explode})), new MoveInfo(false, 0, pacifist(3).createStatusEffectInfo()));
+        move.setAttackDescription("Emits a peaceful wave. Inflicts Pacifist for 3 turns, which reduces attack and defense to 0 and causes strong health regeneration. " +
+                "Reduces the user's defense to 0 for 1 turn. ");
+        return move;
     }
 
     public static Move worryWave(Entity user) {
@@ -7939,6 +7962,9 @@ public class MoveConstructor {
                 (enemy, userEntity) -> {
                     enemy.arbitraryValue -= 60;
                 }));
+        move.setAttackDescription("Emits a unsettling wave. Inflicts Restless for 3 turns, which changes Max SP, attack, and defense to 0 but " +
+                        "doubles speed. Reduces the user's defense to 0 for 1 turn. ");
+        return move;
     }
 
     //boss
@@ -8048,6 +8074,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, slash, fire})), new MoveInfo(false, 1));
+        move.setAttackDescription("Slashes the opponent with a fiery scythe. Deals regular damage.");
+        return move;
     }
 
     public static Move chainFire(Entity user) {
@@ -8164,6 +8192,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0), new BoardPosition(-4, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{fire, explode, sparkles})), new MoveInfo(false, .5f, burn(3).createStatusEffectInfo()));
+        move.setAttackDescription("Lights a fire that spreads to several targets in front of the user. Deals 1/2x damage and burns the targets for 3 turns.");
+        return move;
     }
 
     public static Move flameCharge(Entity user) {
@@ -8354,6 +8384,8 @@ public class MoveConstructor {
                         explode, smokeOut, returnToNormal
                 })),
                 new MoveInfo(false, 0, speedUp(2).createStatusEffectInfo(), attackUp(2).createStatusEffectInfo()));
+        move.setAttackDescription("The user stokes its inner fire, increasing the user's attack and speed for 2 turns.");
+        return move;
     }
 
     public static Move blueFlame(Entity user) {
@@ -8635,6 +8667,8 @@ public class MoveConstructor {
                         fire, smoke.copy(.1f, 20), explode, smoke, smallBooms, smoke.copy(), explodeBig, smoke.copy(), explodeLargest,
                         miniExplosions, largerRadiusBooms.copy(.005f, 10), explodeLargest.copy(), miniExplosions.copy(), largerRadiusBooms.copy(.005f, 10),
                         explodeLargest.copy(), largerRadiusBooms, smoke.copy(.2f, 15)})), new MoveInfo(false, 2));
+        move.setAttackDescription("Summons a ferocious blue flare to consume the target. Deals 2x damage.");
+        return move;
     }
     //water spirit
     public static Move hammerStrike(Entity user) {
@@ -8741,6 +8775,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, bam, sparkle})), new MoveInfo(false, 1, defenseless(2).createStatusEffectInfo()));
+        move.setAttackDescription("Slams the target with a hammer. Deals regular damage and reduces the target's defense to 0.");
+        return move;
     }
 
     public static Move gather(Entity user) {
@@ -8936,6 +8972,9 @@ public class MoveConstructor {
                     if (userEntity.hp < 6) //encourage use of this move if low on health
                         userEntity.arbitraryValue += 300;
                 }));
+        move.setAttackDescription("Gathers water molecules to regenerate its body. Causes the user to regenerate health for 3 turns and increases the user's defense " +
+        "for 1 turn.");
+        return move;
     }
 
     public static Move strengthen(Entity user) {
@@ -9157,6 +9196,8 @@ public class MoveConstructor {
                             }
 
                         }));
+        move.setAttackDescription("Gathers water molecules in order to increase the user's size. Increases the user's attack stat by 1. ");
+        return move;
     }
 
     public static Move KOStrike(Entity user) {
@@ -9301,6 +9342,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{particles, explode, bam, sparkles})), new MoveInfo(true, 10));
+        move.setAttackDescription("Slams the target with a devastating hammer strike. Deals 10x damage.");
+        return move;
     }
     //thunder Spirit
     public static Move stab(Entity user) {
@@ -9346,6 +9389,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{stabbing})), new MoveInfo(true, 1));
+        move.setAttackDescription("Stabs the target with an electric spear. Ignores defense and deals regular damage.");
+        return move;
     }
 
     public static Move fluxWave(Entity user) {
@@ -9526,6 +9571,8 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{projectile, rippleOut.copy(), shocking.copy(), rippleOut, shocking, zags})),
                 new MoveInfo(false, 1, (paralyze(3).createStatusEffectInfo())
         ));
+        move.setAttackDescription("Zaps the area in front of the user with a jolt of electricity. Paralyzes for 3 turns and deals regular damage.");
+        return move;
     }
 
     public static Move disrupt(Entity user) {
@@ -9609,10 +9656,7 @@ public class MoveConstructor {
                         if (status.has(enemy)) {
                             if (status.get(enemy).getTotalStatusEffects() > 0)
                                 status.get(enemy).removeAll(enemy);
-                            status.get(enemy).addStatusEffect(offenseless(3), enemy);
-                            status.get(enemy).addStatusEffect(defenseless(2), enemy);
-                            status.get(enemy).addStatusEffect(paralyze(3), enemy);
-                            status.get(enemy).addStatusEffect(petrify(3), enemy);
+                            status.get(enemy).addStatusEffect(exhausted(3), enemy);
                         }
 
                         if (vm.has(enemy) && vm.get(enemy).shuffleAnimation != null)
@@ -9627,16 +9671,16 @@ public class MoveConstructor {
                     if (enemy.acceptsStatusEffects) {
                         if (enemy.statusEffectInfos.size >= 1)
                             enemy.statusEffectInfos.clear();
-                        enemy.statusEffectInfos.add(offenseless(3).createStatusEffectInfo());
-                        enemy.statusEffectInfos.add(defenseless(2).createStatusEffectInfo());
-                        enemy.statusEffectInfos.add(paralyze(3).createStatusEffectInfo());
-                        enemy.statusEffectInfos.add(petrify(3).createStatusEffectInfo());
+                        enemy.statusEffectInfos.add(exhausted(3).createStatusEffectInfo());
                         //encourage use if hits multiple entities
                         if (enemy.statusEffectInfos.size >= 1)
                             enemy.arbitraryValue -= 60;
                     }
         }
         ));
+        move.setAttackDescription("Emits a disruptive wave, removing all the target's status effects. Stops the target from " +
+        "regenerating SP and reduces their stats.");
+        return move;
     }
 
     public static Move polarize(Entity user) {
@@ -9821,6 +9865,8 @@ public class MoveConstructor {
                     }
                 })
         );
+        move.setAttackDescription("Releases a large bolt of electricity, increasing its stats and causing the user to regenerate Health and SP for 3 turns.");
+        return move;
     }
     //dragon
     public static Move dragonBreath2(Entity user) {
@@ -9942,6 +9988,8 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0),
                 new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)}),
                 new Array<VisualEvent>(new VisualEvent[]{breath, fires})), new MoveInfo(false, 1));
+        move.setAttackDescription("Aggressively breathes on the target. Deals regular damage.");
+        return move;
     }
 
     public static Move dragonRoar(Entity user) {
@@ -10166,6 +10214,9 @@ public class MoveConstructor {
                 new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)}),
                 new Array<VisualEvent>(new VisualEvent[]{breath, explode, explodeBig, ripples, sparks})),
                 new MoveInfo(false, 0, shivers(2).createStatusEffectInfo(), paralyze(3).createStatusEffectInfo(), offenseless(2).createStatusEffectInfo()));
+        move.setAttackDescription("Roars loud enough to paralyze those nearby in fear. Paralyzes and inflicts the Shivers for 2 turns." +
+                " Paralyzes the target for 3 turns." );
+        return move;
     }
 
     public static Move flash(Entity user) {
@@ -10419,6 +10470,8 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{sparkleOut, explode, smallBooms, flash, explodeBig, largerRadiusBooms, sparkle, floatUpDiamonds})),
                 new MoveInfo(true, 1, offenseless(1).createStatusEffectInfo()));
+        move.setAttackDescription("Releases a spark of pure energy. Ignores defense and lowers the target's attack for 1 turn.");
+        return move;
     }
 
     public static Move dragonFluxwave(Entity user) {
@@ -10634,6 +10687,8 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{
                         explode, nothing, explodePause, explodePause2, ripples, circles
                 })), new MoveInfo(true, 1, curse(1).createStatusEffectInfo()));
+        move.setAttackDescription("Releases negative energy near the target, making them feel weak. Ignores defense and inflicts Curse for 1 turn.");
+        return move;
     }
 
     public static Move raze(Entity user) {
@@ -10790,6 +10845,8 @@ public class MoveConstructor {
                 new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)}),
                 new Array<VisualEvent>(new VisualEvent[]{flashRed, firebreath, explosions, sparks})),
                 new MoveInfo(true, 2));
+        move.setAttackDescription("Attacks a large range with a huge surge of power. Ignores defense and inflicts 2x damage.");
+        return move;
     }
 
 
@@ -10864,6 +10921,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, sparkle})), new MoveInfo(false, 0, petrify(2).createStatusEffectInfo()));
+        move.setAttackDescription("Gives a stoic glare that would even petrify a statue. Inflicts Petrification for 2 turns.");
+        return move;
     }
 
     public static Move roar(Entity user) {
@@ -11040,6 +11099,8 @@ public class MoveConstructor {
                 new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
                 new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)}),
                 new Array<VisualEvent>(new VisualEvent[]{breath, explode, explodeBig, ripples})), new MoveInfo(false, 0, offenseless(3).createStatusEffectInfo(), paralyze(3).createStatusEffectInfo()));
+        move.setAttackDescription(nm.get(user).name + " roars loudly and proudly. Lowers the attack and Paralyzes targets for 3 turns.");
+        return move;
     }
 
     public static Move prepare(Entity user) {
@@ -11140,6 +11201,8 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{changeToBlack, shuffleBackForth, explode,  returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, speedUp(2).createStatusEffectInfo()));
+        move.setAttackDescription(nm.get(user).name + " prepares to pounce. Increases the user's speed for 2 turns.");
+        return move;
     }
 
     public static Move ready(Entity user) {
@@ -11241,6 +11304,8 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{changeToBlack, shuffleBackForth, shuffleBackForth.copy(.01f, 30), explode,  returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, speedUp(2).createStatusEffectInfo(), attackUp(2).createStatusEffectInfo()));
+        move.setAttackDescription(nm.get(user).name + " readies itself to attack. Increases the user's speed and attack for 2 turns.");
+        return move;
     }
 
     public static Move neoRoar(Entity user) {
@@ -11437,7 +11502,7 @@ public class MoveConstructor {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
 
                         if (status.has(enemy)) {
-                            status.get(enemy).addStatusEffect(defenseless(2), enemy);
+                            status.get(enemy).addStatusEffect(defenseless(3), enemy);
                             status.get(enemy).addStatusEffect(paralyze(3), enemy);
                         }
 
@@ -11450,6 +11515,9 @@ public class MoveConstructor {
                         new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)}),
                 new Array<VisualEvent>(new VisualEvent[]{breath, explode, explodeBig, ripples, sparks})),
                 new MoveInfo(false, 0, defenseless(2).createStatusEffectInfo(), paralyze(3).createStatusEffectInfo()));
+        move.setAttackDescription("Releases an energetic roar that electrifies the air and strikes fear into those nearby." +
+                " Lowers the defense and Paralyzes targets for 3 turns.");
+        return move;
     }
 
     public static Move reflectionBeamLion(Entity user) {
@@ -11726,6 +11794,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0), new BoardPosition(-4, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{preBoom, explode1, sparkle1, explode2, sparkle2, explode3, sparkle3, explode4, sparkle4})), new MoveInfo(false, .5f));
+        move.setAttackDescription("Uses light to attack targets far away. Deals 1/2x damage.");
+        return move;
     }
 
     //scaleman
@@ -12003,6 +12073,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0), new BoardPosition(-4, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{preBoom, explode1, sparkle1, explode2, sparkle2, explode3, sparkle3, explode4, sparkle4})), new MoveInfo(false, 1));
+        move.setAttackDescription("Uses reflected light to attack targets in a straight line. Deals regular damage.");
+        return move;
     }
 
     public static Move refractionBeam(Entity user) {
@@ -12283,6 +12355,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1), new BoardPosition(-1, 1), new BoardPosition(-2, -2), new BoardPosition(-2, 2)}),
                 new Array<VisualEvent>(new VisualEvent[]{preBoom, explode1, sparkle1, explode2, sparkle2, explode3, sparkle3, explode4, sparkle4})), new MoveInfo(false, 1));
+        move.setAttackDescription("Uses refracted light to attack targets in a diagonal. Deals regular damage.");
+        return move;
     }
 
     //slimeman
@@ -12338,6 +12412,8 @@ public class MoveConstructor {
                     if (enemy.acceptsStatusEffects && MathUtils.randomBoolean())
                         enemy.statusEffectInfos.add(poison(2).createStatusEffectInfo());
         }));
+        move.setAttackDescription("Punches the target with an unwashed hand. Deals regular damage, and has a 50% chance to poison.");
+        return move;
     }
 
     public static Move immobilize(Entity user) {
@@ -12481,6 +12557,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{zag, sparkle, bubble, doNothing, explode})), new MoveInfo(false, 0, paralyze(3).createStatusEffectInfo()));
+        move.setAttackDescription("Soaks the target in a immobilizing goo. Paralyzes for 3 turns.");
+        return move;
     }
 
     public static Move stunPunch(Entity user) {
@@ -12535,6 +12613,8 @@ public class MoveConstructor {
             if (enemy.acceptsStatusEffects && MathUtils.randomBoolean())
                 enemy.statusEffectInfos.add(paralyze(3).createStatusEffectInfo());
         }));
+        move.setAttackDescription("Punches the target with a fist seeped in an immobilizing goo. Deals regular damage and has a 50% chance to paralyze.");
+        return move;
     }
 
     public static Move regenerate(Entity user) {
@@ -12609,7 +12689,7 @@ public class MoveConstructor {
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
-                        stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + 3, 0, stm.get(e).getModMaxHp(e));
+                        stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + 2, 0, stm.get(e).getModMaxHp(e));
 
                         if (status.has(e))
                             status.get(e).addStatusEffect(regeneration(3), e);
@@ -12617,8 +12697,11 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{changeToBlack, sparkles, returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, regeneration(3).createStatusEffectInfo(), (enemy, userEntity) -> {
-                    enemy.hp += 3;
+                    enemy.hp += 2;
                 }));
+        move.setAttackDescription("Focuses the energy around itself to recover a large amount of health. Recovers 2 health points and " +
+                "causes the user to regenerate health for 3 turns.");
+        return move;
     }
 
     public static Move mysteryStrike(Entity user) {
@@ -12756,6 +12839,9 @@ public class MoveConstructor {
                             enemy.statusEffectInfos.add(petrify(3).createStatusEffectInfo());
                     }
         }));
+        move.setAttackDescription("Punches the target with a hand covered in undiscovered viruses. Deals regular damage and has a chance to inflict" +
+                "a random status effect.");
+        return move;
     }
 
     public static Move accursedSludge(Entity user) {
@@ -12872,6 +12958,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{bubble, sludge, explode})), new MoveInfo(false, 0, curse(3).createStatusEffectInfo()));
+        move.setAttackDescription("Covers the target in a acidic taboo. Inflicts Curse for 3 turns.");
+        return move;
     }
 
     //cam man
@@ -12990,6 +13078,8 @@ public class MoveConstructor {
                     if (enemy.acceptsStatusEffects && MathUtils.randomBoolean(.333f))
                         enemy.statusEffectInfos.add(poison(2).createStatusEffectInfo());
                 }));
+        move.setAttackDescription("Throws unsafe trash at the target. Deals regular damage and has a 33% chance to Poison.");
+        return move;
     }
 
     public static Move suppressAttack(Entity user) {
@@ -13109,6 +13199,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{bubble, sludge, ripple})), new MoveInfo(false, 0, offenseless(2).createStatusEffectInfo()));
+        move.setAttackDescription("Uses smelly fumes to lower the target's will to fight. Lowers the target's attack for 2 turns.");
+        return move;
     }
 
     public static Move suppressDefense(Entity user) {
@@ -13228,6 +13320,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{bubble, sludge, ripple})), new MoveInfo(false, 0, defenseless(2).createStatusEffectInfo()));
+        move.setAttackDescription("Uses funky fumes to lower the target's will to defend itself. Lowers the target's defense for 2 turns.");
+        return move;
     }
 
     public static Move sludgeThrow2(Entity user) {
@@ -13353,6 +13447,8 @@ public class MoveConstructor {
                     enemy.statusEffectInfos.add(paralyze(3).createStatusEffectInfo());
             }
         }));
+        move.setAttackDescription("Throws dangerous trash at the target. Deals regular damage and has a 33% chance to Poison or Paralyze.");
+        return move;
     }
 
     public static Move toxicThrow(Entity user) {
@@ -13478,6 +13574,8 @@ public class MoveConstructor {
                     enemy.statusEffectInfos.add(poison(2).createStatusEffectInfo());
             }
         }));
+        move.setAttackDescription("Throws a poisonous sludge at the target. Deals regular damage and has a 66% chance to inflict Poison or Toxic.");
+        return move;
     }
 
     public static Move suppressMove(Entity user) {
@@ -13626,6 +13724,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, bubble, sludge, explodeBig})), new MoveInfo(false, 0, (enemy, userEntity) -> enemy.arbitraryValue -= 50));
+        move.setAttackDescription("Uses unforgettable fumes to block out specific memories. Removes 1 of the target's moves permanently at random.");
+        return move;
     }
 
     public static Move medicalThrow(Entity user) {
@@ -13771,6 +13871,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{bubble, sludge, shine, ripple})), new MoveInfo(false, 0, (enemy, userEntity) -> {enemy.hp += 3;}));
+        move.setAttackDescription("Throws a medical material at the target. Heals the target's health by 3.");
+        return move;
     }
 
     //golem
@@ -13846,6 +13948,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, bam})), new MoveInfo(false, 1));
+        move.setAttackDescription("Slams into the target. Deals regular damage.");
+        return move;
     }
 
     public static Move slamBlue(Entity user) {
@@ -13920,6 +14024,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, bam})), new MoveInfo(false, 1));
+        move.setAttackDescription("Slams into the target. Deals regular damage.");
+        return move;
     }
 
     public static Move heavySlamRed(Entity user) {
@@ -14031,6 +14137,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{sphereOut, explode, bam})), new MoveInfo(false, 2));
+        move.setAttackDescription("Slams into the target with a great force. Deals 2x damage.");
+        return move;
     }
 
     public static Move laserBeamRed(Entity user) {
@@ -14131,6 +14239,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{laser, explode})), new MoveInfo(false, 1));
+        move.setAttackDescription("Fires a laser beam in front of the user. Deals regular damage.");
+        return move;
     }
 
     public static Move guard(Entity user) {
@@ -14158,6 +14268,8 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{moveRight, moveLeft, moveRight.copy(), moveLeft.copy()})),
                 new MoveInfo(false, 0, guardUp(1).createStatusEffectInfo()));
+        move.setAttackDescription(nm.get(user).name + " raises its guard. Increases the user's defense for 1 turn.");
+        return move;
     }
 
     public static Move superGuard(Entity user) {
@@ -14218,6 +14330,9 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, moveRight, moveLeft, moveRight.copy(), moveLeft.copy()})),
                 new MoveInfo(false, 0, guardUp(1).createStatusEffectInfo(), regeneration(3).createStatusEffectInfo()));
+        move.setAttackDescription(nm.get(user).name + " assumes a more defensive stance. Increases the user's defense for 1 turn and causes" +
+                " the user to regenerate health for 3 turns.");
+        return move;
     }
 
     public static Move ultimateGuard(Entity user) {
@@ -14279,6 +14394,9 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, moveRight, moveLeft, moveRight.copy(), moveLeft.copy()})),
                 new MoveInfo(false, 0, guardUp(2).createStatusEffectInfo(), regeneration(3).createStatusEffectInfo()));
+        move.setAttackDescription(nm.get(user).name + " moves into the ultimate defensive stance. Increases the user's defense for 2 turn and causes" +
+                " the user to regenerate health for 3 turns.");
+        return move;
     }
 
     public static Move laserBeamBlue(Entity user) {
@@ -14379,6 +14497,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{laser, explode})), new MoveInfo(false, 1));
+        move.setAttackDescription("Fires a laser beam in front of the user. Deals regular damage.");
+        return move;
     }
 
     //spider
@@ -14462,6 +14582,8 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{slashes, moveRight, slashes.copy(), moveLeft, slashes.copy(), moveRight.copy(),
                 slashes.copy(), moveLeft.copy(), slashes.copy(), moveRight.copy(), slashes.copy(), moveLeft.copy()})), new MoveInfo(false, 1));
+        move.setAttackDescription("Slashes at the target. Deals regular damage.");
+        return move;
     }
 
     public static Move toxicSlash(Entity user) {
@@ -14548,6 +14670,8 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{slashes, moveRight, slashes.copy(), moveLeft, slashes.copy(), moveRight.copy(),
                         slashes.copy(), moveLeft.copy(), slashes.copy(), moveRight.copy(), slashes.copy(), moveLeft.copy()})), new MoveInfo(false, 1, poison(2).createStatusEffectInfo()));
+        move.setAttackDescription("Slashes at the target with an edge seeped in poison. Deals regular damage and poisons the target for 2 turns.");
+        return move;
     }
 
     public static Move immobite(Entity user) {
@@ -14662,6 +14786,8 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{slashes, zag, doNothing, explode})), new MoveInfo(false, 1, paralyze(3).createStatusEffectInfo()));
+        move.setAttackDescription("Bites the target. Paralyzes the target for 3 turns.");
+        return move;
     }
 
     public static Move stealSkill(Entity user) {
@@ -14782,6 +14908,8 @@ public class MoveConstructor {
                     enemy.sp -= stolenAmount;
                     userEntity.sp += stolenAmount;
                 }));
+        move.setAttackDescription("Attempts to steal the target's SP. Deals 1/2x damage and steals 0-3 skill points.");
+        return move;
     }
 
     public static Move stealHealth(Entity user) {
@@ -14906,6 +15034,8 @@ public class MoveConstructor {
                     userEntity.hp += damage;
                 }
         ));
+        move.setAttackDescription("Attempts to steal the target's health. Deals regular damage and recovers the damage dealt");
+        return move;
     }
 
     public static Move demoralizeBlow(Entity user) {
@@ -15036,6 +15166,9 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{glow, glow2, sliceVis, crossSliceVis})), new MoveInfo(true, 1.5f, petrify(3).createStatusEffectInfo()));
+        move.setAttackDescription("Tricks the target into a full sense of self confidence before going in for the kill." +
+                " Deals 1.5x damage and Petrifies for 3 turns.");
+        return move;
     }
 
     public static Move slash2(Entity user) {
@@ -15119,6 +15252,8 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{slashes, moveRight, slashes.copy(), moveLeft, slashes.copy(), moveRight.copy(),
                         slashes.copy(), moveLeft.copy(), slashes.copy(), moveRight.copy(), slashes.copy(), moveLeft.copy()})), new MoveInfo(false, 1));
+        move.setAttackDescription("Viciously slashes at the target. Deals regular damage.");
+        return move;
     }
 
     //gargoyle
