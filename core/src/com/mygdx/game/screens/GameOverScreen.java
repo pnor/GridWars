@@ -70,7 +70,6 @@ public class GameOverScreen extends MenuScreen implements Screen {
         btnReturn.setDisabled(true);
         btnReturn.setVisible(false);
 
-
         ChangeListener listener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

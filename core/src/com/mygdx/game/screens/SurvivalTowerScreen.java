@@ -26,6 +26,7 @@ import com.mygdx.game.components.EventComponent;
 import com.mygdx.game.components.LifetimeComponent;
 import com.mygdx.game.components.PositionComponent;
 import com.mygdx.game.creators.EntityConstructor;
+import com.mygdx.game.highscores.HighScore;
 import com.mygdx.game.misc.EventCompUtil;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.systems.EventSystem;
@@ -112,6 +113,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         HoverButton btnRestore = new HoverButton("Restore", skin, Color.GREEN, Color.DARK_GRAY);
         HoverButton btnSpUp = new HoverButton("SP UP", skin, Color.ORANGE, Color.DARK_GRAY);
         HoverButton btnContinue = new HoverButton("Continue", skin, Color.NAVY, Color.BLUE);
+        HoverButton btnSave = new HoverButton("Save", skin, Color.LIGHT_GRAY, Color.WHITE);
         teamImages = new Image[4];
         for (int i = 3; i >= team.getEntities().size; i--)
             teamImages[i] = new Image(atlas.createSprite("cube"));
@@ -171,6 +173,11 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                             GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), attackingObjectsTeam,
                                     getComputerDifficulty(), level, healingPowerUp, spPowerUp,  points, numberOfTurns,
                                     GRID_WARS));
+                    } else if (actor == btnSave) {
+                        System.out.println("Saving...");
+                        HighScore playerSave = new HighScore(team.getTeamName(), points, numberOfTurns, level);
+                        playerSave.setTeamSprites(team);
+                        //TODO finish storing info about high score in highscore to read back
                     }
                 }
             }
@@ -202,6 +209,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         offsetTable.add(lblHealthPower).colspan(2).size(80, 40).padBottom(20f).row();
         offsetTable.add(btnSpUp).colspan(2).size(80, 40).padBottom(20f).padRight(30f);
         offsetTable.add(lblSPPower).colspan(2).size(80, 40).padBottom(20f).row();
+        offsetTable.add(btnSave).colspan(4).size(180, 40).padBottom(20f).row();
         offsetTable.add(btnContinue).colspan(4).size(180, 40).padBottom(10f).row();
         //offsetTable.debug();
         //offsetTable.setPosition(offsetTable.getX() + 200, offsetTable.getY());
