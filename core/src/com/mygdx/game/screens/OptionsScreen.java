@@ -27,14 +27,7 @@ public class OptionsScreen extends MenuScreen implements Screen {
 
     public OptionsScreen(GridWars gridWars) {
         super(gridWars);
-        preferences = Gdx.app.getPreferences("Options");
-        //put in option variables if this is the first time
-        if (!preferences.contains("Move Animation")) {
-            preferences.putBoolean("Move Animation", true);
-            preferences.putInteger("AI Turn Speed", 1);
-            preferences.putBoolean("Animate Background", true);
-            preferences.flush();
-        }
+        preferences = Gdx.app.getPreferences("GridWars Options");
     }
 
     @Override
@@ -78,11 +71,19 @@ public class OptionsScreen extends MenuScreen implements Screen {
         else
             btnDontAnimateBackground.setChecked(true);
 
-
+        Label lblMusicInfo = new Label("Volume", skin);
+        Slider volumeSlider = new Slider(0, 1, .01f, false, skin);
+        volumeSlider.setValue(preferences.getFloat("Music Volume"));
+        volumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                GRID_WARS.musicManager.setMusicVolume(volumeSlider.getPercent());
+            }
+        });
 
         Table confirmationBox = new Table();
         TextButton btnBack = new HoverButton("Back", skin, Color.WHITE, Color.RED);
-        TextButton btnOK = new HoverButton("OK", skin, Color.WHITE, Color.BLUE);
+        TextButton btnOK = new HoverButton("OK", skin, Color.WHITE, Color.GREEN);
         confirmationBox.add(btnBack).size(80, 50).padRight(30);
         confirmationBox.add(btnOK).size(80, 50);
 
@@ -91,6 +92,7 @@ public class OptionsScreen extends MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == btnBack) {
+                        GRID_WARS.musicManager.setMusicVolume(preferences.getFloat("Music Volume"));
                         GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
                     } else if (actor == btnOK) {
                         if (animationGroup.getChecked() == btnDoAnimation)
@@ -113,6 +115,8 @@ public class OptionsScreen extends MenuScreen implements Screen {
                             Background.setAnimateBackground(false);
                         }
 
+                        preferences.putFloat("Music Volume", volumeSlider.getPercent());
+
                         preferences.flush();
                         GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
 
@@ -123,23 +127,30 @@ public class OptionsScreen extends MenuScreen implements Screen {
         btnOK.addListener(listener);
         btnBack.addListener(listener);
 
-        table.add(lblAnimationInfo).padBottom(20).row();
+        table.add();
+        table.add().row();
+        table.add(lblAnimationInfo).colspan(2).padBottom(20).row();
         Table animBtnGroup = new Table();
         animBtnGroup.add(btnDoAnimation).size(90, 50);
         animBtnGroup.add(btnDontDoAnimation).size(90, 50);
-        table.add(animBtnGroup).padBottom(20).row();
-        table.add(lblAISpeedInfo).padBottom(20).row();
+        table.add(animBtnGroup).colspan(2).padBottom(20).row();
+        table.add(lblAISpeedInfo).colspan(2).padBottom(20).row();
         Table AIBtnGroup = new Table();
         AIBtnGroup.add(btnSlowAI).size(80, 50);
         AIBtnGroup.add(btnNormalAI).size(80, 50);
         AIBtnGroup.add(btnFastAI).size(80, 50);
-        table.add(AIBtnGroup).padBottom(20).row();
-        table.add(lblBackgroundInfo).padBottom(20).row();
+        table.add(AIBtnGroup).colspan(2).padBottom(20).row();
+        table.add(lblBackgroundInfo).colspan(2).padBottom(20).row();
         Table animBackgroundGroup = new Table();
         animBackgroundGroup.add(btnAnimateBackground).size(90, 50);
         animBackgroundGroup.add(btnDontAnimateBackground).size(90, 50);
-        table.add(animBackgroundGroup).padBottom(40).row();
-        table.add(confirmationBox);
+        table.add(animBackgroundGroup).colspan(2).padBottom(20).row();
+        Table musicGroup = new Table();
+        musicGroup.add(lblMusicInfo).row();
+        musicGroup.add(volumeSlider).padBottom(40).row();
+        table.add(musicGroup).colspan(2).padBottom(40).row();
+        table.add(btnOK).size(90, 50);
+        table.add(btnBack).size(90, 50);
 
         Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
         backgroundLay.setColor(Color.BLACK);
@@ -154,7 +165,7 @@ public class OptionsScreen extends MenuScreen implements Screen {
     @Override
     public void render(float deltaTime) {
         super.render(deltaTime);
-        //go back a screen
+        //go back highscores screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
         }

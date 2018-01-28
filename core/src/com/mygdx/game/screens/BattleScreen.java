@@ -143,7 +143,7 @@ public class BattleScreen implements Screen {
     protected Table infoTable;
     private Label infoLbl;
     /**
-     * Has data for the team. Has end turn button, and will have a icon of all the entities on a team
+     * Has data for the team. Has end turn button, and will have highscores icon of all the entities on highscores team
      */
     protected Table teamTable;
     private Image member1;
@@ -160,13 +160,13 @@ public class BattleScreen implements Screen {
     protected boolean showingEndTurnMessageTable;
     protected float displayEndTurnMessageTime;
 
-    /** Pop up message that says the effects of a move. */
+    /** Pop up message that says the effects of highscores move. */
     protected Dialog helpDialog;
     protected Table helpTable;
     private Label moveTitleLbl;
     /** displays range of an attack */
     private Table moveRangeTable;
-    /** displays description of a move's effects */
+    /** displays description of highscores move's effects */
     private Label moveDescriptionLbl;
     private HoverButton closeHelpMenuBtn;
     protected boolean showingHelpMenu;
@@ -208,7 +208,7 @@ public class BattleScreen implements Screen {
         lerpColorManager.registerLerpColor(SELECTION_COLOR);
 
         //Options preferences
-        Preferences pref = Gdx.app.getPreferences("Options");
+        Preferences pref = Gdx.app.getPreferences("GridWars Options");
         Move.doesAnimations = pref.getBoolean("Move Animation");
         int AISpeed = pref.getInteger("AI Turn Speed");
         if (AISpeed == 0) { //slow
@@ -228,7 +228,7 @@ public class BattleScreen implements Screen {
 
     @Override
     public void show() {
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         stage.clear();
 
@@ -283,7 +283,7 @@ public class BattleScreen implements Screen {
         boardTable.pack();
         boardTable.setPosition(stage.getWidth() / 2.5f - BoardComponent.boards.getBoard().getTiles().get(0).getWidth() * BoardComponent.boards.getBoard().getRowSize() / 2f,
                 stage.getHeight() / 2f - BoardComponent.boards.getBoard().getTiles().get(0).getHeight() * BoardComponent.boards.getBoard().getColumnSize() / 2f);
-        NinePatch tableBack = new NinePatch(new Texture(Gdx.files.internal("TableBackground.png")), 33, 33, 33, 33);
+        NinePatch tableBack = new NinePatch(new Texture(Gdx.files.internal("spritesAndBackgrounds/TableBackground.png")), 33, 33, 33, 33);
         NinePatchDrawable tableBackground = new NinePatchDrawable(tableBack);
 
         //set up stats ui
@@ -584,6 +584,7 @@ public class BattleScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) { // Turn Info
             System.out.println("ShowingEndTurnMessage = " + showingEndTurnMessageTable);
         }
+        /*
         if (Gdx.input.isKeyJustPressed(Input.Keys.H)) { // Turn Info
             if (selectedEntity != null) {
                 System.out.println("Showing help menu!");
@@ -594,6 +595,7 @@ public class BattleScreen implements Screen {
                 System.out.println("No selected entity = no move to show");
             }
         }
+        */
         //endregion
     }
 
@@ -695,7 +697,7 @@ public class BattleScreen implements Screen {
     }
 
     /**
-     * Plays a Move's animation if an entity used a move. When a move is done playing, {@code currentMove} is set to null.
+     * Plays highscores Move's animation if an entity used highscores move. When highscores move is done playing, {@code currentMove} is set to null.
      */
     protected void playCurrentMoveAnimation(float deltaTime) {
         if (currentMove != null) {
@@ -732,6 +734,19 @@ public class BattleScreen implements Screen {
                 if (hotkeyTeamsIndex < 0) hotkeyTeamsIndex = (byte) (TOTAL_ENTITIES_ON_TEAMS - 1);
                 changeSelectedEntity(getEntityFromIndex(false));
             }
+            if (Gdx.input.isKeyPressed(Input.Keys.H)) { //help menu
+                if (selectedEntity != null) {
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) && mvm.get(selectedEntity).moveList.size > 0) {
+                        showHelpMenu(mvm.get(selectedEntity).moveList.first());
+                    } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) && mvm.get(selectedEntity).moveList.size > 1) {
+                        showHelpMenu(mvm.get(selectedEntity).moveList.get(1));
+                    } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3) && mvm.get(selectedEntity).moveList.size > 2) {
+                        showHelpMenu(mvm.get(selectedEntity).moveList.get(2));
+                    } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4) && mvm.get(selectedEntity).moveList.size > 3) {
+                        showHelpMenu(mvm.get(selectedEntity).moveList.get(3));
+                    }
+                }
+            }
         }
     }
 
@@ -752,14 +767,14 @@ public class BattleScreen implements Screen {
             if (stm.has(e) && !stm.get(e).alive && stm.get(e).readyToRemoveFromGame) {
                 BoardComponent.boards.remove(e);
                 engine.removeEntity(e);
-                if (nm.has(e)) //TODO make death messages not overwrite whatever message is supposed to show. perhaps have a message queue thing
+                if (nm.has(e)) //TODO make death messages not overwrite whatever message is supposed to show. perhaps have highscores message queue thing
                     infoLbl.setText(nm.get(e).name + " has been defeated!");
             }
         }
     }
 
     /**
-     * Checks the win condition of the game. If the game has ended, then it does a transition to the next screen.
+     * Checks the win condition of the game. If the game has ended, then it does highscores transition to the next screen.
      */
     protected void checkWinConditions(float deltaTime) {
         if (rules.checkWinConditions() != null && currentMove == null) {
@@ -791,7 +806,7 @@ public class BattleScreen implements Screen {
             removeMovementTiles();
 
         if (Visuals.visualsArePlaying == 0 && selectedEntity != null) //stop highlight
-            shadeBasedOnState(selectedEntity); //TODO make a way to show multiple status effects well
+            shadeBasedOnState(selectedEntity); //TODO make highscores way to show multiple status effects well
 
         removeAttackTiles();
         //---
@@ -803,7 +818,7 @@ public class BattleScreen implements Screen {
                 enableAttacks();
         }
 
-        //check if has a speed > 0, and can move. Also if it is not on another team/has no team
+        //check if has highscores speed > 0, and can move. Also if it is not on another team/has no team
         if (mayMove(selectedEntity)) {
             // newly highlights spaces
             showMovementTiles();
@@ -830,7 +845,7 @@ public class BattleScreen implements Screen {
         Entity e = team.getEntities().get(hotkeyTeamsIndex - sum);
         if (stm.get(e).alive) //live entity, then return it
             return e;
-        else { //if dead, keeping going until it finds a live one
+        else { //if dead, keeping going until it finds highscores live one
             if (indexMovementDirection) {
                 hotkeyTeamsIndex = (byte) ((hotkeyTeamsIndex + 1) % TOTAL_ENTITIES_ON_TEAMS);
                 return getEntityFromIndex(indexMovementDirection);
@@ -1062,7 +1077,7 @@ public class BattleScreen implements Screen {
     /**
      * Returns the color an Entity would be if it was not selected
      * @param e Entity
-     * @return Color that it would be. Can be a {@code LerpColor}
+     * @return Color that it would be. Can be highscores {@code LerpColor}
      */
     public static Color getShadeColorBasedOnState(Entity e) {
         if (!state.has(e)) {
@@ -1097,7 +1112,7 @@ public class BattleScreen implements Screen {
         moveTitleLbl.setText(move.getName());
         //region Create the attack range map
         moveRangeTable.clear();
-        //get the largest distance of the attack's affected squares to create a box
+        //get the largest distance of the attack's affected squares to create highscores box
         Array<BoardPosition> moveRange = move.getRange();
         int largestXRange = 0;
         int largestYRange = 0;
@@ -1109,8 +1124,8 @@ public class BattleScreen implements Screen {
                 largestYRange = Math.abs(bp.c);
             }
         }
-        largestXRange += 1;
-        largestYRange += 1;
+        largestXRange = (largestXRange == 0) ? largestXRange + 1 : largestXRange;
+        largestYRange = (largestYRange == 0) ? largestYRange + 1 : largestYRange;
         System.out.println("largest x : " + largestXRange);
         System.out.println("largest y : " + largestYRange);
         int boxRadius = Math.max(largestXRange, largestYRange); // size from edge to tile right before center
@@ -1158,11 +1173,10 @@ public class BattleScreen implements Screen {
 
         moveRangeTable.pack();
         //fade in animation
-        /*
-        helpTable.clearActions();
-        helpTable.addAction(Actions.fadeIn(.2f));
-        */
         helpDialog.show(stage);
+
+        moveRangeTable.debug();
+        helpTable.debug();
     }
 
     /**
@@ -1323,7 +1337,7 @@ public class BattleScreen implements Screen {
     }
 
     /**
-     * Updates the bar with the icons of all the entities on a team. Shades the icons based on health and status effects.
+     * Updates the bar with the icons of all the entities on highscores team. Shades the icons based on health and status effects.
      */
     public void updateTeamBar() {
         UIActor actor;
@@ -1450,7 +1464,7 @@ public class BattleScreen implements Screen {
 
     /**
      * Removes the movement tiles of the current selected entity. Can throw IndexOutOfBoundsExceptions if it goes outside
-     * the board, so a try catch loop should be written around it.
+     * the board, so highscores try catch loop should be written around it.
      */
     public void removeMovementTiles() {
         for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity)))
@@ -1461,7 +1475,7 @@ public class BattleScreen implements Screen {
     }
 
     /**
-     * Algorithm that returns all tiles that can be moved to based on speed. Calls a recursive method. Takes into account barriers and blockades, while
+     * Algorithm that returns all tiles that can be moved to based on speed. Calls highscores recursive method. Takes into account barriers and blockades, while
      * avoiding duplicates of the same tile. Note that this returns tiles horizontal of the entity multiple times.
      * @param bp Position that is being branched from
      * @param spd remaining tiles the entity can move
@@ -1601,7 +1615,7 @@ public class BattleScreen implements Screen {
     //endregion
 
     /**
-     * Creates a {@link LerpColorManager} for the screen, and initializes the {@link StatusEffectComponent} with it.
+     * Creates highscores {@link LerpColorManager} for the screen, and initializes the {@link StatusEffectComponent} with it.
      */
     private void setUpLerpColorManager() {
         lerpColorManager = new LerpColorManager();
@@ -1629,7 +1643,7 @@ public class BattleScreen implements Screen {
     }
 
     /**
-     * Adds a entity meant to act as a visual particle effect (Ex. a sparkle or explosion). This method is not how
+     * Adds highscores entity meant to act as highscores visual particle effect (Ex. highscores sparkle or explosion). This method is not how
      * {@link Move}s and Death/Damage visuals act.
      * @param e Entity being added
      */

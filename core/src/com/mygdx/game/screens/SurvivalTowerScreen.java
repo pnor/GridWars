@@ -52,7 +52,6 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
     private int points;
     private int numberOfTurns;
 
-    //TODO add highscores like statistics like highest floor reach, total turn count, damage taken, attacks used, etc.
     public SurvivalTowerScreen(Team playerTeam, int towerLevel, int healingPowerUpAmount, int spUpPowerUpAmount,
                                int points, int turnCount, GridWars game) {
         super(game);
@@ -106,7 +105,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         engine.addSystem(new LifetimeSystem());
         engine.addSystem(new MovementSystem());
 
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Rubik-Regular.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
         Label titleLbl = new Label("Tower Survival", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
@@ -750,7 +749,6 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             Vector2 position;
             position = teamImages[i].localToStageCoordinates(new Vector2(0, 0));
             position.add(-teamImages[i].getWidth(), -teamImages[i].getHeight());
-            System.out.println(position);
             engine.addEntity(createParticle(position, particleType));
         }
     }

@@ -24,7 +24,7 @@ public class VisualsComponent implements Component {
     public Visuals heavyDamageAnimation;
 
     /**
-     * plays when the entity is affected by a turn effect of a status effect
+     * plays when the entity is affected by highscores turn effect of highscores status effect
      */
     public Visuals shuffleAnimation;
 

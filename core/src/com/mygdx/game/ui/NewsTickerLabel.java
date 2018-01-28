@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /**
- * Displays text like a news ticker.
+ * Displays text like highscores news ticker.
  * @author Phillip O'Reggio
  */
 public class NewsTickerLabel extends Label {

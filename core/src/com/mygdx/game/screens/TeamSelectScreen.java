@@ -96,7 +96,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     private int altNumber;
 
     /**
-     * Creates a team selection screen
+     * Creates highscores team selection screen
      * @param max max number of teams in the round.
      * @param isZones whether game is using zone rules
      */
@@ -116,9 +116,9 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         super.show();
         EntityConstructor.initialize(engine, stage);
 
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Rubik-Regular.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        NinePatch tableBack = new NinePatch(new Texture(Gdx.files.internal("TableBackground.png")), 33, 33, 33, 33);
+        NinePatch tableBack = new NinePatch(new Texture(Gdx.files.internal("spritesAndBackgrounds/TableBackground.png")), 33, 33, 33, 33);
         NinePatchDrawable tableBackground = new NinePatchDrawable(tableBack);
 
         teams = new Array<Team>();
@@ -433,7 +433,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     }
 
     /**
-     * Confirms the selection of a team. If the team is empty, it does nothing. If there is still teams to be chosen, it will change
+     * Confirms the selection of highscores team. If the team is empty, it does nothing. If there is still teams to be chosen, it will change
      * the current team and entity variables and clear the {@code Image}s, to allow the next team to be chosen. If the there
      * is no more teams, it will move on to the {@code BoardSelectScreen}.
      */
@@ -486,7 +486,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     }
 
     /**
-     * Clears all the selected entities on a team.
+     * Clears all the selected entities on highscores team.
      */
     private void clearSelection() {
         teams.get(curTeam).getEntities().clear();
@@ -658,7 +658,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         else
             altNumber = 0;
 
-        //back a screen
+        //back highscores screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
         }

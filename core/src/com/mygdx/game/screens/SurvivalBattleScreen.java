@@ -26,7 +26,7 @@ import static com.mygdx.game.GridWars.*;
 
 /**
  * Alteration of {@link BattleScreen} made for the Survival mode. Displays the floor on the bottom bar, and changes the look of the UI. Also changes
- * how it links to other screens after a victory or loss.
+ * how it links to other screens after highscores victory or loss.
  * @author Phillip O'Reggio
  */
 public class SurvivalBattleScreen extends BattleScreen implements Screen {
@@ -151,7 +151,6 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
             else
                 GRID_WARS.setScreen(new SurvivalResultsScreen(51, points, numberOfTurns, teams.first(), GRID_WARS));
         } else { //loss
-            System.out.println("Level : " + level + ", num turns: " + numberOfTurns);
             GRID_WARS.setScreen(new GameOverScreen(level, points, numberOfTurns, teams.get(0), GRID_WARS));
         }
     }

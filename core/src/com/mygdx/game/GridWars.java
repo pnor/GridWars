@@ -1,10 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -29,7 +26,10 @@ public class GridWars extends Game {
 	public static boolean DEBUG_doubleSpeed;
 
 	//high scores
-	public static HighScoreManager highScoreManager;
+	public HighScoreManager highScoreManager;
+
+	//Music
+	public MusicManager musicManager;
 
 	@Override
 	public void create() {
@@ -38,13 +38,19 @@ public class GridWars extends Game {
 		stage.getViewport().setScreenSize(1000, 900);
 		engine = new Engine();
 		//set up assets
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
-		skin.addRegions( new TextureAtlas("uiskin.atlas"));
-		atlas = new TextureAtlas(Gdx.files.internal("GDSprites.pack"));
-		backAtlas = new TextureAtlas(Gdx.files.internal("BackPack.pack"));
-		//set up options related things
-		Background.setAnimateBackground(Gdx.app.getPreferences("Options").getBoolean("Animate Background"));
-		//set up highscore things
+		skin = new Skin(Gdx.files.internal("fonts/uiskin.json"));
+		skin.addRegions( new TextureAtlas("fonts/uiskin.atlas"));
+		atlas = new TextureAtlas(Gdx.files.internal("spritesAndBackgrounds/GDSprites.pack"));
+		backAtlas = new TextureAtlas(Gdx.files.internal("spritesAndBackgrounds/BackPack.pack"));
+		//set up options if its first time
+		initializeOptions();
+		//set up music
+		musicManager = new MusicManager();
+		musicManager.makeSongAndPlayIt();
+		musicManager.setMusicVolume(Gdx.app.getPreferences("GridWars Options").getFloat("Music Volume"));
+		//animate background if options permit
+		Background.setAnimateBackground(Gdx.app.getPreferences("GridWars Options").getBoolean("Animate Background"));
+		//prepopulate high scores if its the first time
 			highScoreManager = new HighScoreManager();
 		if (!highScoreManager.fileHandleExists()) {
 			highScoreManager.prepopulate();
@@ -102,17 +108,33 @@ public class GridWars extends Game {
 	}
 
 	/**
+	 * Initializes the values of the options menu if this is the first time playing. Does nothing if this is not the first
+	 * time playing.
+	 */
+	public void initializeOptions() {
+		Preferences preferences = Gdx.app.getPreferences("GridWars Options");
+		//put in option variables if this is the first time
+		if (!preferences.contains("Move Animation")) {
+			preferences.putBoolean("Move Animation", true);
+			preferences.putInteger("AI Turn Speed", 1);
+			preferences.putBoolean("Animate Background", true);
+			preferences.putFloat("Music Volume", 1f);
+			preferences.flush();
+		}
+	}
+
+	/**
 	 * Sets the game to shade in grayscale
 	 */
 	public void setGrayScale() {
-		stage.getBatch().setShader(new ShaderProgram(Gdx.files.internal("GrayscaleVertexShader"), Gdx.files.internal("GrayScaleFragmentShader")));
+		stage.getBatch().setShader(new ShaderProgram(Gdx.files.internal("shaders/GrayscaleVertexShader"), Gdx.files.internal("shaders/GrayScaleFragmentShader")));
 	}
 
 	/**
 	 * Sets the game to shade all colors inverted
 	 */
 	public void setInvertColor() {
-		stage.getBatch().setShader(new ShaderProgram(Gdx.files.internal("GrayscaleVertexShader"), Gdx.files.internal("InvertFragmentShader")));
+		stage.getBatch().setShader(new ShaderProgram(Gdx.files.internal("shaders/GrayscaleVertexShader"), Gdx.files.internal("shaders/InvertFragmentShader")));
 	}
 
 	/**

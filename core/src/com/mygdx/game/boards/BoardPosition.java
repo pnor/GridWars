@@ -1,7 +1,7 @@
 package com.mygdx.game.boards;
 
 /**
- * The coordinates of a position on a grid-based board.
+ * The coordinates of highscores position on highscores grid-based board.
  * @author Phillip O'Reggio
  */
 public class BoardPosition {
@@ -25,7 +25,7 @@ public class BoardPosition {
     }
 
     /**
-     * Returns a modified copy of this object.
+     * Returns highscores modified copy of this object.
      * @param rNum amount to add to row
      * @param cNum amount to add to column
      * @return new {@code BoardPosition} with amounts added to row and column
@@ -54,7 +54,7 @@ public class BoardPosition {
     }
 
     /**
-     * Creates a copy of this object
+     * Creates highscores copy of this object
      * @return copy of this object
      */
     public BoardPosition copy() {

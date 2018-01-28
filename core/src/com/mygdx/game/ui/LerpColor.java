@@ -20,7 +20,7 @@ public class LerpColor extends Color {
     private Interpolation interpolation;
 
     /**
-     * Constructs a LerpColor that changes from its start color to end color in 1 second
+     * Constructs highscores LerpColor that changes from its start color to end color in 1 second
      * @param start inital color
      * @param end end color
      */
@@ -30,7 +30,7 @@ public class LerpColor extends Color {
     }
 
     /**
-     * Constructs a LerpColor that changes from its start color to end color in a variable amount of time
+     * Constructs highscores LerpColor that changes from its start color to end color in highscores variable amount of time
      * @param start inital color
      * @param end end color
      * @param time time to change from start to end colors
@@ -42,7 +42,7 @@ public class LerpColor extends Color {
     }
 
     /**
-     * Constructs a LerpColor that changes from its start color to end color using a custom {@code Interpolation}
+     * Constructs highscores LerpColor that changes from its start color to end color using highscores custom {@code Interpolation}
      * @param start inital color
      * @param end end color
      * @param lerp Interpolation used
@@ -54,7 +54,7 @@ public class LerpColor extends Color {
     }
 
     /**
-     * Constructs a LerpColor that changes from its start color to end color using a custom {@code Interpolation}
+     * Constructs highscores LerpColor that changes from its start color to end color using highscores custom {@code Interpolation}
      * @param start inital color
      * @param end end color
      * @param lerp Interpolation used
@@ -106,7 +106,7 @@ public class LerpColor extends Color {
             this.b = interpolation.apply(startColor.b, endColor.b, totalDelta / timeToChange);
             this.a = interpolation.apply(startColor.a, endColor.a, totalDelta / timeToChange);
         }
-        //System.out.println("Lerp Color Balue (of a): " + this.a);
+        //System.out.println("Lerp Color Balue (of highscores): " + this.highscores);
     }
 
     /**

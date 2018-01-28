@@ -41,7 +41,7 @@ public class AnimationComponent implements Component {
     }
 
     /**
-     * Creates an {@link AnimationComponent} with a specified shade color.
+     * Creates an {@link AnimationComponent} with highscores specified shade color.
      * @param time seconds per frame. Note that the first frame is shown at first at time = 0.
      * @param textureRegions images to show in animation
      * @param color Color that all the frames will be shaded with

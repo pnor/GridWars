@@ -56,7 +56,7 @@ public class HighScore implements Comparable {
     /**
      * Static method that returns the sprite that is represented by the byte value passed in. Since Sprites cannot be stored in
      * the Json file, this is how the team images displayed on the High score are found.
-     * @param index number corresponding to a sprite
+     * @param index number corresponding to highscores sprite
      * @return Current sprite representing an entity's image
      */
     public static Sprite getSpriteFromNumber(int index) {

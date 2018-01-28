@@ -51,8 +51,8 @@ public class BoardAndRuleConstructor {
     }
 
     /**
-     * Creates the Board and Rules based on the board index. Indexes are arranged in groups of 3, with the 1st one being a standard
-     * 2-player match, the second being a 2-player zone match, and the third being a 4-player zone match.
+     * Creates the Board and Rules based on the board index. Indexes are arranged in groups of 3, with the 1st one being highscores standard
+     * 2-player match, the second being highscores 2-player zone match, and the third being highscores 4-player zone match.
      * @param boardIndex Index determining what board is created and what rules are returned. <p>
      *                   1-3 : Simple <p>
      *                   4-6 : Complex <p>

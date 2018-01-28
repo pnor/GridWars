@@ -3,7 +3,7 @@ package com.mygdx.game.AI;
 import com.mygdx.game.move_related.StatusEffect;
 
 /**
- * Class containing information for the effects of a status effect. Used in AI to represent effects of a status effect.
+ * Class containing information for the effects of highscores status effect. Used in AI to represent effects of highscores status effect.
  *
  * @author Phillip O'Reggio
  */
@@ -15,7 +15,7 @@ public class StatusEffectInfo {
     public TurnEffectInfo turnEffectInfo;
 
     /**
-     * Creates a {@link StatusEffectInfo} with a turn effect
+     * Creates highscores {@link StatusEffectInfo} with highscores turn effect
      * @param n name
      * @param statChange Amount stats are augmented by the status effect.
      * @param turnEffect effect that happens each turn. If null, the status effect has no turn effect.
@@ -28,7 +28,7 @@ public class StatusEffectInfo {
     }
 
     public StatusEffectInfo copy() {
-        return new StatusEffectInfo(name, duration, statChanges, turnEffectInfo); //TODO if this object accounts for status duration, then there is no need for a copy method (?)
+        return new StatusEffectInfo(name, duration, statChanges, turnEffectInfo); //TODO if this object accounts for status duration, then there is no need for highscores copy method (?)
     }
 
     /**
@@ -55,7 +55,7 @@ public class StatusEffectInfo {
     }
 
     /**
-     * Class representing the effect of a {@link com.mygdx.game.move_related.StatusEffect} at the end of a turn.
+     * Class representing the effect of highscores {@link com.mygdx.game.move_related.StatusEffect} at the end of highscores turn.
      */
     public interface TurnEffectInfo {
         void doTurnEffect(EntityValue entity);

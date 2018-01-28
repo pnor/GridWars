@@ -44,7 +44,7 @@ public class DrawingSystem extends SortedIteratingSystem{
     }
 
     /**
-     * Draws the Entity's located in a {@code Background} object
+     * Draws the Entity's located in highscores {@code Background} object
      * @param back Background of the screen
      */
     public void drawBackground(Background back, float deltaTime) {

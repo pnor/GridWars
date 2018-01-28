@@ -16,7 +16,6 @@ import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.highscores.HighScore;
 
 import static com.mygdx.game.GridWars.atlas;
-import static com.mygdx.game.GridWars.highScoreManager;
 
 /**
  * Screen that displays the top 5 highscores.
@@ -31,14 +30,14 @@ public class HighScoreScreen extends MenuScreen implements Screen {
     @Override
     public void show() {
         super.show();
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Rubik-Regular.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
         Label lblTitle;
         Table scoreTable = new Table();
 
         //get high scores
-        Array<HighScore> highScores = highScoreManager.getHighScores();
+        Array<HighScore> highScores = GRID_WARS.highScoreManager.getHighScores();
 
         //title
         param.size = 50;
@@ -78,7 +77,7 @@ public class HighScoreScreen extends MenuScreen implements Screen {
             scoreTable.add(new Label(curScore.getTeamName(), new Label.LabelStyle(bigFont, Color.YELLOW)));
             scoreTable.add(new Label("" + curScore.getScore(), new Label.LabelStyle(smallFont, Color.WHITE)));
             scoreTable.add(new Label("" + curScore.getTurns(), new Label.LabelStyle(smallFont, Color.WHITE)));
-            //add image
+            //add images
             int[] spriteDrawables = curScore.getTeamSprites();
             for (int j = 0; j < 4; j++) {
                 if (j < spriteDrawables.length) //add normally
@@ -89,7 +88,7 @@ public class HighScoreScreen extends MenuScreen implements Screen {
             if (curScore.getLastFloor() > 50)
                 scoreTable.add(new Label("50+", new Label.LabelStyle(smallFont, Color.CYAN)));
             else
-                scoreTable.add(new Label("" + curScore.getTurns(), new Label.LabelStyle(smallFont, Color.WHITE)));
+                scoreTable.add(new Label("" + curScore.getLastFloor(), new Label.LabelStyle(smallFont, Color.WHITE)));
         }
 
         table.add(lblTitle).padBottom(20).row();
@@ -102,7 +101,7 @@ public class HighScoreScreen extends MenuScreen implements Screen {
     @Override
     public void render(float deltaTime) {
         super.render(deltaTime);
-        //go back a screen
+        //go back highscores screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
         }

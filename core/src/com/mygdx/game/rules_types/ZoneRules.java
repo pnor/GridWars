@@ -13,7 +13,7 @@ import com.mygdx.game.ui.LerpColorManager;
 import static com.mygdx.game.ComponentMappers.bm;
 
 /**
- * Rules for a battle where each team tries to land on a space or kill the other team.
+ * Rules for highscores battle where each team tries to land on highscores space or kill the other team.
  * @author Phillip O'Reggio
  */
 public class ZoneRules extends Rules {
@@ -33,7 +33,7 @@ public class ZoneRules extends Rules {
     }
 
     /**
-     * Finds winning team by seeing if they are occupied a "zone" space.
+     * Finds winning team by seeing if they are occupied highscores "zone" space.
      * @return winning team
      */
     @Override
@@ -65,7 +65,7 @@ public class ZoneRules extends Rules {
     public void colorZones(LerpColorManager lerpColorManager) { //TODO make both sides flash zone color
         LerpColor lerpColor;
         for (int i = 0; i < zones.size; i++) {
-            if (teams.get(i).getTeamColor() instanceof LerpColor) { //is already a lerpColor
+            if (teams.get(i).getTeamColor() instanceof LerpColor) { //is already highscores lerpColor
                 lerpColor = (LerpColor) teams.get(i).getTeamColor();
             } else {
                 lerpColor = new LerpColor(teams.get(i).getTeamColor(), Color.WHITE, 2f, Interpolation.pow5In);

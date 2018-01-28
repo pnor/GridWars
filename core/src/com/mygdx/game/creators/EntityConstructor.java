@@ -1291,17 +1291,17 @@ public class EntityConstructor {
                         atlas.findRegion("dragonUp"),
                         atlas.findRegion("dragonUp2")},
                         Animation.PlayMode.LOOP, .5f, true),
-                        new StatComponent(40, 10, 6, 0, 2)),
+                        new StatComponent(40, 10, 6, 0, 3)),
                 new Phase(25, 15, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("dragonGlow"),
                         atlas.findRegion("dragon2Glow")},
                         Animation.PlayMode.LOOP, .6f, true),
-                        new StatComponent(40, 10, 3, 1, 2)),
+                        new StatComponent(40, 10, 4, 1, 2)),
                 new Phase(40, 25, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("dragon"),
                         atlas.findRegion("dragon2")},
                         Animation.PlayMode.LOOP, 1f, true),
-                        new StatComponent(40, 10, 2, 1, 1))
+                        new StatComponent(40, 10, 3, 1, 1))
         ));
 
         return entity;

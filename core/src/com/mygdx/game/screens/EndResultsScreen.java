@@ -29,7 +29,7 @@ import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
 
 /**
- * Shows the results of a 2 player Zone or Death match.
+ * Shows the results of highscores 2 player Zone or Death match.
  * @author Phillip O'Reggio
  */
 public class EndResultsScreen extends MenuScreen implements Screen {
@@ -72,7 +72,7 @@ public class EndResultsScreen extends MenuScreen implements Screen {
     @Override
     public void show() {
         super.show();
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Rubik-Regular.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
         Label titleLbl = new Label("Results", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));

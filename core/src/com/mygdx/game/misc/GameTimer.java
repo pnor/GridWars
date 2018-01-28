@@ -9,7 +9,7 @@ public class GameTimer {
     private float time = 0;
 
     /**
-     * Constructs a {@code GameTimer} with a given time.
+     * Constructs highscores {@code GameTimer} with highscores given time.
      * @param t time
      */
     public GameTimer(float t) {
@@ -17,7 +17,7 @@ public class GameTimer {
     }
 
     /**
-     * Constructs a {@code GameTimer} with the starting time of 90.
+     * Constructs highscores {@code GameTimer} with the starting time of 90.
      */
     public GameTimer() {
         endTime = 3;

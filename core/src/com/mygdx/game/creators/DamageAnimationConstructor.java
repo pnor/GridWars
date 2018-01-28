@@ -65,7 +65,7 @@ public class DamageAnimationConstructor {
 
 
     /**
-     * Creates a generic damage animation
+     * Creates highscores generic damage animation
      * @param user Entity that is being damaged
      * @return damage animation {@code Visuals}
      */
@@ -97,7 +97,7 @@ public class DamageAnimationConstructor {
     }
 
     /**
-     * Creates a shuffling animation for status effects
+     * Creates highscores shuffling animation for status effects
      * @param user Entity that is being damaged
      * @return damage animation {@code Visuals}
      */
@@ -122,7 +122,7 @@ public class DamageAnimationConstructor {
     }
 
     /**
-     * Creates a generic damage animation
+     * Creates highscores generic damage animation
      * @param user Entity that is being damaged
      * @return damage animation {@code Visuals}
      */

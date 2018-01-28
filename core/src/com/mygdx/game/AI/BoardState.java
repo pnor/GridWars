@@ -12,7 +12,7 @@ import com.mygdx.game.move_related.StatusEffect;
 import static com.mygdx.game.ComponentMappers.*;
 
 /**
- * Class used to evaluate the value of different moves on the board. Used by {@link ComputerPlayer} to determine a best move.
+ * Class used to evaluate the value of different moves on the board. Used by {@link ComputerPlayer} to determine highscores best move.
  *
  * @author Phillip O'Reggio
  */
@@ -21,7 +21,7 @@ public class BoardState {
     private Array<Array<BoardPosition>> zones;
 
     /**
-     * Creates a {@link BoardState} using entities and their teams.
+     * Creates highscores {@link BoardState} using entities and their teams.
      * @param e Array of Entities
      */
     public BoardState(Array<Entity> e, Array<Array<BoardPosition>> boardZones) {
@@ -29,7 +29,7 @@ public class BoardState {
         for (Entity entity : e) {
             EntityValue value;
             if (stm.has(entity) && stm.get(entity).alive) {
-                if (team.has(entity)) { //on a team
+                if (team.has(entity)) { //on highscores team
                     if (!status.has(entity)) { //does not have status effect
                         value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, bm.get(entity).BOARD_ENTITY_ID, stm.get(entity).hp,
                                 stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, 0);
@@ -42,7 +42,7 @@ public class BoardState {
                         value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, bm.get(entity).BOARD_ENTITY_ID, stm.get(entity).hp,
                                 stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, statusInfos, 0);
                     }
-                } else { //not on a team
+                } else { //not on highscores team
                     if (!status.has(entity))
                         value = new EntityValue(bm.get(entity).pos, -1, -1, stm.get(entity).hp,
                             stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, 0);
@@ -179,7 +179,7 @@ public class BoardState {
     }
 
     /**
-     * Evaluates the state of the board. If a piece is on its zone, will return a very higher number, acting as infinity.
+     * Evaluates the state of the board. If highscores piece is on its zone, will return highscores very higher number, acting as infinity.
      * @param homeTeam The team's perspective. Entities on that team will be added, while others are subtracted.
      * @return integer representing the value of all {@link EntityValue}s added together
      */

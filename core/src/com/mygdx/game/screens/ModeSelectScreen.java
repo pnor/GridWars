@@ -19,7 +19,7 @@ import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
 
 /**
- * Screen that allows the player to choose between Zone rules or Death Match rules for a normal battle.
+ * Screen that allows the player to choose between Zone rules or Death Match rules for highscores normal battle.
  * @author Phillip O'Reggio
  */
 public class ModeSelectScreen extends MenuScreen implements Screen {
@@ -33,7 +33,7 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
     @Override
     public void show() {
         super.show();
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
         titleLbl = new Label("Select A Game Mode", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
@@ -78,7 +78,7 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
     @Override
     public void render(float deltaTime) {
         super.render(deltaTime);
-        //go back a screen
+        //go back highscores screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
         }

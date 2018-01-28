@@ -24,7 +24,7 @@ import static com.mygdx.game.GridWars.skin;
  */
 public class SurvivalModeOptions extends MenuScreen implements Screen {
     private Label titleLbl;
-    private HoverButton startBtn, highScoreBtn;
+    private HoverButton startBtn, highScoreBtn, loadBtn;
 
     public SurvivalModeOptions(GridWars gridWars) {
         super(gridWars);
@@ -33,11 +33,12 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
     @Override
     public void show() {
         super.show();
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
-        titleLbl = new Label("Select A Game Mode", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        titleLbl = new Label("Survival", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         startBtn = new HoverButton("Start", skin, Color.LIGHT_GRAY, Color.BLUE);
+        loadBtn = new HoverButton("Load", skin, Color.LIGHT_GRAY, Color.TEAL);
         highScoreBtn = new HoverButton("High Scores", skin, Color.LIGHT_GRAY, Color.ORANGE);
 
         ChangeListener listener = new ChangeListener() {
@@ -48,6 +49,8 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
                         GRID_WARS.setScreen(new SurvivalTeamSelectScreen(GRID_WARS));
                     } else if (actor == highScoreBtn) {
                         GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
+                    } else if (actor == loadBtn) {
+
                     }
                 }
             }
@@ -72,10 +75,9 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
     @Override
     public void render(float deltaTime) {
         super.render(deltaTime);
-        //go back a screen
+        //go back highscores screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
         }
     }
-
 }

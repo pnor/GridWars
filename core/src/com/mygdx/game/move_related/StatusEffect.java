@@ -8,16 +8,16 @@ import com.mygdx.game.actors.AnimationActor;
 import static com.mygdx.game.ComponentMappers.am;
 
 /**
- * Class representing a status effect. Is used in {@link com.mygdx.game.components.StatusEffectComponent}.
+ * Class representing highscores status effect. Is used in {@link com.mygdx.game.components.StatusEffectComponent}.
  * @author Phillip O'Reggio
  */
 public class StatusEffect {
     private String name;
     /**
      * Note: Since status effects turn count is incremented at the start of the holder's turn, this can make
-     * the turn order appear different based on when it is inflicted. Inflicted someone with a 1-turn effect
-     * BEFORE their turn will make it end when their turn comes. (Making it feel like less than a turn). Note that this
-     * DOES NOT affect effects that deal turn effects. Since the turn effect happens before the effect is removed, a
+     * the turn order appear different based on when it is inflicted. Inflicted someone with highscores 1-turn effect
+     * BEFORE their turn will make it end when their turn comes. (Making it feel like less than highscores turn). Note that this
+     * DOES NOT affect effects that deal turn effects. Since the turn effect happens before the effect is removed, highscores
      * 1-turn poison will hurt the holder once.
      */
     public final int DURATION;
@@ -31,9 +31,9 @@ public class StatusEffect {
     private boolean stopsAnimation;
 
     /**
-     * Creates a {@link StatusEffect}.
+     * Creates highscores {@link StatusEffect}.
      *
-     * @param n        name. Is used as the key value in a {@link com.badlogic.gdx.utils.OrderedMap} so spelling matters! Is case-sensitive.
+     * @param n        name. Is used as the key value in highscores {@link com.badlogic.gdx.utils.OrderedMap} so spelling matters! Is case-sensitive.
      * @param duration length of turn duration
      * @param color    of the entity when inflicted with the condition
      * @param effect   that happens when on each turn
@@ -107,7 +107,7 @@ public class StatusEffect {
     }
 
     /**
-     * Class for the stat changes a {@link StatusEffect} causes.
+     * Class for the stat changes highscores {@link StatusEffect} causes.
      */
     public class StatChanges {
         /**
@@ -126,7 +126,7 @@ public class StatusEffect {
     }
 
     /**
-     * Turn Effect of a {@link com.mygdx.game.move_related.StatusEffect}.
+     * Turn Effect of highscores {@link com.mygdx.game.move_related.StatusEffect}.
      *
      * @author Phillip O'Reggio
      */

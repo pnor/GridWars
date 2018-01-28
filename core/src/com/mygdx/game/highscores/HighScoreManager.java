@@ -12,14 +12,14 @@ import com.badlogic.gdx.utils.Json;
 public class HighScoreManager {
     //high score related
     private final FileHandle HIGH_SCORE_FILE;
-    private Array<HighScore> highScores;
+    private Array<com.mygdx.game.highscores.HighScore> highScores;
     /** Total amount of highscores this game will store */
     private final int maxEntries = 5;
     /** Is true if the Array is the same as the one stored in the High score json file */
     private boolean sameAsFile;
 
     public HighScoreManager() {
-        HIGH_SCORE_FILE = Gdx.files.local("GridWarsHighScores.json");
+        HIGH_SCORE_FILE = Gdx.files.local("savedData/GridWarsHighScores.json");
         if (HIGH_SCORE_FILE.exists())
             updateHighScoresWithFile();
     }
@@ -44,7 +44,7 @@ public class HighScoreManager {
     }
 
     /**
-     * Adds a highscore if it is higher than or equal to a score currently in the list. Truncates the list to the size specified by max entries.
+     * Adds highscores highscore if it is higher than or equal to highscores score currently in the list. Truncates the list to the size specified by max entries.
      * @param score being added
      */
     public void addHighScoreObject(HighScore score) {

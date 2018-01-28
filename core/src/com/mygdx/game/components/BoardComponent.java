@@ -5,13 +5,13 @@ import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
 
 /**
- * Represents a location and orientation on the board.
+ * Represents highscores location and orientation on the board.
  * @author pnore_000
  */
 public class BoardComponent implements Component {
     public static BoardManager boards;
     /*
-    Used for giving each Entity a unique ID
+    Used for giving each Entity highscores unique ID
      */
     private static int currentIDNumberAssigned;
     /**

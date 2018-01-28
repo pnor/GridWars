@@ -18,11 +18,10 @@ import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
 
 import static com.mygdx.game.GridWars.atlas;
-import static com.mygdx.game.GridWars.highScoreManager;
 import static com.mygdx.game.GridWars.skin;
 
 /**
- * Screen that is displayed when you get a Game Over in Survival mode
+ * Screen that is displayed when you get highscores Game Over in Survival mode
  * @author Phillip O'Reggio
  */
 public class GameOverScreen extends MenuScreen implements Screen {
@@ -49,15 +48,15 @@ public class GameOverScreen extends MenuScreen implements Screen {
     public void show() {
         super.show();
 
-        //determine if player got a high score
-        if (highScoreManager.getLowestScore().getScore() <= playerScore.getScore()) {
+        //determine if player got highscores high score
+        if (GRID_WARS.highScoreManager.getLowestScore().getScore() <= playerScore.getScore()) {
             playerGotNewHighScore = true;
         }
         //if they did add to highscores
-        highScoreManager.addHighScoreObject(playerScore);
-        highScoreManager.saveHighScores();
+        GRID_WARS.highScoreManager.addHighScoreObject(playerScore);
+        GRID_WARS.highScoreManager.saveHighScores();
 
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Rubik-Regular.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
         lblGameOver = new Label("Game Over", new Label.LabelStyle(fontGenerator.generateFont(param), Color.BLACK));

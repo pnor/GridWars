@@ -60,6 +60,9 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
         super(gridWars);
         playerScore = new HighScore(team.getTeamName(), score, turns, level);
         playerScore.setTeamSprites(team);
+        this.team = team;
+        this.points = score;
+        this.turnCount = turns;
     }
 
     @Override
@@ -71,16 +74,16 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
         engine.addSystem(new LifetimeSystem());
         engine.addSystem(new MovementSystem());
 
-        //determine if player got a high score
-        if (highScoreManager.getLowestScore().getScore() <= playerScore.getScore()) {
+        //determine if player got highscores high score
+        if (GRID_WARS.highScoreManager.getLowestScore().getScore() <= playerScore.getScore()) {
             playerGotNewHighScore = true;
         }
         //if they did add to highscores
-        highScoreManager.addHighScoreObject(playerScore);
-        highScoreManager.saveHighScores();
+        GRID_WARS.highScoreManager.addHighScoreObject(playerScore);
+        GRID_WARS.highScoreManager.saveHighScores();
 
         //create Labels
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Rubik-Regular.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
         Label titleLbl = new Label("Success!", new Label.LabelStyle(fontGenerator.generateFont(param), Color.BLACK));

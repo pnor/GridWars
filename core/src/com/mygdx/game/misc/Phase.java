@@ -19,7 +19,7 @@ public class Phase implements Comparable {
     private StatComponent stat;
 
     /**
-     * Creates a phase to be used in PhaseComponent
+     * Creates highscores phase to be used in PhaseComponent
      * @param upperBounds upper health threshold
      * @param lowerBounds lower health threshold
      * @param newActor new Actor
@@ -43,7 +43,7 @@ public class Phase implements Comparable {
         e.add(stat);
         stm.get(e).hp = currentHealth;
         //apply actor ---
-        //handling stop animation caused from a status effect
+        //handling stop animation caused from highscores status effect
         if (actor instanceof AnimationActor && am.get(e).actor instanceof AnimationActor)
             //changing from animation actor to animation actor
             ((AnimationActor) actor).setStopUpdating(((AnimationActor) am.get(e).actor).getStopUpdating());

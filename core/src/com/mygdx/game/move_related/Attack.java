@@ -5,7 +5,7 @@ import com.mygdx.game.boards.BoardPosition;
 
 /**
  * Phillip O
- * What happens (unrelated to visuals) when a move is used. Is used mainly in the {@code Move} class.
+ * What happens (unrelated to visuals) when highscores move is used. Is used mainly in the {@code Move} class.
  */
 public interface Attack {
     /**
