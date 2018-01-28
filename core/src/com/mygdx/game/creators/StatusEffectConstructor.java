@@ -167,12 +167,12 @@ public class StatusEffectConstructor {
     }
 
     public static StatusEffect unstable(int duration) {
-        StatusEffect effect = new StatusEffect("Unstable", duration, new LerpColor(Color.RED, new Color(.2f, 0, 1f, .5f), .05f, Interpolation.sineOut), (e) -> {
+        StatusEffect effect = new StatusEffect("Unstable", duration, new LerpColor(Color.PURPLE, new Color(0, 1f, 1f, .5f), .1f, Interpolation.sineOut), (e) -> {
             if (stm.has(e)) {
                 if (MathUtils.randomBoolean()) { //hp random effect
                     stm.get(e).hp += 2;
                 } else {
-                    stm.get(e).hp -= 1;
+                    stm.get(e).hp -= 3;
                 }
                 if (MathUtils.randomBoolean()) { //sp random effect
                     stm.get(e).sp += MathUtils.random(-5, 5);
@@ -184,7 +184,7 @@ public class StatusEffectConstructor {
             if (MathUtils.randomBoolean()) { //hp random effect
                 entity.hp += 2;
             } else {
-                entity.hp -= 1;
+                entity.hp -= 3;
             }
             if (MathUtils.randomBoolean()) { //sp random effect
                 entity.sp += MathUtils.random(-5, 5);

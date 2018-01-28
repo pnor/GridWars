@@ -17,26 +17,26 @@
 }
 {
 	class: com.mygdx.game.highscores.HighScore
-	teamName: Adequate Allies
-	score: 500
-	turns: 20
-	lastFloor: 10
-	teamSprites: [ -2, -2, -2, -2 ]
+	teamName: Grid Warriors
+	score: 780
+	turns: 4
+	lastFloor: 42
+	teamSprites: [ 14, 13, 9, 7 ]
 }
 {
 	class: com.mygdx.game.highscores.HighScore
-	teamName: Mediocre Mashup
-	score: 100
-	turns: 10
-	lastFloor: 5
-	teamSprites: [ -2, -2, -2, -2 ]
+	teamName: Grid Warriors
+	score: 720
+	turns: 4
+	lastFloor: 27
+	teamSprites: [ 13, 12, 0, 14 ]
 }
 {
 	class: com.mygdx.game.highscores.HighScore
-	teamName: Poor Party
-	score: 1
-	turns: 0
-	lastFloor: 1
-	teamSprites: [ -2, -2, -2, -2 ]
+	teamName: Grid Warriors
+	score: 590
+	turns: 9
+	lastFloor: 48
+	teamSprites: [ 14, 14, 9, 9 ]
 }
 ]

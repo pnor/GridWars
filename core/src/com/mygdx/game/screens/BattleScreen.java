@@ -1019,7 +1019,7 @@ public class BattleScreen implements Screen {
         }
         //Normal Shading restrictions
         if (!state.get(e).canMove && !state.get(e).canAttack)
-            am.get(e).actor.shade(Color.DARK_GRAY);
+            am.get(e).actor.shade(new Color(.1f, .1f, .1f, 1));
         else if (!state.get(e).canMove || !state.get(e).canAttack)
             am.get(e).actor.shade(Color.GRAY);
         else if (rules.getCurrentTeamNumber() == team.get(e).teamNumber)
@@ -1050,7 +1050,7 @@ public class BattleScreen implements Screen {
         if (!(state.get(e).canMove || state.get(e).canAttack)) //shading to show cant attack/move
             return am.get(e).actor.getColor() == Color.GRAY;
         else if (!state.get(e).canMove && !state.get(e).canAttack)
-            return am.get(e).actor.getColor() == Color.DARK_GRAY;
+            return am.get(e).actor.getColor() == new Color(.1f, .1f, .1f, 1);
         else if (status.has(e) && status.get(e).getTotalStatusEffects() > 0) {  //status effect
                 return am.get(e).actor.getColor().equals(status.get(e).getStatusEffects().get(status.get(e).getTotalStatusEffects() - 1).getColor());
         } else if (team.get(e).teamNumber == rules.getCurrentTeamNumber()) //defualts
@@ -1070,7 +1070,7 @@ public class BattleScreen implements Screen {
         }
         //Normal Shading restrictions
         if (!state.get(e).canMove && !state.get(e).canAttack)
-            return Color.DARK_GRAY;
+            return new Color(.1f, .1f, .1f, 1);
         else if (!state.get(e).canMove || !state.get(e).canAttack)
             return Color.GRAY;
             //status effects
@@ -1154,11 +1154,7 @@ public class BattleScreen implements Screen {
             tableCells.get(index).getActor().setColor(Color.RED);
         }
         //endregion
-        moveDescriptionLbl.setText("This move has quite the effect. Right now it will make something happen on screen, which " +
-        "may or may not be a good thing, depending on your perspective. This move may or may not be helpful to the team you are " +
-        "playing as. To be completely honest, right now the move description test is not yet implemented so this message is just " +
-        "filler text to occupy that space and see how a lengthy description will look in practice. However, you'll find that this description" +
-        " was not completely useless; it was not wrong. The move will certainly do something, whether it will help you or not.");
+        moveDescriptionLbl.setText(move.getAttackDescription());
 
         moveRangeTable.pack();
         //fade in animation
