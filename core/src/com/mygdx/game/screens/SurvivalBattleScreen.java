@@ -19,6 +19,7 @@ import com.mygdx.game.components.PositionComponent;
 import com.mygdx.game.components.SpriteComponent;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.LerpColor;
+import music.Song;
 
 import static com.mygdx.game.ComponentMappers.sm;
 import static com.mygdx.game.ComponentMappers.stm;
@@ -37,8 +38,8 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
     private int points;
     private int numberOfTurns;
 
-    public SurvivalBattleScreen(Team team, Team enemyTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, int points, int turnCount, GridWars game) {
-        super(new Array<Team>(new Team[]{team, enemyTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty)}, game);
+    public SurvivalBattleScreen(Team team, Team enemyTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, int points, int turnCount, Song song, GridWars game) {
+        super(new Array<Team>(new Team[]{team, enemyTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty)}, song, game);
         healthPowerUp = healthPowerUpNum;
         spPowerUp = spPowerUpNum;
         level = floorLevel;
@@ -46,8 +47,8 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
         numberOfTurns = turnCount;
     }
 
-    public SurvivalBattleScreen(Team team, Team enemyTeam, Team objectTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, int points, int turnCount, GridWars game) {
-        super(new Array<Team>(new Team[]{team, enemyTeam, objectTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty), new Vector2(2, 0)}, game);
+    public SurvivalBattleScreen(Team team, Team enemyTeam, Team objectTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, int points, int turnCount, Song song, GridWars game) {
+        super(new Array<Team>(new Team[]{team, enemyTeam, objectTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty), new Vector2(2, 0)}, song, game);
         healthPowerUp = healthPowerUpNum;
         spPowerUp = spPowerUpNum;
         level = floorLevel;

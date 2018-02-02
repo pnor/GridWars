@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.highscores.HighScoreManager;
 import com.mygdx.game.screens.TitleScreen;
 import com.mygdx.game.ui.Background;
+import music.MusicManager;
 
 public class GridWars extends Game {
 	//public AssetManager assets = new AssetManager();
@@ -46,7 +47,6 @@ public class GridWars extends Game {
 		initializeOptions();
 		//set up music
 		musicManager = new MusicManager();
-		musicManager.makeSongAndPlayIt();
 		musicManager.setMusicVolume(Gdx.app.getPreferences("GridWars Options").getFloat("Music Volume"));
 		//animate background if options permit
 		Background.setAnimateBackground(Gdx.app.getPreferences("GridWars Options").getBoolean("Animate Background"));
@@ -114,11 +114,12 @@ public class GridWars extends Game {
 	public void initializeOptions() {
 		Preferences preferences = Gdx.app.getPreferences("GridWars Options");
 		//put in option variables if this is the first time
-		if (!preferences.contains("Move Animation")) {
+		if (preferences.getBoolean("Not First Time") == false) {
+			preferences.putBoolean("Not First Time", true);
 			preferences.putBoolean("Move Animation", true);
 			preferences.putInteger("AI Turn Speed", 1);
 			preferences.putBoolean("Animate Background", true);
-			preferences.putFloat("Music Volume", 1f);
+			preferences.putFloat("Music Volume", .5f);
 			preferences.flush();
 		}
 	}

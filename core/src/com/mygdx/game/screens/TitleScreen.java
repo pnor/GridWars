@@ -13,6 +13,7 @@ import com.mygdx.game.GridWars;
 import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
+import music.Song;
 
 import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
@@ -70,6 +71,9 @@ public class TitleScreen extends MenuScreen implements Screen {
         table.add(titleLbl).padBottom(80f).row();
         table.add(startBtn).size(300, 90).padBottom(40).row();
         table.add(optionBtn).size(300, 90);
+
+        //set music
+        GRID_WARS.musicManager.setSong(Song.PASSWORD);
 
         fontGenerator.dispose();
     }

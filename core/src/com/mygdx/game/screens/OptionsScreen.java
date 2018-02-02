@@ -147,10 +147,10 @@ public class OptionsScreen extends MenuScreen implements Screen {
         table.add(animBackgroundGroup).colspan(2).padBottom(20).row();
         Table musicGroup = new Table();
         musicGroup.add(lblMusicInfo).row();
-        musicGroup.add(volumeSlider).padBottom(40).row();
-        table.add(musicGroup).colspan(2).padBottom(40).row();
-        table.add(btnOK).size(90, 50);
+        musicGroup.add(volumeSlider).row();
+        table.add(musicGroup).colspan(2).padBottom(30).row();
         table.add(btnBack).size(90, 50);
+        table.add(btnOK).size(90, 50);
 
         Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
         backgroundLay.setColor(Color.BLACK);

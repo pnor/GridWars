@@ -23,6 +23,7 @@ import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
 import com.mygdx.game.ui.LerpColor;
+import music.Song;
 
 import static com.mygdx.game.ComponentMappers.am;
 import static com.mygdx.game.GridWars.backAtlas;
@@ -177,6 +178,9 @@ public class EndResultsScreen extends MenuScreen implements Screen {
         table.add().row();
         table.add(lblVictoryLabel).colspan(2).padTop(80).padBottom(20).row();
         table.add(btnReturn).colspan(2).size(180, 50).row();
+
+        //set music
+        GRID_WARS.musicManager.setSong(Song.GAME_RESULTS);
 
         fontGenerator.dispose();
     }

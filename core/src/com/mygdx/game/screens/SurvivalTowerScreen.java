@@ -35,6 +35,7 @@ import com.mygdx.game.systems.MovementSystem;
 import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
+import music.Song;
 
 import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.*;
@@ -165,13 +166,15 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                             }
                         }
                     } else if (actor == btnContinue) {
+                        //get the song
+                        Song song = getFloorLevelSong();
                         Team attackingObjectsTeam = getFloorLevelAttackingObjects();
                         if (attackingObjectsTeam == null) // floor has no attacking objects
                             GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), getComputerDifficulty(),
-                                    level, healingPowerUp, spPowerUp, points, numberOfTurns, GRID_WARS));
+                                    level, healingPowerUp, spPowerUp, points, numberOfTurns, song, GRID_WARS));
                         else
                             GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), attackingObjectsTeam,
-                                    getComputerDifficulty(), level, healingPowerUp, spPowerUp,  points, numberOfTurns,
+                                    getComputerDifficulty(), level, healingPowerUp, spPowerUp,  points, numberOfTurns, song,
                                     GRID_WARS));
                     } else if (actor == btnSave) {
                         System.out.println("Saving...");
@@ -211,10 +214,11 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         offsetTable.add(lblSPPower).colspan(2).size(80, 40).padBottom(20f).row();
         offsetTable.add(btnSave).colspan(4).size(180, 40).padBottom(20f).row();
         offsetTable.add(btnContinue).colspan(4).size(180, 40).padBottom(10f).row();
-        //offsetTable.debug();
-        //offsetTable.setPosition(offsetTable.getX() + 200, offsetTable.getY());
         table.add().padRight(200f);
         table.add(offsetTable);
+
+        //set music
+        GRID_WARS.musicManager.setSong(Song.BATTLE_OPTIONS);
 
         //Healing Player Team somewhat
         for (Entity e : team.getEntities()) {
@@ -741,6 +745,27 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 //endregion
             default: return null;
         }
+    }
+
+    private Song getFloorLevelSong() {
+        //level 1-9
+        if (level >= 1 && level <= 9)
+            return Song.LEVEL_1;
+        //level 11-19
+        else if (level >= 11 && level <= 19)
+            return Song.LEVEL_2;
+        //level 21-29
+        else if (level >= 21 && level <= 29)
+            return Song.LEVEL_4;
+        //level 31-39
+        else if (level >= 31 && level <= 39)
+            return Song.LEVEL_3;
+        //level 41-49
+        else if (level >= 41 && level <= 49)
+            return Song.LEVEL_3;
+        //boss
+        else
+            return Song.LEVEL_6;
     }
 
     private int getComputerDifficulty() {

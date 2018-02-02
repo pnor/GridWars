@@ -25,6 +25,7 @@ import com.mygdx.game.systems.MovementSystem;
 import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
+import music.Song;
 
 import static com.mygdx.game.ComponentMappers.am;
 import static com.mygdx.game.ComponentMappers.sm;
@@ -158,6 +159,9 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
             sm.get(entity).sprite.setColor(sm.get(entity).sprite.getColor().cpy().add(0, 0, 0, -.05f));
         }));
         engine.addEntity(whiteCover);
+
+        //set music
+        GRID_WARS.musicManager.setSong(Song.GAME_RESULTS);
     }
 
     @Override

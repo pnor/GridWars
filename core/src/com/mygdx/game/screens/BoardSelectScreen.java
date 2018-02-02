@@ -17,6 +17,7 @@ import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
+import music.Song;
 
 import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
@@ -68,22 +69,22 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
 
                 if (((Button) actor).isPressed()) {
                     if (actor == basic) {
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, Song.LEVEL_1, GRID_WARS));
                     } else if (actor == complex) {
                         board += 2;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, Song.LEVEL_3, GRID_WARS));
                     } else if (actor == compact) {
                         board += 4;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, Song.LEVEL_4, GRID_WARS));
                     } else if (actor == desert) {
                         board += 6;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, Song.LEVEL_2, GRID_WARS));
                     } else if (actor == forest) {
                         board += 8;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, Song.LEVEL_2, GRID_WARS));
                     } else if (actor == island) {
                         board += 10;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, Song.LEVEL_1, GRID_WARS));
                     }
                 }
             }

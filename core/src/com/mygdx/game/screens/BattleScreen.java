@@ -45,6 +45,7 @@ import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.rules_types.ZoneRules;
 import com.mygdx.game.systems.*;
 import com.mygdx.game.ui.*;
+import music.Song;
 
 import java.util.Iterator;
 
@@ -171,7 +172,7 @@ public class BattleScreen implements Screen {
     private HoverButton closeHelpMenuBtn;
     protected boolean showingHelpMenu;
 
-    public BattleScreen(Array<Team> selectedTeams, int boardIndex, Vector2[] AIControlled, GridWars game) {
+    public BattleScreen(Array<Team> selectedTeams, int boardIndex, Vector2[] AIControlled, Song song, GridWars game) {
         GRID_WARS = game;
         teams = selectedTeams;
 
@@ -224,6 +225,9 @@ public class BattleScreen implements Screen {
             attackWaitTime = .3f;
             displayEndTurnMessageTime = .25f;
         }
+
+        //play the music
+        GRID_WARS.musicManager.setSong(song);
     }
 
     @Override
