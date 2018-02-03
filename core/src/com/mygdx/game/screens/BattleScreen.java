@@ -1179,8 +1179,9 @@ public class BattleScreen implements Screen {
         //fade in animation
         helpDialog.show(stage);
 
+        /*
         moveRangeTable.debug();
-        helpTable.debug();
+        */
     }
 
     /**

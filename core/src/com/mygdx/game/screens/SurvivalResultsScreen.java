@@ -108,8 +108,13 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
-                    if (actor == btnReturn)
-                        GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
+                    if (actor == btnReturn) {
+                        GRID_WARS.musicManager.setSong(Song.MENU_THEME);
+                        if (playerGotNewHighScore)
+                            GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
+                        else
+                            GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
+                    }
                 }
             }
         };

@@ -67,8 +67,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
 
     @Override
     public void render(float deltaTime) {
+        //background anim
         stage.getBatch().begin();
         backgroundProgressBar.draw(stage.getBatch());
+
         stage.getBatch().end();
         super.render(deltaTime);
         engine.update(deltaTime);
@@ -135,7 +137,26 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         //background progress bar
         backgroundProgressBar = new Sprite(backAtlas.createSprite("BlankBackground"));
         backgroundProgressBar.setSize(1000, 900);
-        backgroundProgressBar.setColor(Color.RED);
+        Color towerColor;
+        //level 1-9
+        if (level >= 1 && level <= 10)
+            towerColor = Color.RED;
+        //level 11-19
+        else if (level >= 11 && level <= 20)
+            towerColor = Color.BLUE;
+        //level 21-30
+        else if (level >= 21 && level <= 29)
+            towerColor = Color.YELLOW;
+        //level 31-40
+        else if (level >= 31 && level <= 39)
+            towerColor = Color.MAGENTA;
+        //level 41-49
+        else if (level >= 41 && level <= 49)
+            towerColor = Color.CYAN;
+        //50
+        else
+            towerColor = Color.WHITE;
+        backgroundProgressBar.setColor(towerColor);
         backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
 
         ChangeListener listener = new ChangeListener() {
@@ -218,7 +239,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         table.add(offsetTable);
 
         //set music
-        GRID_WARS.musicManager.setSong(Song.BATTLE_OPTIONS);
+        GRID_WARS.musicManager.setSong(Song.SURVIVAL_TOWER_THEME);
 
         //Healing Player Team somewhat
         for (Entity e : team.getEntities()) {
@@ -232,6 +253,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + MathUtils.clamp(stm.get(e).maxHP / 3, 1, 4), 0, stm.get(e).maxHP);
             else {
                 stm.get(e).setAlive();
+                vm.get(e).resetVisuals();
                 stm.get(e).hp = 1;
                 stm.get(e).sp = 0;
             }
@@ -750,22 +772,25 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
     private Song getFloorLevelSong() {
         //level 1-9
         if (level >= 1 && level <= 9)
-            return Song.LEVEL_1;
+            return Song.STAGE_THEME;
         //level 11-19
         else if (level >= 11 && level <= 19)
-            return Song.LEVEL_2;
+            return Song.STAGE_THEME_2;
         //level 21-29
         else if (level >= 21 && level <= 29)
-            return Song.LEVEL_4;
+            return Song.STAGE_THEME_4;
         //level 31-39
         else if (level >= 31 && level <= 39)
-            return Song.LEVEL_3;
+            return Song.STAGE_THEME_3;
         //level 41-49
         else if (level >= 41 && level <= 49)
-            return Song.LEVEL_3;
+            return Song.STAGE_THEME_5;
+        //final boss
+        else if (level == 50)
+            return Song.FINAL_BOSS_THEME;
         //boss
         else
-            return Song.LEVEL_6;
+            return Song.STAGE_THEME_6;
     }
 
     private int getComputerDifficulty() {

@@ -10,6 +10,14 @@
 {
 	class: com.mygdx.game.highscores.HighScore
 	teamName: Grid Warriors
+	score: 2400
+	turns: 14
+	lastFloor: 21
+	teamSprites: [ 13, 13, 13, 13 ]
+}
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Grid Warriors
 	score: 2160
 	turns: 28
 	lastFloor: 30
@@ -25,18 +33,10 @@
 }
 {
 	class: com.mygdx.game.highscores.HighScore
-	teamName: Adequate Allies
-	score: 500
-	turns: 20
-	lastFloor: 10
-	teamSprites: [ -2, -2, -2, -2 ]
-}
-{
-	class: com.mygdx.game.highscores.HighScore
 	teamName: Grid Warriors
-	score: 430
-	turns: 15
-	lastFloor: 30
-	teamSprites: [ 12, 14, 8, 13 ]
+	score: 720
+	turns: 4
+	lastFloor: 32
+	teamSprites: [ 13, 13, 13, 13 ]
 }
 ]

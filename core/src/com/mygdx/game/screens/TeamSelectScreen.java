@@ -138,12 +138,6 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         menuBtnTable = new Table();
         teamCustomizeTable = new Table();
 
-        //backgrounds?
-        /*
-        selectedTeamsIconsTable.setBackground(tableBackground);
-        AIControlTable.setBackground(tableBackground);
-        portraitTable.setBackground(tableBackground);
-        */
         characterBtnTable.setBackground(tableBackground);
 
 

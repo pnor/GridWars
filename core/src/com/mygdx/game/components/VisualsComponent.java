@@ -40,4 +40,14 @@ public class VisualsComponent implements Component {
         shuffleAnimation = shuffleAnim;
     }
 
+    /**
+     * Resets all the visuals of the component
+     */
+    public void resetVisuals() {
+        damageAnimation.reset();
+        heavyDamageAnimation.reset();
+        deathAnimation.reset();
+        shuffleAnimation.reset();
+    }
+
 }

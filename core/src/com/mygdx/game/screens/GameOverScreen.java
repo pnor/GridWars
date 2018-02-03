@@ -16,6 +16,7 @@ import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
+import music.Song;
 
 import static com.mygdx.game.GridWars.atlas;
 import static com.mygdx.game.GridWars.skin;
@@ -75,6 +76,8 @@ public class GameOverScreen extends MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == btnReturn) {
+                        //set music
+                        GRID_WARS.musicManager.setSong(Song.MENU_THEME);
                         if (playerGotNewHighScore)
                             GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
                         else
@@ -100,6 +103,9 @@ public class GameOverScreen extends MenuScreen implements Screen {
 
         //add listeners
         btnReturn.addListener(listener);
+
+        //set music
+        GRID_WARS.musicManager.setSong(Song.GAME_OVER_THEME);
 
         fontGenerator.dispose();
     }

@@ -12,15 +12,6 @@ public class MusicManager {
     private float volume = 1;
 
     /**
-     * Plays the menu theme
-     */
-    public void makeSongAndPlayIt() {
-        currentSong = Song.PASSWORD;
-        isPlaying = true;
-        currentSong.play();
-    }
-
-    /**
      * Sets the current song and plays it
      */
     public void setSong(Song newSong) {
@@ -29,6 +20,7 @@ public class MusicManager {
             currentSong.dispose();
         }
         currentSong = newSong;
+        currentSong.startOver();
         currentSong.setVolume(volume);
         currentSong.play();
         isPlaying = true;
@@ -52,6 +44,10 @@ public class MusicManager {
         volume = newVolume;
         if (currentSong != null)
             currentSong.setVolume(volume);
+    }
+
+    public Song getSong() {
+        return currentSong;
     }
 
     public boolean getIsPlaying() {

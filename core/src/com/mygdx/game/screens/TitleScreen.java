@@ -73,7 +73,8 @@ public class TitleScreen extends MenuScreen implements Screen {
         table.add(optionBtn).size(300, 90);
 
         //set music
-        GRID_WARS.musicManager.setSong(Song.PASSWORD);
+        if (GRID_WARS.musicManager.getSong() != Song.MENU_THEME)
+            GRID_WARS.musicManager.setSong(Song.MENU_THEME);
 
         fontGenerator.dispose();
     }
