@@ -86,8 +86,10 @@ public class EndResultsScreen extends MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
-                    if (actor == btnReturn)
-                       GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
+                    if (actor == btnReturn) {
+                        GRID_WARS.musicManager.setSong(Song.MENU_THEME);
+                        GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
+                    }
                 }
             }
         };

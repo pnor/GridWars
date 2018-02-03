@@ -3,19 +3,16 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.GridWars;
-import com.mygdx.game.ui.BackType;
-import com.mygdx.game.ui.Background;
+import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.ui.HoverButton;
 import music.Song;
 
-import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
 
 /**
@@ -57,13 +54,8 @@ public class TitleScreen extends MenuScreen implements Screen {
                 }
             }
         };
-        Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
-        backgroundLay.setColor(Color.DARK_GRAY);
-        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeOverlay")));
-        background = new Background(backgroundLay,
-                new Sprite[]{topLayer},
-                new BackType[]{BackType.FADE_COLOR},
-                Color.GRAY, Color.ORANGE);
+
+        background = BackgroundConstructor.makeTitleScreenBackground();
 
         startBtn.addListener(listener);
         optionBtn.addListener(listener);

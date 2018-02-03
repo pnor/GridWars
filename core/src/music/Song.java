@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Music;
 
 /**
  * Class with enums representing each song. Songs with openers use {@link com.badlogic.gdx.audio.Music.OnCompletionListener} to switch to the rest of the song.
+ * Has methods for switching stopping, starting, and resetting music.
  * @author Phillip O'Reggio
  */
 public enum  Song {
@@ -22,6 +23,8 @@ public enum  Song {
 
     private boolean hasOpener;
     private boolean loops;
+    private boolean playingOpener;
+    private Music opener;
     private Music music;
 
     /**
@@ -29,41 +32,53 @@ public enum  Song {
      */
     Song(Music song, boolean doesItLoop) {
         music = song;
+        music.setLooping(doesItLoop);
         hasOpener = false;
         loops = doesItLoop;
     }
 
     /**
      * Creates a song that has an opener and loops
-     * @param opener The opening segment of the song
+     * @param musicOpener The opening segment of the song
      * @param restOfSong the rest of the song
      */
-    Song(Music opener, Music restOfSong) {
-        music = opener;
-        music.setOnCompletionListener(music1 -> {
-            float volume = music1.getVolume();
-            music = restOfSong;
-            music.setVolume(volume);
-            music.setLooping(true);
+    Song(Music musicOpener, Music restOfSong) {
+        opener = musicOpener;
+        music = restOfSong;
+        opener.setOnCompletionListener(music1 -> {
+            opener.stop();
             music.play();
         });
+        music.setLooping(true);
+        playingOpener = true;
         hasOpener = true;
         loops = true;
     }
 
     /**
-     * Plays the song.
+     * Starts over the song, and plays it.
      */
     public void play() {
-        if (loops && !hasOpener)
-            music.setLooping(true);
-        music.play();
+        startOver();
+        if (hasOpener) {
+            playingOpener = true;
+            opener.setOnCompletionListener(music1 -> {
+                opener.stop();
+                music.play();
+            });
+            opener.play();
+        } else {
+            music.play();
+        }
     }
 
     /**
      * Sets the song's playback time to 0.
      */
     public void startOver() {
+        if (hasOpener) {
+            opener.setPosition(0);
+        }
         music.setPosition(0);
     }
 
@@ -71,17 +86,28 @@ public enum  Song {
      * Stops the song
      */
     public void stop() {
-        music.stop();
+        if (playingOpener)
+            opener.stop();
+        else
+            music.stop();
     }
 
     /**
      * Disposes of the song. This class should not be used after that happens.
      */
     public void dispose() {
+        if (hasOpener) {
+            opener.stop();
+            opener.dispose();
+        }
+        music.stop();
         music.dispose();
+        playingOpener = false;
     }
 
     public void setVolume(float volume) {
+        if (hasOpener)
+            opener.setVolume(volume);
         music.setVolume(volume);
     }
 
@@ -95,5 +121,17 @@ public enum  Song {
 
     public boolean getHasOpener() {
         return hasOpener;
+    }
+
+    public boolean getPlayingOpener() {
+        return playingOpener;
+    }
+
+    public Music getMusic() {
+        return music;
+    }
+
+    public Music getOpener() {
+        return opener;
     }
 }

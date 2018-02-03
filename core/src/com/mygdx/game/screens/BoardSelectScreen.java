@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,13 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GridWars;
+import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.rules_types.Team;
-import com.mygdx.game.ui.BackType;
-import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
 import music.Song;
 
-import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
 
 /**
@@ -90,14 +87,7 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
             }
         };
 
-        Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
-        backgroundLay.setColor(Color.BLACK);
-        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeOverlay")));
-        topLayer.setColor(new Color(1, 0, 0, .7f));
-        background = new Background(backgroundLay,
-                new Sprite[]{topLayer},
-                new BackType[]{BackType.SCROLL_HORIZONTAL},
-                null, null);
+        background = BackgroundConstructor.makeBoardSelectScreen();
 
         basic.addListener(listener);
         complex.addListener(listener);
@@ -111,9 +101,9 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
         table.row();
         table.add(titleLbl).colspan(2).padBottom(40).row();
         table.add(basic).size(300, 70).padRight(20f);
-        table.add(complex).size(300, 70).padBottom(20f).row();
+        table.add(complex).size(300, 70).row();
         table.add(compact).size(300, 70).padRight(20f);
-        table.add(desert).size(300, 70).padBottom(20f).row();
+        table.add(desert).size(300, 70).row();
         table.add(forest).size(300, 70).padRight(20f);
         table.add(island).size(300, 70);
     }

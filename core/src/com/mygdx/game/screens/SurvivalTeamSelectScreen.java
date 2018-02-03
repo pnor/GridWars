@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -16,10 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GridWars;
+import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.creators.EntityConstructor;
 import com.mygdx.game.rules_types.Team;
-import com.mygdx.game.ui.BackType;
-import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
 import com.mygdx.game.ui.LerpColor;
 
@@ -82,11 +80,11 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
     private int altNumber;
 
     /**
-     * Creates highscores team selection screen for highscores survival mode. Only one team is selectable
+     * Creates a team selection screen for a survival mode. Only one team is selectable
      */
     public SurvivalTeamSelectScreen(GridWars gridWars) {
         super(gridWars);
-        setUpColorChoices();
+        colorChoices = TeamSelectScreen.setUpColorChoices();
     }
 
     @Override
@@ -305,14 +303,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
         };
 
         //backgrounds----------------
-        Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
-        backgroundLay.setColor(Color.BLACK);
-        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeHoriz")));
-        topLayer.setColor(Color.NAVY);
-        background = new Background(backgroundLay,
-                new Sprite[]{topLayer},
-                new BackType[]{BackType.SCROLL_HORIZONTAL},
-                null, null);
+        background = BackgroundConstructor.makeMovingStripeBackground(Color.BLACK, Color.NAVY);
 
         //listeners
         okBtn.addListener(teamSelectionListener);
@@ -358,15 +349,10 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
         menuBtnTable.add(clearBtn).size(150, 50);
         table.add(menuBtnTable).colspan(2);
 
-        //table.setBackground(tableBackground);
-
-        //table.debug();
-        //characterBtnTable.debug();
-        //portraitTable.debug();
     }
 
     /**
-     * Confirms the selection of highscores team. If the team is empty, it does nothing. If there is still teams to be chosen, it will change
+     * Confirms the selection of a team. If the team is empty, it does nothing. If there is still teams to be chosen, it will change
      * the current team and entity variables and clear the {@code Image}s, to allow the next team to be chosen. If the there
      * is no more teams, it will move on to the {@code BoardSelectScreen}.
      */
@@ -398,7 +384,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
     }
 
     /**
-     * Clears all the selected entities on highscores team.
+     * Clears all the selected entities on a team.
      */
     private void clearSelection() {
         team.getEntities().clear();
@@ -429,60 +415,6 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
             i.setDisabled(false);
     }
 
-    private void setUpColorChoices() {
-        colorChoices = new HashMap<String, Color>();
-
-        colorChoices.put("blue", Color.BLUE);
-        colorChoices.put("black", Color.BLACK);
-        colorChoices.put("brown", Color.BROWN);
-
-        colorChoices.put("chartreuse", Color.CHARTREUSE);
-        colorChoices.put("cyan", Color.CYAN);
-
-        colorChoices.put("dark gray", Color.DARK_GRAY);
-
-        colorChoices.put("firebrick", Color.FIREBRICK);
-        colorChoices.put("forest", Color.FOREST);
-
-        colorChoices.put("glow", new LerpColor(new Color(1, 1, .8f, 1), Color.GOLD, 5f));
-        colorChoices.put("goldenrod", Color.GOLDENROD);
-        colorChoices.put("green", Color.GREEN);
-        colorChoices.put("gray", Color.GRAY);
-        colorChoices.put("ghost", new Color(.6f, .6f, .6f, .65f));
-
-        colorChoices.put("jared", new LerpColor(new Color(.1f, .1f, .1f, .5f), Color.NAVY, 4f));
-
-        colorChoices.put("light gray", Color.LIGHT_GRAY);
-        colorChoices.put("lime", Color.LIME);
-
-        colorChoices.put("magenta", Color.MAGENTA);
-        colorChoices.put("maroon", Color.MAROON);
-
-        colorChoices.put("orange", Color.ORANGE);
-        colorChoices.put("olive", Color.OLIVE);
-
-        colorChoices.put("pink", Color.PINK);
-        colorChoices.put("purple", Color.PURPLE);
-
-        colorChoices.put("red", Color.RED);
-        colorChoices.put("royal", Color.ROYAL);
-
-        colorChoices.put("salmon", Color.SALMON);
-        colorChoices.put("scarlet", Color.SCARLET);
-        colorChoices.put("sea", new LerpColor(Color.BLUE, Color.CYAN, 6f));
-        colorChoices.put("sky", Color.SKY);
-        colorChoices.put("slate", Color.SLATE);
-
-        colorChoices.put("tan", Color.TAN);
-        colorChoices.put("teal", Color.TEAL);
-
-        colorChoices.put("violet", Color.VIOLET);
-
-        colorChoices.put("white", Color.WHITE);
-
-        colorChoices.put("yellow", Color.YELLOW);
-    }
-
     /**
      * @param s String of the color wanted. Not case sensitive. Ex: "red"
      * @return {@code Color} that the string represents. Ex: "red" returns Color.RED
@@ -499,7 +431,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
     @Override
     public void render(float dt) {
         super.render(dt);
-        //go back highscores screen
+        //go back a screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
         }

@@ -1,6 +1,7 @@
 package music;
 
 /**
+ * Class that managers music in the game. This controls what song is currently playing, and has methods for setting the volume for all songs in the game.
  * @author Phillip O'Reggio
  */
 public class MusicManager {
@@ -20,7 +21,6 @@ public class MusicManager {
             currentSong.dispose();
         }
         currentSong = newSong;
-        currentSong.startOver();
         currentSong.setVolume(volume);
         currentSong.play();
         isPlaying = true;
@@ -30,7 +30,6 @@ public class MusicManager {
      * Stops the current song and disposes of it.
      */
     public void disposeSong() {
-        currentSong.stop();
         currentSong.dispose();
         currentSong = null;
         isPlaying = false;

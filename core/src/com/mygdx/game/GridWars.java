@@ -23,8 +23,15 @@ public class GridWars extends Game {
 	public static TextureAtlas backAtlas;
 
 	//debug variables
-	public static boolean DEBUG_halfSpeed;
-	public static boolean DEBUG_doubleSpeed;
+	/**
+	 * 0 : .5x <p>
+	 * 1 : normal <p>
+	 * 2 : 1.5x <p>
+	 * 3 : 2x <p>
+	 * 4 : 3x <p>
+	 */
+	private static byte gameSpeed = 1;
+	private float multiplier = 1;
 
 	//high scores
 	public HighScoreManager highScoreManager;
@@ -63,25 +70,26 @@ public class GridWars extends Game {
 	public void render() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		if (DEBUG_halfSpeed || DEBUG_doubleSpeed) {
-			if (DEBUG_doubleSpeed && DEBUG_halfSpeed)
-				getScreen().render(Gdx.graphics.getDeltaTime() * 1.5f);
-			else if (DEBUG_doubleSpeed)
-				getScreen().render(Gdx.graphics.getDeltaTime() * 2);
-			else if (DEBUG_halfSpeed)
-				getScreen().render(Gdx.graphics.getDeltaTime() * .5f);
-		} else
-			getScreen().render(Gdx.graphics.getDeltaTime());
+		getScreen().render(Gdx.graphics.getDeltaTime() * multiplier);
+
 		//debug --
 		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB)) //escape to title
 			setScreen(new TitleScreen(this));
-		if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) {
-			DEBUG_halfSpeed = !DEBUG_halfSpeed;
-			System.out.println("---HALF SPEED = " + DEBUG_halfSpeed + "---");
+		if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) { //game speed
+			setGameSpeed((byte) (gameSpeed + 1));
+			System.out.println("Game Speed : " + gameSpeed);
 		}
-		if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) {
-			DEBUG_doubleSpeed = !DEBUG_doubleSpeed;
-			System.out.println("+++DOUBLE SPEED = " + DEBUG_doubleSpeed + "+++");
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) { //music info
+			System.out.println("MUSIC DEBUG:" +
+					"Music Volume : " + musicManager.getSong().getVolume() + "\n" +
+					"Music loops? : " + musicManager.getSong().getLooping() + "\n" +
+					"Music opener? : " + musicManager.getSong().getHasOpener() + "\n" +
+					"Playing Opener? : " + musicManager.getSong().getPlayingOpener() + "\n" +
+					"Music Position : " + musicManager.getSong().getMusic().getPosition());
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.F3)) { //print cursor location
+			System.out.println("Mouse X : " + Gdx.input.getX());
+			System.out.println("Mouse Y : " + Gdx.input.getY());
 		}
 	}
 
@@ -139,9 +147,36 @@ public class GridWars extends Game {
 	}
 
 	/**
+	 * Sets the multiplier to render speed. Restrains the value within 0 to 4
+	 * @param speed new speed <p>
+	 * 0 : .5x <p>
+	 * 1 : normal <p>
+	 * 2 : 1.5x <p>
+	 * 3 : 2x <p>
+	 * 4 : 3x <p>
+	 */
+	public void setGameSpeed(byte speed) {
+		gameSpeed = (byte) (speed % 5);
+		if (gameSpeed == 0)
+			multiplier = .5f;
+		else if (gameSpeed == 1)
+			multiplier = 1f;
+		else if (gameSpeed == 2)
+			multiplier = 1.5f;
+		else if (gameSpeed == 3)
+			multiplier = 2f;
+		else if (gameSpeed == 4)
+			multiplier = 3f;
+	}
+
+	/**
 	 * Sets the game to shade normally
 	 */
 	public void removeShader() {
 		stage.getBatch().setShader(null);
+	}
+
+	public byte getGameSpeed() {
+		return gameSpeed;
 	}
 }

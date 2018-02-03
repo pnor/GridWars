@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -17,10 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GridWars;
+import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.creators.EntityConstructor;
 import com.mygdx.game.rules_types.Team;
-import com.mygdx.game.ui.BackType;
-import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
 import com.mygdx.game.ui.LerpColor;
 
@@ -108,7 +106,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         for (int i = 0; i < maxTeams; i++)
             teamImages.add(new Image(atlas.findRegion("cubelight")));
 
-        setUpColorChoices();
+        colorChoices = setUpColorChoices();
     }
 
     @Override
@@ -353,14 +351,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         };
 
         //backgrounds----------------
-        Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
-        backgroundLay.setColor(Color.DARK_GRAY);
-        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeHoriz")));
-        topLayer.setColor(Color.GRAY);
-        background = new Background(backgroundLay,
-                new Sprite[]{topLayer},
-                new BackType[]{BackType.SCROLL_HORIZONTAL_SLOW},
-                null, null);
+        background = BackgroundConstructor.makeMovingStripeBackground(Color.DARK_GRAY, Color.GRAY);
 
         //listeners
         okBtn.addListener(teamSelectionListener);
@@ -580,58 +571,64 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
             i.setDisabled(false);
     }
 
-    private void setUpColorChoices() {
-        colorChoices = new HashMap<String, Color>();
+    /**
+     * Creates the list of colors you can choose from.
+     */
+    public static HashMap<String, Color> setUpColorChoices() {
+        HashMap<String, Color> colors = new HashMap<String, Color>();
 
-        colorChoices.put("blue", Color.BLUE);
-        colorChoices.put("black", Color.BLACK);
-        colorChoices.put("brown", Color.BROWN);
+        colors.put("blue", Color.BLUE);
+        colors.put("black", Color.BLACK);
+        colors.put("brown", Color.BROWN);
 
-        colorChoices.put("chartreuse", Color.CHARTREUSE);
-        colorChoices.put("cyan", Color.CYAN);
+        colors.put("chartreuse", Color.CHARTREUSE);
+        colors.put("cyan", Color.CYAN);
 
-        colorChoices.put("dark gray", Color.DARK_GRAY);
+        colors.put("dark gray", Color.DARK_GRAY);
 
-        colorChoices.put("firebrick", Color.FIREBRICK);
-        colorChoices.put("forest", Color.FOREST);
+        colors.put("firebrick", Color.FIREBRICK);
+        colors.put("forest", Color.FOREST);
 
-        colorChoices.put("glow", new LerpColor(new Color(1, 1, .8f, 1), Color.GOLD, 5f));
-        colorChoices.put("goldenrod", Color.GOLDENROD);
-        colorChoices.put("green", Color.GREEN);
-        colorChoices.put("gray", Color.GRAY);
-        colorChoices.put("ghost", new Color(.6f, .6f, .6f, .65f));
+        colors.put("glow", new LerpColor(new Color(1, 1, .8f, 1), Color.GOLD, 5f));
+        colors.put("goldenrod", Color.GOLDENROD);
+        colors.put("green", Color.GREEN);
+        colors.put("gray", Color.GRAY);
+        colors.put("ghost", new Color(.6f, .6f, .6f, .65f));
 
-        colorChoices.put("jared", new LerpColor(new Color(.1f, .1f, .1f, .5f), Color.NAVY, 4f));
+        colors.put("jared", new LerpColor(new Color(.1f, .1f, .1f, .5f), Color.NAVY, 4f));
+        colors.put("java", new LerpColor(new Color(.4f, .29f, .227f, 1f), new Color(.51f, .36f, .29f, 1f), 1f));
 
-        colorChoices.put("light gray", Color.LIGHT_GRAY);
-        colorChoices.put("lime", Color.LIME);
+        colors.put("light gray", Color.LIGHT_GRAY);
+        colors.put("lime", Color.LIME);
 
-        colorChoices.put("magenta", Color.MAGENTA);
-        colorChoices.put("maroon", Color.MAROON);
+        colors.put("magenta", Color.MAGENTA);
+        colors.put("maroon", Color.MAROON);
 
-        colorChoices.put("orange", Color.ORANGE);
-        colorChoices.put("olive", Color.OLIVE);
+        colors.put("orange", Color.ORANGE);
+        colors.put("olive", Color.OLIVE);
 
-        colorChoices.put("pink", Color.PINK);
-        colorChoices.put("purple", Color.PURPLE);
+        colors.put("pink", Color.PINK);
+        colors.put("purple", Color.PURPLE);
 
-        colorChoices.put("red", Color.RED);
-        colorChoices.put("royal", Color.ROYAL);
+        colors.put("red", Color.RED);
+        colors.put("royal", Color.ROYAL);
 
-        colorChoices.put("salmon", Color.SALMON);
-        colorChoices.put("scarlet", Color.SCARLET);
-        colorChoices.put("sea", new LerpColor(Color.BLUE, Color.CYAN, 6f));
-        colorChoices.put("sky", Color.SKY);
-        colorChoices.put("slate", Color.SLATE);
+        colors.put("salmon", Color.SALMON);
+        colors.put("scarlet", Color.SCARLET);
+        colors.put("sea", new LerpColor(Color.BLUE, Color.CYAN, 6f));
+        colors.put("sky", Color.SKY);
+        colors.put("slate", Color.SLATE);
 
-        colorChoices.put("tan", Color.TAN);
-        colorChoices.put("teal", Color.TEAL);
+        colors.put("tan", Color.TAN);
+        colors.put("teal", Color.TEAL);
 
-        colorChoices.put("violet", Color.VIOLET);
+        colors.put("violet", Color.VIOLET);
 
-        colorChoices.put("white", Color.WHITE);
+        colors.put("white", Color.WHITE);
 
-        colorChoices.put("yellow", Color.YELLOW);
+        colors.put("yellow", Color.YELLOW);
+
+        return colors;
     }
 
     /**
@@ -654,7 +651,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
 
         //back highscores screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
+            GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
         }
 
     }

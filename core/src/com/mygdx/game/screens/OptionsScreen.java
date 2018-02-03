@@ -5,16 +5,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.GridWars;
-import com.mygdx.game.ui.BackType;
+import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
 
-import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
 
 /**
@@ -152,14 +150,7 @@ public class OptionsScreen extends MenuScreen implements Screen {
         table.add(btnBack).size(90, 50);
         table.add(btnOK).size(90, 50);
 
-        Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
-        backgroundLay.setColor(Color.BLACK);
-        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeHoriz")));
-        topLayer.setColor(Color.DARK_GRAY);
-        background = new Background(backgroundLay,
-                new Sprite[]{topLayer},
-                new BackType[]{BackType.FADE_COLOR},
-                Color.DARK_GRAY, Color.GRAY);
+        background = BackgroundConstructor.makeMovingStripeBackground(Color.DARK_GRAY, Color.GRAY);
     }
 
     @Override

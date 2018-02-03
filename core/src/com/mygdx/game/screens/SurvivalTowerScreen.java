@@ -114,7 +114,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         param.size = 50;
         Label titleLbl = new Label("Tower Survival", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         HoverButton btnRestore = new HoverButton("Restore", skin, Color.GREEN, Color.DARK_GRAY);
-        HoverButton btnSpUp = new HoverButton("SP UP", skin, Color.ORANGE, Color.DARK_GRAY);
+        HoverButton btnSpUp = new HoverButton("SP UP", skin, Color.CYAN, Color.DARK_GRAY);
         HoverButton btnContinue = new HoverButton("Continue", skin, Color.NAVY, Color.BLUE);
         HoverButton btnSave = new HoverButton("Save", skin, Color.LIGHT_GRAY, Color.WHITE);
         teamImages = new Image[4];
@@ -149,7 +149,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             towerColor = Color.YELLOW;
         //level 31-40
         else if (level >= 31 && level <= 39)
-            towerColor = Color.MAGENTA;
+            towerColor = Color.PURPLE;
         //level 41-49
         else if (level >= 41 && level <= 49)
             towerColor = Color.CYAN;
@@ -222,9 +222,9 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         offsetTable.add();
         offsetTable.add().row();
         offsetTable.add(titleLbl).colspan(4).padBottom(40).row();
-        offsetTable.add(new Label("Level " + level, skin)).colspan(4).padBottom(10).row();
-        offsetTable.add(new Label("Points : " + points, skin)).colspan(4).padBottom(10).row();
-        offsetTable.add(new Label("Turn Count : " + numberOfTurns, skin)).colspan(4).padBottom(20).row();
+        offsetTable.add(new Label("Level " + level, skin)).colspan(4).padBottom(20).row();
+        offsetTable.add(new Label("Points : " + points, skin)).colspan(4).padBottom(20).row();
+        offsetTable.add(new Label("Turn Count : " + numberOfTurns, skin)).colspan(4).padBottom(30).row();
         offsetTable.add(teamImages[0]).padRight(20f).padBottom(20f);
         offsetTable.add(teamImages[1]).padRight(20f).padBottom(20f);
         offsetTable.add(teamImages[2]).padRight(20f).padBottom(20f);
@@ -233,8 +233,8 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         offsetTable.add(lblHealthPower).colspan(2).size(80, 40).padBottom(20f).row();
         offsetTable.add(btnSpUp).colspan(2).size(80, 40).padBottom(20f).padRight(30f);
         offsetTable.add(lblSPPower).colspan(2).size(80, 40).padBottom(20f).row();
-        offsetTable.add(btnSave).colspan(4).size(180, 40).padBottom(20f).row();
-        offsetTable.add(btnContinue).colspan(4).size(180, 40).padBottom(10f).row();
+        offsetTable.add(btnSave).colspan(2).size(160, 40);
+        offsetTable.add(btnContinue).colspan(2).size(160, 40).row();
         table.add().padRight(200f);
         table.add(offsetTable);
 

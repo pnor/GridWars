@@ -65,6 +65,7 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
         infoTable.setBackground(new NinePatchDrawable(new NinePatch(atlas.findRegion("TableBackDark"), 33, 33, 28, 28)));
         statsTable.setBackground(new NinePatchDrawable(new NinePatch(atlas.findRegion("TableBackDark"), 33, 33, 28, 28)));
         teamTable.setBackground(new NinePatchDrawable(new NinePatch(atlas.findRegion("TableBackDark"), 33, 33, 28, 28)));
+        gameSpeedTable.setBackground(new NinePatchDrawable(new NinePatch(atlas.findRegion("TableBackDark"), 33, 33, 28, 28)));
         teamTable.add(new Label("Floor " + level, skin)).padLeft(25);
     }
 
@@ -143,6 +144,7 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
 
     @Override
     public void goToNextScreen() {
+        GRID_WARS.setGameSpeed((byte) 1);
         numberOfTurns += rules.getTurnCount();
         points += calculatePoints();
         if (rules.checkWinConditions() == teams.first()) { //victory

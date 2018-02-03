@@ -194,10 +194,12 @@ public class BackgroundConstructor {
         back.setColor(new Color(.3f, .3f, 1, 1));
         Sprite overlay = new Sprite(backAtlas.findRegion("CloudBackground"));
         overlay.setColor(new Color(.9f, .9f, .9f, .6f));
+        Sprite overlay2 = new Sprite(backAtlas.findRegion("FadeBackground"));
+        overlay2.setColor(new Color(.92f, .92f, 85f, 1));
         return new Background(
                 back,
-                new Sprite[] {overlay},
-                new BackType[] {BackType.SCROLL_HORIZONTAL},
+                new Sprite[] {overlay, overlay2},
+                new BackType[] {BackType.SCROLL_HORIZONTAL_SLOW, BackType.NO_MOVE},
                 null, null);
     }
     //endregion
@@ -479,5 +481,41 @@ public class BackgroundConstructor {
                 null, null);
     }
     //endregion
+    //endregion
+
+    //region menu
+    public static Background makeTitleScreenBackground() {
+        Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
+        backgroundLay.setColor(Color.DARK_GRAY);
+        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeOverlay")));
+        return new Background(backgroundLay,
+                new Sprite[]{topLayer},
+                new BackType[]{BackType.FADE_COLOR},
+                Color.GRAY, Color.ORANGE);
+    }
+
+    public static Background makeMovingStripeBackground(Color backColor, Color stripeColor) {
+        Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
+        backgroundLay.setColor(backColor);
+        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeHoriz")));
+        topLayer.setColor(stripeColor);
+        return new Background(backgroundLay,
+                new Sprite[]{topLayer},
+                new BackType[]{BackType.SCROLL_HORIZONTAL},
+                null, null);
+    }
+
+    public static Background makeBoardSelectScreen() {
+        Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
+        backgroundLay.setColor(Color.DARK_GRAY);
+        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeHoriz")));
+        topLayer.setColor(new Color(1, 0, 0, .6f));
+        Sprite midLayer = new Sprite(new Sprite(backAtlas.findRegion("FadeHoriz")));
+        midLayer.setColor(Color.DARK_GRAY);
+        return new Background(backgroundLay,
+                new Sprite[]{topLayer, midLayer},
+                new BackType[]{BackType.SCROLL_HORIZONTAL, BackType.SCROLL_HORIZONTAL_SLOW},
+                null, null);
+    }
     //endregion
 }
