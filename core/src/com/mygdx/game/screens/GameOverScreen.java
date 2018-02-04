@@ -22,7 +22,7 @@ import static com.mygdx.game.GridWars.atlas;
 import static com.mygdx.game.GridWars.skin;
 
 /**
- * Screen that is displayed when you get highscores Game Over in Survival mode
+ * Screen that is displayed when you get a Game Over in Survival mode
  * @author Phillip O'Reggio
  */
 public class GameOverScreen extends MenuScreen implements Screen {
@@ -49,7 +49,7 @@ public class GameOverScreen extends MenuScreen implements Screen {
     public void show() {
         super.show();
 
-        //determine if player got highscores high score
+        //determine if player got a high score
         if (GRID_WARS.highScoreManager.getLowestScore().getScore() <= playerScore.getScore()) {
             playerGotNewHighScore = true;
         }

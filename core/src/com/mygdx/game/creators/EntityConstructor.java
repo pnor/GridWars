@@ -426,6 +426,7 @@ public class EntityConstructor {
                     atlas.findRegion("CanightAlt"),
                     atlas.findRegion("Canight2Alt")
             }, Animation.PlayMode.LOOP, 0.5f, true)));
+        nm.get(entity).altColor = altColor;
         
         entity.add(new BoardComponent());
         entity.add(new StatComponent(2, 4, 2, 0, 4));
@@ -464,6 +465,7 @@ public class EntityConstructor {
                     atlas.findRegion("catdroidAlt"),
                     atlas.findRegion("catdroid2Alt")
             }, Animation.PlayMode.LOOP, 0.5f, true)));
+        nm.get(entity).altColor = altColor;
         
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 5, 2, 2, 2));
@@ -503,7 +505,8 @@ public class EntityConstructor {
                     atlas.findRegion("firebullAlt"),
                     atlas.findRegion("firebull2Alt")
             }, Animation.PlayMode.LOOP, 0.2f, true)));
-       
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 4, 5, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -541,7 +544,8 @@ public class EntityConstructor {
                     atlas.findRegion("icebirdAlt"),
                     atlas.findRegion("icebird2Alt")
             }, Animation.PlayMode.LOOP, 0.5f, true)));
-
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 5, 2, 0, 3));
         entity.add(new StatusEffectComponent());
@@ -580,7 +584,8 @@ public class EntityConstructor {
                     atlas.findRegion("fishAlt"),
                     atlas.findRegion("fish2Alt")
             }, Animation.PlayMode.LOOP, 0.5f, true)));
-
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(8, 4, 1, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -619,7 +624,8 @@ public class EntityConstructor {
                     atlas.findRegion("turtleAlt"),
                     atlas.findRegion("turtle2Alt")
             }, Animation.PlayMode.LOOP, 0.7f, true)));
-
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 8, 3, 2, 1));
         entity.add(new StatusEffectComponent());
@@ -658,7 +664,8 @@ public class EntityConstructor {
                     atlas.findRegion("foxAlt"),
                     atlas.findRegion("fox2Alt")
             }, Animation.PlayMode.LOOP, 0.5f, true)));
-
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 3, 2, 1, 2));
         entity.add(new StatusEffectComponent());
@@ -697,7 +704,8 @@ public class EntityConstructor {
                     atlas.findRegion("thunderdogAlt"),
                     atlas.findRegion("thunderdog2Alt")
             }, Animation.PlayMode.LOOP, 0.2f, true)));
-
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(7, 5, 1, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -736,7 +744,8 @@ public class EntityConstructor {
                     atlas.findRegion("mummyAlt"),
                     atlas.findRegion("mummy2Alt")
             }, Animation.PlayMode.LOOP, 0.3f, true)));
-
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 5, 2, 1, 2));
         entity.add(new StatusEffectComponent());
@@ -775,7 +784,8 @@ public class EntityConstructor {
                     atlas.findRegion("squidAlt"),
                     atlas.findRegion("squid2Alt")
             }, Animation.PlayMode.LOOP, 0.7f, true)));
-
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 6, 3, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -814,7 +824,8 @@ public class EntityConstructor {
                     atlas.findRegion("steamdragonAlt"),
                     atlas.findRegion("steamdragon2Alt")
             }, Animation.PlayMode.LOOP, 0.5f, true)));
-
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(6, 6, 1, 0, 2));
         entity.add(new StatusEffectComponent());
@@ -853,7 +864,8 @@ public class EntityConstructor {
                     atlas.findRegion("jellygirlAlt"),
                     atlas.findRegion("jellygirl2Alt")
             }, Animation.PlayMode.LOOP, 0.7f, true)));
-
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 10, 1, 0, 1));
         entity.add(new StatusEffectComponent());
@@ -892,7 +904,8 @@ public class EntityConstructor {
                     atlas.findRegion("mirrormanAlt"),
                     atlas.findRegion("mirrorman2Alt")
             }, Animation.PlayMode.LOOP, 0.3f, true)));
-
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(5, 12, 1, 1, 2));
         entity.add(new StatusEffectComponent());
@@ -931,7 +944,8 @@ public class EntityConstructor {
                     atlas.findRegion("pheonixAlt"),
                     atlas.findRegion("pheonix2Alt")
             }, Animation.PlayMode.LOOP, 0.4f, true)));
-
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(3, 6, 4, 0, 3));
         entity.add(new StatusEffectComponent());
@@ -971,7 +985,8 @@ public class EntityConstructor {
                     atlas.findRegion("acidsnakeAlt"),
                     atlas.findRegion("acidsnake2Alt")
             }, Animation.PlayMode.LOOP, 0.4f, true)));
-
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(4, 5, 1, 1, 2));
         entity.add(new StatusEffectComponent());
@@ -1010,6 +1025,8 @@ public class EntityConstructor {
                     atlas.findRegion("dragon2")
             }, Animation.PlayMode.LOOP, 1f, true)));
         }
+        nm.get(entity).altColor = altColor;
+        
         entity.add(new BoardComponent());
         entity.add(new StatComponent(15, 10, 3, 1, 1));
         entity.add(new StatusEffectComponent());

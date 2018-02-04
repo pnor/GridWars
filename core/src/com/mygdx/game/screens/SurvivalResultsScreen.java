@@ -75,7 +75,7 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
         engine.addSystem(new LifetimeSystem());
         engine.addSystem(new MovementSystem());
 
-        //determine if player got highscores high score
+        //determine if player got a high score
         if (GRID_WARS.highScoreManager.getLowestScore().getScore() <= playerScore.getScore()) {
             playerGotNewHighScore = true;
         }

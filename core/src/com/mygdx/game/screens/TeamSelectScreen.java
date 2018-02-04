@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.GameUtil;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.creators.EntityConstructor;
@@ -106,7 +107,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         for (int i = 0; i < maxTeams; i++)
             teamImages.add(new Image(atlas.findRegion("cubelight")));
 
-        colorChoices = setUpColorChoices();
+        colorChoices = GameUtil.setUpColorChoices();
     }
 
     @Override
@@ -569,66 +570,6 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         clearBtn.setDisabled(false);
         for (ImageButton i : characterBtns)
             i.setDisabled(false);
-    }
-
-    /**
-     * Creates the list of colors you can choose from.
-     */
-    public static HashMap<String, Color> setUpColorChoices() {
-        HashMap<String, Color> colors = new HashMap<String, Color>();
-
-        colors.put("blue", Color.BLUE);
-        colors.put("black", Color.BLACK);
-        colors.put("brown", Color.BROWN);
-
-        colors.put("chartreuse", Color.CHARTREUSE);
-        colors.put("cyan", Color.CYAN);
-
-        colors.put("dark gray", Color.DARK_GRAY);
-
-        colors.put("firebrick", Color.FIREBRICK);
-        colors.put("forest", Color.FOREST);
-
-        colors.put("glow", new LerpColor(new Color(1, 1, .8f, 1), Color.GOLD, 5f));
-        colors.put("goldenrod", Color.GOLDENROD);
-        colors.put("green", Color.GREEN);
-        colors.put("gray", Color.GRAY);
-        colors.put("ghost", new Color(.6f, .6f, .6f, .65f));
-
-        colors.put("jared", new LerpColor(new Color(.1f, .1f, .1f, .5f), Color.NAVY, 4f));
-        colors.put("java", new LerpColor(new Color(.4f, .29f, .227f, 1f), new Color(.51f, .36f, .29f, 1f), 1f));
-
-        colors.put("light gray", Color.LIGHT_GRAY);
-        colors.put("lime", Color.LIME);
-
-        colors.put("magenta", Color.MAGENTA);
-        colors.put("maroon", Color.MAROON);
-
-        colors.put("orange", Color.ORANGE);
-        colors.put("olive", Color.OLIVE);
-
-        colors.put("pink", Color.PINK);
-        colors.put("purple", Color.PURPLE);
-
-        colors.put("red", Color.RED);
-        colors.put("royal", Color.ROYAL);
-
-        colors.put("salmon", Color.SALMON);
-        colors.put("scarlet", Color.SCARLET);
-        colors.put("sea", new LerpColor(Color.BLUE, Color.CYAN, 6f));
-        colors.put("sky", Color.SKY);
-        colors.put("slate", Color.SLATE);
-
-        colors.put("tan", Color.TAN);
-        colors.put("teal", Color.TEAL);
-
-        colors.put("violet", Color.VIOLET);
-
-        colors.put("white", Color.WHITE);
-
-        colors.put("yellow", Color.YELLOW);
-
-        return colors;
     }
 
     /**

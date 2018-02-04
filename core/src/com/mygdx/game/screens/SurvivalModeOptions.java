@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Json;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.ui.HoverButton;
@@ -47,7 +48,10 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
                     } else if (actor == highScoreBtn) {
                         GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
                     } else if (actor == loadBtn) {
-
+                        Json json = new Json();
+                        String jsonScores = Gdx.files.internal("").readString();
+                        //highScores = json.fromJson(Array.class, jsonScores);
+                        //GRID_WARS.setScreen(new SurvivalTowerScreen(team, 30, 10, 10, 10, 10, GRID_WARS));
                     }
                 }
             }
@@ -55,9 +59,11 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
        background = BackgroundConstructor.makeMovingStripeBackground(Color.DARK_GRAY, Color.BLUE);
 
         startBtn.addListener(listener);
+        loadBtn.addListener(listener);
         highScoreBtn.addListener(listener);
         table.add(titleLbl).padBottom(40).row();
         table.add(startBtn).size(350, 90).padBottom(10f).row();
+        table.add(loadBtn).size(350, 90).padBottom(10f).row();
         table.add(highScoreBtn).size(350, 90).padBottom(10f).row();
 
     }

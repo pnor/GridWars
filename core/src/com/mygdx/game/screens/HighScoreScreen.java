@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.GameUtil;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.highscores.HighScore;
@@ -81,7 +82,7 @@ public class HighScoreScreen extends MenuScreen implements Screen {
             int[] spriteDrawables = curScore.getTeamSprites();
             for (int j = 0; j < 4; j++) {
                 if (j < spriteDrawables.length) //add normally
-                    scoreTable.add(new Image(new SpriteDrawable(HighScore.getSpriteFromNumber(spriteDrawables[j]))));
+                    scoreTable.add(new Image(new SpriteDrawable(GameUtil.getSpriteFromID(spriteDrawables[j]))));
                 else //no more entities; place defaults
                     scoreTable.add(new Image(new SpriteDrawable(atlas.createSprite("cube"))));
             }

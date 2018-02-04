@@ -13,7 +13,7 @@ public class HighScoreManager {
     //high score related
     private final FileHandle HIGH_SCORE_FILE;
     private Array<com.mygdx.game.highscores.HighScore> highScores;
-    /** Total amount of highscores this game will store */
+    /** Total amount of high scores this game will store */
     private final int maxEntries = 5;
     /** Is true if the Array is the same as the one stored in the High score json file */
     private boolean sameAsFile;

@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.GameUtil;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.creators.EntityConstructor;
@@ -84,7 +85,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
      */
     public SurvivalTeamSelectScreen(GridWars gridWars) {
         super(gridWars);
-        colorChoices = TeamSelectScreen.setUpColorChoices();
+        colorChoices = GameUtil.setUpColorChoices();
     }
 
     @Override
