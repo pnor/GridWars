@@ -95,7 +95,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     private int altNumber;
 
     /**
-     * Creates highscores team selection screen
+     * Creates a team selection screen
      * @param max max number of teams in the round.
      * @param isZones whether game is using zone rules
      */
@@ -157,6 +157,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         clearBtn = new HoverButton("Clear", skin, Color.GRAY, Color.RED);
         lastTeamBtn = new HoverButton("Last Team", skin, Color.GRAY, Color.YELLOW);
         nextBtn = new HoverButton("Next", skin, Color.GRAY, Color.GREEN);
+        nextBtn.setDisabled(true);
 
         //set up character buttons
         characterBtns = new Array<ImageButton>(new ImageButton[]{
@@ -419,7 +420,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     }
 
     /**
-     * Confirms the selection of highscores team. If the team is empty, it does nothing. If there is still teams to be chosen, it will change
+     * Confirms the selection of a team. If the team is empty, it does nothing. If there is still teams to be chosen, it will change
      * the current team and entity variables and clear the {@code Image}s, to allow the next team to be chosen. If the there
      * is no more teams, it will move on to the {@code BoardSelectScreen}.
      */
@@ -456,6 +457,10 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                 disableSelectionButtons();
             //increment current Team, while keeping it in bounds
             curTeam = (curTeam + 1 < maxTeams) ? curTeam + 1 : curTeam;
+
+            //enable next button if its time
+            if (teams.get(maxTeams - 1).getEntities().size > 0)
+                nextBtn.setDisabled(false);
         }
     }
 
@@ -472,7 +477,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     }
 
     /**
-     * Clears all the selected entities on highscores team.
+     * Clears all the selected entities on a team.
      */
     private void clearSelection() {
         teams.get(curTeam).getEntities().clear();
@@ -540,6 +545,9 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         teamImages.get(curTeam - 1).setColor(Color.WHITE);
         curTeam--;
         currentEntity = 0;
+
+        //disable next button
+        nextBtn.setDisabled(true);
     }
 
     /**
@@ -590,7 +598,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         else
             altNumber = 0;
 
-        //back highscores screen
+        //back a screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
         }

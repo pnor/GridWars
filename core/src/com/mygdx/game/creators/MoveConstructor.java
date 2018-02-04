@@ -831,7 +831,7 @@ public class MoveConstructor {
         }, .5f, 1);
 
         //Move
-        Move move = new Move("Yelp", nm.get(user).name + " yelped in a cute way!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Yelp", nm.get(user).name + " yelped cutely!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {

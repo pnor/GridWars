@@ -42,7 +42,6 @@ public class GameOverScreen extends MenuScreen implements Screen {
         super(gridWars);
         playerScore = new HighScore(team.getTeamName(), score, turns, level);
         playerScore.setTeamSprites(team);
-
     }
 
     @Override
@@ -103,6 +102,10 @@ public class GameOverScreen extends MenuScreen implements Screen {
 
         //add listeners
         btnReturn.addListener(listener);
+
+        //make save file unloadable
+        GRID_WARS.saveDataManager.makeFileUnloadable();
+        GRID_WARS.saveDataManager.saveSavedData();
 
         //set music
         GRID_WARS.musicManager.setSong(Song.GAME_OVER_THEME);

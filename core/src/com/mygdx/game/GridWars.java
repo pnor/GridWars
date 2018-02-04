@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.highscores.HighScoreManager;
+import com.mygdx.game.highscores.SaveDataManager;
 import com.mygdx.game.screens.TitleScreen;
 import com.mygdx.game.ui.Background;
 import music.MusicManager;
@@ -35,6 +36,8 @@ public class GridWars extends Game {
 
 	//high scores
 	public HighScoreManager highScoreManager;
+	//save data
+	public SaveDataManager saveDataManager;
 
 	//Music
 	public MusicManager musicManager;
@@ -45,24 +48,31 @@ public class GridWars extends Game {
 		stage.setViewport(new FitViewport(1000, 900));
 		stage.getViewport().setScreenSize(1000, 900);
 		engine = new Engine();
-		//set up assets
+		// set up assets
 		skin = new Skin(Gdx.files.internal("fonts/uiskin.json"));
 		skin.addRegions( new TextureAtlas("fonts/uiskin.atlas"));
 		atlas = new TextureAtlas(Gdx.files.internal("spritesAndBackgrounds/GDSprites.pack"));
 		backAtlas = new TextureAtlas(Gdx.files.internal("spritesAndBackgrounds/BackPack.pack"));
-		//set up options if its first time
+		// set up options if its first time
 		initializeOptions();
-		//set up music
+		// set up music
 		musicManager = new MusicManager();
 		musicManager.setMusicVolume(Gdx.app.getPreferences("GridWars Options").getFloat("Music Volume"));
-		//animate background if options permit
+		// animate background if options permit
 		Background.setAnimateBackground(Gdx.app.getPreferences("GridWars Options").getBoolean("Animate Background"));
-		//prepopulate high scores if its the first time
-			highScoreManager = new HighScoreManager();
+		// set up high scores and prepopulate high scores if its the first time
+		highScoreManager = new HighScoreManager();
 		if (!highScoreManager.fileHandleExists()) {
 			highScoreManager.prepopulate();
 			highScoreManager.saveHighScores();
 		}
+		// set up save data and prepopulate if its the first time
+		saveDataManager = new SaveDataManager();
+		if (!saveDataManager.fileHandleExists()) {
+			saveDataManager.prepopulate();
+			saveDataManager.saveSavedData();
+		}
+
 		setScreen(new TitleScreen(this));
 	}
 

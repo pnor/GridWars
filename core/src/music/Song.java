@@ -19,7 +19,8 @@ public enum  Song {
     MENU_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/08 Password.ogg")), true),
     SURVIVAL_TOWER_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/16 Battle Options_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/16 Battle Options.ogg"))),
     GAME_RESULTS(Gdx.audio.newMusic(Gdx.files.internal("music/26 Game Results.ogg")), false),
-    GAME_OVER_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/14_Battle Draw.ogg")), false);
+    GAME_OVER_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/14_Battle Draw.ogg")), false),
+    GAME_RESULTS_SURVIVAL(Gdx.audio.newMusic(Gdx.files.internal("music/26_Multi-Player Victory_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/26_Multi-Player Victory.ogg")));
 
     private boolean hasOpener;
     private boolean loops;

@@ -26,7 +26,7 @@ import com.mygdx.game.components.EventComponent;
 import com.mygdx.game.components.LifetimeComponent;
 import com.mygdx.game.components.PositionComponent;
 import com.mygdx.game.creators.EntityConstructor;
-import com.mygdx.game.highscores.HighScore;
+import com.mygdx.game.highscores.SaveData;
 import com.mygdx.game.misc.EventCompUtil;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.systems.EventSystem;
@@ -198,10 +198,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                                     getComputerDifficulty(), level, healingPowerUp, spPowerUp,  points, numberOfTurns, song,
                                     GRID_WARS));
                     } else if (actor == btnSave) {
-                        System.out.println("Saving...");
-                        HighScore playerSave = new HighScore(team.getTeamName(), points, numberOfTurns, level);
-                        playerSave.setTeamSprites(team);
-                        //TODO finish storing info about high score in highscore to read back
+                        GRID_WARS.saveDataManager.setSavedData(new SaveData(team, healingPowerUp, spPowerUp, points, numberOfTurns, level));
+                        GRID_WARS.saveDataManager.saveSavedData();
+                        GRID_WARS.musicManager.setSong(Song.MENU_THEME);
+                        GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
                     }
                 }
             }
@@ -214,6 +214,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
 
         btnRestore.addListener(listener);
         btnSpUp.addListener(listener);
+        btnSave.addListener(listener);
         btnContinue.addListener(listener);
 
         Table offsetTable = new Table();

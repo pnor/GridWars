@@ -112,6 +112,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
         teamColorLbl = new Label("Color", skin);
         teamColor = new TextField("", skin);
         okBtn = new HoverButton("OK", skin, Color.GRAY, Color.GREEN);
+        okBtn.setDisabled(true);
         backBtn = new HoverButton("Back", skin, Color.GRAY, Color.BLUE);
         clearBtn = new HoverButton("Clear", skin, Color.GRAY, Color.RED);
 
@@ -267,6 +268,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
                         }
 
                         currentEntity++;
+                        okBtn.setDisabled(false);
                     }
                 }
             }
@@ -368,7 +370,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
             //color team icon
             for (int i = 0; i < characterPortraits.size; i++)
                 characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
-            GRID_WARS.setScreen(new SurvivalTowerScreen(team, 1, 3, 3, 0, 0, GRID_WARS));
+            GRID_WARS.setScreen(new SurvivalTowerScreen(team, 1, 5, 5, 0, 0, GRID_WARS));
         }
     }
 
@@ -382,6 +384,8 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
         characterPortraits.get(currentEntity - 1).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
         team.getEntities().pop();
         currentEntity--;
+        if (currentEntity <= 0)
+            okBtn.setDisabled(true);
     }
 
     /**
@@ -392,6 +396,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
         for (int i = 0; i < characterPortraits.size; i++)
             characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
         currentEntity = 0;
+        okBtn.setDisabled(true);
     }
 
     /**

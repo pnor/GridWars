@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Json;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.ui.HoverButton;
@@ -37,6 +36,8 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
         titleLbl = new Label("Survival", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         startBtn = new HoverButton("Start", skin, Color.LIGHT_GRAY, Color.BLUE);
         loadBtn = new HoverButton("Load", skin, Color.LIGHT_GRAY, Color.TEAL);
+        if (!GRID_WARS.saveDataManager.fileIsLoadable())
+            loadBtn.setDisabled(true);
         highScoreBtn = new HoverButton("High Scores", skin, Color.LIGHT_GRAY, Color.ORANGE);
 
         ChangeListener listener = new ChangeListener() {
@@ -48,10 +49,14 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
                     } else if (actor == highScoreBtn) {
                         GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
                     } else if (actor == loadBtn) {
-                        Json json = new Json();
-                        String jsonScores = Gdx.files.internal("").readString();
-                        //highScores = json.fromJson(Array.class, jsonScores);
-                        //GRID_WARS.setScreen(new SurvivalTowerScreen(team, 30, 10, 10, 10, 10, GRID_WARS));
+                        GRID_WARS.setScreen(new SurvivalTowerScreen(
+                                GRID_WARS.saveDataManager.getTeamFromData(),
+                                GRID_WARS.saveDataManager.getFloor(),
+                                GRID_WARS.saveDataManager.getHealthPowerUps(),
+                                GRID_WARS.saveDataManager.getSPPowerUps(),
+                                GRID_WARS.saveDataManager.getPoints(),
+                                GRID_WARS.saveDataManager.getTurns(),
+                                GRID_WARS));
                     }
                 }
             }

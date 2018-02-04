@@ -21,21 +21,31 @@ public class SaveData {
     private int[] altColors;
     private int HPPower;
     private int SPPower;
+    private int points;
+    private int totalTurns;
+    private int floor;
+    /** False if the player died in that file or if its deleted */
+    private boolean canLoadThisFile;
 
-    public SaveData(Team team, int healthPowerUps, int SPPowerUps) {
+    public SaveData(Team team, int healthPowerUps, int SPPowerUps, int score, int turns, int level) {
         setEntityInfo(team);
         HPPower = healthPowerUps;
         SPPower = SPPowerUps;
         teamName = team.getTeamName();
         teamColor = team.getTeamColor();
+        points = score;
+        totalTurns = turns;
+        floor = level;
+        canLoadThisFile = true;
     }
 
     public Team createTeam() {
         Team team = new Team(teamName, teamColor);
         for (int i = 0; i < stats.length; i++) {
-            team.addEntity(GameUtil.getEntityFromID(IDValues[i], altColors[i]));
-            stm.get(team.getEntities().get(i)).hp = stats[i].hp;
-            stm.get(team.getEntities().get(i)).sp = stats[i].sp;
+            Entity member = GameUtil.getEntityFromID(IDValues[i], altColors[i]);
+            stm.get(member).hp = stats[i].getHp();
+            stm.get(member).sp = stats[i].getSp();
+            team.addEntity(member);
         }
         return team;
     }
@@ -49,7 +59,24 @@ public class SaveData {
             stats[index] = new StatPair(stm.get(e).hp, stm.get(e).sp);
             IDValues[index] = nm.get(e).serializeID;
             altColors[index] = nm.get(e).altColor;
+            index++;
         }
+    }
+
+    public void setLoadable(boolean loadable) {
+        canLoadThisFile = loadable;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public int getTotalTurns() {
+        return totalTurns;
+    }
+
+    public int getFloor() {
+        return floor;
     }
 
     public StatPair[] getStats() {
@@ -66,6 +93,10 @@ public class SaveData {
 
     public int getSPPower() {
         return SPPower;
+    }
+
+    public boolean canLoadFile() {
+        return canLoadThisFile;
     }
 
     /**

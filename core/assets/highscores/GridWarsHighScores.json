@@ -26,17 +26,17 @@
 {
 	class: com.mygdx.game.highscores.HighScore
 	teamName: Grid Warriors
+	score: 1640
+	turns: 12
+	lastFloor: 42
+	teamSprites: [ 9, 10, 5, 10 ]
+}
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Grid Warriors
 	score: 1380
 	turns: 18
 	lastFloor: 24
 	teamSprites: [ 7, 6, 10, 12 ]
-}
-{
-	class: com.mygdx.game.highscores.HighScore
-	teamName: Good Group
-	score: 1000
-	turns: 30
-	lastFloor: 15
-	teamSprites: [ -2, -2, -2, -2 ]
 }
 ]

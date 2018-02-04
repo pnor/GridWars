@@ -166,7 +166,7 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
         engine.addEntity(whiteCover);
 
         //set music
-        GRID_WARS.musicManager.setSong(Song.GAME_RESULTS);
+        GRID_WARS.musicManager.setSong(Song.GAME_RESULTS_SURVIVAL);
     }
 
     @Override

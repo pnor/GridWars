@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 
 /**
- * Class that manages the highscore table. Is used to retrieve and change values from the highscore table
+ * Class that manages the high score table. Is used to retrieve and change values from the highscore table
  * @author Phillip O'Reggio
  */
 public class HighScoreManager {
@@ -20,8 +20,9 @@ public class HighScoreManager {
 
     public HighScoreManager() {
         HIGH_SCORE_FILE = Gdx.files.local("highscores/GridWarsHighScores.json");
-        if (HIGH_SCORE_FILE.exists())
+        if (HIGH_SCORE_FILE.exists()) {
             updateHighScoresWithFile();
+        }
     }
 
     /**
@@ -44,7 +45,7 @@ public class HighScoreManager {
     }
 
     /**
-     * Adds highscores highscore if it is higher than or equal to highscores score currently in the list. Truncates the list to the size specified by max entries.
+     * Adds a high score if it is higher than or equal to high scores score currently in the list. Truncates the list to the size specified by max entries.
      * @param score being added
      */
     public void addHighScoreObject(HighScore score) {
@@ -54,6 +55,7 @@ public class HighScoreManager {
         while (highScores.size > maxEntries) {
             highScores.removeIndex(maxEntries);
         }
+        sameAsFile = false;
     }
 
     public void prepopulate() {
