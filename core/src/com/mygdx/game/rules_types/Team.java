@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import static com.mygdx.game.ComponentMappers.stm;
 
 /**
- * Represents highscores team of entities.
+ * Represents a team of entities.
  * @author Phillip O'Reggio
  */
 public class Team {
@@ -45,7 +45,7 @@ public class Team {
     }
 
     /**
-     * @return if all entities in highscores team's hp is <= 0. Entities with no StatComponent are considered dead
+     * @return if all entities in a team's hp is <= 0. Entities with no StatComponent are considered dead
      */
     public boolean allDead() {
         for (int i = 0; i < entities.size; i++)

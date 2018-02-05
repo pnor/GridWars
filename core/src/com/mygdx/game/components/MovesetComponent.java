@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.move_related.Move;
 
 /**
- * Component representing highscores list of moves for an Entity on the board to use.
+ * Component representing a list of moves for an Entity on the board to use.
  * Created by pnore_000 on 1/31/2017.
  */
 public class MovesetComponent implements Component {

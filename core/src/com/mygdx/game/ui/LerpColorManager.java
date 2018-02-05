@@ -17,7 +17,7 @@ public class LerpColorManager {
     }
 
     /**
-     * Adds highscores lerp color to be updated by the game.
+     * Adds a lerp color to be updated by the game.
      * @param color being added
      */
     public boolean registerLerpColor(LerpColor color) {
@@ -31,7 +31,7 @@ public class LerpColorManager {
     }
 
     /**
-     * Removes highscores color from the manager
+     * Removes a color from the manager
      * @param color being removed
      * @return True if LerpColor was in the set and operation was successful. False otherwise.
      */

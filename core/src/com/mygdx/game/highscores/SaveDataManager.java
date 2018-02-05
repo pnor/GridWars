@@ -20,16 +20,8 @@ public class SaveDataManager {
     private boolean sameAsFile;
 
     public SaveDataManager() {
-        SAVE_DATA_FILE = Gdx.files.local("savedData/GridWarsSurvivalSave.json");
+        SAVE_DATA_FILE = Gdx.files.local("GridWarsSavedData/GridWarsSurvivalSave.json");
         if (SAVE_DATA_FILE.exists()) {
-            /*
-            try {
-                updateSaveDataWithFile();
-            } catch (SerializationException e) { // file information cannot be read into Save Data
-                prepopulate();
-                saveSavedData();
-            }
-            */
             updateSaveDataWithFile();
         } else {
             prepopulate();
@@ -44,7 +36,7 @@ public class SaveDataManager {
         if (sameAsFile)
             return savedData.canLoadFile();
         else {
-            System.out.println("Called fileIsLoadable and this hasnt updated yet; must update");
+            System.out.println("Called fileIsLoadable and this hasn't updated yet; must update");
             saveSavedData();
             return savedData.canLoadFile();
         }
@@ -59,7 +51,7 @@ public class SaveDataManager {
     }
 
     /**
-     * Updates the high score objects stored in this file with the data in savedData/GridWarsSurvivalSave.json
+     * Updates the high score objects stored in this file with the data in GridWarsSavedData/GridWarsSurvivalSave.json
      */
     public void updateSaveDataWithFile() {
         Json json = new Json();

@@ -17,7 +17,7 @@ public class EventCompUtil {
     /**
      * @return {@link GameEvent} that will become more transparent.
      * @param amount of times this needs to be called until it is fully transparent. (note: will not work as well
-     *               colors that have highscores transparency of <1
+     *               colors that have a transparency of <1
      */
     public static GameEvent fadeOut(int amount) {
         return (entity, engine) -> {
@@ -43,7 +43,7 @@ public class EventCompUtil {
     /**
      * @return {@link GameEvent} that will become more opaque.
      * @param amount of times this needs to be called until it is fully opaque. (note: will not work as well
-     *               colors that have highscores transparency of <1
+     *               colors that have a transparency of <1
      */
     public static GameEvent fadeIn(int amount) {
         return (entity, engine) -> {
@@ -67,10 +67,10 @@ public class EventCompUtil {
     }
 
     /**
-     * @return {@link GameEvent} that will become more transparent after highscores set amount of time
+     * @return {@link GameEvent} that will become more transparent after a set amount of time
      * @param timesUntilFade Amount of times this method will be called until it begins fading
      * @param amount of times this needs to be called until it is fully transparent. (note: will not work as well
-     *               colors that have highscores transparency of <1
+     *               colors that have a transparency of <1
      */
     public static GameEvent fadeOutAfter(int timesUntilFade, int amount) {
         return new GameEvent() {

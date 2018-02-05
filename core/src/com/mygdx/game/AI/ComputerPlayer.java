@@ -11,7 +11,7 @@ import com.mygdx.game.rules_types.Team;
 import static com.mygdx.game.ComponentMappers.*;
 
 /**
- * Class containing methods that highscores Computer Player would use.
+ * Class containing methods that a Computer Player would use.
  *
  * @author Phillip O'Reggio
  */
@@ -37,7 +37,7 @@ public class ComputerPlayer implements Runnable {
      */
     private boolean randomizeDepthLevel = false;
     /**
-     * Should be between 0 and 1 inclusive. Higher values means it has highscores higher change of not including highscores best move.
+     * Should be between 0 and 1 inclusive. Higher values means it has a higher change of not including a best move.
      */
     private float forgetBestMoveChance = 0;
 
@@ -89,7 +89,7 @@ public class ComputerPlayer implements Runnable {
 
     /**
      * Gets the best turn by seeing Turn returns the highest heuristic value. Does not use recursion, so it only goes
-     * to highscores depth of 1. (Changes the BoardState object that is passed into it)
+     * to a depth of 1. (Changes the BoardState object that is passed into it)
      * @return Array of the best turns for each entity.
      */
     public Array<Turn> getBestTurns(BoardState board, int team) {
@@ -100,7 +100,7 @@ public class ComputerPlayer implements Runnable {
         for (int i = 0; i < teams.get(team).getEntities().size; i++) {
             e = teams.get(team).getEntities().get(i);
 
-            //recursion check -> if it dies in highscores later turn
+            //recursion check -> if it dies in a later turn
             boolean inBoard = false;
             for (EntityValue value : board.getEntities().values()) {
                 if (value.checkIdentity(e)) {
@@ -139,7 +139,7 @@ public class ComputerPlayer implements Runnable {
     }
 
     /**
-     * Returns an Array of the best turns for highscores team of Entities. If an entity is dead, its turn will be null. Ties in heuristic values of turn is
+     * Returns an Array of the best turns for a team of Entities. If an entity is dead, its turn will be null. Ties in heuristic values of turn is
      * drawbreaked by using shallower depth levels.
      * @param board {@link BoardState}
      * @param team {@link Team} that the best turns is getting retrieved
@@ -224,7 +224,7 @@ public class ComputerPlayer implements Runnable {
             teamNo = (teamNo + 1) % teams.size;
 
             //do turn
-            if (teamNo == indexOfFirstAttackingTeams) { //if on highscores team that only uses first attacks
+            if (teamNo == indexOfFirstAttackingTeams) { //if on a team that only uses first attacks
                 i -= 1; //do not count in depth deepness
                 Array<Turn> firstAttackTurns = getFirstAttacks(teamNo);
                 for (Turn t : firstAttackTurns)
@@ -238,12 +238,12 @@ public class ComputerPlayer implements Runnable {
     }
 
     /**
-     * Resolves highscores tie in the value of multiple turns by comparing their values at lower depth levels. If there is still tied turns, then it will randomly return
+     * Resolves a tie in the value of multiple turns by comparing their values at lower depth levels. If there is still tied turns, then it will randomly return
      * one of the multiple turns.
      * @param bestTurns Turns that are tied for the best value
      * @param boardState board state
      * @param team of entity
-     * @param depthLevel depth level that was used before that resulted in highscores tie. (Not the depth that will be first used!)
+     * @param depthLevel depth level that was used before that resulted in a tie. (Not the depth that will be first used!)
      * @return the best Turn
      */
     private Turn drawbreakBestTurns(Array<Turn> bestTurns, BoardState boardState, int team, int depthLevel) {
@@ -283,7 +283,7 @@ public class ComputerPlayer implements Runnable {
             }
         }
 
-        //still highscores tie
+        //still a tie
         System.out.println("\nFull Tie !");
         return newBestTurns.random();
     }
@@ -381,12 +381,12 @@ public class ComputerPlayer implements Runnable {
     }
 
     /**
-     * @return Gets highscores random turn for all entities
+     * @return Gets a random turn for all entities
      */
     public Array<Turn> getRandomTurns() {
         Array<Turn> turns = new Array<>();
 
-        // Not the best way to do this, but is highscores good dummy system
+        // Not the best way to do this, but is a good dummy system
         int numTries = 0; //to see if it can use an attack
         int attackChoice = -1;
         for (Entity e : teams.get(teamControlled).getEntities()) {
@@ -419,11 +419,11 @@ public class ComputerPlayer implements Runnable {
     }
 
     /**
-     * Algorithm that returns all positions that can be moved to based on speed. Calls highscores recursive method. Takes into account barriers and blockades, while
+     * Algorithm that returns all positions that can be moved to based on speed. Calls a recursive method. Takes into account barriers and blockades, while
      * avoiding duplicates of the same tile.
      * @param bp Position that is being branched from
      * @param spd remaining tiles the entity can move
-     * @param boardState Used to check if highscores space is occupied. If this value is null, will use the {@link com.mygdx.game.boards.Board} from
+     * @param boardState Used to check if a space is occupied. If this value is null, will use the {@link com.mygdx.game.boards.Board} from
      *                   {@link BoardComponent}.
      * @return {@link Array} of {@link BoardPosition}s.
      */
@@ -466,7 +466,7 @@ public class ComputerPlayer implements Runnable {
      *                          <p>1: left
      *                          <p>2: bottom
      *                          <p>3: right
-     * @param boardState Used to check if highscores space is occupied. If this value is null, will use the {@link com.mygdx.game.boards.Board} from
+     * @param boardState Used to check if a space is occupied. If this value is null, will use the {@link com.mygdx.game.boards.Board} from
      *                   {@link BoardComponent}.
      * @param includeHorizontal Whether it includes spaces directly horizontal of the origin position
      * @return {@link Array} of {@link BoardPosition}s.

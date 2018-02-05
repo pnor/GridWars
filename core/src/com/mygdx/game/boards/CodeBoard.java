@@ -16,7 +16,7 @@ public class CodeBoard {
                 columns = 5;
 
     /**
-     * Creates highscores {@code CodeBoard} with 5 rows and columns.
+     * Creates a {@code CodeBoard} with 5 rows and columns.
      */
     public CodeBoard() {
         grid = new Array<Array<Entity>>();
@@ -28,7 +28,7 @@ public class CodeBoard {
     }
 
     /**
-     * Creates highscores {@code CodeBoard} with highscores defined amount of rows and columns
+     * Creates a {@code CodeBoard} with a defined amount of rows and columns
      * @param r row amount
      * @param c column amount
      */
@@ -47,7 +47,7 @@ public class CodeBoard {
     }
 
     /**
-     * Adds an {@code Entity} at highscores place on the board
+     * Adds an {@code Entity} at a place on the board
      * @param e entity. Must have {@code BoardComponent}
      * @param bp position
      */

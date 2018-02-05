@@ -32,7 +32,7 @@ public class Visuals {
     public static int visualsArePlaying;
 
     /**
-     * Creates highscores {@code Visuals} object
+     * Creates a {@code Visuals} object
      * @param u user
      * @param positions effected squares
      * @param visual Array of {@code VisualEvent} objects
@@ -93,7 +93,7 @@ public class Visuals {
     }
 
     /**
-     * @return the next time at which highscores visual should play
+     * @return the next time at which a visual should play
      */
     private float getNextTargetTime() {
         float target = 0;

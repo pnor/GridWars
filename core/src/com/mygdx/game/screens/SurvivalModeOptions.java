@@ -76,7 +76,7 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
     @Override
     public void render(float deltaTime) {
         super.render(deltaTime);
-        //go back highscores screen
+        //go back a screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
         }

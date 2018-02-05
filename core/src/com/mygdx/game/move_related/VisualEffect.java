@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.boards.BoardPosition;
 
 /**
- * Represents highscores single visual effect. Used in {@code Visuals} class which plays them all in sequence.
+ * Represents a single visual effect. Used in {@code Visuals} class which plays them all in sequence.
  * @author Phillip O'Reggio
  */
 public interface VisualEffect {

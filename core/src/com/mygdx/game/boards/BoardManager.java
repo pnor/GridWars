@@ -9,7 +9,7 @@ import static com.mygdx.game.ComponentMappers.bm;
 /**
  * Has methods in charge of syncing the {@code Board} and {@code CodeBoard} when moving, adding, etc.
  * When using the {@code Board} and {@code CodeBoard} together, this class should be used. Entities in
- * the {@code CodeBoard} should have highscores {@code ActorComponent} and {@code BoardComponent}.
+ * the {@code CodeBoard} should have a {@code ActorComponent} and {@code BoardComponent}.
  * @author pnore_000
  */
 public class BoardManager {
@@ -18,7 +18,7 @@ public class BoardManager {
     private CodeBoard codeBoard;
 
     /**
-     * Makes highscores BoardManager with both types of board equal to null. {@code setBoards} should be called.
+     * Makes a BoardManager with both types of board equal to null. {@code setBoards} should be called.
      */
     public BoardManager() { }
 
@@ -47,9 +47,9 @@ public class BoardManager {
     }
 
     /**
-     * Adds an entity's data to highscores board and codeBoard. Doesn't add if there is an entity
+     * Adds an entity's data to a board and codeBoard. Doesn't add if there is an entity
      * there already. Also scales added entity to board's size.
-     * @param e Entity. Must have highscores {@code ActorComponent}
+     * @param e Entity. Must have a {@code ActorComponent}
      * @param bp position to add at
      * @return true if it added the entity
      */
@@ -65,9 +65,9 @@ public class BoardManager {
     }
 
     /**
-     * Adds an entity's data to highscores board and codeBoard. Doesn't add if there is an entity
+     * Adds an entity's data to a board and codeBoard. Doesn't add if there is an entity
      * there already. Also scales added entity to board's size.
-     * @param e Entity. Must have highscores {@code ActorComponent}
+     * @param e Entity. Must have a {@code ActorComponent}
      * @param r row
      * @param c column
      * @return true if it added the entity
@@ -84,8 +84,8 @@ public class BoardManager {
     }
 
     /**
-     * Removes an entity's data to highscores board and codeBoard.
-     * @param e Entity. Must have highscores {@code ActorComponent} and {@code BoardComponent}
+     * Removes an entity's data to a board and codeBoard.
+     * @param e Entity. Must have a {@code ActorComponent} and {@code BoardComponent}
      * @return true if it removed an entity
      */
     public boolean remove(Entity e) {
@@ -100,7 +100,7 @@ public class BoardManager {
     }
 
     /**
-     * Removes an entity's data to highscores board and codeBoard at highscores specific index
+     * Removes an entity's data to a board and codeBoard at a specific index
      * @param bp board position
      * @return true if an entity was removed
      */
@@ -116,7 +116,7 @@ public class BoardManager {
 
     /**
      * Moves an entity's data to another place on the board and codeBoard.
-     * Entity must have highscores {@code ActorComponent} and {@code BoardComponent}.
+     * Entity must have a {@code ActorComponent} and {@code BoardComponent}.
      * @param bp old position
      * @param newBp new position
      * @return true if an entity was moved
@@ -133,7 +133,7 @@ public class BoardManager {
 
     /**
      * Moves an entity's data to another place on the board and codeBoard.
-     * @param e Entity, must have highscores {@code ActorComponent} and {@code BoardComponent}.
+     * @param e Entity, must have a {@code ActorComponent} and {@code BoardComponent}.
      * @param bp new position
      * @return true if an entity was moved
      */

@@ -22,7 +22,7 @@ public class AnimationActor extends UIActor {
     private boolean stopUpdating;
 
     /**
-     * Creates an {@code AnimationActor} with highscores looping animation. (is selectable)
+     * Creates an {@code AnimationActor} with a looping animation. (is selectable)
      *
      * @param duration how long duration will take
      * @param s        images shown in animation
@@ -48,7 +48,7 @@ public class AnimationActor extends UIActor {
     }
 
     @Override
-    public void act(float delta) { //if this throws null pointer, its currentFrame. Give highscores defualt(?)
+    public void act(float delta) { //if this throws null pointer, its currentFrame. Give a defualt(?)
         if (!stopUpdating) {
             time += delta;
             if (currentFrame != new Sprite(animation.getKeyFrame(time)))

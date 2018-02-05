@@ -11,7 +11,7 @@ public class LifetimeComponent implements Component {
     public float endTime;
 
     /**
-     * Creates highscores {@code LifetimeComponent} with an end time of 1
+     * Creates a {@code LifetimeComponent} with an end time of 1
      */
     public LifetimeComponent() {
         currentTime = 0;
@@ -19,7 +19,7 @@ public class LifetimeComponent implements Component {
     }
 
     /**
-     * Creates highscores {@code LifetimeComponent} with highscores set end time and current time
+     * Creates a {@code LifetimeComponent} with a set end time and current time
      * @param current time it starts ticking from
      * @param end time that the entity disposes itself
      */

@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import static com.mygdx.game.GridWars.atlas;
 
 /**
- * Representation of highscores single Tile Actor on highscores grid.
+ * Representation of a single Tile Actor on a grid.
  * @author pnore_000
  */
 public class Tile extends Group {
@@ -26,7 +26,7 @@ public class Tile extends Group {
     private boolean invisible;
 
     /**
-     * Creates highscores new tile with no set color.
+     * Creates a new tile with no set color.
      * @param rPos row position in relation to board
      * @param cPos column position in relation to board
      * @param isItDark if true, the tile will be dark. Else, will be lighter
@@ -54,7 +54,7 @@ public class Tile extends Group {
     }
 
     /**
-     * Creates highscores new tile with highscores set color
+     * Creates a new tile with a set color
      * @param rPos row position in relation to board
      * @param cPos column position in relation to board
      * @param isItDark if true, the tile will be dark. Else, will be lighter
@@ -86,7 +86,7 @@ public class Tile extends Group {
     }
 
     /**
-     * Creates highscores new tile with highscores set color
+     * Creates a new tile with a set color
      * @param rPos row position in relation to board
      * @param cPos column position in relation to board
      * @param isItDark if true, the tile will be dark. Else, will be lighter
@@ -142,7 +142,7 @@ public class Tile extends Group {
     }
 
     /**
-     * Adds highscores listener to the tile back that toggles whether it was last selected
+     * Adds a listener to the tile back that toggles whether it was last selected
      */
     public void startListening() {
         if (!isListening) {
@@ -166,7 +166,7 @@ public class Tile extends Group {
     }
 
     /**
-     * creates highscores copy of this tile
+     * creates a copy of this tile
      * @return copy of this object
      */
     public Tile copy() {
@@ -177,7 +177,7 @@ public class Tile extends Group {
     }
 
     /**
-     * Creates highscores copy off this tile, with highscores predetermined position
+     * Creates a copy off this tile, with a predetermined position
      * @param rPos row position
      * @param cPos column position
      * @return copy

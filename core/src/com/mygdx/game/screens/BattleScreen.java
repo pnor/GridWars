@@ -538,6 +538,7 @@ public class BattleScreen implements Screen {
         checkWinConditions(delta);
 
         //region Debug
+        /*
         //checking if things are working as intended
         if (Visuals.visualsArePlaying < 0)
             throw (new IndexOutOfBoundsException("Visuals.visualsArePlaying is < 0"));

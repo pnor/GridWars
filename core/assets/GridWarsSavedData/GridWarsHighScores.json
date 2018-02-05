@@ -1,0 +1,42 @@
+[
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Expert E
+	score: 20000
+	turns: 40
+	lastFloor: 50
+	teamSprites: [ -2, -2, -2, -2 ]
+}
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Good Group
+	score: 10000
+	turns: 30
+	lastFloor: 15
+	teamSprites: [ -2, -2, -2, -2 ]
+}
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Adequate Allies
+	score: 5000
+	turns: 20
+	lastFloor: 10
+	teamSprites: [ -2, -2, -2, -2 ]
+}
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Grid Warriors
+	score: 210
+	turns: 5
+	lastFloor: 21
+	teamSprites: [ 13, 13, 13, 13 ]
+}
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Grid Warriors
+	score: 180
+	turns: 4
+	lastFloor: 21
+	teamSprites: [ 13, 13, 13, 13 ]
+}
+]

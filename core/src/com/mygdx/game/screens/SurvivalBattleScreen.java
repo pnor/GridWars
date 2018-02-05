@@ -27,7 +27,7 @@ import static com.mygdx.game.GridWars.*;
 
 /**
  * Alteration of {@link BattleScreen} made for the Survival mode. Displays the floor on the bottom bar, and changes the look of the UI. Also changes
- * how it links to other screens after highscores victory or loss.
+ * how it links to other screens after a victory or loss.
  * @author Phillip O'Reggio
  */
 public class SurvivalBattleScreen extends BattleScreen implements Screen {

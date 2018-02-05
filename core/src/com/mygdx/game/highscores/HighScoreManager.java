@@ -19,14 +19,14 @@ public class HighScoreManager {
     private boolean sameAsFile;
 
     public HighScoreManager() {
-        HIGH_SCORE_FILE = Gdx.files.local("savedData/GridWarsHighScores.json");
+        HIGH_SCORE_FILE = Gdx.files.local("GridWarsSavedData/GridWarsHighScores.json");
         if (HIGH_SCORE_FILE.exists()) {
             updateHighScoresWithFile();
         }
     }
 
     /**
-     * Updates the high score objects stored in this file with the data in savedData/GridWarsHighScores.json
+     * Updates the high score objects stored in this file with the data in GridWarsSavedData/GridWarsHighScores.json
      */
     public void updateHighScoresWithFile() {
         Json json = new Json();

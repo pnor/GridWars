@@ -6,7 +6,7 @@ import com.mygdx.game.ComponentMappers;
 import com.mygdx.game.boards.BoardPosition;
 
 /**
- * Class representing highscores simplified form of entities on the board. Only contains values relating to an Entity's value, such
+ * Class representing a simplified form of entities on the board. Only contains values relating to an Entity's value, such
  * as stats, status effects, etc.
  *
  * @author Phillip O'Reggio
@@ -23,7 +23,7 @@ public class EntityValue implements Comparable {
 
     /**
      * Points representing nothing. Used to fine tune moves with effects that cannot be expressed in raw stats, status conditions or position.
-     * For example, highscores move that copies another move or to discourage using damaging moves on allies or empty spaces
+     * For example, a move that copies another move or to discourage using damaging moves on allies or empty spaces
      */
     public int arbitraryValue;
 
@@ -33,7 +33,7 @@ public class EntityValue implements Comparable {
     public BoardPosition pos;
 
     /**
-     * Creates an {@link EntityValue} based off an Entity that cannot receive highscores status effect.
+     * Creates an {@link EntityValue} based off an Entity that cannot receive a status effect.
      * @param position position of the Entity
      * @param teamNo Entity's team number
      * @param health Entity's health

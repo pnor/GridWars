@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import java.awt.geom.Point2D;
 
 /**
- * For the position of an Entity on highscores {@code Stage}. Has utility methods such as finding the center.
+ * For the position of an Entity on a {@code Stage}. Has utility methods such as finding the center.
  * @author pnore_000
  */
 public class PositionComponent implements Component {
@@ -37,7 +37,7 @@ public class PositionComponent implements Component {
     }
 
     /**
-     * Sets rotation so it is turned towards highscores coordinate
+     * Sets rotation so it is turned towards a coordinate
      * @param point location to look at
      */
     public void lookAt(Point2D.Float point) {

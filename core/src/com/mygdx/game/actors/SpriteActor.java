@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.ui.LerpColor;
 
 /**
- * Actor that displays highscores static sprite.
+ * Actor that displays a static sprite.
  * @author pnore_000
  */
 public class SpriteActor extends UIActor{
@@ -15,7 +15,7 @@ public class SpriteActor extends UIActor{
     private LerpColor lerpColor;
 
     /**
-     * Creates highscores {@code UIActor} with height and width determined by sprite size. Is selectable by default
+     * Creates a {@code UIActor} with height and width determined by sprite size. Is selectable by default
      * @param s sprite
      */
     public SpriteActor(Sprite s) {
@@ -24,7 +24,7 @@ public class SpriteActor extends UIActor{
     }
 
     /**
-     * Creates highscores {@code UIActor} with height and width determined by sprite size, and can be selected
+     * Creates a {@code UIActor} with height and width determined by sprite size, and can be selected
      * @param s sprite
      */
     public SpriteActor(Sprite s, boolean isSelectable) {
@@ -33,7 +33,7 @@ public class SpriteActor extends UIActor{
     }
 
     /**
-     * Creates highscores {@code UIActor} using highscores texture region with highscores set height and width
+     * Creates a {@code UIActor} using a texture region with a set height and width
      * @param tex texture region
      * @param h height
      * @param w width
@@ -45,9 +45,9 @@ public class SpriteActor extends UIActor{
 
     @Override
     public void shade(Color tint) {
-        if (tint instanceof LerpColor) { //new color is highscores lerpColor
+        if (tint instanceof LerpColor) { //new color is a lerpColor
             lerpColor = (LerpColor) tint;
-        } else if (lerpColor != null) { //changing to highscores normal color from highscores lerpColor
+        } else if (lerpColor != null) { //changing to a normal color from a lerpColor
             sprite.setColor(tint);
             lerpColor = null;
         } else
@@ -66,7 +66,7 @@ public class SpriteActor extends UIActor{
     }
 
     /**
-     * @return the sprite. Note that it's NOT highscores copy!
+     * @return the sprite. Note that it's NOT a copy!
      */
     public Sprite getSprite() {
         return sprite;

@@ -83,6 +83,7 @@ public class GridWars extends Game {
 		getScreen().render(Gdx.graphics.getDeltaTime() * multiplier);
 
 		//debug --
+		/*
 		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB)) //escape to title
 			setScreen(new TitleScreen(this));
 		if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) { //game speed
@@ -101,6 +102,7 @@ public class GridWars extends Game {
 			System.out.println("Mouse X : " + Gdx.input.getX());
 			System.out.println("Mouse Y : " + Gdx.input.getY());
 		}
+		*/
 	}
 
 	@Override

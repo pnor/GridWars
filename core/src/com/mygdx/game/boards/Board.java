@@ -9,7 +9,7 @@ import com.mygdx.game.actors.Tile;
 import com.mygdx.game.actors.UIActor;
 
 /**
- * Represents highscores board of actors where battles happen on.
+ * Represents a board of actors where battles happen on.
  * @author pnore_000
  */
 public class Board {
@@ -20,7 +20,7 @@ public class Board {
     private float scaleFactor = 1;
 
     /**
-     * Creates highscores board of highscores pre-determined size
+     * Creates a board of a pre-determined size
      *
      * @param r row size
      * @param c column size
@@ -53,7 +53,7 @@ public class Board {
     }
 
     /**
-     * Creates highscores board of highscores set size and single color
+     * Creates a board of a set size and single color
      *
      * @param r     row size
      * @param c     column size
@@ -90,7 +90,7 @@ public class Board {
     }
 
     /**
-     * Creates highscores board of highscores set size and of 2 different colors
+     * Creates a board of a set size and of 2 different colors
      *
      * @param r  row size
      * @param c  column size
@@ -128,7 +128,7 @@ public class Board {
     }
 
     /**
-     * Creates highscores board of highscores set size and of 2 different colors
+     * Creates a board of a set size and of 2 different colors
      *
      * @param r  row size
      * @param c  column size
@@ -259,7 +259,7 @@ public class Board {
     }
 
     /**
-     * Prints out highscores the board. XXX represent nothing
+     * Prints out a the board. XXX represent nothing
      *
      * @return the board in text
      */

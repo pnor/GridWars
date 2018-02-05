@@ -21,7 +21,7 @@ public class VisualEvent {
     /**
      * @param effect visual effect
      * @param time time till it triggers (from the last event triggered). Is the space after this event.
-     * @param repeat amount of times it will repeat in highscores row(1 means it plays once, 2 means twice, and so on)
+     * @param repeat amount of times it will repeat in a row(1 means it plays once, 2 means twice, and so on)
      */
     public VisualEvent(VisualEffect effect, float time, int repeat) {
         visualEffect = effect;
@@ -49,7 +49,7 @@ public class VisualEvent {
     }
 
     /**
-     * Copies, but with highscores changed trigger time
+     * Copies, but with a changed trigger time
      * @param trigTime trigger time
      * @return copy
      */
@@ -58,7 +58,7 @@ public class VisualEvent {
     }
 
     /**
-     * Copies, but with highscores changed repeat amount
+     * Copies, but with a changed repeat amount
      * @param newRepeat repeat amount
      * @return copy
      */
@@ -67,7 +67,7 @@ public class VisualEvent {
     }
 
     /**
-     * Copies, but with highscores changed trigger time and repeat amount
+     * Copies, but with a changed trigger time and repeat amount
      * @param trigTime trigger time
      * @param repeat repeat amount
      * @return copy

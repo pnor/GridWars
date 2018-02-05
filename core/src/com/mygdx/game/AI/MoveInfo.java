@@ -1,9 +1,9 @@
 package com.mygdx.game.AI;
 
 /**
- * Class containing information for the effects of highscores {@link com.mygdx.game.move_related.Move}. Is used in {@link BoardState}
- * to properly change the values in highscores {@link EntityValue} to reflect the effect of highscores move. This allows the computer to choose
- * highscores good turn, based on the likely state of the board.
+ * Class containing information for the effects of a {@link com.mygdx.game.move_related.Move}. Is used in {@link BoardState}
+ * to properly change the values in a {@link EntityValue} to reflect the effect of a move. This allows the computer to choose
+ * a good turn, based on the likely state of the board.
  *
  * @author Phillip O'Reggio
  */
@@ -26,9 +26,9 @@ public class MoveInfo {
     public MiscEffects miscEffects;
 
     /**
-     * Creates highscores {@link MoveInfo} object that represents highscores move with no special effects are status effect causes to it.
+     * Creates a {@link MoveInfo} object that represents a move with no special effects are status effect causes to it.
      * @param pierce whether it ignores the opponent's defense
-     * @param amp how much the attack alters the base attack of the user. For example, highscores double damage attack would have highscores
+     * @param amp how much the attack alters the base attack of the user. For example, a double damage attack would have highscores
      *            amp value of 2.
      */
     public MoveInfo(boolean pierce, float amp) {
@@ -37,9 +37,9 @@ public class MoveInfo {
     }
 
     /**
-     * Creates highscores {@link MoveInfo} object that represents highscores move that causes highscores status effect.
+     * Creates a {@link MoveInfo} object that represents a move that causes a status effect.
      * @param pierce whether it pierces
-     * @param amp hom much the attack alters the base attack of the user. For example, highscores double damage attack would have highscores
+     * @param amp hom much the attack alters the base attack of the user. For example, a double damage attack would have highscores
      *            amp value of 2.
      * @param statusEffectInformation what status effects it cuases
      */
@@ -50,9 +50,9 @@ public class MoveInfo {
     }
 
     /**
-     * Creates highscores {@link MoveInfo} object that represents highscores move with other misc. effects.
+     * Creates a {@link MoveInfo} object that represents a move with other misc. effects.
      * @param pierce whether it pierces
-     * @param amp hom much the attack alters the base attack of the user. For example, highscores double damage attack would have an
+     * @param amp hom much the attack alters the base attack of the user. For example, a double damage attack would have an
      *            amp value of 2.
      * @param miscEffect the misc. effect caused by this attack
      */
@@ -63,9 +63,9 @@ public class MoveInfo {
     }
 
     /**
-     * Creates highscores {@link MoveInfo} object that represents highscores move with other misc. effects. and causes highscores status effect.
+     * Creates a {@link MoveInfo} object that represents a move with other misc. effects. and causes a status effect.
      * @param pierce whether it pierces
-     * @param amp how much the attack alters the base attack of the user. For example, highscores double damage attack would have an amp value
+     * @param amp how much the attack alters the base attack of the user. For example, a double damage attack would have an amp value
      *            of 2.
      * @param statusEffectInformation status effect caused by this attack
      * @param miscEffect the misc. effect caused by this attack
@@ -78,9 +78,9 @@ public class MoveInfo {
     }
 
     /**
-     * Creates highscores {@link MoveInfo} object that represents highscores move with other misc. effects. and causes multiple status effects.
+     * Creates a {@link MoveInfo} object that represents a move with other misc. effects. and causes multiple status effects.
      * @param pierce whether it pierces
-     * @param amp how much the attack alters the base attack of the user. For example, highscores double damage attack would have an amp value
+     * @param amp how much the attack alters the base attack of the user. For example, a double damage attack would have an amp value
      *            of 2.
      * @param statusEffectInformation status effects caused by this attack
      * @param miscEffect the misc. effect caused by this attack

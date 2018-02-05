@@ -32,7 +32,7 @@ public class Move {
     private MoveInfo moveInfo; //for AI
 
     /**
-     * Creates highscores move that can be used. The move's attack message is displayed when it is used. Has no move description.
+     * Creates a move that can be used. The move's attack message is displayed when it is used. Has no move description.
      * @param name2 name
      * @param message message that is displayed when move is used. {@code null} will show the default message.
      * @param usr user of move
@@ -54,7 +54,7 @@ public class Move {
     }
 
     /**
-     * Creates highscores move that can be used. The move's attack message is displayed when it is used. Has highscores move description.
+     * Creates a move that can be used. The move's attack message is displayed when it is used. Has a move description.
      * @param name2 name
      * @param description move description displayed in help menu
      * @param message message that is displayed when move is used. {@code null} will show the default message.
@@ -78,7 +78,7 @@ public class Move {
     }
 
     /**
-     * Creates highscores move that can be used. The generic message, "(move name) was used" or "(Entity name) used (move name)", is displayed
+     * Creates a move that can be used. The generic message, "(move name) was used" or "(Entity name) used (move name)", is displayed
      * when used. Has no move description
      *
      * @param name2 name
@@ -121,7 +121,7 @@ public class Move {
 
     /**
      * Changes the effected squares of an attack based on direction. Note that this will change the range of an
-     * Attack, not return highscores copy!
+     * Attack, not return a copy!
      * @param clockwise whether the range will be spun clockwise(true) or counterclockwise(false)
      * @param move move to be oriented
      */
@@ -148,7 +148,7 @@ public class Move {
 
     /**
      * Changes the effected squares of an attack based on direction. Note that this will change the range of an
-     * Attack, not return highscores copy!
+     * Attack, not return a copy!
      * @param relativeDirection direction that it will be spun.
      *                          <p> 0 : No rotation; same as before
      *                          <p> 1 : 90 Degrees clockwise
