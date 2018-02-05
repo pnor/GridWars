@@ -19,14 +19,14 @@ public class HighScoreManager {
     private boolean sameAsFile;
 
     public HighScoreManager() {
-        HIGH_SCORE_FILE = Gdx.files.local("highscores/GridWarsHighScores.json");
+        HIGH_SCORE_FILE = Gdx.files.local("savedData/GridWarsHighScores.json");
         if (HIGH_SCORE_FILE.exists()) {
             updateHighScoresWithFile();
         }
     }
 
     /**
-     * Updates the high score objects stored in this file with the data in highscores/GridWarsHighScores.json
+     * Updates the high score objects stored in this file with the data in savedData/GridWarsHighScores.json
      */
     public void updateHighScoresWithFile() {
         Json json = new Json();
@@ -60,11 +60,11 @@ public class HighScoreManager {
 
     public void prepopulate() {
         highScores = new Array<>();
-        highScores.add(new HighScore("Poor Party", 1, 0, 1, -2, -2, -2, -2));
+        highScores.add(new HighScore("Poor Party", 50, 0, 1, -2, -2, -2, -2));
         highScores.add(new HighScore("Mediocre Mashup", 100, 10, 5, -2, -2, -2, -2));
-        highScores.add(new HighScore("Adequate Allies", 500, 20, 10, -2, -2, -2, -2));
-        highScores.add(new HighScore("Good Group", 1000, 30, 15, -2, -2, -2, -2));
-        highScores.add(new HighScore("Expert E", 5500, 40, 50, -2, -2, -2, -2));
+        highScores.add(new HighScore("Adequate Allies", 5000, 20, 10, -2, -2, -2, -2));
+        highScores.add(new HighScore("Good Group", 10000, 30, 15, -2, -2, -2, -2));
+        highScores.add(new HighScore("Expert E", 20000, 40, 50, -2, -2, -2, -2));
         highScores.sort();
         sameAsFile = false;
     }

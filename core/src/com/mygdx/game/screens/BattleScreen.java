@@ -746,7 +746,7 @@ public class BattleScreen implements Screen {
             setGameSpeedLblText();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) { //game speed
-            GRID_WARS.setGameSpeed((byte) (GRID_WARS.getGameSpeed() + 1));
+            GRID_WARS.setGameSpeed((byte) (GRID_WARS.getGameSpeed() - 1));
             setGameSpeedLblText();
         }
         // During player turn and no Visuals

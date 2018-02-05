@@ -181,10 +181,6 @@ public class EndResultsScreen extends MenuScreen implements Screen {
         table.add(lblVictoryLabel).colspan(2).padTop(80).padBottom(20).row();
         table.add(btnReturn).colspan(2).size(180, 50).row();
 
-        //make save file un-loadable
-        GRID_WARS.saveDataManager.makeFileUnloadable();
-        GRID_WARS.saveDataManager.saveSavedData();
-
         //set music
         GRID_WARS.musicManager.setSong(Song.GAME_RESULTS);
 

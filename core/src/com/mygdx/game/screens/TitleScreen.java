@@ -40,7 +40,7 @@ public class TitleScreen extends MenuScreen implements Screen {
         param.shadowColor = Color.LIGHT_GRAY;
         titleLbl = new Label("Grid Wars", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         startBtn = new HoverButton("Start", skin, Color.WHITE, Color.DARK_GRAY);
-        optionBtn = new HoverButton("Option", skin, Color.WHITE, Color.DARK_GRAY);
+        optionBtn = new HoverButton("Options", skin, Color.WHITE, Color.DARK_GRAY);
 
         ChangeListener listener = new ChangeListener() {
             @Override

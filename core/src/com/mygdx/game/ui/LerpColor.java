@@ -20,8 +20,13 @@ public class LerpColor extends Color {
     private Interpolation interpolation;
 
     /**
-     * Constructs highscores LerpColor that changes from its start color to end color in 1 second
-     * @param start inital color
+     * no arg constructor for serialization
+     */
+    public LerpColor() {}
+    
+    /**
+     * Constructs a LerpColor that changes from its start color to end color in 1 second
+     * @param start initial color
      * @param end end color
      */
     public LerpColor(Color start, Color end) {
@@ -30,7 +35,7 @@ public class LerpColor extends Color {
     }
 
     /**
-     * Constructs highscores LerpColor that changes from its start color to end color in highscores variable amount of time
+     * Constructs a LerpColor that changes from its start color to end color in a variable amount of time
      * @param start inital color
      * @param end end color
      * @param time time to change from start to end colors
@@ -42,7 +47,7 @@ public class LerpColor extends Color {
     }
 
     /**
-     * Constructs highscores LerpColor that changes from its start color to end color using highscores custom {@code Interpolation}
+     * Constructs a LerpColor that changes from its start color to end color using a custom {@code Interpolation}
      * @param start inital color
      * @param end end color
      * @param lerp Interpolation used
@@ -54,7 +59,7 @@ public class LerpColor extends Color {
     }
 
     /**
-     * Constructs highscores LerpColor that changes from its start color to end color using highscores custom {@code Interpolation}
+     * Constructs a LerpColor that changes from its start color to end color using a custom {@code Interpolation}
      * @param start inital color
      * @param end end color
      * @param lerp Interpolation used

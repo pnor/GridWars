@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.SerializationException;
 import com.mygdx.game.creators.EntityConstructor;
 import com.mygdx.game.rules_types.Team;
 
@@ -21,14 +20,17 @@ public class SaveDataManager {
     private boolean sameAsFile;
 
     public SaveDataManager() {
-        SAVE_DATA_FILE = Gdx.files.local("highscores/GridWarsSurvivalSave.json");
+        SAVE_DATA_FILE = Gdx.files.local("savedData/GridWarsSurvivalSave.json");
         if (SAVE_DATA_FILE.exists()) {
+            /*
             try {
                 updateSaveDataWithFile();
             } catch (SerializationException e) { // file information cannot be read into Save Data
                 prepopulate();
                 saveSavedData();
             }
+            */
+            updateSaveDataWithFile();
         } else {
             prepopulate();
             saveSavedData();
@@ -57,7 +59,7 @@ public class SaveDataManager {
     }
 
     /**
-     * Updates the high score objects stored in this file with the data in highscores/GridWarsSurvivalSave.json
+     * Updates the high score objects stored in this file with the data in savedData/GridWarsSurvivalSave.json
      */
     public void updateSaveDataWithFile() {
         Json json = new Json();

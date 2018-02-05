@@ -27,6 +27,11 @@ public class SaveData {
     /** False if the player died in that file or if its deleted */
     private boolean canLoadThisFile;
 
+    /**
+     * No args constructor for serialization
+     */
+    public SaveData() {}
+
     public SaveData(Team team, int healthPowerUps, int SPPowerUps, int score, int turns, int level) {
         setEntityInfo(team);
         HPPower = healthPowerUps;
@@ -100,11 +105,16 @@ public class SaveData {
     }
 
     /**
-     * Small class for storing HP and SP values
+     * Small class for storing HP and SP values. Only used in {@link SaveData} for saving Survival mode info
      */
-    class StatPair {
+    public static class StatPair {
         private int hp;
         private int sp;
+
+        /**
+         * No args constructor for serialization
+         */
+        public StatPair() {}
 
         public StatPair(int health, int skill) {
             hp = health;
