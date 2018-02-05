@@ -1,14 +1,34 @@
 {
-teamName: Shouldn't be loadable
+teamName: Grid Warriors
 teamColor: {
+	r: 0.100216776
+	g: 0.3012806
+	b: 0.41559964
 	a: 1
 }
 stats: [
 	{
-		hp: 2
+		hp: 4
+		sp: 2
+	}
+	{
+		hp: 4
+		sp: 3
+	}
+	{
+		hp: 3
+	}
+	{
+		hp: 4
+		sp: 4
 	}
 ]
-IDValues: [ -2 ]
-altColors: [ 0 ]
-floor: 1
+IDValues: [ 5, 14, 1, 11 ]
+altColors: [ 1, 0, 0, 0 ]
+HPPower: 5
+SPPower: 5
+points: 560
+totalTurns: 4
+floor: 2
+canLoadThisFile: true
 }
