@@ -45,7 +45,7 @@ import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.rules_types.ZoneRules;
 import com.mygdx.game.systems.*;
 import com.mygdx.game.ui.*;
-import music.Song;
+import com.mygdx.game.music.Song;
 
 import java.util.Iterator;
 

@@ -9,17 +9,18 @@ import com.badlogic.gdx.audio.Music;
  * @author Phillip O'Reggio
  */
 public enum  Song {
-    STAGE_THEME(Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/04_Level_1_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/04_Level 1.ogg"))),
-    STAGE_THEME_2(Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/05_Level 2_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/05_Level 2.ogg"))),
-    STAGE_THEME_3(Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/06_Level 3.ogg")), true),
-    STAGE_THEME_4(Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/07_Level 4.ogg")), true),
-    STAGE_THEME_5(Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/06_BGM 2_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/06_BGM 2.ogg"))),
-    STAGE_THEME_6(Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/09_Level 6_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/09_Level 6.ogg"))),
-    FINAL_BOSS_THEME(Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/12_Bomberman Wars.ogg")), true),
-    MENU_THEME(Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/08 Password.ogg")), true),
-    SURVIVAL_TOWER_THEME(Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/16 Battle Options_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/16 Battle Options.ogg"))),
-    GAME_RESULTS(Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/26 Game Results.ogg")), false),
-    GAME_OVER_THEME(Gdx.audio.newMusic(Gdx.files.internal("com/mygdx/game/music/14_Battle Draw.ogg")), false);
+    STAGE_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/04_Level_1_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/04_Level 1.ogg"))),
+    STAGE_THEME_2(Gdx.audio.newMusic(Gdx.files.internal("music/05_Level 2_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/05_Level 2.ogg"))),
+    STAGE_THEME_3(Gdx.audio.newMusic(Gdx.files.internal("music/06_Level 3.ogg")), true),
+    STAGE_THEME_4(Gdx.audio.newMusic(Gdx.files.internal("music/07_Level 4.ogg")), true),
+    STAGE_THEME_5(Gdx.audio.newMusic(Gdx.files.internal("music/06_BGM 2_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/06_BGM 2.ogg"))),
+    STAGE_THEME_6(Gdx.audio.newMusic(Gdx.files.internal("music/09_Level 6_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/09_Level 6.ogg"))),
+    FINAL_BOSS_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/12_Bomberman Wars.ogg")), true),
+    MENU_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/08 Password.ogg")), true),
+    SURVIVAL_TOWER_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/16 Battle Options_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/16 Battle Options.ogg"))),
+    GAME_RESULTS(Gdx.audio.newMusic(Gdx.files.internal("music/26 Game Results.ogg")), false),
+    GAME_RESULTS_SURVIVAL(Gdx.audio.newMusic(Gdx.files.internal("music/26_Multi-Player Victory_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/26_Multi-Player Victory.ogg"))),
+    GAME_OVER_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/14_Battle Draw.ogg")), false);
 
     private boolean hasOpener;
     private boolean loops;

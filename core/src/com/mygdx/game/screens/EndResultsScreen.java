@@ -23,7 +23,7 @@ import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
 import com.mygdx.game.ui.LerpColor;
-import music.Song;
+import com.mygdx.game.music.Song;
 
 import static com.mygdx.game.ComponentMappers.am;
 import static com.mygdx.game.GridWars.backAtlas;

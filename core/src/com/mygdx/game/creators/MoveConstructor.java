@@ -5779,7 +5779,7 @@ public class MoveConstructor {
             }
         }, .2f, 1);
 
-        Move move = new Move("Roulette Reflect", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Roulette Move", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {

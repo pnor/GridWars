@@ -1,7 +1,10 @@
 package com.mygdx.game;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -11,9 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.highscores.HighScoreManager;
 import com.mygdx.game.highscores.SaveDataManager;
+import com.mygdx.game.music.MusicManager;
 import com.mygdx.game.screens.TitleScreen;
 import com.mygdx.game.ui.Background;
-import music.MusicManager;
 
 public class GridWars extends Game {
 	//public AssetManager assets = new AssetManager();
@@ -60,18 +63,14 @@ public class GridWars extends Game {
 		musicManager.setMusicVolume(Gdx.app.getPreferences("GridWars Options").getFloat("Music Volume"));
 		// animate background if options permit
 		Background.setAnimateBackground(Gdx.app.getPreferences("GridWars Options").getBoolean("Animate Background"));
-		// set up high scores and prepopulate high scores if its the first time
+		// set up high scores
 		highScoreManager = new HighScoreManager();
 		if (!highScoreManager.fileHandleExists()) {
 			highScoreManager.prepopulate();
 			highScoreManager.saveHighScores();
 		}
-		// set up save data and prepopulate if its the first time
+		// set up save data
 		saveDataManager = new SaveDataManager();
-		if (!saveDataManager.fileHandleExists()) {
-			saveDataManager.prepopulate();
-			saveDataManager.saveSavedData();
-		}
 
 		setScreen(new TitleScreen(this));
 	}

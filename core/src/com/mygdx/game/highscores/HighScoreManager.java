@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.SerializationException;
 
 /**
  * Class that manages the high score table. Is used to retrieve and change values from the highscore table
@@ -21,7 +22,16 @@ public class HighScoreManager {
     public HighScoreManager() {
         HIGH_SCORE_FILE = Gdx.files.local("GridWarsSavedData/GridWarsHighScores.json");
         if (HIGH_SCORE_FILE.exists()) {
-            updateHighScoresWithFile();
+            try {
+                updateHighScoresWithFile();
+            } catch (SerializationException e) { //cant read file
+                //replace it with defaults
+                prepopulate();
+                saveHighScores();
+            }
+        } else {
+            prepopulate();
+            saveHighScores();
         }
     }
 

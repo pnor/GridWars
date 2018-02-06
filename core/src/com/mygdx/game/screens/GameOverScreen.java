@@ -16,7 +16,7 @@ import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
-import music.Song;
+import com.mygdx.game.music.Song;
 
 import static com.mygdx.game.GridWars.atlas;
 import static com.mygdx.game.GridWars.skin;

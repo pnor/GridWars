@@ -25,18 +25,18 @@
 }
 {
 	class: com.mygdx.game.highscores.HighScore
-	teamName: Grid Warriors
-	score: 210
-	turns: 5
-	lastFloor: 21
-	teamSprites: [ 13, 13, 13, 13 ]
+	teamName: Mediocre Mashup
+	score: 100
+	turns: 10
+	lastFloor: 5
+	teamSprites: [ -2, -2, -2, -2 ]
 }
 {
 	class: com.mygdx.game.highscores.HighScore
-	teamName: Grid Warriors
-	score: 180
-	turns: 4
-	lastFloor: 21
-	teamSprites: [ 13, 13, 13, 13 ]
+	teamName: Poor Party
+	score: 50
+	turns: 0
+	lastFloor: 1
+	teamSprites: [ -2, -2, -2, -2 ]
 }
 ]

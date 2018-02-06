@@ -25,7 +25,7 @@ import com.mygdx.game.systems.MovementSystem;
 import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
-import music.Song;
+import com.mygdx.game.music.Song;
 
 import static com.mygdx.game.ComponentMappers.am;
 import static com.mygdx.game.ComponentMappers.sm;
@@ -82,6 +82,10 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
         //if they did add to highscores
         GRID_WARS.highScoreManager.addHighScoreObject(playerScore);
         GRID_WARS.highScoreManager.saveHighScores();
+
+        //make save file unloadable
+        GRID_WARS.saveDataManager.makeFileUnloadable();
+        GRID_WARS.saveDataManager.saveSavedData();
 
         //create Labels
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Rubik-Regular.ttf"));
