@@ -72,9 +72,9 @@ public class HighScoreManager {
         highScores = new Array<>();
         highScores.add(new HighScore("Poor Party", 50, 0, 1, -2, -2, -2, -2));
         highScores.add(new HighScore("Mediocre Mashup", 100, 10, 5, -2, -2, -2, -2));
-        highScores.add(new HighScore("Adequate Allies", 5000, 20, 10, -2, -2, -2, -2));
+        highScores.add(new HighScore("Standard Squad", 5000, 20, 10, -2, -2, -2, -2));
         highScores.add(new HighScore("Good Group", 10000, 30, 15, -2, -2, -2, -2));
-        highScores.add(new HighScore("Expert E", 20000, 40, 50, -2, -2, -2, -2));
+        highScores.add(new HighScore("Strategists", 20000, 40, 50, -2, -2, -2, -2));
         highScores.sort();
         sameAsFile = false;
     }

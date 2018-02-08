@@ -39,6 +39,8 @@ public class EndResultsScreen extends MenuScreen implements Screen {
     private Array<Team> teams;
     private int winningTeamIndex;
 
+    private Label titleLbl;
+
     private Table team0Table;
     private Array<Image> team0Icons;
     private Label lbl0EntitiesRemaining;
@@ -58,6 +60,9 @@ public class EndResultsScreen extends MenuScreen implements Screen {
     private Label lblVictoryLabel;
 
     private Sprite backgroundLayer;
+    
+    /** Color of text on screen */
+    private Color textColor;
 
     private float time = 0f;
     private int progress = 0;
@@ -75,8 +80,16 @@ public class EndResultsScreen extends MenuScreen implements Screen {
         super.show();
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        
+        //figure out text color. If the background is a bright color, it should be Black instead of white
+        Color winningColor = teams.get(winningTeamIndex).getTeamColor();
+        if ((winningColor.r + winningColor.g + winningColor.b) / 3 > .5f) { //bright
+            textColor = Color.BLACK;
+        } else { //dark
+            textColor = Color.WHITE;
+        }
         param.size = 50;
-        Label titleLbl = new Label("Results", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        titleLbl = new Label("Results", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         param.size = 30;
         lblVictoryLabel = new Label(teams.get(winningTeamIndex).getTeamName() + " Wins!", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         lblVictoryLabel.setColor(Color.CLEAR);
@@ -228,11 +241,25 @@ public class EndResultsScreen extends MenuScreen implements Screen {
             else
                 for (Image i : team0Icons)
                     i.setColor(Color.BLACK);
-            lblVictoryLabel.setColor(Color.WHITE);
+            lblVictoryLabel.setColor(textColor);
             if (teams.get(winningTeamIndex).getTeamColor() instanceof LerpColor)
                 backgroundLayer.setColor(((LerpColor) teams.get(winningTeamIndex).getTeamColor()).getMiddleColor());
             else
                 backgroundLayer.setColor(teams.get(winningTeamIndex).getTeamColor());
+            //set all labels to textColor
+            titleLbl.setColor(textColor);
+            lblVictoryLabel.setColor(textColor);
+            lblMatchType.setColor(textColor);
+            lblTurnCount.setColor(textColor);
+            lbl0AttacksUsed.setColor(textColor);
+            lbl1AttacksUsed.setColor(textColor);
+            lbl0TotalSpRemaing.setColor(textColor);
+            lbl1TotalSpRemaing.setColor(textColor);
+            lbl0TotalHealthRemaining.setColor(textColor);
+            lbl1TotalHealthRemaining.setColor(textColor);
+            lbl0EntitiesRemaining.setColor(textColor);
+            lbl1EntitiesRemaining.setColor(textColor);
+
             progress = 8;
         }
     }

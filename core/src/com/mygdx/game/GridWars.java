@@ -1,10 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -82,7 +79,7 @@ public class GridWars extends Game {
 		getScreen().render(Gdx.graphics.getDeltaTime() * multiplier);
 
 		//debug --
-		/*
+
 		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB)) //escape to title
 			setScreen(new TitleScreen(this));
 		if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) { //game speed
@@ -101,7 +98,10 @@ public class GridWars extends Game {
 			System.out.println("Mouse X : " + Gdx.input.getX());
 			System.out.println("Mouse Y : " + Gdx.input.getY());
 		}
-		*/
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+			System.out.println(Gdx.graphics.getFramesPerSecond());
+		}
+
 	}
 
 	@Override
