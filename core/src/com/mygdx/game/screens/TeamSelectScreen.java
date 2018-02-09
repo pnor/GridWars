@@ -75,6 +75,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     private CheckBox AINormalCheckBox;
     private CheckBox AIHardCheckBox;
     private ButtonGroup<CheckBox> AICheckBoxGroup;
+    private HoverButton clearAIBtn;
     
     //menu control buttons
     private Table menuBtnTable;
@@ -152,6 +153,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         AIHardCheckBox = new CheckBox("Hard", skin);
         AICheckBoxGroup = new ButtonGroup<>(AIEasyCheckBox, AINormalCheckBox, AIHardCheckBox);
         AICheckBoxGroup.setMaxCheckCount(1);
+        clearAIBtn = new HoverButton("Clear", skin, Color.GRAY, Color.WHITE);
         okBtn = new HoverButton("OK", skin, Color.GRAY, Color.BLUE);
         backBtn = new HoverButton("Back", skin, Color.GRAY, Color.ORANGE);
         clearBtn = new HoverButton("Clear", skin, Color.GRAY, Color.RED);
@@ -185,12 +187,14 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                        confirmSelection();
                     } else if (actor == backBtn) //Back Button
                         removeLastSelection();
-                    else if (actor == clearBtn) {
+                    else if (actor == clearBtn) { //clear
                        clearSelection();
-                    } else if (actor == lastTeamBtn) {
+                    } else if (actor == lastTeamBtn) { //Last Team
                         goToLastTeam();
-                    } else if (actor == nextBtn) {
+                    } else if (actor == nextBtn) { //Next
                         goToNextScreen();
+                    } else if (actor == clearAIBtn) { //AI Clear
+                        AICheckBoxGroup.uncheckAll();
                     }
                 }
             }
@@ -363,6 +367,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         clearBtn.addListener(teamSelectionListener);
         lastTeamBtn.addListener(teamSelectionListener);
         nextBtn.addListener(teamSelectionListener);
+        clearAIBtn.addListener(teamSelectionListener);
         for (int i = 0; i < characterBtns.size; i++)
             characterBtns.get(i).addListener(characterListener);
         teamName.setTextFieldListener(nameListener);
@@ -402,6 +407,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
 
         //AI control table
         AIControlTable.add(AIDescription).padRight(30);
+        AIControlTable.add(clearAIBtn).size(90, 40).padRight(30f);
         AIControlTable.add(AIEasyCheckBox).padRight(30);
         AIControlTable.add(AINormalCheckBox).padRight(30);
         AIControlTable.add(AIHardCheckBox);
@@ -420,7 +426,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         //characterBtnTable.debug();
         //portraitTable.debug();
     }
-
+//TODO fix team indexing issue
     /**
      * Confirms the selection of a team. If the team is empty, it does nothing. If there is still teams to be chosen, it will change
      * the current team and entity variables and clear the {@code Image}s, to allow the next team to be chosen. If the there

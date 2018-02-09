@@ -2,7 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -28,6 +27,7 @@ import com.mygdx.game.components.PositionComponent;
 import com.mygdx.game.creators.EntityConstructor;
 import com.mygdx.game.highscores.SaveData;
 import com.mygdx.game.misc.EventCompUtil;
+import com.mygdx.game.music.Song;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.systems.EventSystem;
 import com.mygdx.game.systems.LifetimeSystem;
@@ -35,7 +35,6 @@ import com.mygdx.game.systems.MovementSystem;
 import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
-import com.mygdx.game.music.Song;
 
 import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.*;
@@ -74,6 +73,9 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         stage.getBatch().end();
         super.render(deltaTime);
         engine.update(deltaTime);
+
+        //debug--Change floor level from Survival Select Screen
+        /*
         //Press
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             level++;
@@ -98,6 +100,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
             System.out.println("Level : " + level);
         }
+        */
     }
 
     @Override

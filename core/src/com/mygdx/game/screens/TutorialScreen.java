@@ -86,7 +86,7 @@ public class TutorialScreen extends MenuScreen {
         purpleDescription = new Label("This shows the game speed. Pressing the \"+\" or \"=\" key will alter the speed of the game." , skin);
         purpleDescription.setWrap(true);
 
-        nextBtn = new HoverButton("Next", skin, Color.WHITE, Color.DARK_GRAY);
+        nextBtn = new HoverButton("Exit", skin, Color.WHITE, Color.DARK_GRAY);
 
         ChangeListener listener = new ChangeListener() {
             @Override

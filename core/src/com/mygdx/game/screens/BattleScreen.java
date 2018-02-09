@@ -53,7 +53,8 @@ import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.*;
 
 /**
- * SCreen where the battles take place.
+ * Screen where the battles take place. Contains methods for handling the UI and other visual effects. Here, the player interacts with the game through
+ * the buttons and sprites.
  * @author pnore_000
  */
 public class BattleScreen implements Screen {

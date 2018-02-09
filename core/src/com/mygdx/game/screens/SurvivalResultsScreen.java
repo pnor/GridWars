@@ -101,7 +101,6 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
             teamImages[i] = new Image();
         for (int i = 0; i < teamImages.length; i++) {
             if (i < team.getEntities().size) {
-                System.out.println(am.get(team.getEntities().get(i)).actor.getSprite());
                 teamImages[i].setDrawable(new SpriteDrawable(am.get(team.getEntities().get(i)).actor.getSprite()));
             } else
                 teamImages[i].setDrawable(new SpriteDrawable(atlas.createSprite("cube")));

@@ -51,7 +51,7 @@ public class TitleScreen extends MenuScreen implements Screen {
                     if (actor == startBtn) {
                         GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
                     } else if (actor == tutorialBtn) {
-                        GRID_WARS.setScreen(new TutorialScreen(GRID_WARS));
+                        GRID_WARS.setScreen(new TutorialScreenObjective(GRID_WARS));
                     } else if (actor == optionBtn) {
                         GRID_WARS.setScreen(new OptionsScreen(GRID_WARS));
                     }
