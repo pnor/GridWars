@@ -32,6 +32,7 @@ public class GameUtil {
         colors.put("cyan", Color.CYAN);
 
         colors.put("dark gray", Color.DARK_GRAY);
+        colors.put("darkness", new LerpColor(Color.BLACK, Color.CLEAR, 5f, Interpolation.bounce));
 
         colors.put("firebrick", Color.FIREBRICK);
         colors.put("forest", Color.FOREST);

@@ -38,10 +38,12 @@ public class Phase implements Comparable {
      */
     public void applyPhase(Entity e) {
         int currentHealth = stm.get(e).hp;
+        int currentSP = stm.get(e).sp;
         //apply health ---
         e.remove(StatComponent.class);
         e.add(stat);
         stm.get(e).hp = currentHealth;
+        stm.get(e).sp = currentSP;
         //apply actor ---
         //handling stop animation caused from a status effect
         if (actor instanceof AnimationActor && am.get(e).actor instanceof AnimationActor)

@@ -1,0 +1,42 @@
+[
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Strategists
+	score: 20000
+	turns: 40
+	lastFloor: 50
+	teamSprites: [ -2, -2, -2, -2 ]
+}
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Good Group
+	score: 10000
+	turns: 30
+	lastFloor: 15
+	teamSprites: [ -2, -2, -2, -2 ]
+}
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Standard Squad
+	score: 5000
+	turns: 20
+	lastFloor: 10
+	teamSprites: [ -2, -2, -2, -2 ]
+}
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Grid Warriors
+	score: 320
+	turns: 12
+	lastFloor: 51
+	teamSprites: [ 8, 9, 7, 14 ]
+}
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Grid Warriors
+	score: 320
+	turns: 4
+	lastFloor: 45
+	teamSprites: [ 9, 0, 2, 3 ]
+}
+]

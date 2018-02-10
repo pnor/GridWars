@@ -7,8 +7,9 @@ import com.mygdx.game.rules_types.Rules;
 
 
 /**
- * Component representing board entities with phases. Component contains data for the thresholds of each phase, and what stats/appearances it has.
- * Is used in the {@link Rules} class, where the game will check if it should move onto the next phase.
+ * Component representing board entities with phases, or ones that change when their health changes. Component contains
+ * data for the thresholds of each phase, and what stats/appearances it has. Is used in the {@link Rules} class, where
+ * the game will check if it should move onto the next phase.
  *
  * @author Phillip O'Reggio
  */

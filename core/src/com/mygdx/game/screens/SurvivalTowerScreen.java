@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -75,7 +76,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         engine.update(deltaTime);
 
         //debug--Change floor level from Survival Select Screen
-        /*
+
         //Press
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             level++;
@@ -100,7 +101,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
             System.out.println("Level : " + level);
         }
-        */
+
 
     }
 
@@ -663,7 +664,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.RED,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.romanceBook(1),
+                                EntityConstructor.golemTypeX(1),
                                 EntityConstructor.gargoyle(1),
                                 EntityConstructor.archgargoyle(1),
                                 EntityConstructor.eliteBook(1)

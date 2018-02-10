@@ -198,7 +198,7 @@ public class DamageAnimationConstructor {
     /**
      * Creates the explosive death animation
      * @param user Entity that is being killed
-     * @param color of the explosions
+     * @param color of the sparkles and explosion
      * @return death animation {@code Visuals}
      */
     public static Visuals deathAnimationExplosive(Entity user, Color color) {
@@ -609,5 +609,103 @@ public class DamageAnimationConstructor {
         return new Visuals(user, null,
                 new Array<VisualEvent>(new VisualEvent[]{initialRed, explosions, smoke, explosions.copy(), smoke.copy(),
                         explosions.copy(), smoke.copy(), explosions.copy(), smoke.copy(), fadeAndBlacken}));
+    }
+
+    /**
+     * Creates the explosive death animation
+     * @param user Entity that is being killed
+     * @param color of the explosions
+     * @return death animation {@code Visuals}
+     */
+    public static Visuals deathAnimationSparkle(Entity user, Color color) {
+        VisualEvent initialRed = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                am.get(user).actor.shade(Color.RED);
+            }
+        }, .2f, 1);
+
+        VisualEvent explosions = new VisualEvent(new VisualEffect() {
+            boolean right;
+
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = bm.get(user).pos.copy();
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(100 * scale, 100 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity boom = new Entity();
+                boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-50 * scale, 50 * scale), MathUtils.random(-50 * scale, 50 * scale))
+                        , entitySize.x, entitySize.y, 0));
+                boom.add(new LifetimeComponent(0, .11f));
+                boom.add(new AnimationComponent(.02f,
+                        new TextureRegion[]{atlas.findRegion("BWexplode"),
+                                atlas.findRegion("BWexplode2"),
+                                atlas.findRegion("BWexplode3"),
+                                atlas.findRegion("BWexplode4"),
+                                atlas.findRegion("BWexplode5"),
+                                atlas.findRegion("BWexplode6")},
+                        color,
+                        Animation.PlayMode.NORMAL));
+                boom.add(new EventComponent(.02f, true, EventCompUtil.fadeOut(5)));
+                engine.addEntity(boom);
+
+                if (right)
+                    am.get(user).actor.moveBy(4 * scale, 0);
+                else
+                    am.get(user).actor.moveBy(-4 * scale, 0);
+                right = !right;
+
+            }
+        }, .2f, 6);
+
+        VisualEvent sparkle = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = bm.get(user).pos.copy();
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(10 * scale, 10 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity boom = new Entity();
+                boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-50 * scale, 50 * scale), MathUtils.random(-50 * scale, 50 * scale)),
+                        entitySize.x, entitySize.y, 0));
+                boom.add(new LifetimeComponent(0, .3f));
+                Sprite sprite = atlas.createSprite("sparkle");
+                sprite.setOriginCenter();
+                sprite.setColor(color);
+                boom.add(new SpriteComponent(sprite));
+                boom.add(new EventComponent(.1f, true, EventCompUtil.fadeOut(3)));
+
+                engine.addEntity(boom);
+            }
+        }, .005f, 30);
+
+        VisualEvent fadeAndBlacken = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                am.get(user).actor.shade(
+                        new Color(am.get(user).actor.getColor().r - .01f, am.get(user).actor.getColor().g - .1f,
+                                am.get(user).actor.getColor().b - .1f, am.get(user).actor.getColor().a - .1f));
+            }
+        }, .1f, 9);
+
+        return new Visuals(user, null,
+                new Array<VisualEvent>(new VisualEvent[]{initialRed, sparkle, explosions, fadeAndBlacken.copy(.275f, 1), fadeAndBlacken}));
     }
 }

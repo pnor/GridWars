@@ -5613,10 +5613,16 @@ public class MoveConstructor {
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
                         if (mvm.has(enemy)) {
+                            Move copiedMove = mvm.get(enemy).moveList.get(0).createCopy(e);
+                            if (copiedMove.getName().equals("Reflect Move") || copiedMove.getName().equals("Mirror Move") ||
+                                    copiedMove.getName().equals("Roulette Move")) { //fail if its copying a move that copies other moves
+                                return;
+                            }
+
                             if (mvm.get(e).moveList.size >= 4)
-                                mvm.get(e).moveList.set(3, mvm.get(enemy).moveList.get(0).createCopy(e));
+                                mvm.get(e).moveList.set(3, copiedMove);
                             else
-                                mvm.get(e).moveList.add(mvm.get(enemy).moveList.get(0).createCopy(e));
+                                mvm.get(e).moveList.add(copiedMove);
 
                         }
                     }
@@ -5699,10 +5705,16 @@ public class MoveConstructor {
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
                         if (mvm.has(enemy)) {
+                            Move copiedMove = mvm.get(enemy).moveList.get(mvm.get(enemy).moveList.size - 1).createCopy(e);
+                            if (copiedMove.getName().equals("Reflect Move") || copiedMove.getName().equals("Mirror Move") ||
+                                    copiedMove.getName().equals("Roulette Move")) { //fail if its copying a move that copies other moves
+                                return;
+                            }
+
                             if (mvm.get(e).moveList.size >= 4)
-                                mvm.get(e).moveList.set(3, mvm.get(enemy).moveList.get(mvm.get(enemy).moveList.size - 1).createCopy(e));
+                                mvm.get(e).moveList.set(3, copiedMove);
                             else
-                                mvm.get(e).moveList.add(mvm.get(enemy).moveList.get(mvm.get(enemy).moveList.size - 1).createCopy(e));
+                                mvm.get(e).moveList.add(copiedMove);
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
@@ -5785,7 +5797,15 @@ public class MoveConstructor {
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
                         if (mvm.has(enemy)) {
-                            mvm.get(e).moveList.set(3, mvm.get(enemy).moveList.get(MathUtils.random(0, mvm.get(enemy).moveList.size - 1)).createCopy(e));
+                            Move copiedMove = mvm.get(enemy).moveList.get(MathUtils.random(0, mvm.get(enemy).moveList.size - 1)).createCopy(e);
+                            if (copiedMove.getName().equals("Reflect Move") || copiedMove.getName().equals("Mirror Move") ||
+                                    copiedMove.getName().equals("Roulette Move")) { //fail if its copying a move that copies other moves
+                                return;
+                            }
+                            if (mvm.get(e).moveList.size >= 4)
+                                mvm.get(e).moveList.set(3, copiedMove);
+                            else
+                                mvm.get(e).moveList.add(copiedMove);
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
@@ -15128,7 +15148,7 @@ public class MoveConstructor {
         }, .3f, 1);
 
         //Move
-        Move move = new Move("Demoralizing Blow", nm.get(user).name + " delivered a demoralizing blow!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Demoralize Blow", nm.get(user).name + " delivered a demoralizing blow!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -16477,8 +16497,9 @@ public class MoveConstructor {
                 progress = MathUtils.clamp(progress + .1f, 0, 1);
 
                 Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
-                if (enemy != null)
+                if (enemy != null) {
                     am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress));
+                }
             }
         }, .05f, 10);
 

@@ -268,7 +268,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                     } else { //random
                         characterPortraits.get(currentEntity).setDrawable(new TextureRegionDrawable(atlas.findRegion("mystery")));
                         //teams.get(curTeam).getEntities().add(EntityConstructor.AITester(curTeam, altNumber));
-                        int randomIndex = MathUtils.random(0, 12);
+                        int randomIndex = MathUtils.random(0, 14);
                         int randomColor = (MathUtils.randomBoolean(.05f))? 1 : 0;
                         switch (randomIndex) {
                             case 0 :

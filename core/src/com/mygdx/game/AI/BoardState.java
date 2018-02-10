@@ -149,7 +149,7 @@ public class BoardState {
                     //discourage attacking empty spaces compared to not attacking at all
                     //single hitting moves weighted heavier than spread attacks
                     userEntity.arbitraryValue = (move.getRange().size <= 1)?
-                            userEntity.arbitraryValue - 30 : userEntity.arbitraryValue - 30 / move.getRange().size;
+                            userEntity.arbitraryValue - 50 : userEntity.arbitraryValue - 50 / move.getRange().size;
                 }
             }
 

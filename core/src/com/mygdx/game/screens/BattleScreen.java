@@ -811,7 +811,6 @@ public class BattleScreen implements Screen {
     protected void checkWinConditions(float deltaTime) {
         if (rules.checkWinConditions() != null && currentMove == null) {
             if (!gameHasEnded) {
-                System.out.println("-------------------------------GAME HAS ENDED---------------------------------");
                 endTurnBtn.setDisabled(true);
                 gameHasEnded = true;
             }
@@ -1158,12 +1157,8 @@ public class BattleScreen implements Screen {
         }
         largestXRange = (largestXRange == 0) ? largestXRange + 1 : largestXRange;
         largestYRange = (largestYRange == 0) ? largestYRange + 1 : largestYRange;
-        System.out.println("largest x : " + largestXRange);
-        System.out.println("largest y : " + largestYRange);
         int boxRadius = Math.max(largestXRange, largestYRange); // size from edge to tile right before center
         int squareSideLength = boxRadius * 2 + 1; // size of the side lengths
-        System.out.println("box radius : " + boxRadius);
-        System.out.println("square side length : " + squareSideLength);
         //fill in the square centered around target entity
         for (int i = -boxRadius; i <= boxRadius; i++) {
             for (int j = -boxRadius; j <= boxRadius; j++) {

@@ -988,7 +988,7 @@ public class EntityConstructor {
         nm.get(entity).altColor = altColor;
         
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(4, 5, 1, 1, 2));
+        entity.add(new StatComponent(3, 5, 1, 1, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1287,7 +1287,7 @@ public class EntityConstructor {
                 atlas.findRegion("dragon2")
         }, Animation.PlayMode.LOOP, 1f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(40, 10, 3, 1, 1));
+        entity.add(new StatComponent(40, 10, 4, 1, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1313,12 +1313,12 @@ public class EntityConstructor {
                         atlas.findRegion("dragonGlow"),
                         atlas.findRegion("dragon2Glow")},
                         Animation.PlayMode.LOOP, .6f, true),
-                        new StatComponent(40, 10, 4, 1, 2)),
+                        new StatComponent(40, 10, 5, 1, 2)),
                 new Phase(40, 25, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("dragon"),
                         atlas.findRegion("dragon2")},
                         Animation.PlayMode.LOOP, 1f, true),
-                        new StatComponent(40, 10, 3, 1, 1))
+                        new StatComponent(40, 10, 4, 1, 1))
         ));
 
         return entity;
@@ -1925,7 +1925,7 @@ public class EntityConstructor {
                 atlas.findRegion("eliteGolem2")
         }, Animation.PlayMode.LOOP_PINGPONG, .34f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(7, 7, 3, 1, 2));
+        entity.add(new StatComponent(6, 8, 3, 1, 1));
         stm.get(entity).obscureStatInfo = true;
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1938,7 +1938,7 @@ public class EntityConstructor {
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.slamRed(entity),
                 MoveConstructor.reflectionBeam(entity),
-                MoveConstructor.heavySlamRed(entity),
+                MoveConstructor.rouletteReflect(entity),
                 MoveConstructor.ultimateGuard(entity)
         })));
 
@@ -2179,7 +2179,7 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.deathAnimationSparkle(entity, new Color(1, .2f, 1, 1)),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.monoplode(entity),
@@ -2210,7 +2210,7 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.deathAnimationSparkle(entity, Color.CYAN),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.monoplode2(entity),
@@ -2241,7 +2241,7 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.deathAnimationSparkle(entity, Color.PINK),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.monopierce(entity),
@@ -2273,7 +2273,7 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.deathAnimationSparkle(entity, Color.RED),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.monoplode3(entity),
@@ -2305,7 +2305,7 @@ public class EntityConstructor {
         entity.add(new VisualsComponent(
                 DamageAnimationConstructor.damageAnimation(entity),
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
-                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.deathAnimationSparkle(entity, Color.WHITE),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.monoplode4(entity),

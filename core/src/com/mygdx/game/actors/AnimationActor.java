@@ -74,8 +74,14 @@ public class AnimationActor extends UIActor {
     }
 
     @Override
+    /**
+     * If uninitialized, this will return Color.WHITE
+     */
     public Color getColor() {
-        return shadeColor;
+        if (shadeColor != null)
+            return shadeColor;
+        else
+            return Color.WHITE;
     }
 
     /**
