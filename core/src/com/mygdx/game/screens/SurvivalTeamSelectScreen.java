@@ -280,8 +280,8 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
                 String input = textField.getText().trim();
                 if (input.length() <= 0)
                     return;
-                if (input.length() > 25)
-                    textField.setText(input.substring(0, 26));
+                if (input.length() > 15)
+                    textField.setText(input.substring(0, 16));
                team.setTeamName(textField.getText());
             }
         };
