@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Array;
  *
  */
 public class AnimationActor extends UIActor {
-    private Animation<Sprite> animation;
+    private Animation<TextureRegion> animation;
     private Sprite currentFrame;
     private Color shadeColor;
     private Vector2 size;
@@ -29,7 +29,7 @@ public class AnimationActor extends UIActor {
      */
     public AnimationActor(float duration, TextureRegion[] s) {
         super(s[0].getRegionWidth(), s[0].getRegionHeight(), true);
-        animation = new Animation(duration, new Array<TextureRegion>(s), Animation.PlayMode.LOOP);
+        animation = new Animation<>(duration, new Array<TextureRegion>(s), Animation.PlayMode.LOOP);
         currentFrame = new Sprite(animation.getKeyFrame(0));
     }
 
@@ -43,7 +43,7 @@ public class AnimationActor extends UIActor {
      */
     public AnimationActor(TextureRegion[] s, Animation.PlayMode playType, float duration, boolean selectable) {
         super(s[0].getRegionWidth(), s[0].getRegionHeight(), selectable);
-        animation = new Animation(duration, new Array<TextureRegion>(s), playType);
+        animation = new Animation<>(duration, new Array<TextureRegion>(s), playType);
         currentFrame = new Sprite(animation.getKeyFrame(0));
     }
 
