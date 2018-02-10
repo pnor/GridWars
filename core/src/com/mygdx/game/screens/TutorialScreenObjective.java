@@ -1,6 +1,7 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -53,9 +54,9 @@ public class TutorialScreenObjective extends MenuScreen {
 
         hotKeysLbl = new Label(
                 "H + [Number Key 1-4] : Display information about a selected piece's move.\n\n" +
-                "A / D : Scroll through pieces on the board.\n\n" +
+                "A, D : Scroll through pieces on the board.\n\n" +
                 "Shift (Left) : End the current turn.\n\n" +
-                "= / - : Change game speed.", skin);
+                "=, - : Change game speed.", skin);
         nextBtn = new HoverButton("Next", skin, Color.WHITE, Color.DARK_GRAY);
 
         ChangeListener listener = new ChangeListener() {
@@ -88,5 +89,14 @@ public class TutorialScreenObjective extends MenuScreen {
         table.add(subTable);
 
         fontGenerator.dispose();
+    }
+
+    @Override
+    public void render(float deltaTime) {
+        super.render(deltaTime);
+        //go back a screen
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
+        }
     }
 }

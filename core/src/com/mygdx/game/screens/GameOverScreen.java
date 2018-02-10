@@ -138,14 +138,14 @@ public class GameOverScreen extends MenuScreen implements Screen {
                     1,
                     1,
                     1,
-                    MathUtils.clamp(time - 2f, 0, 1)
+                    MathUtils.clamp(time - 3f, 0, 1)
             ));
         else if (progress == 4)
             btnReturn.setColor(new Color(
                     0,
                     0,
                     0,
-                    MathUtils.clamp((time - 3f), 0, 1)
+                    MathUtils.clamp((time - 4f), 0, 1)
             ));
 
         if (time >= 1f && progress == 0) {

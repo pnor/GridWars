@@ -1,6 +1,7 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -130,5 +131,14 @@ public class TutorialScreen extends MenuScreen {
         //infoTable.debug();
 
         fontGenerator.dispose();
+    }
+
+    @Override
+    public void render(float deltaTime) {
+        super.render(deltaTime);
+        //go back a screen
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
+        }
     }
 }

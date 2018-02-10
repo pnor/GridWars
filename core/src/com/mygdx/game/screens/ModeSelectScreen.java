@@ -37,9 +37,9 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
         titleLbl = new Label("Select A Game Mode", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
-        twoPlayerDeathMatch = new HoverButton("2-Player Death Match", skin, Color.CYAN, Color.DARK_GRAY);
-        twoPlayerZones = new HoverButton("2-Player Zone Match", skin, Color.GREEN, Color.DARK_GRAY);
-        survival = new HoverButton("Survival", skin, Color.NAVY, Color.DARK_GRAY);
+        twoPlayerDeathMatch = new HoverButton("2-Player Death Match", skin, Color.WHITE, Color.GREEN);
+        twoPlayerZones = new HoverButton("2-Player Zone Match", skin, Color.WHITE, Color.RED);
+        survival = new HoverButton("Survival", skin, Color.WHITE, Color.BLUE);
 
         ChangeListener listener = new ChangeListener() {
             @Override

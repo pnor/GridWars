@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -75,7 +76,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         engine.update(deltaTime);
 
         //debug--Change floor level from Survival Select Screen
-        /*
+
         //Press
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             level++;
@@ -100,7 +101,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
             System.out.println("Level : " + level);
         }
-        */
+
     }
 
     @Override
@@ -118,8 +119,8 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         Label titleLbl = new Label("Tower Survival", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         HoverButton btnRestore = new HoverButton("Restore", skin, Color.GREEN, Color.DARK_GRAY);
         HoverButton btnSpUp = new HoverButton("SP UP", skin, Color.CYAN, Color.DARK_GRAY);
-        HoverButton btnContinue = new HoverButton("Continue", skin, Color.NAVY, Color.BLUE);
-        HoverButton btnSave = new HoverButton("Save", skin, Color.LIGHT_GRAY, Color.WHITE);
+        HoverButton btnContinue = new HoverButton("Continue", skin, Color.WHITE, Color.GREEN);
+        HoverButton btnSave = new HoverButton("Save", skin, Color.WHITE, Color.TEAL);
         teamImages = new Image[4];
         for (int i = 3; i >= team.getEntities().size; i--)
             teamImages[i] = new Image(atlas.createSprite("cube"));
@@ -233,10 +234,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         offsetTable.add(teamImages[1]).padRight(20f).padBottom(20f);
         offsetTable.add(teamImages[2]).padRight(20f).padBottom(20f);
         offsetTable.add(teamImages[3]).padBottom(20f).row();
-        offsetTable.add(btnRestore).colspan(2).size(80, 40).padBottom(20f).padRight(30f);
+        offsetTable.add(btnRestore).colspan(2).size(120, 40).padBottom(20f).padRight(30f);
         offsetTable.add(lblHealthPower).colspan(2).size(80, 40).padBottom(20f).row();
-        offsetTable.add(btnSpUp).colspan(2).size(80, 40).padBottom(20f).padRight(30f);
-        offsetTable.add(lblSPPower).colspan(2).size(80, 40).padBottom(20f).row();
+        offsetTable.add(btnSpUp).colspan(2).size(120, 40).padBottom(20f).padRight(30f);
+        offsetTable.add(lblSPPower).colspan(2).size(80, 40).padBottom(30f).row();
         offsetTable.add(btnSave).colspan(2).size(160, 40);
         offsetTable.add(btnContinue).colspan(2).size(160, 40).row();
         table.add().padRight(200f);

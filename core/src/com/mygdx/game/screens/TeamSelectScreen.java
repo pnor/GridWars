@@ -258,11 +258,11 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                         characterPortraits.get(currentEntity).setDrawable(
                                 new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(13)) {
-                        teams.get(curTeam).getEntities().add(EntityConstructor.pheonix(0, altNumber));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.pheonix(curTeam, altNumber));
                         characterPortraits.get(currentEntity).setDrawable(
                                 new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(14)) {
-                    teams.get(curTeam).getEntities().add(EntityConstructor.acidsnake(0, altNumber));
+                    teams.get(curTeam).getEntities().add(EntityConstructor.acidsnake(curTeam, altNumber));
                         characterPortraits.get(currentEntity).setDrawable(
                                 new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else { //random
@@ -426,7 +426,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         //characterBtnTable.debug();
         //portraitTable.debug();
     }
-//TODO fix team indexing issue
+
     /**
      * Confirms the selection of a team. If the team is empty, it does nothing. If there is still teams to be chosen, it will change
      * the current team and entity variables and clear the {@code Image}s, to allow the next team to be chosen. If the there

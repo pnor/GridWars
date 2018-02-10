@@ -3,6 +3,8 @@ package com.mygdx.game;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.game.creators.EntityConstructor;
 import com.mygdx.game.ui.LerpColor;
 
@@ -26,6 +28,7 @@ public class GameUtil {
         colors.put("brown", Color.BROWN);
 
         colors.put("chartreuse", Color.CHARTREUSE);
+        colors.put("color wars", new LerpColor(Color.CYAN, Color.GOLD, 1f));
         colors.put("cyan", Color.CYAN);
 
         colors.put("dark gray", Color.DARK_GRAY);
@@ -38,6 +41,10 @@ public class GameUtil {
         colors.put("green", Color.GREEN);
         colors.put("gray", Color.GRAY);
         colors.put("ghost", new Color(.6f, .6f, .6f, .65f));
+
+        colors.put("hold my coffee", new LerpColor(new Color(.4f, .29f, .227f, 1f), Color.ORANGE, 1f));
+
+        colors.put("invisible", new Color(1, 1, 1, 0));
 
         colors.put("jared", new LerpColor(new Color(.1f, .1f, .1f, .5f), Color.NAVY, 4f));
         colors.put("java", new LerpColor(new Color(.4f, .29f, .227f, 1f), new Color(.51f, .36f, .29f, 1f), 1f));
@@ -54,14 +61,17 @@ public class GameUtil {
         colors.put("pink", Color.PINK);
         colors.put("purple", Color.PURPLE);
 
+        colors.put("random", new LerpColor(new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), MathUtils.random(.3f, 3)));
         colors.put("red", Color.RED);
         colors.put("royal", Color.ROYAL);
 
         colors.put("salmon", Color.SALMON);
         colors.put("scarlet", Color.SCARLET);
         colors.put("sea", new LerpColor(Color.BLUE, Color.CYAN, 6f));
+        colors.put("shiny", new LerpColor(new Color(.9f, .9f, .9f, 1), new Color(.3f, .6f, 1, 1), 5f, Interpolation.exp10In));
         colors.put("sky", Color.SKY);
         colors.put("slate", Color.SLATE);
+        colors.put("smokey", new LerpColor(new Color(1, 0, 0, 1), new Color(.1f, .01f, 0, 1), 5f));
 
         colors.put("tan", Color.TAN);
         colors.put("teal", Color.TEAL);
