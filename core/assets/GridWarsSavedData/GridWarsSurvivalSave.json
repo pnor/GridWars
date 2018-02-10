@@ -1,0 +1,14 @@
+{
+teamName: Shouldn't be loadable
+teamColor: {
+	a: 1
+}
+stats: [
+	{
+		hp: 2
+	}
+]
+IDValues: [ -2 ]
+altColors: [ 0 ]
+floor: 1
+}
