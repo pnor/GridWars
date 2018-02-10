@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Array;
  *
  */
 public class AnimationActor extends UIActor {
-    private Animation animation;
+    private Animation<Sprite> animation;
     private Sprite currentFrame;
     private Color shadeColor;
     private Vector2 size;

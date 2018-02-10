@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Array;
  * @author pnore_000
  */
 public class AnimationComponent implements Component {
-    public Animation animation;
+    public Animation<Sprite> animation;
     public Color shadeColor = Color.WHITE;
     public float currentTime;
     public boolean isAnimating = true;
