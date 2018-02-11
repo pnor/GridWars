@@ -21,6 +21,8 @@ public class SaveData {
     private int[] altColors;
     private int HPPower;
     private int SPPower;
+    private int powerPower;
+    private int speedPower;
     private int points;
     private int totalTurns;
     private int floor;
@@ -32,10 +34,12 @@ public class SaveData {
      */
     public SaveData() {}
 
-    public SaveData(Team team, int healthPowerUps, int SPPowerUps, int score, int turns, int level) {
+    public SaveData(Team team, int healthPowerUps, int SPPowerUps, int attackPowerUps, int speedPowerUps, int score, int turns, int level) {
         setEntityInfo(team);
         HPPower = healthPowerUps;
         SPPower = SPPowerUps;
+        powerPower = attackPowerUps;
+        speedPower = speedPowerUps;
         teamName = team.getTeamName();
         teamColor = team.getTeamColor();
         points = score;
@@ -98,6 +102,15 @@ public class SaveData {
 
     public int getSPPower() {
         return SPPower;
+    }
+
+
+    public int getAttackPower() {
+        return powerPower;
+    }
+
+    public int getSpeedPower() {
+        return speedPower;
     }
 
     public boolean canLoadFile() {

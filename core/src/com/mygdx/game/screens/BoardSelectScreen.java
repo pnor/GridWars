@@ -13,9 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
+import com.mygdx.game.music.Song;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.HoverButton;
-import com.mygdx.game.music.Song;
+import com.mygdx.game.ui.LerpColorManager;
 
 import static com.mygdx.game.GridWars.skin;
 
@@ -66,22 +67,22 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
 
                 if (((Button) actor).isPressed()) {
                     if (actor == basic) {
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, Song.STAGE_THEME, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, new LerpColorManager(), Song.STAGE_THEME, GRID_WARS));
                     } else if (actor == complex) {
                         board += 2;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, Song.STAGE_THEME_2, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, new LerpColorManager(), Song.STAGE_THEME_2, GRID_WARS));
                     } else if (actor == compact) {
                         board += 4;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, Song.STAGE_THEME_3, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, new LerpColorManager(), Song.STAGE_THEME_3, GRID_WARS));
                     } else if (actor == desert) {
                         board += 6;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, Song.STAGE_THEME_4, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, new LerpColorManager(), Song.STAGE_THEME_4, GRID_WARS));
                     } else if (actor == forest) {
                         board += 8;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, Song.STAGE_THEME_5, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, new LerpColorManager(), Song.STAGE_THEME_5, GRID_WARS));
                     } else if (actor == island) {
                         board += 10;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, Song.STAGE_THEME, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, new LerpColorManager(), Song.STAGE_THEME, GRID_WARS));
                     }
                 }
             }

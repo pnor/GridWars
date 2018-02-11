@@ -21,11 +21,9 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.SpriteActor;
-import com.mygdx.game.components.AnimationComponent;
-import com.mygdx.game.components.EventComponent;
-import com.mygdx.game.components.LifetimeComponent;
-import com.mygdx.game.components.PositionComponent;
+import com.mygdx.game.components.*;
 import com.mygdx.game.creators.EntityConstructor;
+import com.mygdx.game.creators.StatusEffectConstructor;
 import com.mygdx.game.highscores.SaveData;
 import com.mygdx.game.misc.EventCompUtil;
 import com.mygdx.game.music.Song;
@@ -36,6 +34,7 @@ import com.mygdx.game.systems.MovementSystem;
 import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
+import com.mygdx.game.ui.LerpColorManager;
 
 import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.*;
@@ -49,23 +48,35 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
     private int level;
     private int healingPowerUp;
     private int spPowerUp;
+    private int powerPowerUp;
+    private int speedPowerUp;
     private Sprite backgroundProgressBar;
     //score keeping
     private int points;
     private int numberOfTurns;
     //Whether this is a loaded save
     private boolean loadedFromSave;
+    //LerpColor Manager that is used throughout Survival Mode
+    private static LerpColorManager survivalLerpColorManager;
 
-    public SurvivalTowerScreen(Team playerTeam, int towerLevel, int healingPowerUpAmount, int spUpPowerUpAmount,
-                               int points, int turnCount, boolean loadedFromSave, GridWars game) {
+    public SurvivalTowerScreen(Team playerTeam, int towerLevel, int healingPowerUpAmount, int spUpPowerUpAmount, int attackPowerUpAmount,
+                               int speedPowerUpAmount, int points, int turnCount, boolean loadedFromSave, GridWars game) {
         super(game);
         team = playerTeam;
         level = towerLevel;
         healingPowerUp = healingPowerUpAmount;
         spPowerUp = spUpPowerUpAmount;
+        powerPowerUp = attackPowerUpAmount;
+        speedPowerUp = speedPowerUpAmount;
         this.points = points;
         numberOfTurns = turnCount;
         this.loadedFromSave = loadedFromSave;
+        if (survivalLerpColorManager == null) {
+            survivalLerpColorManager = new LerpColorManager();
+        }
+        if (StatusEffectComponent.getLerpColorManager() != survivalLerpColorManager) {
+            StatusEffectComponent.setLerpColorManager(survivalLerpColorManager);
+        }
     }
 
     @Override
@@ -105,7 +116,6 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             System.out.println("Level : " + level);
         }
 
-
     }
 
     @Override
@@ -121,8 +131,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
         Label titleLbl = new Label("Tower Survival", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
-        HoverButton btnRestore = new HoverButton("Restore", skin, Color.GREEN, Color.DARK_GRAY);
-        HoverButton btnSpUp = new HoverButton("SP UP", skin, Color.CYAN, Color.DARK_GRAY);
+        HoverButton btnRestore = new HoverButton("Restore", skin, Color.GRAY, Color.GREEN);
+        HoverButton btnSpUp = new HoverButton("SP UP", skin, Color.GRAY, Color.ORANGE);
+        HoverButton btnSpeedUp = new HoverButton("Speed +", skin, Color.GRAY, Color.CYAN);
+        HoverButton btnPowerUp = new HoverButton("Power +", skin, Color.GRAY, Color.RED);
         HoverButton btnContinue = new HoverButton("Continue", skin, Color.WHITE, Color.GREEN);
         HoverButton btnSave = new HoverButton("Save", skin, Color.WHITE, Color.TEAL);
         teamImages = new Image[4];
@@ -141,6 +153,8 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         }
         Label lblHealthPower = new Label("Remaining : " + healingPowerUp, skin);
         Label lblSPPower = new Label("Remaining : " + spPowerUp, skin);
+        Label lblPower = new Label("Remaining : " + powerPowerUp, skin);
+        Label lblSpeedUp = new Label("Remaining : " + speedPowerUp, skin);
 
         //background progress bar
         backgroundProgressBar = new Sprite(backAtlas.createSprite("BlankBackground"));
@@ -178,7 +192,6 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                             createParticleEffect(0);
                             for (Entity e : team.getEntities()) {
                                 stm.get(e).hp = stm.get(e).maxHP;
-                                status.get(e).removeAll(e);
                                 stm.get(e).setAlive();
                             }
                             for (Image image : teamImages) {
@@ -194,19 +207,41 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                                 stm.get(e).sp = stm.get(e).getModMaxSp(e);
                             }
                         }
+                    } else if (actor == btnPowerUp) {
+                        if (spPowerUp > 0) {
+                            powerPowerUp--;
+                            lblPower.setText("Remaining : " + powerPowerUp);
+                            createParticleEffect(2);
+                            for (Entity e : team.getEntities()) {
+                                if (status.has(e))
+                                    status.get(e).addStatusEffect(StatusEffectConstructor.attackUp2(3), e);
+                            }
+                        }
+                    } else if (actor == btnSpeedUp) {
+                        if (spPowerUp > 0) {
+                            speedPowerUp--;
+                            lblSpeedUp.setText("Remaining : " + speedPowerUp);
+                            createParticleEffect(3);
+                            for (Entity e : team.getEntities()) {
+                                if (status.has(e))
+                                    status.get(e).addStatusEffect(StatusEffectConstructor.speedUp(3), e);
+                            }
+                        }
                     } else if (actor == btnContinue) {
                         //get the song
                         Song song = getFloorLevelSong();
                         Team attackingObjectsTeam = getFloorLevelAttackingObjects();
                         if (attackingObjectsTeam == null) // floor has no attacking objects
                             GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), getComputerDifficulty(),
-                                    level, healingPowerUp, spPowerUp, points, numberOfTurns, loadedFromSave, song, GRID_WARS));
+                                    level, healingPowerUp, spPowerUp, powerPowerUp, speedPowerUp, points, numberOfTurns, loadedFromSave,
+                                    survivalLerpColorManager, song, GRID_WARS));
                         else
                             GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), attackingObjectsTeam,
-                                    getComputerDifficulty(), level, healingPowerUp, spPowerUp,  points, numberOfTurns, loadedFromSave,
-                                    song, GRID_WARS));
+                                    getComputerDifficulty(), level, healingPowerUp, spPowerUp, powerPowerUp, speedPowerUp, points, numberOfTurns, loadedFromSave,
+                                    survivalLerpColorManager, song, GRID_WARS));
                     } else if (actor == btnSave) {
-                        GRID_WARS.saveDataManager.setSavedData(new SaveData(team, healingPowerUp, spPowerUp, points, numberOfTurns, level));
+                        StatusEffectComponent.setLerpColorManager(null);
+                        GRID_WARS.saveDataManager.setSavedData(new SaveData(team, healingPowerUp, spPowerUp, powerPowerUp, speedPowerUp, points, numberOfTurns, level));
                         GRID_WARS.saveDataManager.saveSavedData();
                         GRID_WARS.musicManager.setSong(Song.MENU_THEME);
                         GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
@@ -222,6 +257,8 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
 
         btnRestore.addListener(listener);
         btnSpUp.addListener(listener);
+        btnPowerUp.addListener(listener);
+        btnSpeedUp.addListener(listener);
         btnSave.addListener(listener);
         btnContinue.addListener(listener);
 
@@ -231,19 +268,27 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         offsetTable.add();
         offsetTable.add().row();
         offsetTable.add(titleLbl).colspan(4).padBottom(40).row();
-        offsetTable.add(new Label("Level " + level, skin)).colspan(4).padBottom(20).row();
+        Label floorLevelLbl = new Label("Level " + level, skin);
+        if (level == 10 || level == 20 || level == 30 || level == 50 || level == 40 || level == 43 || level == 47) { //if boss indicate
+            floorLevelLbl.setColor(Color.RED);
+        }
+        offsetTable.add(floorLevelLbl).colspan(4).padBottom(20).row();
         offsetTable.add(new Label("Points : " + points, skin)).colspan(4).padBottom(20).row();
         offsetTable.add(new Label("Turn Count : " + numberOfTurns, skin)).colspan(4).padBottom(30).row();
         offsetTable.add(teamImages[0]).padRight(20f).padBottom(20f);
         offsetTable.add(teamImages[1]).padRight(20f).padBottom(20f);
         offsetTable.add(teamImages[2]).padRight(20f).padBottom(20f);
         offsetTable.add(teamImages[3]).padBottom(20f).row();
-        offsetTable.add(btnRestore).colspan(2).size(120, 40).padBottom(20f).padRight(30f);
+        offsetTable.add(btnRestore).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
         offsetTable.add(lblHealthPower).colspan(2).size(80, 40).padBottom(20f).row();
-        offsetTable.add(btnSpUp).colspan(2).size(120, 40).padBottom(20f).padRight(30f);
+        offsetTable.add(btnSpUp).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
         offsetTable.add(lblSPPower).colspan(2).size(80, 40).padBottom(30f).row();
-        offsetTable.add(btnSave).colspan(2).size(160, 40);
-        offsetTable.add(btnContinue).colspan(2).size(160, 40).row();
+        offsetTable.add(btnPowerUp).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
+        offsetTable.add(lblPower).colspan(2).size(80, 40).padBottom(20f).row();
+        offsetTable.add(btnSpeedUp).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
+        offsetTable.add(lblSpeedUp).colspan(2).size(80, 40).padBottom(20f).row();
+        offsetTable.add(btnSave).colspan(2).size(170, 40);
+        offsetTable.add(btnContinue).colspan(2).size(170, 40).row();
         table.add().padRight(200f);
         table.add(offsetTable);
 
@@ -487,7 +532,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.RED,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.spider(1),
+                                EntityConstructor.stoneLion(1),
                                 EntityConstructor.lethalSpider(1),
                                 EntityConstructor.advancedBook(1),
                                 EntityConstructor.yellowLion(1)
@@ -505,10 +550,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.RED,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.advancedBook(1),
+                                EntityConstructor.lethalSpider(1),
                                 EntityConstructor.fancyBook(1),
                                 EntityConstructor.fancyBook(1),
-                                EntityConstructor.redGolem(1)
+                                EntityConstructor.lethalSpider(1)
                         }));
             case 28 :
                 return new Team("Enemy",
@@ -517,7 +562,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                                 EntityConstructor.book(1),
                                 EntityConstructor.golemMK2(1),
                                 EntityConstructor.immoralSpider(1),
-                                EntityConstructor.book(1)
+                                EntityConstructor.advancedBook(1)
                         }));
             case 29 :
                 return new Team("Enemy",
@@ -783,10 +828,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             return Song.STAGE_THEME;
         //level 11-19
         else if (level >= 11 && level <= 19)
-            return Song.STAGE_THEME_2;
+            return Song.STAGE_THEME_4;
         //level 21-29
         else if (level >= 21 && level <= 29)
-            return Song.STAGE_THEME_4;
+            return Song.STAGE_THEME_2;
         //level 31-39
         else if (level >= 31 && level <= 39)
             return Song.STAGE_THEME_3;
@@ -852,7 +897,37 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         Animation.PlayMode.NORMAL));
                 entity.add(new EventComponent(.03f, true, EventCompUtil.fadeOut(5)));
                 return entity;
+            case 2:
+                entity.add(new PositionComponent(position, 200, 200, 0));
+                entity.add(new LifetimeComponent(0, .16f));
+                entity.add(new AnimationComponent(.03f,
+                        new TextureRegion[]{atlas.findRegion("openCircle"),
+                                atlas.findRegion("openCircle2"),
+                                atlas.findRegion("openCircle3"),
+                                atlas.findRegion("openCircle4"),
+                                atlas.findRegion("openCircle5")},
+                        Color.RED,
+                        Animation.PlayMode.NORMAL));
+                entity.add(new EventComponent(.02f, true, EventCompUtil.fadeOut(9)));
+                return entity;
+            case 3:
+                entity.add(new PositionComponent(position, 200, 200, 0));
+                entity.add(new LifetimeComponent(0, .18f));
+                entity.add(new AnimationComponent(.04f,
+                        new TextureRegion[]{atlas.findRegion("openCircle"),
+                                atlas.findRegion("openCircle2"),
+                                atlas.findRegion("openCircle3"),
+                                atlas.findRegion("openCircle4"),
+                                atlas.findRegion("openCircle5")},
+                        Color.CYAN,
+                        Animation.PlayMode.NORMAL));
+                entity.add(new EventComponent(.02f, true, EventCompUtil.fadeOut(9)));
+                return entity;
         }
         return null;
+    }
+
+    public static void clearSurvivalLerpColorManager() {
+        survivalLerpColorManager = null;
     }
 }

@@ -17,9 +17,10 @@ import com.mygdx.game.GridWars;
 import com.mygdx.game.components.EventComponent;
 import com.mygdx.game.components.PositionComponent;
 import com.mygdx.game.components.SpriteComponent;
+import com.mygdx.game.music.Song;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.LerpColor;
-import com.mygdx.game.music.Song;
+import com.mygdx.game.ui.LerpColorManager;
 
 import static com.mygdx.game.ComponentMappers.sm;
 import static com.mygdx.game.ComponentMappers.stm;
@@ -34,6 +35,8 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
     private int level;
     private int healthPowerUp;
     private int spPowerUp;
+    private int powerPowerUp;
+    private int speedPowerUp;
     //score keeping
     private int points;
     private int numberOfTurns;
@@ -44,25 +47,36 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
     //whether this is loaded from a save file
     private boolean loadedFromSave;
 
-    public SurvivalBattleScreen(Team team, Team enemyTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, int points, int turnCount, boolean loadedFromSave, Song song, GridWars game) {
-        super(new Array<Team>(new Team[]{team, enemyTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty)}, song, game);
+    public SurvivalBattleScreen(Team team, Team enemyTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum,
+                                int attackPowerUpAmount, int speedPowerUpAmount, int points, int turnCount, boolean loadedFromSave,
+                                LerpColorManager survivalLerpColorManager, Song song, GridWars game) {
+        super(new Array<Team>(new Team[]{team, enemyTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty)}, survivalLerpColorManager, song, game);
         healthPowerUp = healthPowerUpNum;
         spPowerUp = spPowerUpNum;
+        powerPowerUp = attackPowerUpAmount;
+        speedPowerUp = speedPowerUpAmount;
         level = floorLevel;
         this.points = points;
         numberOfTurns = turnCount;
         this.loadedFromSave = loadedFromSave;
+        lerpColorManager = survivalLerpColorManager;
     }
 
-    public SurvivalBattleScreen(Team team, Team enemyTeam, Team objectTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, int points, int turnCount, boolean loadedFromSave, Song song, GridWars game) {
-        super(new Array<Team>(new Team[]{team, enemyTeam, objectTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty), new Vector2(2, 0)}, song, game);
+    public SurvivalBattleScreen(Team team, Team enemyTeam, Team objectTeam, int difficulty, int floorLevel, int healthPowerUpNum,
+                                int spPowerUpNum, int attackPowerUpAmount, int speedPowerUpAmount, int points, int turnCount,
+                                boolean loadedFromSave, LerpColorManager survivalLerpColorManager, Song song, GridWars game) {
+        super(new Array<Team>(new Team[]{team, enemyTeam, objectTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty), new Vector2(2, 0)},
+                survivalLerpColorManager, song, game);
         healthPowerUp = healthPowerUpNum;
         spPowerUp = spPowerUpNum;
+        powerPowerUp = attackPowerUpAmount;
+        speedPowerUp = speedPowerUpAmount;
         level = floorLevel;
         computer.setIndexOfFirstAttackingTeams(2);
         this.points = points;
         numberOfTurns = turnCount;
         this.loadedFromSave = loadedFromSave;
+        lerpColorManager = survivalLerpColorManager;
     }
 
     @Override
@@ -161,19 +175,25 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
         if (rules.checkWinConditions() == teams.first()) { //victory
             if (level < 50)
                 //is not 50th floor:
-                GRID_WARS.setScreen(new SurvivalTowerScreen(teams.first(), ++level, healthPowerUp++, spPowerUp++, points, numberOfTurns, loadedFromSave, GRID_WARS));
+                GRID_WARS.setScreen(new SurvivalTowerScreen(teams.first(), ++level, healthPowerUp, spPowerUp, powerPowerUp, speedPowerUp, points, numberOfTurns, loadedFromSave, GRID_WARS));
             else
                 GRID_WARS.setScreen(new SurvivalResultsScreen(51, points, numberOfTurns,  loadedFromSave, teams.first(), GRID_WARS));
         } else { //loss
-            GRID_WARS.setScreen(new GameOverScreen(level, points, numberOfTurns,  loadedFromSave, teams.get(0), GRID_WARS));
+            SurvivalTowerScreen.clearSurvivalLerpColorManager();
+            GRID_WARS.setScreen(new GameOverScreen(level, points, numberOfTurns, loadedFromSave, teams.get(0), GRID_WARS));
         }
+    }
+
+    @Override
+    protected void disposeLerpColorManager() {
+        lerpColorManager.clear();
     }
 
     public int calculatePoints() {
         int points = 0;
         points += MathUtils.clamp((30 - rules.getTurnCount()) * 10, 0, 3000);
         for (Entity e : teams.first().getEntities()) {
-            points += stm.get(e).hp * 20;
+            points += MathUtils.clamp(stm.get(e).hp, 0, 999) * 20;
         }
         return points;
     }

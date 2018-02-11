@@ -827,7 +827,7 @@ public class EntityConstructor {
         nm.get(entity).altColor = altColor;
         
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(6, 6, 1, 0, 2));
+        entity.add(new StatComponent(3, 6, 1, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;

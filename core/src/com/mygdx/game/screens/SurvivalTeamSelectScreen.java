@@ -372,7 +372,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
             //color team icon
             for (int i = 0; i < characterPortraits.size; i++)
                 characterPortraits.get(i).setDrawable(new TextureRegionDrawable(atlas.findRegion("cube")));
-            GRID_WARS.setScreen(new SurvivalTowerScreen(team, 1, 5, 5, 0, 0, false, GRID_WARS));
+            GRID_WARS.setScreen(new SurvivalTowerScreen(team, 1, 5, 5, 3, 3, 0, 0, false, GRID_WARS));
         }
     }
 
@@ -450,7 +450,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
         else
             altNumber = 0;
 
-        //bonus survival character (only if game has been beaten) //TODO add in if game is beaten
+        //bonus survival character (only if game has been beaten)
         if (checkSecretCombo() && team.getEntities().size <= 3) {
             if (Gdx.input.isKeyPressed(Input.Keys.BACKSLASH))
                 team.getEntities().add(EntityConstructor.dragonPneumaPlayer(0, 1));

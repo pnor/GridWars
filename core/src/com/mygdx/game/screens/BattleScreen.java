@@ -179,12 +179,22 @@ public class BattleScreen implements Screen {
     protected Table gameSpeedTable;
     protected Label gameSpeedLbl;
 
-    public BattleScreen(Array<Team> selectedTeams, int boardIndex, Vector2[] AIControlled, Song song, GridWars game) {
+    /**
+     * Creates a Battle Screen
+     * @param selectedTeams teams selected from the team select screen
+     * @param boardIndex what board is being played on
+     * @param AIControlled which teams are being controlled by the AI (x: team number, y: difficulty)
+     * @param colorManager Manger for {@link LerpColor}s in the screen. Typically, this parameter should be {@code new LerpColorManager()} unless
+     *                     its survival mode which recycles it.
+     * @param song Song that will play
+     * @param game Instance of the game
+     */
+    public BattleScreen(Array<Team> selectedTeams, int boardIndex, Vector2[] AIControlled, LerpColorManager colorManager, Song song, GridWars game) {
         GRID_WARS = game;
         teams = selectedTeams;
 
         // initialize board and rule constructor first with lerpColorManager
-        setUpLerpColorManager();
+        setUpLerpColorManager(colorManager);
         BoardAndRuleConstructor.initialize(lerpColorManager);
 
         if (BoardComponent.boards == null)
@@ -1667,15 +1677,15 @@ public class BattleScreen implements Screen {
     /**
      * Creates a {@link LerpColorManager} for the screen, and initializes the {@link StatusEffectComponent} with it.
      */
-    private void setUpLerpColorManager() {
-        lerpColorManager = new LerpColorManager();
+    protected void setUpLerpColorManager(LerpColorManager colorManager) {
+        lerpColorManager = colorManager;
         StatusEffectComponent.setLerpColorManager(lerpColorManager);
     }
 
     /**
      * Sets the {@link LerpColorManager} for the screen to null, and clears the {@link StatusEffectComponent} and {@link BoardAndRuleConstructor}.
      */
-    private void disposeLerpColorManager() {
+    protected void disposeLerpColorManager() {
         lerpColorManager = null;
         StatusEffectComponent.setLerpColorManager(null);
         BoardAndRuleConstructor.clear();

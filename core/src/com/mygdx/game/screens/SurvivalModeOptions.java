@@ -54,6 +54,8 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
                                 GRID_WARS.saveDataManager.getFloor(),
                                 GRID_WARS.saveDataManager.getHealthPowerUps(),
                                 GRID_WARS.saveDataManager.getSPPowerUps(),
+                                GRID_WARS.saveDataManager.getAttackPowerUps(),
+                                GRID_WARS.saveDataManager.getSpeedPowerUps(),
                                 GRID_WARS.saveDataManager.getPoints(),
                                 GRID_WARS.saveDataManager.getTurns(),
                                 true,

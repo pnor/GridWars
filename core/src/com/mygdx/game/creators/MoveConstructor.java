@@ -2294,7 +2294,7 @@ public class MoveConstructor {
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
                     enemy.hp -= 3;
                 }));
-        move.setAttackDescription(nm.get(user).name + " uses mysterious powers to submerge the target in water. This" +
+        move.setAttackDescription("Uses mysterious powers to submerge the target in water. This" +
                 " always inflicts 3 points of damage regardless of the target's stats or condition.");
         return move;
     }
@@ -2544,7 +2544,7 @@ public class MoveConstructor {
             }
         }, .01f, 7);
 
-        Move move = new Move("Drench", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Drench", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-3, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -2700,13 +2700,13 @@ public class MoveConstructor {
             }
         }, .01f, 7);
 
-        Move move = new Move("Electrocute", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+        Move move = new Move("Electrocute", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-4, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
                         if (stm.has(enemy))
-                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) / 2 - stm.get(enemy).getModDef(enemy), 0, 999);
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
 
                         if (status.has(enemy))
                             status.get(enemy).addStatusEffect(paralyze(3), enemy);
@@ -2716,7 +2716,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{spinning, ripple, shock, largeSparkle})), new MoveInfo(false, .5f, paralyze(3).createStatusEffectInfo()));
-        move.setAttackDescription("Uses arcane powers to induce a current in the opponent. Deals 1/2x damage and inflicts the" +
+        move.setAttackDescription("Uses arcane powers to induce a current in the opponent. Deals regular damage and inflicts the" +
         " user with paralysis.");
         return move;
     }
@@ -5052,7 +5052,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        Move move = new Move("Restore", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Restore", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5188,7 +5188,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        Move move = new Move("Regen", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Regen", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5388,16 +5388,15 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        Move move = new Move("Boost", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Boost", user, 5, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
                         if (status.has(enemy)) {
-                            status.get(enemy).addStatusEffect(regeneration(2), enemy);
-                            status.get(enemy).addStatusEffect(speedUp(2), enemy);
-                            status.get(enemy).addStatusEffect(attackUp(2), enemy);
-                            status.get(enemy).addStatusEffect(guardUp(2), enemy);
+                            status.get(enemy).addStatusEffect(speedUp(3), enemy);
+                            status.get(enemy).addStatusEffect(attackUp(3), enemy);
+                            status.get(enemy).addStatusEffect(guardUp(3), enemy);
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
@@ -5412,7 +5411,7 @@ public class MoveConstructor {
                     }
                 })
         );
-        move.setAttackDescription("Invigorates the energy of the target. Gives the target Regeneration and a boost to Attack, Defense, and Speed for 2 turns.");
+        move.setAttackDescription("Invigorates the energy of the target. Gives the target a boost to Attack, Defense, and Speed for 3 turns.");
         return move;
     }
 
@@ -9183,17 +9182,6 @@ public class MoveConstructor {
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
                             //Uses it less when attack is higher
                             userEntity.attack++;
-                            /*
-                            if (userEntity.attack < 10) {
-                                if (MathUtils.randomBoolean())
-                                    userEntity.arbitraryValue += 100;
-                                else
-                                    userEntity.arbitraryValue += 15;
-                            } else {
-                                userEntity.arbitraryValue += 15;
-                            }
-                            */
-
                         }));
         move.setAttackDescription("Gathers water molecules in order to increase the user's size. Increases the user's attack stat by 1. ");
         return move;
@@ -12745,7 +12733,7 @@ public class MoveConstructor {
                         BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
 
                 Entity boom = new Entity();
-                boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-60 * scale, 60 * scale), MathUtils.random(-60 * scale, 60 * scale))
+                boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-30 * scale, 30 * scale), MathUtils.random(-30 * scale, 30 * scale))
                         , entitySize.x, entitySize.y, 0));
                 boom.add(new LifetimeComponent(0, .11f));
                 boom.add(new AnimationComponent(.02f,
@@ -12778,7 +12766,7 @@ public class MoveConstructor {
                         BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
 
                 Entity boom = new Entity();
-                boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-140 * scale, 140 * scale), MathUtils.random(-140 * scale, 140 * scale))
+                boom.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-60 * scale, 60 * scale), MathUtils.random(-60 * scale, 60 * scale))
                         , entitySize.x, entitySize.y, 0));
                 boom.add(new LifetimeComponent(0, .11f));
                 boom.add(new AnimationComponent(.02f,

@@ -97,7 +97,7 @@ public class SaveDataManager {
     public void prepopulate() {
         Team team = new Team("Shouldn't be loadable", Color.BLACK);
         team.addEntity(EntityConstructor.canman(0));
-        savedData = new SaveData(team, 0, 0, 0, 0, 1);
+        savedData = new SaveData(team, 0, 0, 0, 0, 0, 0, 1);
         savedData.setLoadable(false);
         sameAsFile = false;
     }
@@ -108,6 +108,14 @@ public class SaveDataManager {
 
     public int getSPPowerUps() {
         return savedData.getSPPower();
+    }
+
+    public int getAttackPowerUps() {
+        return savedData.getAttackPower();
+    }
+
+    public int getSpeedPowerUps() {
+        return savedData.getSpeedPower();
     }
 
     public int getPoints() {

@@ -41,6 +41,7 @@ public class GameUtil {
         colors.put("goldenrod", Color.GOLDENROD);
         colors.put("green", Color.GREEN);
         colors.put("gray", Color.GRAY);
+        colors.put("groovy", new LerpColor(new Color(.4f, .2f, .1f, 1), Color.PURPLE, .5f, Interpolation.bounceOut));
         colors.put("ghost", new Color(.6f, .6f, .6f, .65f));
 
         colors.put("hold my coffee", new LerpColor(new Color(.4f, .29f, .227f, 1f), Color.ORANGE, 1f));
@@ -60,6 +61,7 @@ public class GameUtil {
         colors.put("olive", Color.OLIVE);
 
         colors.put("pink", Color.PINK);
+        colors.put("psi", new LerpColor(Color.PURPLE, new Color(0, 1, 1, 0), 1f, Interpolation.bounceIn));
         colors.put("purple", Color.PURPLE);
 
         colors.put("random", new LerpColor(new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), MathUtils.random(.3f, 3)));
@@ -80,6 +82,7 @@ public class GameUtil {
         colors.put("violet", Color.VIOLET);
 
         colors.put("white", Color.WHITE);
+        colors.put("wild", new LerpColor(Color.GOLDENROD, Color.PURPLE, .4f, Interpolation.bounceIn));
 
         colors.put("yellow", Color.YELLOW);
 
