@@ -57,13 +57,17 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
     /** Time before doing anything on the screen */
     private final float BUFFER_TIME = 1f;
 
-    public SurvivalResultsScreen(int level, int score, int turns, Team team, GridWars gridWars) {
+    //whether this was loaded form save file
+    private boolean loadedFromSave;
+
+    public SurvivalResultsScreen(int level, int score, int turns, boolean loadedFromSave, Team team, GridWars gridWars) {
         super(gridWars);
         playerScore = new HighScore(team.getTeamName(), score, turns, level);
         playerScore.setTeamSprites(team);
         this.team = team;
         this.points = score;
         this.turnCount = turns;
+        this.loadedFromSave  = loadedFromSave;
     }
 
     @Override
@@ -84,8 +88,10 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
         GRID_WARS.highScoreManager.saveHighScores();
 
         //make save file unloadable
-        GRID_WARS.saveDataManager.makeFileUnloadable();
-        GRID_WARS.saveDataManager.saveSavedData();
+        if (loadedFromSave) {
+            GRID_WARS.saveDataManager.makeFileUnloadable();
+            GRID_WARS.saveDataManager.saveSavedData();
+        }
 
         //create Labels
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Rubik-Regular.ttf"));

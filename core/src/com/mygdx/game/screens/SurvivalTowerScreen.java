@@ -53,9 +53,11 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
     //score keeping
     private int points;
     private int numberOfTurns;
+    //Whether this is a loaded save
+    private boolean loadedFromSave;
 
     public SurvivalTowerScreen(Team playerTeam, int towerLevel, int healingPowerUpAmount, int spUpPowerUpAmount,
-                               int points, int turnCount, GridWars game) {
+                               int points, int turnCount, boolean loadedFromSave, GridWars game) {
         super(game);
         team = playerTeam;
         level = towerLevel;
@@ -63,6 +65,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         spPowerUp = spUpPowerUpAmount;
         this.points = points;
         numberOfTurns = turnCount;
+        this.loadedFromSave = loadedFromSave;
     }
 
     @Override
@@ -150,10 +153,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         else if (level >= 11 && level <= 20)
             towerColor = Color.BLUE;
         //level 21-30
-        else if (level >= 21 && level <= 29)
+        else if (level >= 21 && level <= 30)
             towerColor = Color.YELLOW;
         //level 31-40
-        else if (level >= 31 && level <= 39)
+        else if (level >= 31 && level <= 40)
             towerColor = Color.PURPLE;
         //level 41-49
         else if (level >= 41 && level <= 49)
@@ -197,11 +200,11 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         Team attackingObjectsTeam = getFloorLevelAttackingObjects();
                         if (attackingObjectsTeam == null) // floor has no attacking objects
                             GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), getComputerDifficulty(),
-                                    level, healingPowerUp, spPowerUp, points, numberOfTurns, song, GRID_WARS));
+                                    level, healingPowerUp, spPowerUp, points, numberOfTurns, loadedFromSave, song, GRID_WARS));
                         else
                             GRID_WARS.setScreen(new SurvivalBattleScreen(team, getFloorLevelTeam(), attackingObjectsTeam,
-                                    getComputerDifficulty(), level, healingPowerUp, spPowerUp,  points, numberOfTurns, song,
-                                    GRID_WARS));
+                                    getComputerDifficulty(), level, healingPowerUp, spPowerUp,  points, numberOfTurns, loadedFromSave,
+                                    song, GRID_WARS));
                     } else if (actor == btnSave) {
                         GRID_WARS.saveDataManager.setSavedData(new SaveData(team, healingPowerUp, spPowerUp, points, numberOfTurns, level));
                         GRID_WARS.saveDataManager.saveSavedData();
@@ -264,7 +267,6 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 stm.get(e).sp = 0;
             }
         }
-
     }
 
     private Team getFloorLevelTeam() {
@@ -630,7 +632,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.telegolem(1),
                                 EntityConstructor.eliteSpider(1),
-                                EntityConstructor.eliteSpider(1),
+                                EntityConstructor.lethalSpider(1),
                                 EntityConstructor.eliteSpider(1)
                         }));
             case 42 :
@@ -789,14 +791,17 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         else if (level >= 31 && level <= 39)
             return Song.STAGE_THEME_3;
         //level 41-49
-        else if (level >= 41 && level <= 49)
+        else if ((level >= 41 && level <= 42) || (level >= 44 && level <= 46) || (level >= 47 && level <= 49))
             return Song.STAGE_THEME_5;
+        //alternate bosses
+        else if (level == 40 || level == 43 || level == 47)
+            return Song.BOSS_THEME_2;
         //final boss
         else if (level == 50)
             return Song.FINAL_BOSS_THEME;
         //boss
         else
-            return Song.STAGE_THEME_6;
+            return Song.BOSS_THEME;
     }
 
     private int getComputerDifficulty() {

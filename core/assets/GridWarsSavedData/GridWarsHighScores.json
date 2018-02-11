@@ -9,34 +9,34 @@
 }
 {
 	class: com.mygdx.game.highscores.HighScore
+	teamName: Grid Warriors
+	score: 13730
+	turns: 181
+	lastFloor: 29
+	teamSprites: [ 9, 2, 1, 10 ]
+}
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Grid Warriors
+	score: 13120
+	turns: 160
+	lastFloor: 27
+	teamSprites: [ 9, 2, 1, 10 ]
+}
+{
+	class: com.mygdx.game.highscores.HighScore
+	teamName: Grid Warriors
+	score: 12470
+	turns: 178
+	lastFloor: 26
+	teamSprites: [ 9, 2, 1, 10 ]
+}
+{
+	class: com.mygdx.game.highscores.HighScore
 	teamName: Good Group
 	score: 10000
 	turns: 30
 	lastFloor: 15
 	teamSprites: [ -2, -2, -2, -2 ]
-}
-{
-	class: com.mygdx.game.highscores.HighScore
-	teamName: Standard Squad
-	score: 5000
-	turns: 20
-	lastFloor: 10
-	teamSprites: [ -2, -2, -2, -2 ]
-}
-{
-	class: com.mygdx.game.highscores.HighScore
-	teamName: Grid Warriors
-	score: 320
-	turns: 12
-	lastFloor: 51
-	teamSprites: [ 8, 9, 7, 14 ]
-}
-{
-	class: com.mygdx.game.highscores.HighScore
-	teamName: Grid Warriors
-	score: 320
-	turns: 4
-	lastFloor: 45
-	teamSprites: [ 9, 0, 2, 3 ]
 }
 ]

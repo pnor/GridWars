@@ -357,7 +357,7 @@ public class BoardAndRuleConstructor {
             boardManager.add(e, new BoardPosition(0, col));
             col++;
         }
-        col = 3;
+        col = 4;
         for (Entity e : teams.get(1).getEntities()) {
             boardManager.add(e, new BoardPosition(maxSize, col));
             col--;
@@ -376,7 +376,7 @@ public class BoardAndRuleConstructor {
                 }));
 
         //place entities
-        int col = 1;
+        int col = 0;
         for (Entity e : teams.get(0).getEntities()) {
             boardManager.add(e, new BoardPosition(0, col));
             col++;

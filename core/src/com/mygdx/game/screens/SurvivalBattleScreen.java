@@ -38,16 +38,23 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
     private int points;
     private int numberOfTurns;
 
-    public SurvivalBattleScreen(Team team, Team enemyTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, int points, int turnCount, Song song, GridWars game) {
+    //game speed last set to
+    private static byte gameSpeedSurvival = (byte) 1;
+
+    //whether this is loaded from a save file
+    private boolean loadedFromSave;
+
+    public SurvivalBattleScreen(Team team, Team enemyTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, int points, int turnCount, boolean loadedFromSave, Song song, GridWars game) {
         super(new Array<Team>(new Team[]{team, enemyTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty)}, song, game);
         healthPowerUp = healthPowerUpNum;
         spPowerUp = spPowerUpNum;
         level = floorLevel;
         this.points = points;
         numberOfTurns = turnCount;
+        this.loadedFromSave = loadedFromSave;
     }
 
-    public SurvivalBattleScreen(Team team, Team enemyTeam, Team objectTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, int points, int turnCount, Song song, GridWars game) {
+    public SurvivalBattleScreen(Team team, Team enemyTeam, Team objectTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum, int points, int turnCount, boolean loadedFromSave, Song song, GridWars game) {
         super(new Array<Team>(new Team[]{team, enemyTeam, objectTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty), new Vector2(2, 0)}, song, game);
         healthPowerUp = healthPowerUpNum;
         spPowerUp = spPowerUpNum;
@@ -55,6 +62,7 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
         computer.setIndexOfFirstAttackingTeams(2);
         this.points = points;
         numberOfTurns = turnCount;
+        this.loadedFromSave = loadedFromSave;
     }
 
     @Override
@@ -67,6 +75,8 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
         teamTable.setBackground(new NinePatchDrawable(new NinePatch(atlas.findRegion("TableBackDark"), 33, 33, 28, 28)));
         gameSpeedTable.setBackground(new NinePatchDrawable(new NinePatch(atlas.findRegion("TableBackDark"), 33, 33, 28, 28)));
         teamTable.add(new Label("Floor " + level, skin)).padLeft(25);
+        GRID_WARS.setGameSpeed(gameSpeedSurvival);
+        setGameSpeedLblText();
     }
 
     @Override
@@ -144,17 +154,18 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
 
     @Override
     public void goToNextScreen() {
+        gameSpeedSurvival = GRID_WARS.getGameSpeed();
         GRID_WARS.setGameSpeed((byte) 1);
         numberOfTurns += rules.getTurnCount();
         points += calculatePoints();
         if (rules.checkWinConditions() == teams.first()) { //victory
             if (level < 50)
                 //is not 50th floor:
-                GRID_WARS.setScreen(new SurvivalTowerScreen(teams.first(), ++level, healthPowerUp++, spPowerUp++, points, numberOfTurns, GRID_WARS));
+                GRID_WARS.setScreen(new SurvivalTowerScreen(teams.first(), ++level, healthPowerUp++, spPowerUp++, points, numberOfTurns, loadedFromSave, GRID_WARS));
             else
-                GRID_WARS.setScreen(new SurvivalResultsScreen(51, points, numberOfTurns, teams.first(), GRID_WARS));
+                GRID_WARS.setScreen(new SurvivalResultsScreen(51, points, numberOfTurns,  loadedFromSave, teams.first(), GRID_WARS));
         } else { //loss
-            GRID_WARS.setScreen(new GameOverScreen(level, points, numberOfTurns, teams.get(0), GRID_WARS));
+            GRID_WARS.setScreen(new GameOverScreen(level, points, numberOfTurns,  loadedFromSave, teams.get(0), GRID_WARS));
         }
     }
 

@@ -35,13 +35,16 @@ public class GameOverScreen extends MenuScreen implements Screen {
     private float time = 0f;
     private int progress = 0;
 
-    //which type of game over is it?
     private boolean playerGotNewHighScore;
 
-    public GameOverScreen(int level, int score, int turns, Team team, GridWars gridWars) {
+    //whether this was loaded from a save file
+    private boolean loadedFromSave;
+
+    public GameOverScreen(int level, int score, int turns, boolean loadedFromSave, Team team, GridWars gridWars) {
         super(gridWars);
         playerScore = new HighScore(team.getTeamName(), score, turns, level);
         playerScore.setTeamSprites(team);
+        this.loadedFromSave = loadedFromSave;
     }
 
     @Override
@@ -104,8 +107,10 @@ public class GameOverScreen extends MenuScreen implements Screen {
         btnReturn.addListener(listener);
 
         //make save file unloadable
-        GRID_WARS.saveDataManager.makeFileUnloadable();
-        GRID_WARS.saveDataManager.saveSavedData();
+        if (loadedFromSave) {
+            GRID_WARS.saveDataManager.makeFileUnloadable();
+            GRID_WARS.saveDataManager.saveSavedData();
+        }
 
         //set music
         GRID_WARS.musicManager.setSong(Song.GAME_OVER_THEME);

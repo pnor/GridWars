@@ -4736,7 +4736,7 @@ public class MoveConstructor {
             }
         }, .2f, 2);
 
-        Move move = new Move("Fresh Breath", nm.get(user).name + " breathed refreshing air!", user, 1,
+        Move move = new Move("Fresh Breath", nm.get(user).name + " breathed refreshing air!", user, 2,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)
@@ -4913,7 +4913,7 @@ public class MoveConstructor {
             }
         }, .2f, 2);
 
-        Move move = new Move("Spa Breath", nm.get(user).name + " breathed a soothing air!", user, 2,
+        Move move = new Move("Spa Breath", nm.get(user).name + " breathed a soothing air!", user, 3,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)
@@ -9183,6 +9183,7 @@ public class MoveConstructor {
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
                             //Uses it less when attack is higher
                             userEntity.attack++;
+                            /*
                             if (userEntity.attack < 10) {
                                 if (MathUtils.randomBoolean())
                                     userEntity.arbitraryValue += 100;
@@ -9191,6 +9192,7 @@ public class MoveConstructor {
                             } else {
                                 userEntity.arbitraryValue += 15;
                             }
+                            */
 
                         }));
         move.setAttackDescription("Gathers water molecules in order to increase the user's size. Increases the user's attack stat by 1. ");
@@ -14315,18 +14317,18 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
-        Move move = new Move("Super Guard", nm.get(user).name + " assumed a defensive stance.", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Super Guard", nm.get(user).name + " assumed a defensive stance.", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
                         if (status.has(e)) {
                             status.get(e).addStatusEffect(guardUp(1), e);
-                            status.get(e).addStatusEffect(regeneration(3), e);
+                            status.get(e).addStatusEffect(regeneration(2), e);
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, moveRight, moveLeft, moveRight.copy(), moveLeft.copy()})),
-                new MoveInfo(false, 0, guardUp(1).createStatusEffectInfo(), regeneration(3).createStatusEffectInfo()));
+                new MoveInfo(false, 0, guardUp(1).createStatusEffectInfo(), regeneration(2).createStatusEffectInfo()));
         move.setAttackDescription(nm.get(user).name + " assumes a more defensive stance. Increases the user's defense for 1 turn and causes" +
                 " the user to regenerate health for 3 turns.");
         return move;
