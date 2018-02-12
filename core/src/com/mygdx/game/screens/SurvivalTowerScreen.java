@@ -71,6 +71,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         this.points = points;
         numberOfTurns = turnCount;
         this.loadedFromSave = loadedFromSave;
+        // Makes sure Survival mode always has a lerp color manager, even outside of battle screens
         if (survivalLerpColorManager == null) {
             survivalLerpColorManager = new LerpColorManager();
         }
@@ -214,7 +215,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                             createParticleEffect(2);
                             for (Entity e : team.getEntities()) {
                                 if (status.has(e))
-                                    status.get(e).addStatusEffect(StatusEffectConstructor.attackUp2(3), e);
+                                    status.get(e).addStatusEffect(StatusEffectConstructor.attackUp(3), e);
                             }
                         }
                     } else if (actor == btnSpeedUp) {
@@ -286,8 +287,8 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         offsetTable.add(btnPowerUp).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
         offsetTable.add(lblPower).colspan(2).size(80, 40).padBottom(20f).row();
         offsetTable.add(btnSpeedUp).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
-        offsetTable.add(lblSpeedUp).colspan(2).size(80, 40).padBottom(20f).row();
-        offsetTable.add(btnSave).colspan(2).size(170, 40);
+        offsetTable.add(lblSpeedUp).colspan(2).size(80, 40).padBottom(40f).row();
+        offsetTable.add(btnSave).colspan(2).size(170, 40).padRight(20);
         offsetTable.add(btnContinue).colspan(2).size(170, 40).row();
         table.add().padRight(200f);
         table.add(offsetTable);
@@ -730,15 +731,15 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         Color.RED,
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.electroPnuemaAlt(1),
-                                EntityConstructor.eliteSpider(1),
-                                EntityConstructor.eliteSpider(1)
+                                EntityConstructor.blazePneumaAlt(1),
+                                EntityConstructor.aquaPneumaAlt(1)
                         }));
             case 48 :
                 return new Team("Enemy",
                         Color.RED,
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.chromeMan(1),
-                                EntityConstructor.archgargoyle(1),
+                                EntityConstructor.gargoyle(1),
                                 EntityConstructor.archgargoyle(1),
                                 EntityConstructor.chromeMan(1)
                         }));
@@ -746,7 +747,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.RED,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.blueLion(1),
+                                EntityConstructor.medicanMan(1),
                                 EntityConstructor.eliteBook(1),
                                 EntityConstructor.blueLion(1),
                                 EntityConstructor.archgargoyle(1)
@@ -769,47 +770,47 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         switch (level) {
             //region levels with towers
             case 17 :
-                return new Team("Enemy",
+                return new Team("Neutral",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.weakenTower(1),
                                 EntityConstructor.weakenTower(1)
                         }));
             case 22 :
-                return new Team("Enemy",
+                return new Team("Neutral",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.weakenTower(1),
                                 EntityConstructor.weakenTower(1)
                         }));
             case 23 :
-                return new Team("Enemy",
+                return new Team("Neutral",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.powerTower(1)
                         }));
             case 35 :
-                return new Team("Enemy",
+                return new Team("Neutral",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.weakenTower(1)
                         }));
             case 43 :
-                return new Team("Enemy",
+                return new Team("Neutral",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.powerTower(1),
                                 EntityConstructor.weakenTower(1)
                         }));
             case 46 :
-                return new Team("Enemy",
+                return new Team("Neutral",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.guardTower(1),
                                 EntityConstructor.powerTower(1)
                         }));
             case 47 :
-                return new Team("Enemy",
+                return new Team("Neutral",
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.guardTower(1),
@@ -836,7 +837,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         else if (level >= 31 && level <= 39)
             return Song.STAGE_THEME_3;
         //level 41-49
-        else if ((level >= 41 && level <= 42) || (level >= 44 && level <= 46) || (level >= 47 && level <= 49))
+        else if ((level >= 41 && level <= 42) || (level >= 44 && level <= 46) || (level >= 48 && level <= 49))
             return Song.STAGE_THEME_5;
         //alternate bosses
         else if (level == 40 || level == 43 || level == 47)
@@ -850,9 +851,14 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
     }
 
     private int getComputerDifficulty() {
-        if (level > 0 && level <= 12)
+        //bosses
+        if (level == 10 || level == 20 || level == 30 || level == 50 || level == 40 || level == 43 || level == 47) {
+            return 3;
+        }
+        //normal stages
+        if (level > 0 && level <= 17)
             return 1;
-        else if (level > 12 && level <= 28)
+        else if (level > 17 && level <= 29)
             return 2;
         else
             return 3;
@@ -899,8 +905,8 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return entity;
             case 2:
                 entity.add(new PositionComponent(position, 200, 200, 0));
-                entity.add(new LifetimeComponent(0, .16f));
-                entity.add(new AnimationComponent(.03f,
+                entity.add(new LifetimeComponent(0, .18f));
+                entity.add(new AnimationComponent(.04f,
                         new TextureRegion[]{atlas.findRegion("openCircle"),
                                 atlas.findRegion("openCircle2"),
                                 atlas.findRegion("openCircle3"),

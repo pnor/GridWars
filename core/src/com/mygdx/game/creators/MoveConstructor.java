@@ -2555,7 +2555,7 @@ public class MoveConstructor {
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
-                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-3, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{bubble, sparkle, ripple, largeSparkle})), new MoveInfo(false, 1));
         move.setAttackDescription("Summons a rush of water to drench the opponent. Deals regular damage.");
         return move;
@@ -2714,7 +2714,7 @@ public class MoveConstructor {
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
-                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-4, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{spinning, ripple, shock, largeSparkle})), new MoveInfo(false, .5f, paralyze(3).createStatusEffectInfo()));
         move.setAttackDescription("Uses arcane powers to induce a current in the opponent. Deals regular damage and inflicts the" +
         " user with paralysis.");
@@ -5052,7 +5052,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        Move move = new Move("Restore", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Restore", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5188,7 +5188,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        Move move = new Move("Regen", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Regen", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5626,7 +5626,8 @@ public class MoveConstructor {
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})), new MoveInfo(false, 0, (enemy, userEntity) -> userEntity.arbitraryValue += 50));
+                new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})),
+                new MoveInfo(false, 0, (enemy, userEntity) -> userEntity.arbitraryValue = (MathUtils.randomBoolean())? userEntity.arbitraryValue + 50 : userEntity.arbitraryValue));
         move.setAttackDescription("Uses reflection to copy the target's fighting tactics. Copies the target's first move and replaces the user's last move with it.");
         return move;
     }
@@ -5717,7 +5718,8 @@ public class MoveConstructor {
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})), new MoveInfo(false, 0, (enemy, userEntity) -> userEntity.arbitraryValue += 50));
+                new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})),
+                new MoveInfo(false, 0, (enemy, userEntity) -> userEntity.arbitraryValue = (MathUtils.randomBoolean())? userEntity.arbitraryValue + 50 : userEntity.arbitraryValue));
         move.setAttackDescription("Uses mirrors to copy the target's alternate fighting tactics. Copies the target's last move and replaces the user's last move with it.");
         return move;
     }
@@ -5808,7 +5810,8 @@ public class MoveConstructor {
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{mirror, spinning})), new MoveInfo(false, 0, (enemy, userEntity) -> userEntity.arbitraryValue += 50));
+                new Array<VisualEvent>(new VisualEvent[]{mirror, spinning})), new MoveInfo(false, 0,
+                (enemy, userEntity) -> userEntity.arbitraryValue = (MathUtils.randomBoolean())? userEntity.arbitraryValue + 50 : userEntity.arbitraryValue));
         move.setAttackDescription("Uses reflection, mirrors, and a bit of luck to copy the target's fighting actions. Copies one of the target's moves at random and " +
                 "replaces the user's last move with it.");
         return move;

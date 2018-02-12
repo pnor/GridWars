@@ -126,9 +126,9 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
             teams.add(new Team("", new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f)));
         switch (maxTeams) { //Give default names
             case 2 :
-                teams.get(1).setTeamName("Beta");
+                teams.get(1).setTeamName("Jazzy");
             case 1 :
-                teams.get(0).setTeamName("Alpha");
+                teams.get(0).setTeamName("Groovy");
         }
         //UI stuff
         selectedTeamsIconsTable = new Table();
@@ -511,8 +511,10 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         teamColor.setColor(Color.WHITE);
         //clear teams at current and last slot
         String genericTeamName = "___";
-        if (curTeam == 0) genericTeamName = "Alpha";
-        else if (curTeam == 1) genericTeamName = "Beta";
+        if (curTeam == 0)
+            genericTeamName = "Groovy";
+        else if (curTeam == 1)
+            genericTeamName = "Jazzy";
         teams.get(curTeam).getEntities().clear();
         teams.get(curTeam).setTeamName(genericTeamName);
         teams.get(curTeam).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));

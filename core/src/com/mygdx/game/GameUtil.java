@@ -50,6 +50,7 @@ public class GameUtil {
 
         colors.put("jared", new LerpColor(new Color(.1f, .1f, .1f, .5f), Color.NAVY, 4f));
         colors.put("java", new LerpColor(new Color(.4f, .29f, .227f, 1f), new Color(.51f, .36f, .29f, 1f), 1f));
+        colors.put("jazzy", new LerpColor(new Color(.5f, 1, 1, 1), Color.GREEN, .5f, Interpolation.bounceOut));
 
         colors.put("light gray", Color.LIGHT_GRAY);
         colors.put("lime", Color.LIME);

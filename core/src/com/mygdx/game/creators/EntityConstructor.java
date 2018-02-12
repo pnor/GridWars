@@ -1194,7 +1194,7 @@ public class EntityConstructor {
                 atlas.findRegion("fireSpirit2Alt")
         }, Animation.PlayMode.LOOP, 0.4f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(15, 6, 3, 0, 2));
+        entity.add(new StatComponent(8, 6, 3, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1225,7 +1225,7 @@ public class EntityConstructor {
                 atlas.findRegion("waterSpirit2Alt")
         }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(20, 7, 2, 1, 1));
+        entity.add(new StatComponent(12, 7, 2, 1, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1256,7 +1256,7 @@ public class EntityConstructor {
                 atlas.findRegion("thunderSpirit2Alt")
         }, Animation.PlayMode.LOOP, 0.2f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(20, 10, 2, 1, 2));
+        entity.add(new StatComponent(8, 10, 2, 1, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1398,7 +1398,7 @@ public class EntityConstructor {
                 atlas.findRegion("yellowLion2")
         }, Animation.PlayMode.LOOP, 0.7f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(7, 8, 3, 0, 2));
+        entity.add(new StatComponent(6, 8, 3, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1429,7 +1429,7 @@ public class EntityConstructor {
                 atlas.findRegion("blueLion2")
         }, Animation.PlayMode.LOOP, 0.7f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(12, 4, 4, 0, 2));
+        entity.add(new StatComponent(7, 4, 4, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;

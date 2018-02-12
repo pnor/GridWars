@@ -1,37 +1,30 @@
 {
 teamName: Grid Warriors
 teamColor: {
-	r: 0.43325394
-	g: 0.30113178
-	b: 0.5194565
+	r: 0.5449557
+	g: 0.12251481
+	b: 0.3303566
 	a: 1
 }
 stats: [
 	{
-		hp: 6
-		sp: 3
-	}
-	{
-		hp: 4
-		sp: 3
-	}
-	{
 		hp: 3
-		sp: 1
 	}
 	{
 		hp: 4
-		sp: 3
+	}
+	{
+		hp: 4
+	}
+	{
+		hp: 4
 	}
 ]
-IDValues: [ 2, 11, 1, 11 ]
+IDValues: [ 13, 9, 6, 11 ]
 altColors: [ 0, 0, 0, 0 ]
-HPPower: 5
-SPPower: 5
-powerPower: 2
-speedPower: 2
-points: 610
-totalTurns: 3
-floor: 2
-canLoadThisFile: true
+HPPower: 10
+SPPower: 10
+powerPower: 10
+speedPower: 10
+floor: 46
 }
