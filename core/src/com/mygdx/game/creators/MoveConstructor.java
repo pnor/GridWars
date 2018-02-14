@@ -767,7 +767,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{bark.copy(.1f), bark2.copy(.1f), bark.copy(.1f), bark2.copy(.1f) ,bark, bark2})), new MoveInfo(false, 0, offenseless(2).createStatusEffectInfo()));
-        move.setAttackDescription(nm.get(user).name + " barks intimidatingly at the opponent. Halves the attack of the target for 2 turns.");
+        move.setAttackDescription("Barks intimidatingly at the opponent. Halves the attack of the target for 2 turns.");
         return move;
     }
 
@@ -846,7 +846,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{bark.copy(.1f), bark2.copy(.1f), bark.copy(.1f), bark2.copy(.1f) ,bark, bark2})), new MoveInfo(false, 0, defenseless(2).createStatusEffectInfo()));
-        move.setAttackDescription(nm.get(user).name + " yelps in order to lower the opponents guard. Brings the target's defense to 0 for 2 turns.");
+        move.setAttackDescription("Yelps in order to lower the opponents guard. Brings the target's defense to 0 for 2 turns.");
         return move;
     }
 
@@ -1278,7 +1278,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, bam})), new MoveInfo(false, 1));
-        move.setAttackDescription(nm.get(user).name + " slams into the opponent with full force. Deals regular damage.");
+        move.setAttackDescription("Slams into the opponent with full force. Deals regular damage.");
         return move;
     }
 
@@ -1327,7 +1327,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{fire})), new MoveInfo(false, 0, burn(3).createStatusEffectInfo()));
-        move.setAttackDescription(nm.get(user).name + " creates intensely hot flames. Burns the opponent for 3 turns.");
+        move.setAttackDescription("Creates intensely hot flames. Burns the opponent for 3 turns.");
         return move;
     }
 
@@ -1932,7 +1932,7 @@ public class MoveConstructor {
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
                     enemy.hp += 2;
                 }));
-        move.setAttackDescription(nm.get(user).name + " uses supportive powers to heal the target. Always heals the target by 2 points.");
+        move.setAttackDescription("Uses supportive powers to heal the target. Always heals the target by 2 points.");
         return move;
     }
 
@@ -2050,7 +2050,7 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{changeToBlue, sparkle, explode, returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, (enemy, userEntity) -> {if (enemy.acceptsStatusEffects) enemy.statusEffectInfos.clear();}));
-        move.setAttackDescription(nm.get(user).name + " uses mystic powers to remove all status effects from the target. Clears the target of all status effects.");
+        move.setAttackDescription("Uses mystic powers to remove all status effects from the target. Clears the target of all status effects.");
         return move;
     }
 
@@ -2122,7 +2122,7 @@ public class MoveConstructor {
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
                     enemy.hp += 2;
                 }));
-        move.setAttackDescription(nm.get(user).name + " focuses its energy to recover. Heals 3 points to itself.");
+        move.setAttackDescription("Focuses its energy to recover. Heals 3 points to itself.");
         return move;
     }
 
@@ -2410,7 +2410,7 @@ public class MoveConstructor {
                     if (userEntity.acceptsStatusEffects)
                         userEntity.statusEffectInfos.add(defenseless(1).createStatusEffectInfo());
                 }));
-        move.setAttackDescription(nm.get(user).name + " focuses its mind in order to prepare its next move. The user gains one SP point, but lowers the user's " +
+        move.setAttackDescription("Focuses its mind in order to prepare its next move. The user gains one SP point, but lowers the user's " +
         "defense to 0 for 1 turn.");
         return move;
     }
@@ -2855,7 +2855,7 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{
                         preSparkles.copy(), preBooms.copy(), preSparkles.copy(), preBooms.copy(),
                         comets.copy(), ripple.copy(), comets.copy(), ripple.copy(), comets.copy(), ripple, comets, preBooms.copy(), preBooms})), new MoveInfo(false, 2f));
-        move.setAttackDescription(nm.get(user).name + " uses most of its energy to summon a flurry of comets onto the field. Deals 2x damage.");
+        move.setAttackDescription("Uses most of its energy to summon a flurry of comets onto the field. Deals 2x damage.");
         return move;
     }
 
@@ -3714,7 +3714,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{fire, spinningDiamond.copy(), sparkle.copy(), spinningDiamond, sparkle})), new MoveInfo(false, 0, curse(3).createStatusEffectInfo()));
-        move.setAttackDescription(nm.get(user).name + " uses arcane rituals to cast a curse on the target. Inflicts the target with Curse for 3 turns, lowering all " +
+        move.setAttackDescription("Uses arcane rituals to cast a curse on the target. Inflicts the target with Curse for 3 turns, lowering all " +
         "of their stats.");
         return move;
     }
@@ -3831,7 +3831,7 @@ public class MoveConstructor {
                         userEntity.statusEffectInfos.clear();
                 })
         );
-        move.setAttackDescription(nm.get(user).name + " relaxes tension in its body. Recovers 1 point of health and cures all of the user's status effects.");
+        move.setAttackDescription("Relaxes tension in its body. Recovers 1 point of health and cures all of the user's status effects.");
         return move;
     }
 
@@ -4297,7 +4297,7 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{
                         preSparkles.copy(), preBooms.copy(), preSparkles.copy(), preBooms.copy(),
                         comets.copy(), ripple.copy(), comets.copy(), ripple.copy(), comets.copy(), ripple, comets, preBooms.copy(), preBooms})), new MoveInfo(true, 2));
-        move.setAttackDescription(nm.get(user).name + " uses most of its energy to summon a flurry of comets near itself. Ignores the opponents defense and deals 2x damage.");
+        move.setAttackDescription("Uses most of its energy to summon a flurry of comets near itself. Ignores the opponents defense and deals 2x damage.");
         return move;
     }
 
@@ -7055,7 +7055,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, bam})), new MoveInfo(false, 1));
-        move.setAttackDescription(nm.get(user).name + " slams into the opponent dealing regular damage.");
+        move.setAttackDescription("Slams into the opponent dealing regular damage.");
         return move;
     }
 
@@ -7166,7 +7166,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{sphereOut, explode, bam})), new MoveInfo(false, 2));
-        move.setAttackDescription(nm.get(user).name + " slams into the opponent with great force. Deals 2x damage.");
+        move.setAttackDescription("Slams into the opponent with great force. Deals 2x damage.");
         return move;
     }
 
@@ -7216,7 +7216,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{claw})), new MoveInfo(false, 1));
-        move.setAttackDescription(nm.get(user).name + " slashes at the opponent dealing regular damage.");
+        move.setAttackDescription("Slashes at the opponent dealing regular damage.");
         return move;
     }
 
@@ -7267,7 +7267,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{claw})), new MoveInfo(false, 1));
-        move.setAttackDescription(nm.get(user).name + " slashes at the opponent dealing regular damage.");
+        move.setAttackDescription("Slashes at the opponent dealing regular damage.");
         return move;
     }
 
@@ -11089,7 +11089,7 @@ public class MoveConstructor {
                 new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
                 new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)}),
                 new Array<VisualEvent>(new VisualEvent[]{breath, explode, explodeBig, ripples})), new MoveInfo(false, 0, offenseless(3).createStatusEffectInfo(), paralyze(3).createStatusEffectInfo()));
-        move.setAttackDescription(nm.get(user).name + " roars loudly and proudly. Lowers the attack and Paralyzes targets for 3 turns.");
+        move.setAttackDescription("Roars loudly and proudly. Lowers the attack and Paralyzes targets for 3 turns.");
         return move;
     }
 
@@ -11191,7 +11191,7 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{changeToBlack, shuffleBackForth, explode,  returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, speedUp(2).createStatusEffectInfo()));
-        move.setAttackDescription(nm.get(user).name + " prepares to pounce. Increases the user's speed for 2 turns.");
+        move.setAttackDescription("Prepares to pounce. Increases the user's speed for 2 turns.");
         return move;
     }
 
@@ -11294,7 +11294,7 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{changeToBlack, shuffleBackForth, shuffleBackForth.copy(.01f, 30), explode,  returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, speedUp(2).createStatusEffectInfo(), attackUp(2).createStatusEffectInfo()));
-        move.setAttackDescription(nm.get(user).name + " readies itself to attack. Increases the user's speed and attack for 2 turns.");
+        move.setAttackDescription("Readies itself to attack. Increases the user's speed and attack for 2 turns.");
         return move;
     }
 
@@ -14258,7 +14258,7 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{moveRight, moveLeft, moveRight.copy(), moveLeft.copy()})),
                 new MoveInfo(false, 0, guardUp(1).createStatusEffectInfo()));
-        move.setAttackDescription(nm.get(user).name + " raises its guard. Increases the user's defense for 1 turn.");
+        move.setAttackDescription("Raises its guard. Increases the user's defense for 1 turn.");
         return move;
     }
 
@@ -14320,7 +14320,7 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, moveRight, moveLeft, moveRight.copy(), moveLeft.copy()})),
                 new MoveInfo(false, 0, guardUp(1).createStatusEffectInfo(), regeneration(2).createStatusEffectInfo()));
-        move.setAttackDescription(nm.get(user).name + " assumes a more defensive stance. Increases the user's defense for 1 turn and causes" +
+        move.setAttackDescription("Assumes a more defensive stance. Increases the user's defense for 1 turn and causes" +
                 " the user to regenerate health for 3 turns.");
         return move;
     }
@@ -14384,7 +14384,7 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explode, moveRight, moveLeft, moveRight.copy(), moveLeft.copy()})),
                 new MoveInfo(false, 0, guardUp(2).createStatusEffectInfo(), regeneration(3).createStatusEffectInfo()));
-        move.setAttackDescription(nm.get(user).name + " moves into the ultimate defensive stance. Increases the user's defense for 2 turn and causes" +
+        move.setAttackDescription("Moves into the ultimate defensive stance. Increases the user's defense for 2 turn and causes" +
                 " the user to regenerate health for 3 turns.");
         return move;
     }

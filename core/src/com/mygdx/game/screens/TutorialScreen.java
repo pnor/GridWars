@@ -57,18 +57,18 @@ public class TutorialScreen extends MenuScreen {
         //descriptions
         pinkIcon = new Image(atlas.findRegion("star"));
         pinkIcon.setColor(Color.PINK);
-        pinkDescription = new Label("This is a team member. Clicking on them will display it's stats and the spaces it can move to. Clicking" +
+        pinkDescription = new Label("A team member. Clicking on it will display its stats and the spaces it can move to. Clicking" +
                 " the movement spaces highlighted in blue will move the piece to that space. ", skin);
         pinkDescription.setWrap(true);
 
         redIcon = new Image(atlas.findRegion("star"));
         redIcon.setColor(Color.RED);
-        redDescription = new Label("This shows the details of a selected piece. You can see the values of each stat and any status effects it has." , skin);
+        redDescription = new Label("Shows the details of a selected piece. You can see the values of each stat and any status effects it has." , skin);
         redDescription.setWrap(true);
 
         greenIcon = new Image(atlas.findRegion("star"));
         greenIcon.setColor(Color.GREEN);
-        greenDescription = new Label("This shows all of the attacks of a piece. Each piece can do 1 action each turn." , skin);
+        greenDescription = new Label("Shows all the attacks of a piece. Each piece can do 1 action each turn." , skin);
         greenDescription.setWrap(true);
 
         cyanIcon = new Image(atlas.findRegion("star"));
@@ -79,12 +79,12 @@ public class TutorialScreen extends MenuScreen {
 
         orangeIcon = new Image(atlas.findRegion("star"));
         orangeIcon.setColor(Color.ORANGE);
-        orangeDescription = new Label("This is the Infobar. It displays information about attacks used." , skin);
+        orangeDescription = new Label("The Infobar. It displays information about attacks and other events." , skin);
         orangeDescription.setWrap(true);
 
         purpleIcon = new Image(atlas.findRegion("star"));
         purpleIcon.setColor(Color.PURPLE);
-        purpleDescription = new Label("This shows the game speed. Pressing the \"+\" or \"=\" key will alter the speed of the game." , skin);
+        purpleDescription = new Label("Shows the game speed. Pressing the \"+\" or \"=\" key will alter the speed of the game." , skin);
         purpleDescription.setWrap(true);
 
         nextBtn = new HoverButton("Exit", skin, Color.WHITE, Color.DARK_GRAY);

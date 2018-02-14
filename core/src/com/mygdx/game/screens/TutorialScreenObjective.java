@@ -48,15 +48,15 @@ public class TutorialScreenObjective extends MenuScreen {
 
         normalWinLbl = new Label("To win, reduce the Health Points of all the pieces on the opposing team to 0.", skin);
         normalWinLbl.setWrap(true);
-        zoneWinLbl = new Label("In Zone Rules, their will be spaces glowing in the opposing team's color. Placing a piece on the other team's " +
+        zoneWinLbl = new Label("In Zone Rules, there will be spaces glowing in the opposing team's color. Placing a piece on the other team's " +
                 "zone will win the match.", skin);
         zoneWinLbl.setWrap(true);
 
         hotKeysLbl = new Label(
                 "H + [Number Key 1-4] : Display information about a selected piece's move.\n\n" +
-                "A, D : Scroll through pieces on the board.\n\n" +
+                "A or D : Scroll through pieces on the board.\n\n" +
                 "Shift (Left) : End the current turn.\n\n" +
-                "=, - : Change game speed.", skin);
+                "= or - : Change game speed.", skin);
         nextBtn = new HoverButton("Next", skin, Color.WHITE, Color.DARK_GRAY);
 
         ChangeListener listener = new ChangeListener() {
