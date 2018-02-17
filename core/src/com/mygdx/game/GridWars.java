@@ -77,6 +77,7 @@ public class GridWars extends Game {
 		saveDataManager = new SaveDataManager();
 
 		//region Set up crashlogs
+		// Prints out the sources of game crashes.
 		FileHandle crashDirectory = new FileHandle("GWcrashlogs");
 		if (!crashDirectory.exists()) {
 			FileHandle newCrashDirectory = new FileHandle("GWcrashlogs/info");
