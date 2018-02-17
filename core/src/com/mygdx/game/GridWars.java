@@ -77,9 +77,9 @@ public class GridWars extends Game {
 		saveDataManager = new SaveDataManager();
 
 		//region Set up crashlogs
-		FileHandle crashDirectory = new FileHandle("crashlogs");
+		FileHandle crashDirectory = new FileHandle("GWcrashlogs");
 		if (!crashDirectory.exists()) {
-			FileHandle newCrashDirectory = new FileHandle("crashlogs/info");
+			FileHandle newCrashDirectory = new FileHandle("GWcrashlogs/info");
 			newCrashDirectory.writeString("This file was created so GridWars can write errors to this directory.", false);
 		}
 		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
@@ -88,7 +88,7 @@ public class GridWars extends Game {
 				Calendar cal = Calendar.getInstance();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
-				String filename = "crashlogs/"+sdf.format(cal.getTime())+".txt";
+				String filename = "GWcrashlogs/"+sdf.format(cal.getTime())+".txt";
 
 				PrintStream writer;
 				try {
