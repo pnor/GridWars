@@ -1,10 +1,8 @@
 package com.mygdx.game;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,6 +15,12 @@ import com.mygdx.game.highscores.SaveDataManager;
 import com.mygdx.game.music.MusicManager;
 import com.mygdx.game.screens.TitleScreen;
 import com.mygdx.game.ui.Background;
+
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class GridWars extends Game {
 	//public AssetManager assets = new AssetManager();
@@ -72,6 +76,36 @@ public class GridWars extends Game {
 		// set up save data
 		saveDataManager = new SaveDataManager();
 
+		//region Set up crashlogs
+		FileHandle crashDirectory = new FileHandle("crashlogs");
+		if (!crashDirectory.exists()) {
+			FileHandle newCrashDirectory = new FileHandle("crashlogs/info");
+			newCrashDirectory.writeString("This file was created so GridWars can write errors to this directory.", false);
+		}
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				Calendar cal = Calendar.getInstance();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+
+				String filename = "crashlogs/"+sdf.format(cal.getTime())+".txt";
+
+				PrintStream writer;
+				try {
+					writer = new PrintStream(filename, "UTF-8");
+					writer.println(e.getClass() + ": " + e.getMessage());
+					for (int i = 0; i < e.getStackTrace().length; i++) {
+						writer.println(e.getStackTrace()[i].toString());
+					}
+
+				} catch (FileNotFoundException | UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		//endregion
+
 		setScreen(new TitleScreen(this));
 	}
 
@@ -103,6 +137,15 @@ public class GridWars extends Game {
 		}
 		if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
 			System.out.println(Gdx.graphics.getFramesPerSecond());
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT)) { // throw an exception
+			//region Divide by Zero
+			//int inconceivable = 1 / 0;
+			//endregion
+			//region  Array out of Bounds
+			int[] troublesome = new int[0];
+			System.out.println(troublesome[1]);
+			//endregion
 		}
 		*/
 

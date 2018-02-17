@@ -1079,7 +1079,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{explosions, fire})), new MoveInfo(false, 1, burn(3).createStatusEffectInfo()));
-        move.setAttackDescription("Starts a fire using live wires and electricity. Deals regular damage. and Burns the opponent for 3 turns.");
+        move.setAttackDescription("Starts a fire using live wires and electricity. Deals regular damage, and Burns the opponent for 3 turns.");
         return move;
     }
 
