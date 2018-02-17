@@ -211,6 +211,7 @@ public class ComputerPlayer implements Runnable {
             turns.add(bestTurn);
             //update BoardState with last Entity's action
             board.tryTurn(bestTurn);
+
         }
 
         return turns;
@@ -218,7 +219,8 @@ public class ComputerPlayer implements Runnable {
 
     private int bestTurnAssumption(BoardState board, int teamNo, int originalTeam, int depthLevel) {
         BoardState newBoardState = board.copy();
-        for (int i = 0; i < depthLevel; i++) {
+        //System.out.println(newBoardState);
+        for (int i = 0; i <= depthLevel; i++) {
             DEBUG_TURNS_PROCESSED++;
             //change turns
             teamNo = (teamNo + 1) % teams.size;
@@ -232,6 +234,10 @@ public class ComputerPlayer implements Runnable {
             }
             newBoardState.doTurnEffects(teamNo);
             getBestTurns(newBoardState, teamNo);
+            /*
+            System.out.println("A Step of GetBestTurns (Depth : " + i + " / " + depthLevel + ")");
+            System.out.println(newBoardState);
+            */
         }
 
         return newBoardState.evaluate(originalTeam);

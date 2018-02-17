@@ -1,7 +1,10 @@
 package com.mygdx.game;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -77,6 +80,7 @@ public class GridWars extends Game {
 		saveDataManager = new SaveDataManager();
 
 		//region Set up crashlogs
+		
 		// Prints out the sources of game crashes.
 		FileHandle crashDirectory = new FileHandle("GWcrashlogs");
 		if (!crashDirectory.exists()) {
@@ -105,6 +109,7 @@ public class GridWars extends Game {
 				}
 			}
 		});
+
 		//endregion
 
 		setScreen(new TitleScreen(this));

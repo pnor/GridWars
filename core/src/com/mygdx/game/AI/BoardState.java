@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.StatusEffect;
@@ -220,5 +221,119 @@ public class BoardState {
 
     public ArrayMap<BoardPosition, EntityValue> getEntities() {
         return entities;
+    }
+
+    /**
+     * @return a visualization of the board based on entities and zones
+     */
+    @Override
+    public String toString() {
+        final Array<BoardPosition> POSITIONS = entities.keys().toArray(); // all positions
+        final Array<BoardPosition> ZONES = new Array<>();
+
+        if (zones != null) {
+            for (int i = 0; i < this.zones.get(0).size; i++)
+                ZONES.add(this.zones.get(0).get(i));
+            for (int i = 0; i < this.zones.get(1).size; i++)
+                ZONES.add(this.zones.get(1).get(i));
+        }
+
+
+        // get assumed dimensions of board
+        int largestRowSize = -1;
+        for (int i = 0; i < POSITIONS.size; i++) { // iterate over positions of entities
+            largestRowSize = Math.max(POSITIONS.get(i).r, largestRowSize);
+        }
+        if (zones != null) {
+            for (int i = 0; i < ZONES.size; i++) { // iterate over zone locations
+                largestRowSize = Math.max(ZONES.get(i).r, largestRowSize);
+            }
+        }
+        final int ASSUMED_ROW_SIZE = largestRowSize;
+
+        int largestColSize = -1;
+        for (int i = 0; i < POSITIONS.size; i++) { // iterate over positions of entities
+            largestColSize = Math.max(POSITIONS.get(i).c, largestColSize);
+        }
+        if (zones != null) {
+            for (int i = 0; i < ZONES.size; i++) { // iterate over positions of entities
+                largestColSize = Math.max(ZONES.get(i).c, largestColSize);
+            }
+        }
+        final int ASSUMED_COL_SIZE = largestColSize;
+
+        //listed in order of display priority form lowest (top) to highest (bottom)
+        final char OBJECT_ICON = 'X';
+        final char ZONE_ICON = 'Z';
+        final char TEAM_2_ICON = '2';
+        final char TEAM_0_ICON = '0';
+        final char TEAM_1_ICON = '1';
+
+        StringBuilder outputString = new StringBuilder();
+
+        // print row header
+        outputString.append("    "); // 4 spaces
+        for (int i = 0; i <= ASSUMED_COL_SIZE; i++) {
+            outputString.append(i + " "); // Col Numbers
+        }
+        outputString.append("\n");
+
+        // print board
+        for (int i = 0; i <= ASSUMED_ROW_SIZE; i++) {
+            outputString.append(" " + i + " |");
+            for (int j = 0; j <= ASSUMED_COL_SIZE; j++) {
+                char entityZoneChar = '?'; //char representing whats going on that space
+                //region get what char to display
+                BoardPosition curPos = new BoardPosition(i, j);
+                for (ObjectMap.Entry<BoardPosition, EntityValue> posPair : entities.entries()) { //entities
+                    if (curPos.equals(posPair.key)) { // team 1
+                        if (posPair.value.team == 1) {
+                            entityZoneChar = TEAM_1_ICON;
+                            break;
+                        }
+                        if (posPair.value.team == 0) { // team 0
+                            entityZoneChar = TEAM_0_ICON;
+                            break;
+                        }
+                        if (posPair.value.team == 2) { // team 2
+                            entityZoneChar = TEAM_2_ICON;
+                            break;
+                        }
+                        if (posPair.value.team == -1) { // object
+                            entityZoneChar = OBJECT_ICON;
+                            break;
+                        }
+                    }
+                }
+                // if haven't found it yet, look to see if its a zone
+                if (zones != null) {
+                    for (BoardPosition bp : ZONES) {
+                        if (curPos.equals(bp)) {
+                            entityZoneChar = ZONE_ICON;
+                            break;
+                        }
+                    }
+                }
+                // the space is nothing: default to ' '
+                if (entityZoneChar == '?')
+                    entityZoneChar = ' ';
+                //endregion
+                outputString.append(entityZoneChar + "|");
+            }
+            outputString.append('\n');
+        }
+
+        /**
+         * Example of output
+         *     0 1 2
+         *  0 | | | |
+         *  1 | | | |
+         *  2 | | | |
+         *  3 | | | |
+         *  4 | | | |
+         *
+         */
+
+        return outputString.toString();
     }
 }
