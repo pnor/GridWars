@@ -17296,16 +17296,8 @@ public class MoveConstructor {
                 progress = MathUtils.clamp(progress + .1f, 0, 1);
 
                 Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
-                try {
-                    if (enemy != null)
-                        am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress));
-                } catch (Exception e) {
-                    System.out.println("Threw " + e + "in a Visual Event in MoveConstructor...");
-                    System.out.println("Entity name : " + nm.get(enemy).name);
-                    System.out.println("Actor : " + am.get(enemy));
-                    System.out.println("Actor .getColor() : " + am.get(enemy).actor.getColor());
-                    am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress)); //to crash progream
-                }
+                if (enemy != null)
+                    am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress));
             }
         }, .05f, 10);
 
@@ -17594,19 +17586,5 @@ public class MoveConstructor {
         return move;
     }
     //endregion
-
-    /*
-    //TODO replace all instances of this debug line:
-    try {
-                    if (enemy != null)
-                        am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress));
-                } catch (Exception e) {
-                    System.out.println("Threw " + e + "in a Visual Event in MoveConstructor...");
-                    System.out.println("Entity name : " + nm.get(enemy).name);
-                    System.out.println("Actor : " + am.get(enemy));
-                    System.out.println("Actor .getColor() : " + am.get(enemy).actor.getColor());
-                    am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress)); //to crash progream
-                }
-                */
 
 }
