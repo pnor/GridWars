@@ -14558,6 +14558,26 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
+        VisualEvent fixPositioning = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                if (!t.isOccupied())
+                    return;
+
+                Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                Vector2 tilePosition = new Vector2(BoardComponent.boards.getTileWidth() / 2 - am.get(enemy).actor.getWidth() / 2f,
+                        BoardComponent.boards.getTileHeight() / 2 - am.get(enemy).actor.getHeight() / 2f);
+                am.get(enemy).actor.setPosition(tilePosition.x, tilePosition.y);
+            }
+        }, .05f, 1);
+
         Move move = new Move("Slash", nm.get(user).name + " attacks!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
@@ -14571,7 +14591,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{slashes, moveRight, slashes.copy(), moveLeft, slashes.copy(), moveRight.copy(),
-                slashes.copy(), moveLeft.copy(), slashes.copy(), moveRight.copy(), slashes.copy(), moveLeft.copy()})), new MoveInfo(false, 1));
+                slashes.copy(), moveLeft.copy(), slashes.copy(), moveRight.copy(), slashes.copy(), moveLeft.copy(), fixPositioning})), new MoveInfo(false, 1));
         move.setAttackDescription("Slashes at the target. Deals regular damage.");
         return move;
     }
@@ -14643,6 +14663,26 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
+        VisualEvent fixPositioning = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                if (!t.isOccupied())
+                    return;
+
+                Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                Vector2 tilePosition = new Vector2(BoardComponent.boards.getTileWidth() / 2 - am.get(enemy).actor.getWidth() / 2f,
+                        BoardComponent.boards.getTileHeight() / 2 - am.get(enemy).actor.getHeight() / 2f);
+                am.get(enemy).actor.setPosition(tilePosition.x, tilePosition.y);
+            }
+        }, .05f, 1);
+
         Move move = new Move("Toxic Slash", nm.get(user).name + " attacks with a deadly poison!", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
@@ -14659,7 +14699,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{slashes, moveRight, slashes.copy(), moveLeft, slashes.copy(), moveRight.copy(),
-                        slashes.copy(), moveLeft.copy(), slashes.copy(), moveRight.copy(), slashes.copy(), moveLeft.copy()})), new MoveInfo(false, 1, poison(2).createStatusEffectInfo()));
+                        slashes.copy(), moveLeft.copy(), slashes.copy(), moveRight.copy(), slashes.copy(), moveLeft.copy(), fixPositioning})), new MoveInfo(false, 1, poison(2).createStatusEffectInfo()));
         move.setAttackDescription("Slashes at the target with an edge seeped in poison. Deals regular damage and poisons the target for 2 turns.");
         return move;
     }
@@ -15228,6 +15268,26 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
+        VisualEvent fixPositioning = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                if (!t.isOccupied())
+                    return;
+
+                Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                Vector2 tilePosition = new Vector2(BoardComponent.boards.getTileWidth() / 2 - am.get(enemy).actor.getWidth() / 2f,
+                        BoardComponent.boards.getTileHeight() / 2 - am.get(enemy).actor.getHeight() / 2f);
+                am.get(enemy).actor.setPosition(tilePosition.x, tilePosition.y);
+            }
+        }, .05f, 1);
+
         Move move = new Move("Slash", nm.get(user).name + " attacks!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
@@ -15241,7 +15301,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{slashes, moveRight, slashes.copy(), moveLeft, slashes.copy(), moveRight.copy(),
-                        slashes.copy(), moveLeft.copy(), slashes.copy(), moveRight.copy(), slashes.copy(), moveLeft.copy()})), new MoveInfo(false, 1));
+                        slashes.copy(), moveLeft.copy(), slashes.copy(), moveRight.copy(), slashes.copy(), moveLeft.copy(), fixPositioning})), new MoveInfo(false, 1));
         move.setAttackDescription("Viciously slashes at the target. Deals regular damage.");
         return move;
     }

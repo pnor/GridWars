@@ -1509,7 +1509,7 @@ public class BattleScreen implements Screen {
     }
     //endregion
 
-    //region Changing Tiles and movements square related things
+    //region Tile Visual Effects
     //Movement
     public void showMovementTiles() {
         for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity))) {
