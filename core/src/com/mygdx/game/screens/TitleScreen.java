@@ -10,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
-import com.mygdx.game.ui.HoverButton;
 import com.mygdx.game.music.Song;
+import com.mygdx.game.ui.HoverButton;
 
 import static com.mygdx.game.GridWars.skin;
 
@@ -59,7 +59,8 @@ public class TitleScreen extends MenuScreen implements Screen {
             }
         };
 
-        background = BackgroundConstructor.makeTitleScreenBackground();
+        //background = BackgroundConstructor.makeTitleScreenBackground();
+        background = BackgroundConstructor.makeNewTitle();
 
         startBtn.addListener(listener);
         tutorialBtn.addListener(listener);

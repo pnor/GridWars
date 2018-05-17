@@ -489,7 +489,7 @@ public class BoardAndRuleConstructor {
 
     //region forest
     public static Rules makeForest2P(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
-        boardManager.setBoards(new Board(6, 6, new Color(36f / 255f, 106f / 255f, 0, 1), new Color(.2f, .2f, 20f / 255f, 1), 700 / 7), new CodeBoard(6, 6));
+        boardManager.setBoards(new Board(6, 6, new Color(66f / 255f, 136f / 255f, 0, 1), new Color(.2f, .2f, 20f / 255f, 1), 700 / 7), new CodeBoard(6, 6));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
         //place entities
         int col = 1;
@@ -516,7 +516,7 @@ public class BoardAndRuleConstructor {
 
     public static Rules makeForest2PZone(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
         //declare rules
-        boardManager.setBoards(new Board(6, 6, new Color(36f / 255f, 106f / 255f, 0, 1), new Color(.2f, .2f, 20f / 255f, 1), 700 / 7), new CodeBoard(6, 6));
+        boardManager.setBoards(new Board(6, 6, new Color(66f / 255f, 136f / 255f, 0, 1), new Color(.2f, .2f, 20f / 255f, 1), 700 / 7), new CodeBoard(6, 6));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
         ZoneRules rules = new ZoneRules(screen, teams, new Array<Array<BoardPosition>>(new Array[] {
                 new Array<BoardPosition>(new BoardPosition[]{

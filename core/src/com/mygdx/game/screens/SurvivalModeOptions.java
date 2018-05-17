@@ -30,7 +30,7 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
     @Override
     public void show() {
         super.show();
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
         titleLbl = new Label("Survival", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
@@ -64,15 +64,15 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
                 }
             }
         };
-       background = BackgroundConstructor.makeMovingStripeBackground(Color.DARK_GRAY, Color.BLUE);
+       background = BackgroundConstructor.makeMovingStripeBackground(new Color(0.1f, 0.1f, 0.1f, 1), Color.DARK_GRAY);
 
         startBtn.addListener(listener);
         loadBtn.addListener(listener);
         highScoreBtn.addListener(listener);
         table.add(titleLbl).padBottom(40).row();
-        table.add(startBtn).size(350, 90).padBottom(10f).row();
-        table.add(loadBtn).size(350, 90).padBottom(10f).row();
-        table.add(highScoreBtn).size(350, 90).padBottom(10f).row();
+        table.add(startBtn).size(350, 90).padBottom(40f).row();
+        table.add(loadBtn).size(350, 90).padBottom(40f).row();
+        table.add(highScoreBtn).size(350, 90).padBottom(40f).row();
 
     }
 

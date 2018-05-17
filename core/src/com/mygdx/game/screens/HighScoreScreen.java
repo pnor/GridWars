@@ -95,14 +95,15 @@ public class HighScoreScreen extends MenuScreen implements Screen {
         table.add(lblTitle).padBottom(20).row();
         table.add(scoreTable);
 
-        background = BackgroundConstructor.makeSurvivalBackChecker();
+        //background = BackgroundConstructor.makeSurvivalBackChecker();
+        background = BackgroundConstructor.makeMovingStripeBackground(new Color(0.1f, 0.1f, 0.1f, 1), Color.DARK_GRAY);
         fontGenerator.dispose();
     }
 
     @Override
     public void render(float deltaTime) {
         super.render(deltaTime);
-        //go back highscores screen
+        //go back high scores screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
         }

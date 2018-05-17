@@ -4,18 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.GridWars;
-import com.mygdx.game.ui.BackType;
-import com.mygdx.game.ui.Background;
+import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.ui.HoverButton;
 
-import static com.mygdx.game.GridWars.backAtlas;
 import static com.mygdx.game.GridWars.skin;
 
 /**
@@ -33,7 +30,7 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
     @Override
     public void show() {
         super.show();
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
         titleLbl = new Label("Select A Game Mode", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
@@ -55,22 +52,16 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
                 }
             }
         };
-        Sprite backgroundLay = new Sprite(backAtlas.findRegion("BlankBackground"));
-        backgroundLay.setColor(Color.DARK_GRAY);
-        Sprite topLayer = new Sprite(new Sprite(backAtlas.findRegion("DiagStripeHoriz")));
-        topLayer.setColor(Color.GRAY);
-        background = new Background(backgroundLay,
-                new Sprite[]{topLayer},
-                new BackType[]{BackType.SCROLL_HORIZONTAL},
-                null, null);
+
+        background = BackgroundConstructor.makeMovingStripeBackground(Color.DARK_GRAY, Color.GRAY);
 
         twoPlayerDeathMatch.addListener(listener);
         twoPlayerZones.addListener(listener);
         survival.addListener(listener);
         table.add(titleLbl).padBottom(40).row();
-        table.add(twoPlayerDeathMatch).size(350, 90).padBottom(10f).row();
-        table.add(twoPlayerZones).size(350, 90).padBottom(10f).row();
-        table.add(survival).size(350, 90).padBottom(10f).row();
+        table.add(twoPlayerDeathMatch).size(350, 90).padBottom(40f).row();
+        table.add(twoPlayerZones).size(350, 90).padBottom(40f).row();
+        table.add(survival).size(350, 90).padBottom(40f).row();
 
         fontGenerator.dispose();
     }

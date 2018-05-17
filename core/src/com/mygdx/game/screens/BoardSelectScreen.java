@@ -47,16 +47,16 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
     @Override
     public void show() {
         super.show();
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Rubik-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = 50;
         Label titleLbl = new Label("Select A Board", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
-        HoverButton basic = new HoverButton("Basic", skin, Color.WHITE, Color.DARK_GRAY);
-        HoverButton complex = new HoverButton("Complex", skin, Color.WHITE, Color.DARK_GRAY);
-        HoverButton compact = new HoverButton("Compact", skin, Color.WHITE, Color.DARK_GRAY);
-        HoverButton desert = new HoverButton("Desert", skin, Color.WHITE, Color.DARK_GRAY);
-        HoverButton forest = new HoverButton("Forest", skin, Color.WHITE, Color.DARK_GRAY);
-        HoverButton island = new HoverButton("Island", skin, Color.WHITE, Color.DARK_GRAY);
+        HoverButton basic = new HoverButton("Basic", skin, Color.LIGHT_GRAY, Color.WHITE);
+        HoverButton complex = new HoverButton("Complex", skin, Color.LIGHT_GRAY, Color.DARK_GRAY);
+        HoverButton compact = new HoverButton("Compact", skin, Color.LIGHT_GRAY, Color.BLUE);
+        HoverButton desert = new HoverButton("Desert", skin, Color.LIGHT_GRAY, Color.YELLOW);
+        HoverButton forest = new HoverButton("Forest", skin, Color.LIGHT_GRAY, Color.GREEN);
+        HoverButton island = new HoverButton("Island", skin, Color.LIGHT_GRAY, Color.SKY);
 
 
 
@@ -88,7 +88,7 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
             }
         };
 
-        background = BackgroundConstructor.makeBoardSelectScreen();
+        background = BackgroundConstructor.makeMovingStripeBackground(Color.DARK_GRAY, Color.GRAY);
 
         basic.addListener(listener);
         complex.addListener(listener);
@@ -101,11 +101,14 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
         table.add();
         table.row();
         table.add(titleLbl).colspan(2).padBottom(40).row();
-        table.add(basic).size(300, 70).padRight(20f);
-        table.add(complex).size(300, 70).row();
-        table.add(compact).size(300, 70).padRight(20f);
-        table.add(desert).size(300, 70).row();
-        table.add(forest).size(300, 70).padRight(20f);
+
+        table.add(basic).size(300, 70).padBottom(40f).padRight(40f);
+        table.add(complex).size(300, 70).padBottom(40f).row();
+
+        table.add(compact).size(300, 70).padBottom(40f).padRight(40f);
+        table.add(desert).size(300, 70).padBottom(40f).row();
+
+        table.add(forest).size(300, 70).padRight(40f);
         table.add(island).size(300, 70);
     }
 
