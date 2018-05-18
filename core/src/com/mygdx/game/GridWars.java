@@ -5,7 +5,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -18,12 +17,6 @@ import com.mygdx.game.highscores.SaveDataManager;
 import com.mygdx.game.music.MusicManager;
 import com.mygdx.game.screens.TitleScreen;
 import com.mygdx.game.ui.Background;
-
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class GridWars extends Game {
 	//public AssetManager assets = new AssetManager();
@@ -80,6 +73,7 @@ public class GridWars extends Game {
 		saveDataManager = new SaveDataManager();
 
 		//region Set up crashlogs
+		/*
 		// Prints out the sources of game crashes.
 		FileHandle crashDirectory = new FileHandle("GWcrashlogs");
 		if (!crashDirectory.exists()) {
@@ -108,7 +102,7 @@ public class GridWars extends Game {
 				}
 			}
 		});
-
+		*/
 
 		//endregion
 
