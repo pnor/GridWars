@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.AI.ComputerPlayer;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.components.EventComponent;
 import com.mygdx.game.components.PositionComponent;
@@ -21,6 +22,7 @@ import com.mygdx.game.music.Song;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.LerpColor;
 import com.mygdx.game.ui.LerpColorManager;
+import javafx.util.Pair;
 
 import static com.mygdx.game.ComponentMappers.sm;
 import static com.mygdx.game.ComponentMappers.stm;
@@ -47,10 +49,10 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
     //whether this is loaded from a save file
     private boolean loadedFromSave;
 
-    public SurvivalBattleScreen(Team team, Team enemyTeam, int difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum,
+    public SurvivalBattleScreen(Team team, Team enemyTeam, ComputerPlayer.Difficulty difficulty, int floorLevel, int healthPowerUpNum, int spPowerUpNum,
                                 int attackPowerUpAmount, int speedPowerUpAmount, int points, int turnCount, boolean loadedFromSave,
                                 LerpColorManager survivalLerpColorManager, Song song, GridWars game) {
-        super(new Array<Team>(new Team[]{team, enemyTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty)}, survivalLerpColorManager, song, game);
+        super(new Array<Team>(new Team[]{team, enemyTeam}), floorLevel + 12, new Pair[]{new Pair(1, difficulty)}, survivalLerpColorManager, song, game);
         healthPowerUp = healthPowerUpNum;
         spPowerUp = spPowerUpNum;
         powerPowerUp = attackPowerUpAmount;
@@ -62,10 +64,10 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
         lerpColorManager = survivalLerpColorManager;
     }
 
-    public SurvivalBattleScreen(Team team, Team enemyTeam, Team objectTeam, int difficulty, int floorLevel, int healthPowerUpNum,
+    public SurvivalBattleScreen(Team team, Team enemyTeam, Team objectTeam, ComputerPlayer.Difficulty difficulty, int floorLevel, int healthPowerUpNum,
                                 int spPowerUpNum, int attackPowerUpAmount, int speedPowerUpAmount, int points, int turnCount,
                                 boolean loadedFromSave, LerpColorManager survivalLerpColorManager, Song song, GridWars game) {
-        super(new Array<Team>(new Team[]{team, enemyTeam, objectTeam}), floorLevel + 12, new Vector2[]{new Vector2(1, difficulty), new Vector2(2, 0)},
+        super(new Array<Team>(new Team[]{team, enemyTeam, objectTeam}), floorLevel + 12, new Pair[]{new Pair(1, difficulty), new Pair(2, ComputerPlayer.Difficulty.FIRST_ATTACK)},
                 survivalLerpColorManager, song, game);
         healthPowerUp = healthPowerUpNum;
         spPowerUp = spPowerUpNum;

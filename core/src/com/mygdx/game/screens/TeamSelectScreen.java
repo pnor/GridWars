@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.AI.ComputerPlayer;
 import com.mygdx.game.GameUtil;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
@@ -22,6 +22,7 @@ import com.mygdx.game.creators.EntityConstructor;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.HoverButton;
 import com.mygdx.game.ui.LerpColor;
+import javafx.util.Pair;
 
 import java.util.HashMap;
 
@@ -89,7 +90,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     /**
      * x-coordinate of the vector is team index. y-coordinate is the difficulty. 1 is easy, 2 is normal, 3 is hard.
      */
-    private Array<Vector2> AIControlledTeams = new Array<>();
+    private Array<Pair<Integer, ComputerPlayer.Difficulty>> AIControlledTeams = new Array<>();
     
     //misc
     /** number representing alternate color choices for players */
@@ -438,14 +439,14 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         else { //else -> move to next team
             //if AI controlled, store team index in array
             if (AICheckBoxGroup.getChecked() != null) {
-                int difficulty = 0;
+                ComputerPlayer.Difficulty difficulty = ComputerPlayer.Difficulty.FIRST_ATTACK;
                 if (AICheckBoxGroup.getChecked() == AIEasyCheckBox)
-                    difficulty = 1;
+                    difficulty = ComputerPlayer.Difficulty.EASY;
                 else if (AICheckBoxGroup.getChecked() == AINormalCheckBox)
-                    difficulty = 2;
+                    difficulty = ComputerPlayer.Difficulty.NORMAL;
                 else
-                    difficulty = 3;
-                AIControlledTeams.add(new Vector2(curTeam, difficulty));
+                    difficulty = ComputerPlayer.Difficulty.HARD;
+                AIControlledTeams.add(new Pair(curTeam, difficulty));
                 AICheckBoxGroup.uncheckAll();
             }
 
@@ -525,10 +526,10 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         //search for curTeam
         boolean hasCurTeam = false;
         int indexOfTeam = -1;
-        for (Vector2 v : AIControlledTeams) {
-            if (v.x == curTeam) {
+        for (Pair<Integer, ComputerPlayer.Difficulty> p : AIControlledTeams) {
+            if (p.getKey() == curTeam) {
                 hasCurTeam = true;
-                indexOfTeam = AIControlledTeams.indexOf(v, true);
+                indexOfTeam = AIControlledTeams.indexOf(p, true);
                 break;
             }
         }
@@ -537,10 +538,10 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         //search for curTeam - 1
         hasCurTeam = false;
         indexOfTeam = -1;
-        for (Vector2 v : AIControlledTeams) {
-            if (v.x == curTeam) {
+        for (Pair<Integer, ComputerPlayer.Difficulty> p : AIControlledTeams) {
+            if (p.getKey() == curTeam) {
                 hasCurTeam = true;
-                indexOfTeam = AIControlledTeams.indexOf(v, true);
+                indexOfTeam = AIControlledTeams.indexOf(p, true);
                 break;
             }
         }
@@ -565,7 +566,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
      */
     public void goToNextScreen() {
         if (teams.get(maxTeams - 1).getEntities().size > 0)
-            GRID_WARS.setScreen(new BoardSelectScreen(maxTeams, zones, teams, AIControlledTeams.toArray(Vector2.class), GRID_WARS));
+            GRID_WARS.setScreen(new BoardSelectScreen(maxTeams, zones, teams, AIControlledTeams.toArray(Pair.class), GRID_WARS));
     }
 
     /**

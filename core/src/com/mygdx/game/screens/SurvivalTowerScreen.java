@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.AI.ComputerPlayer;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.actors.AnimationActor;
 import com.mygdx.game.actors.SpriteActor;
@@ -850,18 +851,18 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             return Song.BOSS_THEME;
     }
 
-    private int getComputerDifficulty() {
+    private ComputerPlayer.Difficulty getComputerDifficulty() {
         //bosses
         if (level == 10 || level == 20 || level == 30 || level == 50 || level == 40 || level == 43 || level == 47) {
-            return 3;
+            return ComputerPlayer.Difficulty.HARD;
         }
         //normal stages
         if (level > 0 && level <= 17)
-            return 1;
+            return ComputerPlayer.Difficulty.EASY;
         else if (level > 17 && level <= 29)
-            return 2;
+            return ComputerPlayer.Difficulty.NORMAL;
         else
-            return 3;
+            return ComputerPlayer.Difficulty.HARD;
     }
 
     private void createParticleEffect(int particleType) {

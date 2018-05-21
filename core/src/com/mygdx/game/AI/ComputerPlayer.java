@@ -3,6 +3,7 @@ package com.mygdx.game.AI;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.ComponentMappers;
 import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.BoardComponent;
@@ -30,7 +31,7 @@ public class ComputerPlayer implements Runnable {
     private Array<EntityTeamPairing> entityTeamPairings;
     private int depthLevel;
     /**
-     * Whether it should only get the first attack for all controlled entities on team
+     * Whether it should only get the first attack for all controlled entities on team. Typically false, and used for debugging purposes.
      */
     private boolean getFirstAttackAlways;
     private int indexOfFirstAttackingTeams = -1;
@@ -43,7 +44,14 @@ public class ComputerPlayer implements Runnable {
      */
     private float forgetBestMoveChance = 0;
 
-    public ComputerPlayer(BoardManager b, Array<Team> t, int teamIndexControlled, int depth, boolean randomizeDepth, float forgetChance) {
+    /**
+     * Creates a computer player to play death match game mode.
+     * @param b Board manager
+     * @param t teams
+     * @param teamIndexControlled team computer controls
+     * @param difficulty difficulty of computer
+     */
+    public ComputerPlayer(BoardManager b, Array<Team> t, int teamIndexControlled, ComputerPlayer.Difficulty difficulty) {
         boards = b;
         teams = t;
         entityTeamPairings = new Array<>();
@@ -53,22 +61,26 @@ public class ComputerPlayer implements Runnable {
             }
         }
         teamControlled = teamIndexControlled;
-        depthLevel = depth;
         decidedTurns = new Array<>();
-        randomizeDepthLevel = randomizeDepth;
-        forgetBestMoveChance = forgetChance;
+        setDifficulty(difficulty);
     }
 
-    public ComputerPlayer(BoardManager b, Array<Team> t, Array<Array<BoardPosition>> zones, int teamIndexControlled, int depth, boolean randomizeDepth, float forgetChance) {
+    /**
+     * Creates a computer player to play zone match game mode.
+     * @param b board manager
+     * @param t teams
+     * @param zones zones on the board
+     * @param teamIndexControlled team computer controls
+     * @param difficulty difficulty of computer
+     *
+     */
+    public ComputerPlayer(BoardManager b, Array<Team> t, Array<Array<BoardPosition>> zones, int teamIndexControlled, ComputerPlayer.Difficulty difficulty) {
         boards = b;
         teams = t;
         zoneLocations = zones;
         teamControlled = teamIndexControlled;
-        depthLevel = depth;
         decidedTurns = new Array<>();
-        randomizeDepthLevel = randomizeDepth;
-        forgetBestMoveChance = forgetChance;
-
+        setDifficulty(difficulty);
     }
 
     public void updateComputerPlayer(BoardState board) {
@@ -100,7 +112,6 @@ public class ComputerPlayer implements Runnable {
         */
 
         //EXPERIMENTAL!
-
         processing = true;
         decidedTurns.clear();
         PROCESSING_TIME = System.nanoTime();
@@ -110,9 +121,16 @@ public class ComputerPlayer implements Runnable {
             if (randomizeDepthLevel) {
                 int newDepth = depthLevel;
                 newDepth = MathUtils.clamp(newDepth + MathUtils.random(-1, 1), 0, 999);
+
+                System.out.println("Pairings : ");
+                for (EntityTeamPairing etp : entityTeamPairings)
+                    System.out.println(etp);
+                System.out.println("Processing: atDepth: " + newDepth + ", teamControlled: " + teamControlled);
+
                 decidedTurns = expGetBestTurnsMinimax(currentBoardState, teamControlled);
             } else
-                decidedTurns = getBestTurnsBestTurnAssumption(currentBoardState, teamControlled, depthLevel);
+                //decidedTurns = getBestTurnsBestTurnAssumption(currentBoardState, teamControlled, depthLevel);
+                decidedTurns = expGetBestTurnsMinimax(currentBoardState, teamControlled);
         }
         System.out.println("TIME TO PROCESS: " +  ((float)(System.nanoTime() - PROCESSING_TIME) / 1000000000));
         System.out.println("TURNS PROCESSED : " + DEBUG_TURNS_PROCESSED);
@@ -308,9 +326,10 @@ public class ComputerPlayer implements Runnable {
             Turn bestTurn = null;
             int startIndex = -1;
             for (int j = 0; j < entityTeamPairings.size; j++) {
-                if (entityTeamPairings.get(j).entity == teams.get(team).getEntities().get(0))
+                if (entityTeamPairings.get(j).entity == e)
                     startIndex = j;
             }
+            System.out.println("Start Index : " + startIndex);
             for (Turn t : allTurns) {
                 curValue = expGetTurnValMinimax(board.copy().tryTurn(t), team, startIndex, 5, -9999999, 9999999);
                 worstValue = Math.min(curValue, worstValue);
@@ -329,9 +348,11 @@ public class ComputerPlayer implements Runnable {
     }
 
     public int expGetTurnValMinimax(BoardState board, int team, int curEntityIndex, int depth, int alpha, int beta) {
+        /*
         if (depth == depthLevel) { // end of depth
             return board.evaluate(team);
         }
+        */
 
         // process each entity in team
         for (EntityTeamPairing entityTeamPair : entityTeamPairings) {
@@ -353,9 +374,11 @@ public class ComputerPlayer implements Runnable {
 
             Array<Turn> entityTurns = getAllPossibleTurns(entityTeamPairings.get(curEntityIndex).entity, entityValue, board);
             int bestVal = -99999999;
+            System.out.println("IN Minimax: depth: " + depth + "   maxing? : " + (team == teamControlled));
             for (Turn t : entityTurns) {
                 if (team == teamControlled) { // Computer team
-                    if (depth > 24) { //get a value
+                    if (depth > depthLevel * 4) { //get a value
+                        /*
                         int bestTurnVal = -99999999;
                         int curValue = 0;
                         Array<Turn> allTurns = getAllPossibleTurns(entityTeamPair.entity, entityValue, board);
@@ -367,10 +390,13 @@ public class ComputerPlayer implements Runnable {
                                 bestTurn = turn;
                             }
                         }
-                        return board.tryTurn(bestTurn).evaluate(team);
+                        */
+                        //return board.tryTurn(bestTurn).evaluate(team);
+                        return board.tryTurn(t).evaluate(teamControlled);
                     }
+
                     bestVal = -9999999;
-                    int nextIndex = (curEntityIndex + 1) % (teams.get(0).getEntities().size + teams.get(1).getEntities().size);
+                    int nextIndex = (curEntityIndex + 1) % entityTeamPairings.size;
                     int value = expGetTurnValMinimax(board.copy().tryTurn(t), entityTeamPairings.get(nextIndex).team, nextIndex, depth + 1, alpha, beta);
                     bestVal = Math.max(value, bestVal);
                     alpha = Math.max(alpha, bestVal);
@@ -378,19 +404,22 @@ public class ComputerPlayer implements Runnable {
                         break;
                     return bestVal;
                 } else { // Enemy Team
-                    if (depth > 24) { //get a value
-                        int bestTurnVal = -99999999;
+                    if (depth > depthLevel * 4) { //get a value
+                        /*
+                        int bestTurnVal = 99999999;
                         int curValue = 0;
                         Array<Turn> allTurns = getAllPossibleTurns(entityTeamPair.entity, entityValue, board);
                         Turn bestTurn = null;
                         for (Turn turn : allTurns) {
                             curValue = board.copy().tryTurn(turn).evaluate(team);
-                            if (curValue > bestTurnVal) {
+                            if (curValue < bestTurnVal) {
                                 bestTurnVal = curValue;
                                 bestTurn = turn;
                             }
                         }
                         return board.tryTurn(bestTurn).evaluate(team);
+                        */
+                        return board.tryTurn(t).evaluate(teamControlled);
                     }
                     bestVal = 9999999;
                     int nextIndex = (curEntityIndex + 1) % (teams.get(0).getEntities().size + teams.get(1).getEntities().size);
@@ -705,13 +734,28 @@ public class ComputerPlayer implements Runnable {
         teamControlled = i;
     }
 
-    public void setDepthLevel(int d) {
-        depthLevel = d;
-    }
-
-    public void setForgetBestMoveChance(float f) {
-        forgetBestMoveChance = f;
-    }
+    /**
+     * Sets the difficulty level of the computer
+     * @param difficulty
+     */
+   public void setDifficulty(ComputerPlayer.Difficulty difficulty) {
+        switch(difficulty) {
+            case EASY:
+                depthLevel = 1;
+                forgetBestMoveChance = .4f;
+                randomizeDepthLevel = false;
+                break;
+            case NORMAL:
+                depthLevel = 2;
+                forgetBestMoveChance = .08f;
+                randomizeDepthLevel = false;
+                break;
+            case HARD:
+                depthLevel = 3;
+                forgetBestMoveChance = .01f;
+                randomizeDepthLevel = false;
+        }
+   }
 
     public void setGetFirstAttackAlways(boolean b) { getFirstAttackAlways = b; }
 
@@ -744,5 +788,17 @@ public class ComputerPlayer implements Runnable {
             this.entity = entity;
             this.team = team;
         }
+
+        @Override
+        public String toString() {
+            return nm.get(entity).name + " | " + ComponentMappers.team.get(entity).teamNumber;
+        }
+    }
+
+    /**
+     * Enum for the levels of difficulty the computer has
+     */
+    public enum Difficulty {
+        EASY, NORMAL, HARD, FIRST_ATTACK
     }
 }

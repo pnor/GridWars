@@ -46,6 +46,7 @@ import com.mygdx.game.rules_types.ZoneRules;
 import com.mygdx.game.systems.*;
 import com.mygdx.game.ui.*;
 import com.mygdx.game.music.Song;
+import javafx.util.Pair;
 
 import java.util.Iterator;
 
@@ -102,7 +103,7 @@ public class BattleScreen implements Screen {
      * <p> Normal -> 2 </p>
      * <p> Hard ->  6 </p>
      */
-    private Vector2[] computerControlledTeamsIndex;
+    private Pair<Integer, ComputerPlayer.Difficulty>[] computerControlledTeamsIndex;
     private boolean playingComputerTurn;
     private float timeAfterMove;
     private float movementWaitTime;
@@ -189,7 +190,7 @@ public class BattleScreen implements Screen {
      * @param song Song that will play
      * @param game Instance of the game
      */
-    public BattleScreen(Array<Team> selectedTeams, int boardIndex, Vector2[] AIControlled, LerpColorManager colorManager, Song song, GridWars game) {
+    public BattleScreen(Array<Team> selectedTeams, int boardIndex, Pair[] AIControlled, LerpColorManager colorManager, Song song, GridWars game) {
         GRID_WARS = game;
         teams = selectedTeams;
 
@@ -208,9 +209,9 @@ public class BattleScreen implements Screen {
 
         //Updating AI with information about rules
         if (rules instanceof ZoneRules)
-            computer = new ComputerPlayer(BoardComponent.boards, teams, ((ZoneRules) rules).getZones(), 1, 1, true, 0);
+            computer = new ComputerPlayer(BoardComponent.boards, teams, ((ZoneRules) rules).getZones(), 1, ComputerPlayer.Difficulty.EASY);
         else
-            computer = new ComputerPlayer(BoardComponent.boards, teams, 1, 1, true, 0);
+            computer = new ComputerPlayer(BoardComponent.boards, teams, 1, ComputerPlayer.Difficulty.EASY);
         computerControlledTeamsIndex = AIControlled;
 
         //get sum of all entities on teams in game + add lerpColors of teams to manager
@@ -988,7 +989,7 @@ public class BattleScreen implements Screen {
             boolean processingAComputerControlledTeam = false;
             int controlledTeamIndex = -1;
             for (int i = 0; i < computerControlledTeamsIndex.length; i++) {
-                if ((int) computerControlledTeamsIndex[i].x == rules.getCurrentTeamNumber()) {
+                if (computerControlledTeamsIndex[i].getKey() == rules.getCurrentTeamNumber()) {
                     processingAComputerControlledTeam = true;
                     controlledTeamIndex = i;
                     break;
@@ -997,22 +998,16 @@ public class BattleScreen implements Screen {
 
             if (processingAComputerControlledTeam) {
                 playingComputerTurn = true;
-                computer.setTeamControlled((int) computerControlledTeamsIndex[controlledTeamIndex].x);
-                Vector2 v = computerControlledTeamsIndex[controlledTeamIndex];
-                if ((int) v.y == 0) { //first attack
+                computer.setTeamControlled(computerControlledTeamsIndex[controlledTeamIndex].getKey());
+                Pair AIPair = computerControlledTeamsIndex[controlledTeamIndex];
+                if ((ComputerPlayer.Difficulty) AIPair.getValue() == ComputerPlayer.Difficulty.FIRST_ATTACK) { //first attack
                     computer.setGetFirstAttackAlways(true);
-                } else if ((int) v.y == 1) { //easy
-                    computer.setGetFirstAttackAlways(false);
-                    computer.setDepthLevel(0);
-                    computer.setForgetBestMoveChance(.5f);
-                } else if ((int) v.y == 2) { //normal
-                    computer.setGetFirstAttackAlways(false);
-                    computer.setDepthLevel(3);
-                    computer.setForgetBestMoveChance(.3f);
-                } if ((int) v.y == 3) { //hard
-                    computer.setGetFirstAttackAlways(false);
-                    computer.setDepthLevel(5);
-                    computer.setForgetBestMoveChance(.1f);
+                } else if ((ComputerPlayer.Difficulty) AIPair.getValue() == ComputerPlayer.Difficulty.EASY) { //easy
+                    computer.setDifficulty(ComputerPlayer.Difficulty.EASY);
+                } else if ((ComputerPlayer.Difficulty) AIPair.getValue() == ComputerPlayer.Difficulty.NORMAL) { //normal
+                    computer.setDifficulty(ComputerPlayer.Difficulty.NORMAL);
+                } else if ((ComputerPlayer.Difficulty) AIPair.getValue() == ComputerPlayer.Difficulty.HARD) { //hard
+                    computer.setDifficulty(ComputerPlayer.Difficulty.HARD);
                 }
                 if (rules instanceof ZoneRules)
                     computer.updateComputerPlayer(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), ((ZoneRules) rules).getZones()));
