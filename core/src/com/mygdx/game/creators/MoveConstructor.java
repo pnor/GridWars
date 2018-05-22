@@ -2400,18 +2400,22 @@ public class MoveConstructor {
                     public void effect(Entity e, BoardPosition bp) {
                         stm.get(e).sp = MathUtils.clamp(stm.get(e).sp + 1, 0, stm.get(e).getModMaxSp(e));
 
-                        if (status.has(e))
-                            status.get(e).addStatusEffect(defenseless(1), e);
+                        if (status.has(e)) {
+                            status.get(e).addStatusEffect(defenseless(2), e);
+                            status.get(e).addStatusEffect(slowness(2), e);
+                        }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{sparkle, explode,  returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
                     userEntity.sp += 1;
-                    if (userEntity.acceptsStatusEffects)
-                        userEntity.statusEffectInfos.add(defenseless(1).createStatusEffectInfo());
+                    if (userEntity.acceptsStatusEffects) {
+                        userEntity.statusEffectInfos.add(defenseless(2).createStatusEffectInfo());
+                        userEntity.statusEffectInfos.add(slowness(2).createStatusEffectInfo());
+                    }
                 }));
         move.setAttackDescription("Focuses its mind in order to prepare its next move. The user gains one SP point, but lowers the user's " +
-        "defense to 0 for 1 turn.");
+        "defense and speed to 0 for 2 turn.");
         return move;
     }
 
@@ -5400,7 +5404,7 @@ public class MoveConstructor {
                         }
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{changeToBlack, ripple.copy(), regenParticles1, ripple.copy(), regenParticles2, ripple.copy(),
+                new Array<VisualEvent>(new VisualEvent[]{changeToBlack, ripple.copy(), regenParticles1, ripple.copy(), regenParticles2,
                         returnToNormalGradual, returnToNormal, rippleGold})),
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
                     if (enemy.acceptsStatusEffects) {
@@ -6979,7 +6983,6 @@ public class MoveConstructor {
                 "drastically raises attack but halves health and causes gradual damage.");
         return move;
     }
-
     //endregion
 
     //region survival Moves
@@ -8951,7 +8954,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        Move move = new Move("Gather", nm.get(user).name + " began gathering water molecules to regenerate itself!", user, 5, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Gather", nm.get(user).name + " began gathering water molecules to regenerate itself!", user, 7, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -9124,7 +9127,6 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
-
         VisualEvent returnToNormalGradual = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
@@ -9184,6 +9186,7 @@ public class MoveConstructor {
                 })),
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
                             //Uses it less when attack is higher
+                            userEntity.arbitraryValue += 12 * MathUtils.clamp(10 - userEntity.attack, 1, 100);
                             userEntity.attack++;
                         }));
         move.setAttackDescription("Gathers water molecules in order to increase the user's size. Increases the user's attack stat by 1. ");
@@ -9960,7 +9963,7 @@ public class MoveConstructor {
             }
         }, .06f, 10);
 
-        Move move = new Move("Dragon Breath", nm.get(user).name + " spewed dragon breath!", user, 2,
+        Move move = new Move("Dragon Breath", nm.get(user).name + " spewed dragon breath!", user, 3,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1)
@@ -10178,7 +10181,7 @@ public class MoveConstructor {
             }
         }, .05f, 15);
 
-        Move move = new Move("Roar", nm.get(user).name + "'s roar scared the enemy!", user, 2,
+        Move move = new Move("Roar", nm.get(user).name + "'s roar scared the enemy!", user, 3,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
@@ -10442,7 +10445,7 @@ public class MoveConstructor {
             }
         }, .03f, 15);
 
-        Move move = new Move("Spectral Flash", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Spectral Flash", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -10658,7 +10661,7 @@ public class MoveConstructor {
 
         }, .02f, 25);
 
-        Move move = new Move("Fluxwave", nm.get(user).name + " caused major disturbances!", user, 4,
+        Move move = new Move("Fluxwave", nm.get(user).name + " caused major disturbances!", user, 5,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(0, -2)
                 }),
@@ -10812,7 +10815,7 @@ public class MoveConstructor {
             }
         }, .05f, 15);
 
-        Move move = new Move("Raze", nm.get(user).name + " unleashed a surge of energy!", user, 6,
+        Move move = new Move("Raze", nm.get(user).name + " unleashed a surge of energy!", user, 7,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
@@ -10838,7 +10841,6 @@ public class MoveConstructor {
         move.setAttackDescription("Attacks a large range with a huge surge of power. Ignores defense and inflicts 2x damage.");
         return move;
     }
-
 
     //lions
     public static Move stoneGlare(Entity user) {
@@ -14912,6 +14914,26 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
+        VisualEvent fixPositioning = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                if (!t.isOccupied())
+                    return;
+
+                Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                Vector2 tilePosition = new Vector2(BoardComponent.boards.getTileWidth() / 2 - am.get(enemy).actor.getWidth() / 2f,
+                        BoardComponent.boards.getTileHeight() / 2 - am.get(enemy).actor.getHeight() / 2f);
+                am.get(enemy).actor.setPosition(tilePosition.x, tilePosition.y);
+            }
+        }, .05f, 1);
+
         Move move = new Move("Steal Skill", nm.get(user).name + " tried to steal skill points!", user, 0, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
@@ -14931,7 +14953,7 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{
                         slashes, moveRight, slashes.copy(), moveLeft, slashes.copy(),
                         moveRight.copy(), slashes.copy(), moveLeft.copy(), slashes.copy(),
-                        moveRight.copy(), shine, slashes.copy(), shine.copy(), moveLeft.copy(), shine.copy()
+                        moveRight.copy(), shine, slashes.copy(), shine.copy(), moveLeft.copy(), shine.copy(), fixPositioning
                 })),
                 new MoveInfo(false, .5f, (enemy, userEntity) -> {
                     int stolenAmount = MathUtils.random(0, 3);
@@ -15037,6 +15059,26 @@ public class MoveConstructor {
             }
         }, .05f, 2);
 
+        VisualEvent fixPositioning = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                if (!t.isOccupied())
+                    return;
+
+                Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                Vector2 tilePosition = new Vector2(BoardComponent.boards.getTileWidth() / 2 - am.get(enemy).actor.getWidth() / 2f,
+                        BoardComponent.boards.getTileHeight() / 2 - am.get(enemy).actor.getHeight() / 2f);
+                am.get(enemy).actor.setPosition(tilePosition.x, tilePosition.y);
+            }
+        }, .05f, 1);
+
         Move move = new Move("Steal Health", nm.get(user).name + " tried to steal health!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
@@ -15056,7 +15098,7 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{
                         slashes, moveRight, slashes.copy(), moveLeft, slashes.copy(),
                         moveRight.copy(), slashes.copy(), moveLeft.copy(), slashes.copy(),
-                        moveRight.copy(), shine, slashes.copy(), shine.copy(), moveLeft.copy(), shine.copy()
+                        moveRight.copy(), shine, slashes.copy(), shine.copy(), moveLeft.copy(), shine.copy(), fixPositioning
                 })),
                 new MoveInfo(false, 1, (enemy, userEntity) -> {
                     int damage = userEntity.attack - enemy.defense;

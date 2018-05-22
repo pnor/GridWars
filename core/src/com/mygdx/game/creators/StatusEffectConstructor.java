@@ -116,6 +116,12 @@ public class StatusEffectConstructor {
         return effect;
     }
 
+    public static StatusEffect slowness(int duration) {
+        StatusEffect effect =  new StatusEffect("Slowness", duration, new LerpColor(Color.WHITE, Color.NAVY, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
+        effect.setStatChanges(1, 1, 1, 1, 0);
+        return effect;
+    }
+
     public static StatusEffect berserk(int duration) {
         StatusEffect effect = new StatusEffect("Berserk", duration, new LerpColor(Color.RED, Color.BLUE, .2f, Interpolation.sine), (e) -> {
             stm.get(e).hp -= 1;

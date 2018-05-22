@@ -116,8 +116,6 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
             System.out.println("Level : " + level);
         }
-
-
     }
 
     @Override
@@ -251,10 +249,29 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 }
             }
         };
+
+        // Background
+        Sprite transparentBack = new Sprite(backAtlas.findRegion("BlankBackground"));
+        transparentBack.setColor(0, 0, 0, 0);
         Sprite backgroundLay = new Sprite(backAtlas.findRegion("TowerBackground"));
-        background = new Background(backgroundLay,
-                new Sprite[]{},
-                new BackType[]{},
+        Sprite overlay;
+        if (level >= 1 && level <= 10) { //level 1-9
+            overlay = new Sprite(backAtlas.findRegion("DiagStripeHoriz"));
+        } else if (level >= 11 && level <= 20) { //level 11-19
+            overlay = new Sprite(backAtlas.findRegion("SpeedBackground"));
+        } else if (level >= 21 && level <= 30) {//level 21-30
+            overlay = new Sprite(backAtlas.findRegion("WavesHoriz"));
+        } else if (level >= 31 && level <= 40) { //level 31-40
+            overlay = new Sprite(backAtlas.findRegion("HexagonBackground"));
+        }  else if (level >= 41 && level <= 49) { //level 41-49
+            overlay = new Sprite(backAtlas.findRegion("CubeBackground"));
+        } else { //level 50
+            overlay = new Sprite(backAtlas.findRegion("FadeBackground"));
+        }
+        overlay.setColor(0, 0, 0, .2f);
+        background = new Background(transparentBack,
+                new Sprite[]{overlay, backgroundLay},
+                new BackType[]{BackType.SCROLL_HORIZONTAL, BackType.NO_MOVE},
                 null, null);
 
         btnRestore.addListener(listener);
@@ -275,12 +292,15 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             floorLevelLbl.setColor(Color.RED);
         }
         offsetTable.add(floorLevelLbl).colspan(4).padBottom(20).row();
+        //Info about Performance
         offsetTable.add(new Label("Points : " + points, skin)).colspan(4).padBottom(20).row();
         offsetTable.add(new Label("Turn Count : " + numberOfTurns, skin)).colspan(4).padBottom(30).row();
+        //Team Images
         offsetTable.add(teamImages[0]).padRight(20f).padBottom(20f);
         offsetTable.add(teamImages[1]).padRight(20f).padBottom(20f);
         offsetTable.add(teamImages[2]).padRight(20f).padBottom(20f);
         offsetTable.add(teamImages[3]).padBottom(20f).row();
+        //Power Ups
         offsetTable.add(btnRestore).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
         offsetTable.add(lblHealthPower).colspan(2).size(80, 40).padBottom(20f).row();
         offsetTable.add(btnSpUp).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
@@ -288,7 +308,8 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         offsetTable.add(btnPowerUp).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
         offsetTable.add(lblPower).colspan(2).size(80, 40).padBottom(20f).row();
         offsetTable.add(btnSpeedUp).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
-        offsetTable.add(lblSpeedUp).colspan(2).size(80, 40).padBottom(40f).row();
+        offsetTable.add(lblSpeedUp).colspan(2).size(80, 40).padBottom(60f).row();
+        //Save and Continue Buttons
         offsetTable.add(btnSave).colspan(2).size(170, 40).padRight(20);
         offsetTable.add(btnContinue).colspan(2).size(170, 40).row();
         table.add().padRight(200f);

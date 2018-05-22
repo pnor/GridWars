@@ -100,7 +100,7 @@ public class TutorialScreen extends MenuScreen {
             }
         };
 
-        background = BackgroundConstructor.makeMovingStripeBackground(Color.GRAY, Color.DARK_GRAY);
+        background = BackgroundConstructor.makeMovingStripeBackground(Color.BLACK, new Color(.1f, .1f, .1f, .5f));
 
         nextBtn.addListener(listener);
 

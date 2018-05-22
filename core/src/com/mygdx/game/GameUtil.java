@@ -61,6 +61,7 @@ public class GameUtil {
 
         colors.put("magenta", Color.MAGENTA);
         colors.put("maroon", Color.MAROON);
+        colors.put("mystical cyan", new LerpColor(Color.CYAN, Color.ROYAL, 5f));
 
         colors.put("orange", Color.ORANGE);
         colors.put("olive", Color.OLIVE);

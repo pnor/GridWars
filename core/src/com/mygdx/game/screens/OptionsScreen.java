@@ -150,7 +150,7 @@ public class OptionsScreen extends MenuScreen implements Screen {
         table.add(btnBack).size(90, 50);
         table.add(btnOK).size(90, 50);
 
-        background = BackgroundConstructor.makeMovingStripeBackground(Color.DARK_GRAY, Color.GRAY);
+        background = BackgroundConstructor.makeNewTitle();
     }
 
     @Override

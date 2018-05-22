@@ -337,11 +337,11 @@ public class ComputerPlayer implements Runnable {
                     startIndex = j;
             }
             startIndex = (startIndex + 1) % entityTeamPairings.size;
-            System.out.println("Start Index : " + startIndex);
+            System.out.println("Start-----------------------(" + startIndex + ")");
             for (Turn t : allTurns) {
-                System.out.println("Next-----------------------(" + startIndex + ")");
+                System.out.println("***");
                 curValue = expGetTurnValMinimax(board.copy().tryTurn(t), team, startIndex, 1, -9999999, 9999999);
-                System.out.println("---Val: " + curValue);
+                System.out.println("Val: " + curValue);
 
                 worstValue = Math.min(curValue, worstValue);
                 if (curValue > bestTurnVal) {
@@ -378,12 +378,38 @@ public class ComputerPlayer implements Runnable {
             return board.evaluate(teamControlled);
         }
 
+        // End of Turn Effects
+
+        if (depth > 1) {
+            if (curEntityIndex == 0) {
+                board.doTurnEffects(0);
+            } else if (curEntityIndex == teams.get(0).getEntities().size) { // Start of Second Team Turn
+                board.doTurnEffects(1);
+            } else if (teams.size == 2 && curEntityIndex == teams.get(0).getEntities().size - 1 + teams.get(1).getEntities().size) { // If they're 3 teams, and start of 3rd team turn
+                board.doTurnEffects(2);
+            }
+        }
+
         Array<Turn> entityTurns = getAllPossibleTurns(entityTeamPairings.get(curEntityIndex).entity, entityValue, board);
         int bestVal = -999999999;
         System.out.println("IN Minimax| depth: " + depth + "   maxing?: " + (team == teamControlled) + "   Player Index: " + curEntityIndex);
         for (Turn t : entityTurns) {
+            // Zone Rules: If it's on a zone -> Don't Evaluate Turns after that
+            if (zoneLocations != null) {
+                for (int i = 0; i < zoneLocations.size; i++) {
+                    for (BoardPosition zone : zoneLocations.get(i)) {
+                        if (board.getEntities().get(zone) != null) {
+                            if (i == teamControlled && board.getEntities().get(zone).team != teamControlled)
+                                return 99999999 - depth * 30;
+                            else if (i != teamControlled && board.getEntities().get(zone).team == teamControlled)
+                                return -99999999 + depth * 30;
+                        }
+                    }
+                }
+            }
+
             if (team == teamControlled) { // Computer team
-                if (depth > depthLevel * 4) { //get a value
+                if (depth > depthLevel * depthLevel * teams.get(team).getEntities().size) { //get a value
                     int val = board.tryTurn(t).evaluate(teamControlled);
                     //apply depth penalty (longer it takes to get to an outcome, the worst)
                     val -= 30 * depth;
@@ -398,7 +424,7 @@ public class ComputerPlayer implements Runnable {
                     break;
                 return bestVal;
             } else if (team != indexOfFirstAttackingTeams) { // Enemy Team
-                if (depth > depthLevel * 4) { //get a value
+                if (depth > depthLevel * teams.get(team).getEntities().size) { //get a value
                     int val = board.tryTurn(t).evaluate(teamControlled);
                     //apply depth penalty (longer it takes to get to an outcome, the worst)
                     val -= 30 * depth;
