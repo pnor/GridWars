@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -40,12 +41,12 @@ import com.mygdx.game.creators.*;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.StatusEffect;
 import com.mygdx.game.move_related.Visuals;
+import com.mygdx.game.music.Song;
 import com.mygdx.game.rules_types.Rules;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.rules_types.ZoneRules;
 import com.mygdx.game.systems.*;
 import com.mygdx.game.ui.*;
-import com.mygdx.game.music.Song;
 import javafx.util.Pair;
 
 import java.util.Iterator;
@@ -1001,7 +1002,7 @@ public class BattleScreen implements Screen {
                 computer.setTeamControlled(computerControlledTeamsIndex[controlledTeamIndex].getKey());
                 Pair AIPair = computerControlledTeamsIndex[controlledTeamIndex];
                 if ((ComputerPlayer.Difficulty) AIPair.getValue() == ComputerPlayer.Difficulty.FIRST_ATTACK) { //first attack
-                    computer.setGetFirstAttackAlways(true);
+                    computer.setDifficulty(ComputerPlayer.Difficulty.FIRST_ATTACK);
                 } else if ((ComputerPlayer.Difficulty) AIPair.getValue() == ComputerPlayer.Difficulty.EASY) { //easy
                     computer.setDifficulty(ComputerPlayer.Difficulty.EASY);
                 } else if ((ComputerPlayer.Difficulty) AIPair.getValue() == ComputerPlayer.Difficulty.NORMAL) { //normal
@@ -1251,7 +1252,7 @@ public class BattleScreen implements Screen {
         if (stm.has(selectedEntity)) {
             if (!stm.get(selectedEntity).obscureStatInfo) {
                 StatComponent stat = stm.get(selectedEntity);
-                hpLbl.setText(stat.hp + " / " + stat.getModMaxHp(selectedEntity));
+                hpLbl.setText(MathUtils.clamp(stat.hp, 0, 999) + " / " + stat.getModMaxHp(selectedEntity));
                 spLbl.setText(stat.sp + " / " + stat.getModMaxSp(selectedEntity));
                 atkLbl.setText("" + stat.getModAtk(selectedEntity));
                 defLbl.setText("" + stat.getModDef(selectedEntity));

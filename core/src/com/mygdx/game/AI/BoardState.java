@@ -262,7 +262,7 @@ public class BoardState {
         }
         final int ASSUMED_COL_SIZE = largestColSize;
 
-        //listed in order of display priority form lowest (top) to highest (bottom)
+        // listed in order of display priority form lowest (top) to highest (bottom)
         final char OBJECT_ICON = 'X';
         final char ZONE_ICON = 'Z';
         final char TEAM_2_ICON = '2';

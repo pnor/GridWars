@@ -88,8 +88,10 @@ public class EntityValue implements Comparable {
 
         //value += sp * 30;
 
+        /*
         if (team == -1) //no team -> treat as weak enemy
             value /= 40;
+        */
 
         if (team != homeTeam)
             value *= -1;

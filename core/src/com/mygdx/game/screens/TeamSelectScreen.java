@@ -360,7 +360,10 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         };
 
         //backgrounds----------------
-        background = BackgroundConstructor.makeMovingStripeBackground(Color.DARK_GRAY, Color.GRAY);
+        if (zones)
+            background = BackgroundConstructor.makeMovingStripeBackground(new Color(0.15f, 0.1f, 0.1f, 1), Color.GRAY);
+        else
+            background = BackgroundConstructor.makeMovingStripeBackground(new Color(0.1f, 0.15f, 0.1f, 1), Color.GRAY);
 
         //listeners
         okBtn.addListener(teamSelectionListener);
