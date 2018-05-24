@@ -262,7 +262,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         } else if (level >= 21 && level <= 30) {//level 21-30
             overlay = new Sprite(backAtlas.findRegion("WavesHoriz"));
         } else if (level >= 31 && level <= 40) { //level 31-40
-            overlay = new Sprite(backAtlas.findRegion("HexagonBackground"));
+            overlay = new Sprite(backAtlas.findRegion("SimpleRoundedZag"));
         }  else if (level >= 41 && level <= 49) { //level 41-49
             overlay = new Sprite(backAtlas.findRegion("CubeBackground"));
         } else { //level 50

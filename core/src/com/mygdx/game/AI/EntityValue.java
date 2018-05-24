@@ -165,15 +165,15 @@ public class EntityValue implements Comparable {
     @Override
     public String toString() {
         return "EntityValue{" +
-                "team=" + team +
-                ", board Entity ID=" + BOARD_ENTITY_ID +
-                ", hp=" + hp +
-                ", maxHp=" + maxHp +
-                ", sp=" + sp +
-                ", attack=" + attack +
-                ", defense=" + defense +
-                ", accepts Status Effect=" + acceptsStatusEffects +
-                ", pos=" + pos +
+                "team= " + team +
+                ", board Entity ID= " + BOARD_ENTITY_ID +
+                ", hp= " + hp +
+                ", maxHp= " + maxHp +
+                ", sp= " + sp +
+                ", attack= " + attack +
+                ", defense= " + defense +
+                ", accepts Status Effect= " + acceptsStatusEffects +
+                ", pos= " + pos +
                 '}';
     }
 }

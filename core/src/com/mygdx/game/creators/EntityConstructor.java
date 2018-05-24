@@ -1571,7 +1571,7 @@ public class EntityConstructor {
                 atlas.findRegion("brightScaleman2")
         }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(10, 7, 1, 1, 1));
+        entity.add(new StatComponent(6, 7, 1, 1, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1588,21 +1588,21 @@ public class EntityConstructor {
                 MoveConstructor.superGuard(entity)
         })));
         entity.add(new PhaseComponent(
-                new Phase(3, -999, new AnimationActor(new TextureRegion[]{
+                new Phase(2, -999, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("brightScalemanHigh"),
                         atlas.findRegion("brightScalemanHigh2")},
                         Animation.PlayMode.LOOP, 0.1f, true),
-                        new StatComponent(10, 5, 3, 0, 3)),
-                new Phase(6, 3, new AnimationActor(new TextureRegion[]{
+                        new StatComponent(6, 5, 3, 0, 3)),
+                new Phase(4, 3, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("brightScalemanMid"),
                         atlas.findRegion("brightScalemanMid2")},
                         Animation.PlayMode.LOOP, 0.2f, true),
-                        new StatComponent(10, 7, 2, 1, 2)),
-                new Phase(10, 6, new AnimationActor(new TextureRegion[]{
+                        new StatComponent(6, 7, 2, 1, 2)),
+                new Phase(6, 5, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("brightScaleman"),
                         atlas.findRegion("brightScaleman2")},
                         Animation.PlayMode.LOOP, 0.5f, true),
-                        new StatComponent(10, 7, 1, 1, 1))
+                        new StatComponent(6, 7, 1, 1, 1))
         ));
         return entity;
     }

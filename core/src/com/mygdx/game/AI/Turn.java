@@ -2,7 +2,6 @@ package com.mygdx.game.AI;
 
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.game.boards.BoardPosition;
-import com.mygdx.game.move_related.Attack;
 
 import static com.mygdx.game.ComponentMappers.nm;
 
@@ -19,6 +18,13 @@ public class Turn {
     /** orientation of the attack */
     public int direction;
 
+    /**
+     * Creates a Turn Object that is used by BoardState to simulate the effect of a turn on a game state.
+     * @param e Entity
+     * @param newPosition Position being moved to
+     * @param attackNo Which attack being used. -1 means no attack was used that turn
+     * @param directionNo what direction the attack is oriented
+     */
     public Turn(Entity e, BoardPosition newPosition, int attackNo, int directionNo) {
         entity = e;
         pos = newPosition;
