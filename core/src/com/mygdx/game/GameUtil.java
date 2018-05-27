@@ -46,6 +46,7 @@ public class GameUtil {
         colors.put("groovy", new LerpColor(new Color(.4f, .2f, .1f, 1), Color.PURPLE, .5f, Interpolation.bounceOut));
         colors.put("ghost", new Color(.6f, .6f, .6f, .65f));
 
+        colors.put("hazard", new LerpColor(Color.YELLOW, Color.BLACK, 1f));
         colors.put("hold my coffee", new LerpColor(new Color(.4f, .29f, .227f, 1f), Color.ORANGE, 1f));
 
         colors.put("invisible", new Color(1, 1, 1, 0));
