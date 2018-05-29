@@ -123,163 +123,6 @@ public class ComputerPlayer implements Runnable {
 
     }
 
-
-    /**
-     * Gets the best turn by seeing Turn returns the highest heuristic value. Does not use recursion, so it only goes
-     * to a depth of 1. (Changes the BoardState object that is passed into it)
-     * @return Array of the best turns for each entity.
-     */
-    public Array<Turn> getBestTurns(BoardState board, int team) {
-        Array<Turn> turns = new Array<>();
-        EntityValue entityValue = null;
-        Entity e;
-
-        for (int i = 0; i < teams.get(team).getEntities().size; i++) {
-            e = teams.get(team).getEntities().get(i);
-
-            //recursion check -> if it dies in a later turn
-            boolean inBoard = false;
-            for (EntityValue value : board.getEntities().values()) {
-                if (value.checkIdentity(e)) {
-                    inBoard = true;
-                    entityValue = value;
-                    break;
-                }
-            }
-
-            if (!stm.get(e).alive || !inBoard) { //is alive check
-                turns.add(null);
-                continue;
-            }
-
-            int bestTurnVal = -99999999;
-            int worstValue = 99999999;
-            int curValue = 0;
-            Array<Turn> allTurns = getAllPossibleTurns(e, entityValue, board);
-            Turn bestTurn = null;
-
-            for (Turn t : allTurns) {
-                curValue = board.copy().tryTurn(t).evaluate(team);
-                worstValue = Math.min(curValue, worstValue);
-                if (curValue > bestTurnVal) {
-                    bestTurnVal = curValue;
-                    bestTurn = t;
-                }
-            }
-
-            turns.add(bestTurn);
-            //update BoardState with last Entity's action
-            board.tryTurn(bestTurn);
-        }
-
-        return turns;
-    }
-
-    /**
-     * Returns an Array of the best turns for a team of Entities. If an entity is dead, its turn will be null. Ties in heuristic values of turn is
-     * drawbreaked by using shallower depth levels.
-     * @param board {@link BoardState}
-     * @param team {@link Team} that the best turns is getting retrieved
-     * @param depth how many turns ahead it looks
-     * @return {@link Array} of {@link Turn}s
-     */
-    public Array<Turn> getBestTurnsBestTurnAssumption(BoardState board, int team, int depth) {
-        Array<Turn> turns = new Array<>();
-        Array<Entity> entities = teams.get(team).getEntities();
-
-        for (int i = 0; i < entities.size; i++) {
-            Entity e = entities.get(i);
-
-            if (!stm.get(e).alive) { //is alive check
-                turns.add(null);
-                continue;
-            }
-
-            int bestTurnVal = -9999999;
-            int worstValue = 9999999;
-            int curValue = 0;
-            Array<Turn> allTurns = getAllPossibleTurns(e);
-            Array<Turn> bestTurns = new Array<>(); //for possible ties
-            Turn bestTurn;
-            boolean willForget;
-
-            for (Turn t : allTurns) {
-                willForget = MathUtils.randomBoolean(forgetBestMoveChance) && bestTurns.size > 0;
-                if (willForget)
-                    System.out.print("?");
-                curValue = bestTurnAssumption(board.copy().tryTurn(t), (team + 1) % teams.size, team, depth);
-                worstValue = Math.min(curValue, worstValue);
-                if (curValue > bestTurnVal && !willForget) {
-                    System.out.print("!!!!");
-                    bestTurnVal = curValue;
-                    bestTurns.clear();
-                    bestTurns.add(t);
-                } else if (curValue == bestTurnVal && !willForget) {
-                    System.out.print("~!!~");
-                    bestTurns.add(t);
-                }
-
-                if (willForget && (curValue >bestTurnVal || curValue == bestTurnVal)) //debug
-                    System.out.print("????");
-                System.out.print(t.toStringCondensed() + ": ");
-                System.out.print(curValue + ", " + "\n");
-            }
-
-            //resolve ties
-            if (bestTurns.size > 1 && depth > 0) {
-                System.out.println("Drawbreak");
-                System.out.println("bestTurns : ");
-                for (Turn t : bestTurns) {
-                    System.out.println(t.toStringCondensed());
-                }
-                bestTurn = drawbreakBestTurns(bestTurns, board, team, depth);
-            } else if (depth == 0) {
-                bestTurn = bestTurns.random();
-            } else {
-                bestTurn = bestTurns.first();
-            }
-
-            System.out.println("\nWorst: " + worstValue);
-            System.out.println("Best: " + bestTurnVal);
-            System.out.println("Best Turn: " + bestTurn);
-            System.out.println("-----------------------------------------------");
-
-
-            turns.add(bestTurn);
-            //update BoardState with last Entity's action
-            board.tryTurn(bestTurn);
-
-        }
-
-        return turns;
-    }
-
-    private int bestTurnAssumption(BoardState board, int teamNo, int originalTeam, int depthLevel) {
-        BoardState newBoardState = board.copy();
-        //System.out.println(newBoardState);
-        for (int i = 0; i <= depthLevel; i++) {
-            DEBUG_TURNS_PROCESSED++;
-            //change turns
-            teamNo = (teamNo + 1) % teams.size;
-
-            //do turn
-            if (teamNo == indexOfFirstAttackingTeams) { //if on a team that only uses first attacks
-                i -= 1; //do not count in depth deepness
-                Array<Turn> firstAttackTurns = getFirstAttacks(teamNo);
-                for (Turn t : firstAttackTurns)
-                    newBoardState = newBoardState.tryTurn(t);
-            }
-            newBoardState.doTurnEffects(teamNo);
-            getBestTurns(newBoardState, teamNo);
-            /*
-            System.out.println("A Step of GetBestTurns (Depth : " + i + " / " + depthLevel + ")");
-            System.out.println(newBoardState);
-            */
-        }
-
-        return newBoardState.evaluate(originalTeam);
-    }
-
     public Array<Turn> getBestTurnsMinimax(BoardState board, int team) {
         Array<Turn> turns = new Array<>();
         EntityValue entityValue = null;
@@ -306,6 +149,7 @@ public class ComputerPlayer implements Runnable {
             int bestTurnVal = -99999999;
             int worstValue = 99999999;
             int curValue = 0;
+            int bestCurValueResult = 0;
             Array<Turn> allTurns = getAllPossibleTurns(e, entityValue, board);
             Turn bestTurn = null;
             // Get index of next entity turn after tested turn
@@ -317,19 +161,24 @@ public class ComputerPlayer implements Runnable {
             startIndex = (startIndex + 1) % entityTeamPairings.size;
             System.out.println("Start-----------------------(" + startIndex + ")");
             for (Turn t : allTurns) {
+                /*
                 if (MathUtils.random() < forgetBestMoveChance)
                     continue;
+                    */
                 System.out.println("***");
                 curValue = expGetTurnValMinimax(board.copy().tryTurn(t), team, startIndex, 1, -9999999, 9999999);
                 System.out.println("Val: " + curValue);
 
                 worstValue = Math.min(curValue, worstValue);
                 if (curValue > bestTurnVal) {
+                    bestCurValueResult = curValue;
                     bestTurnVal = curValue;
                     bestTurn = t;
                 }
             }
             turns.add(bestTurn);
+            System.out.println("~-~-~-~-~-~-~-~-~-~-~-~-");
+            System.out.println("At depth " + depthLevel + " the best value was " + bestCurValueResult);
             System.out.println(bestTurn);
             System.out.println(board.copy().tryTurn(bestTurn));
             System.out.println("End-----------------------");
@@ -383,10 +232,12 @@ public class ComputerPlayer implements Runnable {
             }
         }
 
+
         Array<Turn> entityTurns = getAllPossibleTurns(entityTeamPairings.get(curEntityIndex).entity, entityValue, board);
         int bestVal = -999999999;
         System.out.println("IN Minimax| depth: " + depth + "   maxing?: " + (team == teamControlled) + "   Player Index: " + curEntityIndex);
         for (Turn t : entityTurns) {
+            System.out.println("(" + entityTurns.indexOf(t, true) + "/" + entityTurns.size + ")");
             if (team == teamControlled) { // Computer team
                 if (depth > depthLevel * depthLevel * teams.get(team).getEntities().size) { //get a value
                     int val = board.tryTurn(t).evaluate(teamControlled);
@@ -499,10 +350,10 @@ public class ComputerPlayer implements Runnable {
         int bestVal = -999999999;
         //System.out.println("IN Minimax| depth: " + depth + "   maxing?: " + (team == teamControlled) + "   Player Index: " + curEntityIndex);
         if (team == teamControlled) { // Computer team
-            if (depth > depthLevel * depthLevel * teams.get(team).getEntities().size) { //get a value
+            if (depth > depthLevel /* * teams.get(team).getEntities().size*/) { //get a value
                 int val = board.evaluate(teamControlled);
                 //apply depth penalty (longer it takes to get to an outcome, the worst)
-                val -= 30 * depth;
+                //val -= 30 * depth;
                 return val;
             }
             bestVal = -999999999;
@@ -519,10 +370,10 @@ public class ComputerPlayer implements Runnable {
             }
             return bestVal;
         } else if (team != indexOfFirstAttackingTeams) { // Enemy Team
-            if (depth > depthLevel * teams.get(team).getEntities().size) { //get a value
+            if (depth > depthLevel /* * teams.get(team).getEntities().size*/) { //get a value
                 int val = board.evaluate(teamControlled);
                 //apply depth penalty (longer it takes to get to an outcome, the worst)
-                val -= 30 * depth;
+                //val -= 30 * depth;
                 return val;
             }
             bestVal = 999999999;
@@ -542,6 +393,166 @@ public class ComputerPlayer implements Runnable {
         // Shouldn't reach here
         System.out.println("reached end of AI minimax method?");
         return -123456789;
+    }
+
+
+    //--------------------
+    /**
+     * Gets the best turn by seeing Turn returns the highest heuristic value. Does not use recursion, so it only goes
+     * to a depth of 1. (Changes the BoardState object that is passed into it)
+     * @return Array of the best turns for each entity.
+     */
+    public Array<Turn> getBestTurns(BoardState board, int team, boolean useForgetChance) {
+        Array<Turn> turns = new Array<>();
+        EntityValue entityValue = null;
+        Entity e;
+
+        for (int i = 0; i < teams.get(team).getEntities().size; i++) {
+            e = teams.get(team).getEntities().get(i);
+
+            //recursion check -> if it dies in a later turn
+            boolean inBoard = false;
+            for (EntityValue value : board.getEntities().values()) {
+                if (value.checkIdentity(e)) {
+                    inBoard = true;
+                    entityValue = value;
+                    break;
+                }
+            }
+
+            if (!stm.get(e).alive || !inBoard) { //is alive check
+                turns.add(null);
+                continue;
+            }
+
+            int bestTurnVal = -99999999;
+            int worstValue = 99999999;
+            int curValue = 0;
+            Array<Turn> allTurns = getAllPossibleTurns(e, entityValue, board);
+            Turn bestTurn = null;
+
+            for (Turn t : allTurns) {
+                if (useForgetChance && MathUtils.random() < forgetBestMoveChance)
+                    continue;
+                curValue = board.copy().tryTurn(t).evaluate(team);
+                worstValue = Math.min(curValue, worstValue);
+                if (curValue > bestTurnVal) {
+                    bestTurnVal = curValue;
+                    bestTurn = t;
+                }
+            }
+
+            turns.add(bestTurn);
+            //update BoardState with last Entity's action
+            board.tryTurn(bestTurn);
+        }
+
+        return turns;
+    }
+
+    /**
+     * Returns an Array of the best turns for a team of Entities. If an entity is dead, its turn will be null. Ties in heuristic values of turn is
+     * drawbreaked by using shallower depth levels.
+     * @param board {@link BoardState}
+     * @param team {@link Team} that the best turns is getting retrieved
+     * @param depth how many turns ahead it looks
+     * @return {@link Array} of {@link Turn}s
+     */
+    public Array<Turn> getBestTurnsBestTurnAssumption(BoardState board, int team, int depth) {
+        Array<Turn> turns = new Array<>();
+        Array<Entity> entities = teams.get(team).getEntities();
+
+        for (int i = 0; i < entities.size; i++) {
+            Entity e = entities.get(i);
+
+            if (!stm.get(e).alive) { //is alive check
+                turns.add(null);
+                continue;
+            }
+
+            int bestTurnVal = -9999999;
+            int worstValue = 9999999;
+            int curValue = 0;
+            Array<Turn> allTurns = getAllPossibleTurns(e);
+            Array<Turn> bestTurns = new Array<>(); //for possible ties
+            Turn bestTurn;
+            boolean willForget;
+
+            for (Turn t : allTurns) {
+                willForget = MathUtils.randomBoolean(forgetBestMoveChance) && bestTurns.size > 0;
+                if (willForget)
+                    System.out.print("?");
+                curValue = bestTurnAssumption(board.copy().tryTurn(t), (team + 1) % teams.size, team, depth);
+                worstValue = Math.min(curValue, worstValue);
+                if (curValue > bestTurnVal && !willForget) {
+                    System.out.print("!!!!");
+                    bestTurnVal = curValue;
+                    bestTurns.clear();
+                    bestTurns.add(t);
+                } else if (curValue == bestTurnVal && !willForget) {
+                    System.out.print("~!!~");
+                    bestTurns.add(t);
+                }
+
+                if (willForget && (curValue >bestTurnVal || curValue == bestTurnVal)) //debug
+                    System.out.print("????");
+                System.out.print(t.toStringCondensed() + ": ");
+                System.out.print(curValue + ", " + "\n");
+            }
+
+            //resolve ties
+            if (bestTurns.size > 1 && depth > 0) {
+                System.out.println("Drawbreak");
+                System.out.println("bestTurns : ");
+                for (Turn t : bestTurns) {
+                    System.out.println(t.toStringCondensed());
+                }
+                bestTurn = drawbreakBestTurns(bestTurns, board, team, depth);
+            } else if (depth == 0) {
+                bestTurn = bestTurns.random();
+            } else {
+                bestTurn = bestTurns.first();
+            }
+
+            System.out.println("\nWorst: " + worstValue);
+            System.out.println("Best: " + bestTurnVal);
+            System.out.println("Best Turn: " + bestTurn);
+            System.out.println("-----------------------------------------------");
+
+
+            turns.add(bestTurn);
+            //update BoardState with last Entity's action
+            board.tryTurn(bestTurn);
+
+        }
+
+        return turns;
+    }
+
+    private int bestTurnAssumption(BoardState board, int teamNo, int originalTeam, int depthLevel) {
+        BoardState newBoardState = board.copy();
+        //System.out.println(newBoardState);
+        for (int i = 0; i <= depthLevel; i++) {
+            DEBUG_TURNS_PROCESSED++;
+            //change turns
+            teamNo = (teamNo + 1) % teams.size;
+
+            //do turn
+            if (teamNo == indexOfFirstAttackingTeams) { //if on a team that only uses first attacks
+                i -= 1; //do not count in depth deepness
+                Array<Turn> firstAttackTurns = getFirstAttacks(teamNo);
+                for (Turn t : firstAttackTurns)
+                    newBoardState = newBoardState.tryTurn(t);
+            }
+            newBoardState.doTurnEffects(teamNo);
+            getBestTurns(newBoardState, teamNo, false);
+            /*
+            System.out.println("A Step of GetBestTurns (Depth : " + i + " / " + depthLevel + ")");
+            System.out.println(newBoardState);
+            */
+        }
+
+        return newBoardState.evaluate(originalTeam);
     }
 
     /**
