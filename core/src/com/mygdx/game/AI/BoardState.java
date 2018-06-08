@@ -18,12 +18,17 @@ import static com.mygdx.game.ComponentMappers.*;
 public class BoardState {
     private EntityMap entities;
     private Array<Array<BoardPosition>> zones;
+    /** Keeps count of how many entities per team there are.
+     * Index represents team number while value at index represents number of live entities
+     */
+    private Array<Integer> liveEntityCount;
 
     /**
      * Creates a {@link BoardState} using entities and their teams.
      * @param e Array of Entities
      */
     public BoardState(Array<Entity> e, Array<Array<BoardPosition>> boardZones) {
+        liveEntityCount = new Array<Integer>(new Integer[]{0, 0, 0});
         entities = new EntityMap();
         for (Entity entity : e) {
             EntityValue value;
@@ -57,15 +62,26 @@ public class BoardState {
                 }
             } else continue;
 
+            //add new entityValue to liveEntityCount
+            if (value.team != -1) {
+                liveEntityCount.set(value.team, liveEntityCount.get(value.team) + 1);
+            }
             entities.put(entity, bm.get(entity).pos, value);
         }
 
         zones = boardZones;
     }
 
-    public BoardState(EntityMap entityMap, Array<Array<BoardPosition>> boardZones) {
+    /**
+     * Creates a board state using values that would normally be gotten from a pre-existing board state
+     * @param entityMap Map of entities on the board
+     * @param boardZones Zones
+     * @param entitiesAliveCount Number of Entities from each team that are alive
+     */
+    public BoardState(EntityMap entityMap, Array<Array<BoardPosition>> boardZones, Array<Integer> entitiesAliveCount) {
         entities = entityMap;
         zones = boardZones;
+        liveEntityCount = entitiesAliveCount;
     }
 
     /**
@@ -127,8 +143,10 @@ public class BoardState {
                         e.hp = e.maxHp;
 
                     //remove dead
-                    if (e.hp <= 0)
+                    if (e.hp <= 0) {
                         entities.remove(e);
+                        liveEntityCount.set(e.team, liveEntityCount.get(e.team) - 1);
+                    }
                 } else { //attacking on an empty space
                     //discourage attacking empty spaces compared to not attacking at all
                     //single hitting moves weighted heavier than spread attacks
@@ -191,6 +209,18 @@ public class BoardState {
     }
 
     /**
+     * @return index of the team still on the board. Does not count the 1st attack only teams, and will return -1 if no teams qualifies.
+     */
+    public int getLastTeamStanding() {
+        if (liveEntityCount.get(0) <= 0)
+            return 1;
+        else if (liveEntityCount.get(1) <= 0)
+            return 0;
+        else
+            return -1;
+    }
+
+    /**
      * @param bp position that is being checked
      * @return whether the chosen position is occupied by an entity
      */
@@ -206,7 +236,11 @@ public class BoardState {
         for (EntityValue e : entities.getEntityValues())
             map.put(entities.getKeyEntity(e), e.pos, e);
 
-        return new BoardState(map, zones);
+        return new BoardState(map, zones, liveEntityCount);
+    }
+
+    public Array<Integer> getLiveEntityCount() {
+        return liveEntityCount;
     }
 
     public EntityMap getEntities() {
@@ -313,6 +347,9 @@ public class BoardState {
             outputString.append('\n');
         }
 
+        // print number of entities still alive
+        outputString.append("Number Still Alive:   0| " + liveEntityCount.get(0) + "   1| " + liveEntityCount.get(1) +
+                "   2| " + liveEntityCount.get(2) + "\n");
         /**
          * Example of output
          *     0 1 2
@@ -322,6 +359,7 @@ public class BoardState {
          *  3 | | | |
          *  4 | | | |
          *
+         * Number Still Alive:   0: 1   1: 3  2: 0
          */
 
         return outputString.toString();

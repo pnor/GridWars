@@ -86,7 +86,7 @@ public class EntityValue implements Comparable {
         if (hp > 0)
             value += 300 + (hp * 30);
 
-        //value += sp * 30;
+        //value += sp * 10;
 
         if (team != homeTeam) {
             value *= -1;
