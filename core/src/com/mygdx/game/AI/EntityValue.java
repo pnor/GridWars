@@ -81,20 +81,16 @@ public class EntityValue implements Comparable {
      */
     public int getValue(int homeTeam) {
         int value = 0;
-        value += arbitraryValue;
+        //value += arbitraryValue;
 
         if (hp > 0)
             value += 300 + (hp * 30);
 
         //value += sp * 30;
 
-        /*
-        if (team == -1) //no team -> treat as weak enemy
-            value /= 40;
-        */
-
-        if (team != homeTeam)
+        if (team != homeTeam) {
             value *= -1;
+        }
 
         return value;
     }

@@ -8,7 +8,7 @@ import static com.mygdx.game.ComponentMappers.nm;
 /**
  * @author Phillip O'Reggio
  */
-public class Turn {
+public class Turn{
     /** Entity moving */
     public Entity entity;
     /** New Position on Board */

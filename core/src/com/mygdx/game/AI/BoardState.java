@@ -1,10 +1,8 @@
 package com.mygdx.game.AI;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.move_related.Move;
@@ -18,7 +16,7 @@ import static com.mygdx.game.ComponentMappers.*;
  * @author Phillip O'Reggio
  */
 public class BoardState {
-    private ArrayMap<BoardPosition, EntityValue> entities;
+    private EntityMap entities;
     private Array<Array<BoardPosition>> zones;
 
     /**
@@ -26,7 +24,7 @@ public class BoardState {
      * @param e Array of Entities
      */
     public BoardState(Array<Entity> e, Array<Array<BoardPosition>> boardZones) {
-        entities = new ArrayMap<>();
+        entities = new EntityMap();
         for (Entity entity : e) {
             EntityValue value;
             if (stm.has(entity) && stm.get(entity).alive) {
@@ -59,13 +57,13 @@ public class BoardState {
                 }
             } else continue;
 
-            entities.put(bm.get(entity).pos, value);
+            entities.put(entity, bm.get(entity).pos, value);
         }
 
         zones = boardZones;
     }
 
-    public BoardState(ArrayMap<BoardPosition, EntityValue> entityMap, Array<Array<BoardPosition>> boardZones) {
+    public BoardState(EntityMap entityMap, Array<Array<BoardPosition>> boardZones) {
         entities = entityMap;
         zones = boardZones;
     }
@@ -76,23 +74,8 @@ public class BoardState {
      * @return The {@link BoardState} for chaining
      */
     public BoardState tryTurn(Turn t) {
-        EntityValue userEntity = null; //entity value representing entity playing out turn
-
         //get User
-        Array<EntityValue> entityValues = entities.values().toArray();
-        EntityValue cur = null;
-        try {
-            for (int i = 0; i < entityValues.size; i++) {
-                cur = entityValues.get(i);
-                if (entityValues.get(i).checkIdentity(t.entity))
-                    userEntity = entityValues.get(i);
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-            System.out.println("entityValues.get(i) : " + cur);
-            System.out.println("t.entity : " + t.entity);
-            Gdx.app.exit();
-        }
+        EntityValue userEntity = entities.get(t.entity);
 
         if (userEntity == null) //user died, do nothing
                 return this;
@@ -100,7 +83,7 @@ public class BoardState {
         //movement
         if (!t.pos.equals(userEntity.pos))
             if (entities.containsKey(userEntity.pos)) {
-                entities.put(t.pos, entities.removeKey(userEntity.pos));
+                entities.put(t.entity, t.pos, entities.remove(t.entity));
                 userEntity.pos = t.pos.copy();
             }
 
@@ -145,12 +128,16 @@ public class BoardState {
 
                     //remove dead
                     if (e.hp <= 0)
-                        entities.removeKey(newPos);
+                        entities.remove(e);
                 } else { //attacking on an empty space
                     //discourage attacking empty spaces compared to not attacking at all
                     //single hitting moves weighted heavier than spread attacks
+                    //TODO this effect adds up over deeper recursion level! Instead, prune these moves to reduce branch sizes?
+                    /*
                     userEntity.arbitraryValue = (move.getRange().size <= 1)?
                             userEntity.arbitraryValue - 50 : userEntity.arbitraryValue - 50 / move.getRange().size;
+                            */
+
                 }
             }
 
@@ -164,10 +151,12 @@ public class BoardState {
      * @param team team which is having turn effects inflicted on
      */
     public void doTurnEffects(int team) {
-        Array<EntityValue> entityValues = entities.values().toArray();
+        Array<EntityValue> entityValues = entities.getEntityValues();
 
         for (EntityValue e : entityValues) {
-            if (e.team == team && e.statusEffectInfos != null && e.statusEffectInfos.size > 0)
+            if (e.team == team && e.statusEffectInfos != null && e.statusEffectInfos.size > 0) {
+                //increment SP
+                e.sp++;
                 for (StatusEffectInfo s : e.statusEffectInfos) {
                     if (s.turnEffectInfo != null) {
                         s.turnEffectInfo.doTurnEffect(e);
@@ -176,6 +165,7 @@ public class BoardState {
                     if (s.checkDuration())
                         e.statusEffectInfos.removeValue(s, true);
                 }
+            }
         }
     }
 
@@ -186,7 +176,7 @@ public class BoardState {
      */
     public int evaluate(int homeTeam) {
         int val = 0;
-        for (EntityValue e : entities.values()) {
+        for (EntityValue e : entities.getEntityValues()) {
             //zone check
             if (zones != null && e.team != -1 && zones.get(e.team).contains(e.pos, false)) {
                 if (e.team == homeTeam)
@@ -212,14 +202,14 @@ public class BoardState {
      * @return A copy of this object
      */
     public BoardState copy() {
-        ArrayMap<BoardPosition, EntityValue> map = new ArrayMap<>();
-        for (EntityValue e : entities.values())
-            map.put(e.pos.copy(), e.copy());
+        EntityMap map = new EntityMap();
+        for (EntityValue e : entities.getEntityValues())
+            map.put(entities.getKeyEntity(e), e.pos, e);
 
         return new BoardState(map, zones);
     }
 
-    public ArrayMap<BoardPosition, EntityValue> getEntities() {
+    public EntityMap getEntities() {
         return entities;
     }
 
@@ -228,7 +218,7 @@ public class BoardState {
      */
     @Override
     public String toString() {
-        final Array<BoardPosition> POSITIONS = entities.keys().toArray(); // all positions
+        final Array<BoardPosition> POSITIONS = entities.getAllPositions(); // all positions
         final Array<BoardPosition> ZONES = new Array<>();
 
         if (zones != null) {
@@ -285,7 +275,7 @@ public class BoardState {
                 char entityZoneChar = '?'; //char representing whats going on that space
                 //region get what char to display
                 BoardPosition curPos = new BoardPosition(i, j);
-                for (ObjectMap.Entry<BoardPosition, EntityValue> posPair : entities.entries()) { //entities
+                for (ObjectMap.Entry<BoardPosition, EntityValue> posPair : entities.getPositionEntityValuePairs()) { //entities
                     if (curPos.equals(posPair.key)) { // team 1
                         if (posPair.value.team == 1) {
                             entityZoneChar = TEAM_1_ICON;
