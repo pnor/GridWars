@@ -147,8 +147,8 @@ public class Move {
     }
 
     /**
-     * Changes the effected squares of an attack based on direction. Note that this will change the range of an
-     * Attack, not return a copy!
+     * Changes the effected squares of an attack based on direction. Note that this will NOT change the range of an
+     * Attack, and returns a copy of the effected squares
      * @param relativeDirection direction that it will be spun.
      *                          <p> 0 : No rotation; same as before
      *                          <p> 1 : 90 Degrees clockwise

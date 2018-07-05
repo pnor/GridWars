@@ -85,7 +85,7 @@ public class EntityConstructor {
                 atlas.findRegion("robot2")
         }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(5, 5, 1, 1, 2));
+        entity.add(new StatComponent(5, 5, 1, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -95,8 +95,8 @@ public class EntityConstructor {
                 DamageAnimationConstructor.heavyDamageAnimation(entity),
                 DamageAnimationConstructor.deathAnimation(entity),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
-        entity.add(new MovesetComponent(new Array<Move>(new Move[]{MoveConstructor.Tackle(entity),
-                MoveConstructor.bodySlam(entity)
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.slam(entity)
         })));
         entity.add(new NameComponent("Robo - Beta"));
 
@@ -133,6 +133,42 @@ public class EntityConstructor {
         return entity;
     }
 
+    public static Entity AITestingUnit(int team, int altColor) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Canight"));
+
+        if (altColor == 0)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("scaleman"),
+                    atlas.findRegion("scaleman2")
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
+        else if (altColor >= 1)
+            entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                    atlas.findRegion("brightScaleman"),
+                    atlas.findRegion("brightScaleman2")
+            }, Animation.PlayMode.LOOP, 0.5f, true)));
+        nm.get(entity).altColor = altColor;
+
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(3, 2, 1, 0, 1));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.slam(entity)
+        })));
+        nm.get(entity).serializeID = 0;
+        return entity;
+    }
+
     public static Entity AITester(int team, int altColor) {
         Entity entity = new Entity();
         if (team > -1)
@@ -144,7 +180,7 @@ public class EntityConstructor {
                 atlas.findRegion("iceSpike")
         }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(5, 5, 1, 0, 1));
+        entity.add(new StatComponent(3, 5, 1, 0, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;

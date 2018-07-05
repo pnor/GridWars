@@ -47,10 +47,10 @@ public class BoardState {
                                 stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, statusInfos, 0);
                     }
                 } else { //not on a team
-                    if (!status.has(entity))
+                    if (!status.has(entity)) {
                         value = new EntityValue(bm.get(entity).pos, -1, -1, stm.get(entity).hp,
-                            stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, 0);
-                    else {
+                                stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, 0);
+                    } else {
                         Array<StatusEffect> currentStatusEffects = status.get(entity).getStatusEffects();
                         StatusEffectInfo[] statusInfos = new StatusEffectInfo[status.get(entity).getTotalStatusEffects()];
                         for (int i = 0; i < currentStatusEffects.size; i++)
@@ -81,7 +81,7 @@ public class BoardState {
     public BoardState(EntityMap entityMap, Array<Array<BoardPosition>> boardZones, Array<Integer> entitiesAliveCount) {
         entities = entityMap;
         zones = boardZones;
-        liveEntityCount = entitiesAliveCount;
+        liveEntityCount = new Array<Integer>(entitiesAliveCount);
     }
 
     /**
@@ -123,8 +123,10 @@ public class BoardState {
                         e.hp = MathUtils.clamp(e.hp - (MathUtils.clamp((int) (move.moveInfo().ampValue * userEntity.getModAtk()) - e.getModDef(), 0, 999)), 0, e.maxHp);
 
                     //discourage hitting allies with damaging attacks
+                    /*
                     if (userEntity.team == e.team && oldHp > e.hp)
                         e.arbitraryValue -= 30 * (oldHp - e.hp);
+                     */
 
                     //status
                     if (move.moveInfo().statusEffects != null && e.acceptsStatusEffects) {
@@ -148,14 +150,8 @@ public class BoardState {
                         liveEntityCount.set(e.team, liveEntityCount.get(e.team) - 1);
                     }
                 } else { //attacking on an empty space
-                    //discourage attacking empty spaces compared to not attacking at all
-                    //single hitting moves weighted heavier than spread attacks
-                    //TODO this effect adds up over deeper recursion level! Instead, prune these moves to reduce branch sizes?
-                    /*
-                    userEntity.arbitraryValue = (move.getRange().size <= 1)?
-                            userEntity.arbitraryValue - 50 : userEntity.arbitraryValue - 50 / move.getRange().size;
-                            */
-
+                    //NOW pruned so this should never be an issue
+                    //System.out.println("occuring"); // <- or is it?
                 }
             }
 
@@ -196,12 +192,14 @@ public class BoardState {
         int val = 0;
         for (EntityValue e : entities.getEntityValues()) {
             //zone check
+            /*
             if (zones != null && e.team != -1 && zones.get(e.team).contains(e.pos, false)) {
                 if (e.team == homeTeam)
                     return 9999999;
                 else
                     return -9999999;
             }
+            */
 
             val += e.getValue(homeTeam);
         }
@@ -233,8 +231,9 @@ public class BoardState {
      */
     public BoardState copy() {
         EntityMap map = new EntityMap();
-        for (EntityValue e : entities.getEntityValues())
-            map.put(entities.getKeyEntity(e), e.pos, e);
+        for (EntityValue e : entities.getEntityValues()) {
+            map.put(entities.getKeyEntity(e), e.pos.copy(), e.copy());
+        }
 
         return new BoardState(map, zones, liveEntityCount);
     }
