@@ -97,11 +97,12 @@ public class BoardState {
                 return this;
 
         //movement
-        if (!t.pos.equals(userEntity.pos))
+        if (!t.pos.equals(userEntity.pos)) {
             if (entities.containsKey(userEntity.pos)) {
                 entities.put(t.entity, t.pos, entities.remove(t.entity));
                 userEntity.pos = t.pos.copy();
             }
+        }
 
         //attack
         if (t.attack != -1) {
@@ -114,19 +115,20 @@ public class BoardState {
                 BoardPosition newPos = pos.add(t.pos.r, t.pos.c);
 
                 if (entities.containsKey(newPos)) {
-                    EntityValue e = entities.get(newPos); //entity targeted by attack
-                    //damage
+                    EntityValue e = entities.get(newPos); // entity targeted by attack
+                    // damage
                     int oldHp = e.hp;
                     if (move.moveInfo().pierces)
                         e.hp = MathUtils.clamp(e.hp - (int) (move.moveInfo().ampValue * userEntity.getModAtk()), 0, e.maxHp);
                     else
                         e.hp = MathUtils.clamp(e.hp - (MathUtils.clamp((int) (move.moveInfo().ampValue * userEntity.getModAtk()) - e.getModDef(), 0, 999)), 0, e.maxHp);
 
-                    //discourage hitting allies with damaging attacks
+                    // discourage hitting allies with damaging attacks
                     /*
                     if (userEntity.team == e.team && oldHp > e.hp)
                         e.arbitraryValue -= 30 * (oldHp - e.hp);
-                     */
+                        */
+
 
                     //status
                     if (move.moveInfo().statusEffects != null && e.acceptsStatusEffects) {
@@ -147,7 +149,8 @@ public class BoardState {
                     //remove dead
                     if (e.hp <= 0) {
                         entities.remove(e);
-                        liveEntityCount.set(e.team, liveEntityCount.get(e.team) - 1);
+                        if (e.team != -1)
+                            liveEntityCount.set(e.team, liveEntityCount.get(e.team) - 1);
                     }
                 } else { //attacking on an empty space
                     //NOW pruned so this should never be an issue
@@ -234,7 +237,6 @@ public class BoardState {
         for (EntityValue e : entities.getEntityValues()) {
             map.put(entities.getKeyEntity(e), e.pos.copy(), e.copy());
         }
-
         return new BoardState(map, zones, liveEntityCount);
     }
 
@@ -245,6 +247,8 @@ public class BoardState {
     public EntityMap getEntities() {
         return entities;
     }
+
+    public Array<Array<BoardPosition>> getZones() { return zones; }
 
     /**
      * @return a visualization of the board based on entities and zones
@@ -345,10 +349,14 @@ public class BoardState {
             }
             outputString.append('\n');
         }
-
+        // print health of remaining entities alive
+        Array<EntityValue> entityValues = entities.getEntityValues();
+        for (EntityValue ev : entityValues) {
+            outputString.append(ev.BOARD_ENTITY_ID + " T: " + ev.team + "  " + ev.hp + " / " + ev.maxHp + '\n');
+        }
         // print number of entities still alive
-        outputString.append("Number Still Alive:   0| " + liveEntityCount.get(0) + "   1| " + liveEntityCount.get(1) +
-                "   2| " + liveEntityCount.get(2) + "\n");
+        outputString.append("Number Still Alive:  0| " + liveEntityCount.get(0) + "  1| " + liveEntityCount.get(1) +
+                "  2| " + liveEntityCount.get(2) + "\n");
         /**
          * Example of output
          *     0 1 2

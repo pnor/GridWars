@@ -53,6 +53,11 @@ public class BoardPosition {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return (new Integer(r * 200).hashCode() + new Integer(c * 100).hashCode()) / 2;
+    }
+
     /**
      * Creates a copy of this object
      * @return copy of this object
