@@ -23,6 +23,9 @@ public class GameUtil {
     public static HashMap<String, Color> setUpColorChoices() {
         HashMap<String, Color> colors = new HashMap<String, Color>();
 
+        colors.put("acid", new Color(247f / 255f, 234f / 255f, 93f / 255f, 1));
+        colors.put("acidic", new LerpColor(new Color(247f / 255f, 234f / 255f, 93f / 255f, 1), Color.LIME));
+
         colors.put("blue", Color.BLUE);
         colors.put("black", Color.BLACK);
         colors.put("brown", Color.BROWN);

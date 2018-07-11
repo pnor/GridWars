@@ -129,7 +129,6 @@ public class BoardState {
                         e.arbitraryValue -= 30 * (oldHp - e.hp);
                         */
 
-
                     //status
                     if (move.moveInfo().statusEffects != null && e.acceptsStatusEffects) {
                         for (StatusEffectInfo status : move.moveInfo().statusEffects) {
@@ -154,7 +153,7 @@ public class BoardState {
                     }
                 } else { //attacking on an empty space
                     //NOW pruned so this should never be an issue
-                    //System.out.println("occuring"); // <- or is it?
+                    System.out.println("OCCURING WEE WAAA WEE WAAAAAAAAAAAAAA"); // <- or is it?
                 }
             }
 
@@ -194,16 +193,6 @@ public class BoardState {
     public int evaluate(int homeTeam) {
         int val = 0;
         for (EntityValue e : entities.getEntityValues()) {
-            //zone check
-            /*
-            if (zones != null && e.team != -1 && zones.get(e.team).contains(e.pos, false)) {
-                if (e.team == homeTeam)
-                    return 9999999;
-                else
-                    return -9999999;
-            }
-            */
-
             val += e.getValue(homeTeam);
         }
         return val;
@@ -242,6 +231,50 @@ public class BoardState {
 
     public Array<Integer> getLiveEntityCount() {
         return liveEntityCount;
+    }
+
+    /**
+     * @return Whether the conditions are met for the game to be considered "close to being done". These conditions are:
+     * - if any team has ony 1 or less entities left
+     * - if there is 2 entities on a team...
+     *     ~ if an entity on the other team's attack is large enough to ko the other team
+     * - An Entity is close to their respective zone
+     */
+    public boolean isGameCloseToEnding() {
+        // If a team has one entity left
+        int lowest = -999;
+        int indexOfLowestLiveEntityTeam = -1;
+        for (int i = 0; i < liveEntityCount.size; i++) {
+            if (lowest > liveEntityCount.get(i)) {
+                lowest = liveEntityCount.get(i);
+                indexOfLowestLiveEntityTeam = i;
+            }
+        }
+        if (lowest <= 1) return true;
+
+        // An entity is close to their zone
+        boolean entityIsCloseToTheirZone = false;
+        if (zones != null) {
+            for (Entity e : entities.getAllEntities()) { // Entity Value
+                for (BoardPosition zone : zones.get(entities.get(e).team)) { // BoardPosition
+                    if (stm.get(e).getModSpd(e) <= entities.get(e).pos.taxicabDistance(zone))
+                        entityIsCloseToTheirZone = true;
+
+                    if (entityIsCloseToTheirZone) break;
+                }
+                if (entityIsCloseToTheirZone) break;
+            }
+
+            if (entityIsCloseToTheirZone) return true;
+        }
+        // if there are more than 2 entities on team -> attack stat is great enough to KO other team entities.
+        /*
+        if (lowest == 2) {
+            // get highest HP of weaker team
+            for ()
+        }
+        */
+        return false;
     }
 
     public EntityMap getEntities() {

@@ -53,6 +53,15 @@ public class BoardPosition {
         return false;
     }
 
+    /**
+     * Gets the taxicab distance from this object to another BoardPosition object
+     * @param other BoardPosition that is being compared
+     * @return an integer representing the taxi cab distance.
+     */
+    public int taxicabDistance(BoardPosition other) {
+        return Math.abs(this.r - other.r) + Math.abs(this.c - other.c);
+    }
+
     @Override
     public int hashCode() {
         return (new Integer(r * 200).hashCode() + new Integer(c * 100).hashCode()) / 2;
