@@ -153,7 +153,9 @@ public class BoardState {
                     }
                 } else { //attacking on an empty space
                     //NOW pruned so this should never be an issue
-                    System.out.println("OCCURING WEE WAAA WEE WAAAAAAAAAAAAAA"); // <- or is it?
+                    if (move.getOrientedAttackPositions(t.direction, move).size == 1) {
+                        System.out.println("OCCURING WEE WAAA (On Non-Multihit)"); // <- or is it?
+                    }
                 }
             }
 
@@ -199,6 +201,30 @@ public class BoardState {
     }
 
     /**
+     * Changes the state of the {@link BoardState} based on the effects of the {@link Turn}. Only performs the movement and not the
+     * attack. Is used to prune redundant moves in the AI
+     * @param t Turn
+     * @return The {@link BoardState} for chaining
+     */
+    public BoardState tryTurnMovementOnly(Turn t) {
+        //get User
+        EntityValue userEntity = entities.get(t.entity);
+
+        if (userEntity == null) //user died, do nothing
+            return this;
+
+        //movement
+        if (!t.pos.equals(userEntity.pos)) {
+            if (entities.containsKey(userEntity.pos)) {
+                entities.put(t.entity, t.pos, entities.remove(t.entity));
+                userEntity.pos = t.pos.copy();
+            }
+        }
+
+        return this;
+    }
+
+    /**
      * @return index of the team still on the board. Does not count the 1st attack only teams, and will return -1 if no teams qualifies.
      */
     public int getLastTeamStanding() {
@@ -236,21 +262,18 @@ public class BoardState {
     /**
      * @return Whether the conditions are met for the game to be considered "close to being done". These conditions are:
      * - if any team has ony 1 or less entities left
-     * - if there is 2 entities on a team...
-     *     ~ if an entity on the other team's attack is large enough to ko the other team
      * - An Entity is close to their respective zone
+     * - if an entity can one hit ko the strongest member of the opposing team
      */
     public boolean isGameCloseToEnding() {
         // If a team has one entity left
-        int lowest = -999;
-        int indexOfLowestLiveEntityTeam = -1;
-        for (int i = 0; i < liveEntityCount.size; i++) {
-            if (lowest > liveEntityCount.get(i)) {
-                lowest = liveEntityCount.get(i);
-                indexOfLowestLiveEntityTeam = i;
+        int lowestAlive = 999;
+        for (int i = 0; i < 2; i++) {
+            if (lowestAlive > liveEntityCount.get(i)) { // Only go through playable teams
+                lowestAlive = liveEntityCount.get(i);
             }
         }
-        if (lowest <= 1) return true;
+        if (lowestAlive <= 1) return true;
 
         // An entity is close to their zone
         boolean entityIsCloseToTheirZone = false;
@@ -267,14 +290,28 @@ public class BoardState {
 
             if (entityIsCloseToTheirZone) return true;
         }
-        // if there are more than 2 entities on team -> attack stat is great enough to KO other team entities.
-        /*
-        if (lowest == 2) {
-            // get highest HP of weaker team
-            for ()
+
+        // If any team can one hit KO the strongest member of the opposing team
+        int team0HighestHP = -1, team0HighestAtk = -1, team0defenseOfHighest = 0,
+                team1HighestHP = -1, team1HighestAtk = -1, team1defenseOfHighest = 0;
+        // get highest HP and ATK of teams
+        for (EntityValue ev : entities.getEntityValues()) {
+            if (ev.team == 0) {
+                if (team0HighestHP < ev.hp) {
+                    team0HighestHP = ev.hp;
+                    team0defenseOfHighest = ev.getModDef();
+                }
+                team0HighestAtk = Math.max(ev.getModAtk(), team0HighestAtk);
+            } else {
+                if (team1HighestHP < ev.hp) {
+                    team1HighestHP = ev.hp;
+                    team1defenseOfHighest = ev.getModDef();
+                }
+                team1HighestAtk = Math.max(ev.getModAtk(), team1HighestAtk);
+            }
         }
-        */
-        return false;
+        return team0HighestAtk - team1defenseOfHighest >= team1HighestHP || team1HighestAtk - team0defenseOfHighest >= team0HighestHP;
+
     }
 
     public EntityMap getEntities() {
