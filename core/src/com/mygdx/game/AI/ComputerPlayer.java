@@ -25,6 +25,12 @@ public class ComputerPlayer implements Runnable {
     public long PROCESSING_TIME;
 
     private boolean processing = false;
+    /**
+     * Represents how far it is in processing computer's turns. Value is always between 0 and 4, with 1 meaning it is
+     * processing the first of a team of 4 and 4 meaning it is on the last entity. 0 means it is not processing. If a team has
+     * fewer than 4, it will skip 1, 2, etc. and go towards 4.
+     */
+    private byte progress = 0;
     private Array<Turn> decidedTurns;
     private int teamControlled;
     private Array<Array<BoardPosition>> zoneLocations;
@@ -111,20 +117,12 @@ public class ComputerPlayer implements Runnable {
             if (randomizeDepthLevel) {
                 int newDepth = depthLevel;
                 newDepth = MathUtils.clamp(newDepth + MathUtils.random(-1, 1), 0, 999);
-
-                //System.out.println("Pairings : ");
-                for (EntityTeamPairing etp : entityTeamPairings)
-                    //System.out.println(etp);
                 System.out.println("Processing: atDepth: " + newDepth + ", teamControlled: " + teamControlled);
 
                 decidedTurns = getBestTurnsNegamax(currentBoardState, teamControlled);
-                //decidedTurns = getBestTurnsBestTurnAssumption(currentBoardState, teamControlled, depthLevel);
-                //decidedTurns = getBestTurns(currentBoardState, teamControlled, false);
             } else {
                 System.out.println("Processing: atDepth: " + depthLevel + ", teamControlled: " + teamControlled);
                 decidedTurns = getBestTurnsNegamax(currentBoardState, teamControlled);
-                //decidedTurns = getBestTurnsBestTurnAssumption(currentBoardState, teamControlled, depthLevel);
-                //decidedTurns = getBestTurns(currentBoardState, teamControlled, false);
             }
         }
         System.out.println("TIME TO PROCESS: " +  ((float)(System.nanoTime() - PROCESSING_TIME) / 1000000000));
@@ -140,6 +138,7 @@ public class ComputerPlayer implements Runnable {
         Entity e;
 
         for (int i = 0; i < teams.get(team).getEntities().size; i++) {
+            progress = (byte) (i + 1 + teams.get(team).getEntities().size - 4);
             e = teams.get(team).getEntities().get(i);
 
            // if dead, add a null turn
@@ -150,6 +149,7 @@ public class ComputerPlayer implements Runnable {
             int bestTurnVal = -99999999;
             int curValue = 0;
             Array<Turn> allTurns = getFilteredPossibleTurns(e);
+            System.out.println("SIZE OF TURNS: " + allTurns.size);
             Turn bestTurn = null;
 
             // Get index of next entity turn after tested turn
@@ -177,25 +177,22 @@ public class ComputerPlayer implements Runnable {
             });
 
             // Go Through Each Possible Turn
-            boolean gameCloseToEnding = board.isGameCloseToEnding();
+            boolean gameCloseToEnding = board.isGameCloseToEnding(teams);
             for (Tuple<Integer, Turn> turnValPair : orderedTurns) {
                 Turn t = turnValPair.value2;
                 //forgot a move -> skip
-
-                /*
                 if (MathUtils.random() < forgetBestMoveChance)
                     continue;
-                    */
-
                 BoardState newBoardState = board.copy().tryTurn(t);
 
-                // If the game is almost done, use a depth of 0
+                // If the game is almost done, use a much smaller depth
                 if (gameCloseToEnding) {
-                    curValue = newBoardState.evaluate(teamControlled);
-                    System.out.println("|0 DEPTH");
+                    curValue = getTurnValNegamax(newBoardState, team, curEntityIndex, startIndex, depthLevel,
+                            depthLevel * (teams.get(teamControlled).getEntities().size / 4), true, -9999999, 9999999);
+                System.out.println("|SMALL DEPTH");
                 } else {
                     curValue = getTurnValNegamax(newBoardState, team, curEntityIndex, startIndex, depthLevel,
-                            depthLevel * (teams.get(teamControlled).getEntities().size / 2), -9999999, 9999999);
+                            depthLevel * (teams.get(teamControlled).getEntities().size / 2), false, -9999999, 9999999);
                     System.out.println("|FULL DEPTH");
                 }
                 System.out.print("\ncur : " + curValue);
@@ -206,117 +203,19 @@ public class ComputerPlayer implements Runnable {
                 }
             }
             turns.add(bestTurn);
-
             //System.out.println("~-~-~-~-~-~-~-~-~-~-~-~-");
-            System.out.println("\nAt depth " + depthLevel + " the best value was " + bestTurnVal);
-            System.out.println(bestTurn);
+            //System.out.println("\nAt depth " + depthLevel + " the best value was " + bestTurnVal);
+            //System.out.println(bestTurn);
             //System.out.println(bestTurn.showOnBoardStateToString(board));
 
-
             //update BoardState with last Entity's action
-            board.tryTurn(bestTurn);
+            if (bestTurn != null)
+                board.tryTurn(bestTurn);
         }
 
+        progress = 0;
         return turns;
     }
-
-
-    /*
-    public int getTurnValMinimax(BoardState board, int team, int curEntityIndex, int depth, int alpha, int beta) {
-        //get the entity value
-        boolean inBoard = false;
-        EntityValue entityValue = null;
-
-        //check alive
-        if (board.getEntities().containsKey(entityTeamPairings.get(curEntityIndex).entity)) {
-            inBoard = true;
-            entityValue = board.getEntities().get(entityTeamPairings.get(curEntityIndex).entity);
-        }
-
-        if (!stm.get(entityTeamPairings.get(curEntityIndex).entity).alive || !inBoard) { //is alive check
-            return board.evaluate(teamControlled);
-        }
-
-        // End of Turn Effects
-        if (depth > 1) {
-            if (curEntityIndex == 0) {
-                board.doTurnEffects(0);
-            } else if (curEntityIndex == teams.get(0).getEntities().size) { // Start of Second Team Turn
-                board.doTurnEffects(1);
-            } else if (teams.size == 2 && curEntityIndex == teams.get(0).getEntities().size - 1 + teams.get(1).getEntities().size) { // If they're 3 teams, and start of 3rd team turn
-                board.doTurnEffects(2);
-            }
-        }
-
-        // Zone Rules: If it's on a zone -> Don't Evaluate Turns after that
-        if (zoneLocations != null) {
-            for (int i = 0; i < zoneLocations.size; i++) {
-                for (BoardPosition zone : zoneLocations.get(i)) {
-                    if (board.getEntities().get(zone) != null) {
-                        if (i == teamControlled && board.getEntities().get(zone).team != teamControlled)
-                            return 99999999 - depth * 30;
-                        else if (i != teamControlled && board.getEntities().get(zone).team == teamControlled)
-                            return -99999999 + depth * 30;
-                    }
-                }
-            }
-        }
-
-
-        Array<Turn> entityTurns = getAllPossibleTurns(entityTeamPairings.get(curEntityIndex).entity, entityValue, board);
-        int bestVal = -999999999;
-        //System.out.println("IN Minimax| depth: " + depth + "   maxing?: " + (team == teamControlled) + "   Player Index: " + curEntityIndex);
-        for (Turn t : entityTurns) {
-            //System.out.println("(" + entityTurns.indexOf(t, true) + "/" + entityTurns.size + ")");
-            if (team == teamControlled) { // Computer team
-                if (depth > depthLevel * depthLevel * teams.get(team).getEntities().size) { //get a value
-                    int val = board.tryTurn(t).evaluate(teamControlled);
-                    //apply depth penalty (longer it takes to get to an outcome, the worst)
-                    //val -= 30 * depth;
-                    return val;
-                }
-                bestVal = -999999999;
-                int nextIndex = (curEntityIndex + 1) % entityTeamPairings.size;
-                int value = getTurnValMinimax(board.copy().tryTurn(t), entityTeamPairings.get(nextIndex).team, nextIndex, depth + 1, alpha, beta);
-                bestVal = Math.max(value, bestVal);
-                alpha = Math.max(alpha, bestVal);
-                if (beta <= alpha)
-                    break;
-                return bestVal;
-            } else if (team != indexOfFirstAttackingTeams) { // Enemy Team
-                if (depth > depthLevel * teams.get(team).getEntities().size) { //get a value
-                    int val = board.tryTurn(t).evaluate(teamControlled);
-                    //apply depth penalty (longer it takes to get to an outcome, the worst)
-                    //val -= 30 * depth;
-                    return val;
-                }
-                bestVal = 999999999;
-                int nextIndex = (curEntityIndex + 1) % (teams.get(0).getEntities().size + teams.get(1).getEntities().size);
-                int value = getTurnValMinimax(board.copy().tryTurn(t), entityTeamPairings.get(nextIndex).team, nextIndex, depth + 1, alpha, beta);
-                bestVal = Math.min(value, bestVal);
-                beta = Math.min(beta, bestVal);
-                if (beta <= alpha)
-                    break;
-                return bestVal;
-            } else { // First Attacking team
-                Turn firstAttackTurn = new Turn(entityTeamPairings.get(curEntityIndex).entity, entityValue.pos, 0, 0);
-                int nextIndex = (curEntityIndex + 1) % entityTeamPairings.size;
-                int value = 0;
-                if (entityValue.sp >= mvm.get(entityTeamPairings.get(curEntityIndex).entity).moveList.first().spCost())
-                    value = getTurnValMinimax(board.copy().tryTurn(firstAttackTurn), entityTeamPairings.get(nextIndex).team, nextIndex, depth, alpha, beta);
-                else
-                    value = getTurnValMinimax(board.copy(), entityTeamPairings.get(nextIndex).team, nextIndex, depth, alpha, beta);
-                bestVal = Math.max(value, bestVal);
-                alpha = Math.max(alpha, bestVal);
-                if (beta <= alpha)
-                    break;
-                return bestVal;
-            }
-        }
-        System.out.println("reached end of AI minimax method?");
-        return -123456789;
-    }
-    */
 
     /**
      * @param board Current {@link BoardState}
@@ -324,12 +223,13 @@ public class ComputerPlayer implements Runnable {
      * @param processedEntityIndex the entity that is being processed. Should not change in recursive calls. Used to skip rest of team members.
      * @param curEntityIndex current entity being processed
      * @param depth depth level search is at
-     * @param depth level the search ends at
+     * @param endDepth level the search ends at
+     * @param skipTeammates whether it will skip teammates when searching at depth levels
      * @param alpha
      * @param beta
      * @return value of a turn evaluated at a given depth using negamax.
      */
-    public int getTurnValNegamax(BoardState board, int team, int processedEntityIndex, int curEntityIndex, int depth, int endDepth, int alpha, int beta) {
+    public int getTurnValNegamax(BoardState board, int team, int processedEntityIndex, int curEntityIndex, int depth, int endDepth, boolean skipTeammates, int alpha, int beta) {
         //get the entity value
         boolean inBoard = false;
         EntityValue entityValue = null;
@@ -337,20 +237,20 @@ public class ComputerPlayer implements Runnable {
         int nextIndex = (curEntityIndex + 1) % entityTeamPairings.size;
         //region skip members on same team
         //NOTE: Causes stack overflows
-        /*
-        if (entityTeamPairings.get(nextIndex).team == teamControlled) { // moving onto team controlled -> skip to original processed entity
-            nextIndex = processedEntityIndex;
-        } else if (curEntityIndex == processedEntityIndex) { // was on the processed entity -> skip to next team
-            if (teamControlled == 0)
-                nextIndex = teams.get(0).getEntities().size;
-            else if (teamControlled == 1) {
-                if (indexOfFirstAttackingTeams != -1) // jump straight to non-attacking team
-                    nextIndex = teams.get(0).getEntities().size + teams.get(1).getEntities().size - 1;
-                else // jump straight to first team
-                    nextIndex = 0;
+        if (skipTeammates) {
+            if (entityTeamPairings.get(nextIndex).team == teamControlled) { // moving onto team controlled -> skip to original processed entity
+                nextIndex = processedEntityIndex;
+            } else if (curEntityIndex == processedEntityIndex) { // was on the processed entity -> skip to next team
+                if (teamControlled == 0)
+                    nextIndex = teams.get(0).getEntities().size;
+                else if (teamControlled == 1) {
+                    if (indexOfFirstAttackingTeams != -1) // jump straight to non-attacking team
+                        nextIndex = teams.get(0).getEntities().size + teams.get(1).getEntities().size - 1;
+                    else // jump straight to first team
+                        nextIndex = 0;
+                }
             }
         }
-        */
         //endregion
 
         //If depth limit has been approached, get a value
@@ -369,19 +269,6 @@ public class ComputerPlayer implements Runnable {
             }
         }
 
-        // check alive
-        if (board.getEntities().containsKey(entityTeamPairings.get(curEntityIndex).entity)) {
-            inBoard = true;
-            entityValue = board.getEntities().get(entityTeamPairings.get(curEntityIndex).entity);
-        } else { // is dead -> don't do anything and skip
-            if (entityTeamPairings.get(nextIndex).team == team)
-                return getTurnValNegamax(board.copy(), entityTeamPairings.get(nextIndex).team, processedEntityIndex,
-                        nextIndex, depth, endDepth, alpha, beta);
-            else
-                return -getTurnValNegamax(board.copy(), entityTeamPairings.get(nextIndex).team, processedEntityIndex,
-                        nextIndex, depth, endDepth, -alpha, -beta);
-        }
-
         // Total Knockout: If no entities from a team are alive, then don't evaluate turn after that
         if (board.getLastTeamStanding() != -1) {
             if (board.getLastTeamStanding() == teamControlled)
@@ -390,15 +277,32 @@ public class ComputerPlayer implements Runnable {
                 return -9999999 + depth * 30;
         }
 
+        // check alive
+        if (board.getEntities().containsKey(entityTeamPairings.get(curEntityIndex).entity)) {
+            inBoard = true;
+            entityValue = board.getEntities().get(entityTeamPairings.get(curEntityIndex).entity);
+        } else { // is dead -> don't do anything and skip
+            if (entityTeamPairings.get(nextIndex).team == team) {
+                if (!skipTeammates) {
+                    return getTurnValNegamax(board.copy(), entityTeamPairings.get(nextIndex).team, processedEntityIndex,
+                            nextIndex, depth, endDepth, skipTeammates, alpha, beta);
+                } else { // To avoid stack overflow
+                    return board.evaluate(team);
+                }
+            } else
+                return -getTurnValNegamax(board.copy(), entityTeamPairings.get(nextIndex).team, processedEntityIndex,
+                        nextIndex, depth, endDepth, skipTeammates, -alpha, -beta);
+        }
+
         // First Turn Entities
         if (entityTeamPairings.get(curEntityIndex).team == indexOfFirstAttackingTeams) {
             Turn firstAttackTurn = new Turn(entityTeamPairings.get(curEntityIndex).entity, entityValue.pos, 0, 0);
             if (entityValue.sp >= mvm.get(entityTeamPairings.get(curEntityIndex).entity).moveList.first().spCost())
                 return getTurnValNegamax(board.copy().tryTurn(firstAttackTurn), entityTeamPairings.get(nextIndex).team,
-                        processedEntityIndex, nextIndex, depth, endDepth, alpha, beta);
+                        processedEntityIndex, nextIndex, depth, endDepth, skipTeammates, alpha, beta);
             else
                 return -getTurnValNegamax(board.copy(), entityTeamPairings.get(nextIndex).team, processedEntityIndex,
-                        nextIndex, depth, endDepth, alpha, beta);
+                        nextIndex, depth, endDepth, skipTeammates, alpha, beta);
         }
 
         // Zone Rules: If it's on a zone -> Don't Evaluate Turns after that
@@ -406,9 +310,9 @@ public class ComputerPlayer implements Runnable {
             for (int i = 0; i < zoneLocations.size; i++) {
                 for (BoardPosition zone : zoneLocations.get(i)) {
                     if (board.getEntities().get(zone) != null) {
-                        if (i == teamControlled && board.getEntities().get(zone).team != teamControlled) {
+                        if (i != teamControlled && board.getEntities().get(zone).team != teamControlled) {
                             return 9999999 - depth * 30;
-                        } else if (i != teamControlled && board.getEntities().get(zone).team == teamControlled) {
+                        } else if (i == teamControlled && board.getEntities().get(zone).team == teamControlled) {
                             return -9999999 + depth * 30;
                         }
                     }
@@ -424,10 +328,10 @@ public class ComputerPlayer implements Runnable {
             int value;
             if (entityTeamPairings.get(nextIndex).team == team)
                 value = getTurnValNegamax(board.copy().tryTurn(t), entityTeamPairings.get(nextIndex).team,
-                        processedEntityIndex, nextIndex, depth + 1, endDepth, alpha, beta);
+                        processedEntityIndex, nextIndex, depth + 1, endDepth, skipTeammates, alpha, beta);
             else
                 value = -getTurnValNegamax(board.copy().tryTurn(t), entityTeamPairings.get(nextIndex).team,
-                        processedEntityIndex, nextIndex, depth + 1, endDepth, -alpha, -beta);
+                        processedEntityIndex, nextIndex, depth + 1, endDepth, skipTeammates, -alpha, -beta);
             bestVal = Math.max(value, bestVal);
             alpha = Math.max(alpha, bestVal);
             if (beta <= alpha) {
@@ -1003,6 +907,8 @@ public class ComputerPlayer implements Runnable {
     }
 
     public int getTeamSize() { return teams.get(teamControlled).getEntities().size; }
+
+    public byte getProgress() { return progress; }
 
     /**
      * Small class to group an entity and their team.

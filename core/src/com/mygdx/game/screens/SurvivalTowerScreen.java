@@ -678,10 +678,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.RED,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.chromeMan(1),
-                                EntityConstructor.chromeMan(1),
+                                EntityConstructor.eliteSpider(1),
+                                EntityConstructor.lethalSpider(1),
                                 EntityConstructor.telegolem(1),
-                                EntityConstructor.chromeMan(1)
+                                EntityConstructor.fancyBook(1)
                         }));
             case 40 :
                 return new Team("Enemy",

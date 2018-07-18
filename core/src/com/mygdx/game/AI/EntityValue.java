@@ -81,7 +81,7 @@ public class EntityValue implements Comparable {
      */
     public int getValue(int homeTeam) {
         int value = 0;
-        //value += arbitraryValue;
+        value += arbitraryValue;
 
         if (hp > 0)
             value += 300 + (hp * 30);

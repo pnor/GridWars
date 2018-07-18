@@ -33,11 +33,14 @@ public class GameUtil {
         colors.put("chartreuse", Color.CHARTREUSE);
         colors.put("color wars", new LerpColor(Color.CYAN, Color.GOLD, 1f));
         colors.put("cyan", Color.CYAN);
+        colors.put("canight", new LerpColor(Color.WHITE, Color.CYAN, 1f));
 
         colors.put("dark gray", Color.DARK_GRAY);
         colors.put("darkness", new LerpColor(Color.BLACK, Color.CLEAR, 5f, Interpolation.bounce));
+        colors.put("dog", new LerpColor(Color.BROWN, Color.GOLDENROD, 5f, Interpolation.pow2InInverse));
 
         colors.put("emma", new LerpColor(Color.RED, Color.LIGHT_GRAY, .4f, Interpolation.circleOut));
+        colors.put("electrical", new LerpColor(Color.YELLOW, Color.BLACK, .8f, Interpolation.pow3In));
 
         colors.put("firebrick", Color.FIREBRICK);
         colors.put("forest", Color.FOREST);
@@ -89,7 +92,10 @@ public class GameUtil {
         colors.put("tan", Color.TAN);
         colors.put("teal", Color.TEAL);
 
+        colors.put("ultimate", new LerpColor(new Color(1, .2f, .3f, 1), Color.GOLDENROD, .5f));
+
         colors.put("violet", Color.VIOLET);
+        colors.put("vulpedge", new LerpColor(Color.WHITE, Color.RED, 1f));
 
         colors.put("white", Color.WHITE);
         colors.put("wild", new LerpColor(Color.GOLDENROD, Color.PURPLE, .4f, Interpolation.bounceIn));

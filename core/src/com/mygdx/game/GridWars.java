@@ -1,10 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -114,11 +111,11 @@ public class GridWars extends Game {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		getScreen().render(Gdx.graphics.getDeltaTime() * multiplier);
+		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB)) //escape to title
+			setScreen(new TitleScreen(this));
 
 		//debug --
 		/*
-		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB)) //escape to title
-			setScreen(new TitleScreen(this));
 		if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) { //game speed
 			setGameSpeed((byte) (gameSpeed + 1));
 			System.out.println("Game Speed : " + gameSpeed);

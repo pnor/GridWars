@@ -71,7 +71,7 @@ public class BattleScreen implements Screen {
     //General Info
     private final int TOTAL_ENTITIES_ON_TEAMS;
 
-    //rules
+    //Rules
     protected static Rules rules;
     private boolean gameHasEnded;
     private int winningTeamIndex;
@@ -131,6 +131,7 @@ public class BattleScreen implements Screen {
             defLblID, defLbl,
             spdLblID, spdLbl;
     private NewsTickerLabel statusLbl;
+    private Image loadingIcon;
 
     /**
      * Table with attack buttons
@@ -348,13 +349,12 @@ public class BattleScreen implements Screen {
         statsTable.add(spdLbl).row();
         statsTable.add(statusLbl).colspan(2).size(120, 40);
         statusLbl.setAlignment(Align.center);
-            //statsTable.debug();
         statsTable.setBackground(tableBackground);
         statsTable.pack();
         statsTable.setSize(statsTable.getWidth() - 30f, statsTable.getHeight() - 30f);
         statsTable.setPosition(stage.getWidth() * .875f - (statsTable.getWidth() / 2), stage.getHeight() * .725f - (statsTable.getHeight() / 2));
 
-        //set up attack menu ui
+        // Set up attack menu ui
         param.size = 20;
         param.borderWidth = 0;
         attackTitleLabel = new Label("Actions", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
@@ -436,7 +436,7 @@ public class BattleScreen implements Screen {
         attackTable.setSize(attackTable.getWidth() - 30f, attackTable.getHeight() - 30f);
         attackTable.setPosition(stage.getWidth() * .875f - (attackTable.getWidth() / 2), stage.getHeight() * .225f - (attackTable.getWidth() / 2));
 
-        //set up team table
+        // Set up team table
         endTurnBtn = new HoverButton("End Turn", skin, new Color(200f / 255f, 200f / 255f, 255f / 255f, 1), new Color(.8f, 1f, 1f, 1));
         endTurnBtn.addListener(new ChangeListener() {
            @Override
@@ -460,7 +460,7 @@ public class BattleScreen implements Screen {
         teamTable.setSize(700, 70);
         teamTable.setPosition(teamTable.getX() + teamTable.getOriginX() + 50, stage.getHeight() * .01f);
 
-        //set up infoTable
+        // Set up infoTable
         infoLbl = new GradualLabel(.001f, "---", skin);
         infoTable.add(infoLbl).height(25).center();
         infoTable.setBackground(tableBackground);
@@ -468,7 +468,7 @@ public class BattleScreen implements Screen {
         infoTable.setPosition(teamTable.getX(), stage.getHeight() * .91f);
         infoTable.setSize(700, 60);
 
-        //set up endTurnMessageTable
+        // Set up endTurnMessageTable
         param.size = 25;
         endTurnMessageLbl = new Label("Team <Unset> Turn", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         turnCountLbl = new Label("Turn 1", skin);
@@ -481,7 +481,7 @@ public class BattleScreen implements Screen {
         endTurnMessageTable.setColor(Color.WHITE);
         endTurnMessageTable.addAction(Actions.fadeOut(0f));
 
-        //set up help menu
+        // Set up help menu
         helpDialog = new Dialog("Help", skin);
         moveTitleLbl = new Label("~_~_~_", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         moveDescriptionLbl = new Label("-----", skin);
@@ -501,10 +501,10 @@ public class BattleScreen implements Screen {
         helpTable.add(moveRangeTable).padBottom(20f).row();
         helpTable.add(moveDescriptionLbl).width(450f).padBottom(20f).row();
         helpTable.add(closeHelpMenuBtn).size(120f, 40f).padBottom(10f);
-        //add to dialog window
+        // Add to dialog window
         helpDialog.add(helpTable).row();
 
-        //place game speed indicator
+        // Place game speed indicator
         param.size = 16;
         gameSpeedLbl = new Label("???", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         setGameSpeedLblText();
@@ -515,7 +515,17 @@ public class BattleScreen implements Screen {
         gameSpeedTable.setSize(gameSpeedLbl.getWidth() * 2.8f , gameSpeedLbl.getHeight() * 2.8f);
         gameSpeedTable.setPosition(stage.getWidth() - stage.getWidth() * .05f, stage.getHeight() * .005f);
         stage.addActor(gameSpeedTable);
-        //Start first turn
+
+        // Loading Icon
+        loadingIcon = new Image(atlas.findRegion("eightCircles"));
+        loadingIcon.setColor(Color.RED);
+        loadingIcon.setSize(stage.getWidth() / 25f, stage.getWidth() / 25f);
+        loadingIcon.setOrigin(loadingIcon.getWidth() / 2f, loadingIcon.getHeight() / 2f);
+        loadingIcon.setPosition(stage.getWidth() - stage.getWidth() * .125f, stage.getHeight() * .005f);
+        stage.addActor(loadingIcon);
+
+
+        // Start first turn
         nextTurn();
 
         fontGenerator.dispose();
@@ -524,14 +534,15 @@ public class BattleScreen implements Screen {
     /**
      * Game loop of the Battle Screen. In order of operations : <p>
      * 1 : Syncs Visual board with BoardManager boards <p>
-     * 2 : If the game hasnt ended and it is the player's turn, process Player Input (selecting entities and attacks <p>
+     * 2 : If the game hasn't ended and it is the player's turn, process Player Input (selecting entities and attacks <p>
      * 3 : If it is the computer's turn and the computer has gotten its actions for the turn, then it should play those actions out on screen <p>
-     * 4 : Play any move animations <p>
-     * 5 : If the game is still going, check and perform actions if any Hot Keys were pressed <p>
-     * 6 : update game engine and screen and draw onto screen <p>
-     * 7 : Remove dead entities and play their animations <p>
-     * 8 : Check win conditions to see if game has ended <p>
-     * 9 : Any debug actions <p>
+     * 4 : If the computer is processing, update the loading icon appropriately ELSE hide it from view
+     * 5 : Play any move animations <p>
+     * 6 : If the game is still going, check and perform actions if any Hot Keys were pressed <p>
+     * 7 : update game engine and screen and draw onto screen <p>
+     * 8 : Remove dead entities and play their animations <p>
+     * 9 : Check win conditions to see if game has ended <p>
+     * 10 : Any debug actions <p>
      */
     @Override
     public void render(float delta) {
@@ -543,6 +554,10 @@ public class BattleScreen implements Screen {
             processPlayerInput();
         if (playingComputerTurn && !computer.getProcessing())
             updateComputerTurn(delta);
+        if (computer.getProcessing())
+            updateLoadingIcon(delta);
+        else
+            hideLoadingIcon();
         playCurrentMoveAnimation(delta);
         if (!gameHasEnded) //Hot Keys should not work while game has ended
             checkHotKeys();
@@ -1207,10 +1222,6 @@ public class BattleScreen implements Screen {
         moveRangeTable.pack();
         //fade in animation
         helpDialog.show(stage);
-
-        /*
-        moveRangeTable.debug();
-        */
     }
 
     /**
@@ -1218,11 +1229,6 @@ public class BattleScreen implements Screen {
      */
     protected void hideHelpMenu() {
         showingHelpMenu = false;
-        //fade out animation
-        /*
-        helpTable.clearActions();
-        helpTable.addAction(Actions.fadeOut(.2f));
-        */
         helpDialog.hide();
     }
 
@@ -1502,6 +1508,36 @@ public class BattleScreen implements Screen {
             gameSpeedLbl.setText("x3");
             gameSpeedLbl.setColor(Color.RED);
         }
+    }
+
+    /**
+     * Updates the loading icon that shows how far the AI is in choosing a move.
+     */
+    public void updateLoadingIcon(float delta) {
+        switch (computer.getProgress()) {
+            case 1:
+                loadingIcon.setColor(Color.RED);
+                break;
+            case 2:
+                loadingIcon.setColor(Color.CYAN);
+                break;
+            case 3:
+                loadingIcon.setColor(Color.PURPLE);
+                break;
+            case 4:
+                loadingIcon.setColor(Color.GREEN);
+                break;
+            default:
+                loadingIcon.setColor(Color.CLEAR);
+        }
+        loadingIcon.rotateBy(540f * delta);
+    }
+
+    /**
+     * Hides the loading icon.
+     */
+    public void hideLoadingIcon() {
+        loadingIcon.setColor(Color.CLEAR);
     }
     //endregion
 

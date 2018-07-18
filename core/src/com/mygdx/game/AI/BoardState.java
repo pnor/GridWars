@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.StatusEffect;
+import com.mygdx.game.rules_types.Team;
 
 import static com.mygdx.game.ComponentMappers.*;
 
@@ -263,9 +264,9 @@ public class BoardState {
      * @return Whether the conditions are met for the game to be considered "close to being done". These conditions are:
      * - if any team has ony 1 or less entities left
      * - An Entity is close to their respective zone
-     * - if an entity can one hit ko the strongest member of the opposing team
+     * - (COMMENTED OUT) if an entity can one hit ko the strongest member of the opposing team and is within one turn of movement distance
      */
-    public boolean isGameCloseToEnding() {
+    public boolean isGameCloseToEnding(Array<Team> teams) {
         // If a team has one entity left
         int lowestAlive = 999;
         for (int i = 0; i < 2; i++) {
@@ -279,8 +280,10 @@ public class BoardState {
         boolean entityIsCloseToTheirZone = false;
         if (zones != null) {
             for (Entity e : entities.getAllEntities()) { // Entity Value
+                if (entities.get(e).team <= -1 || entities.get(e).team > 1) continue; // skip entities not on team 0 or 1
+                int otherTeamIndex = entities.get(e).team == 0 ? 1 : 0;
                 for (BoardPosition zone : zones.get(entities.get(e).team)) { // BoardPosition
-                    if (stm.get(e).getModSpd(e) <= entities.get(e).pos.taxicabDistance(zone))
+                    if (stm.get(e).getModSpd(e) >= entities.get(e).pos.taxicabDistance(zone))
                         entityIsCloseToTheirZone = true;
 
                     if (entityIsCloseToTheirZone) break;
@@ -291,28 +294,64 @@ public class BoardState {
             if (entityIsCloseToTheirZone) return true;
         }
 
-        // If any team can one hit KO the strongest member of the opposing team
-        int team0HighestHP = -1, team0HighestAtk = -1, team0defenseOfHighest = 0,
-                team1HighestHP = -1, team1HighestAtk = -1, team1defenseOfHighest = 0;
+        // If any team can one hit KO the strongest member of the opposing team + is close to them
+        /*
+        Entity strongestAttacker0 = null, mostDefensive0 = null,
+                strongestAttacker1 = null, mostDefensive1 = null;
         // get highest HP and ATK of teams
-        for (EntityValue ev : entities.getEntityValues()) {
-            if (ev.team == 0) {
-                if (team0HighestHP < ev.hp) {
-                    team0HighestHP = ev.hp;
-                    team0defenseOfHighest = ev.getModDef();
+        for (int i = 0; i < teams.size; i++) {
+            for (int j = 0; j < teams.get(i).getEntities().size; j++) { // through each entity, get strongest for each category
+                Entity curEntity = teams.get(i).getEntities().get(j);
+                EntityValue ev = entities.get(curEntity);
+                if (ev != null) {
+                    if (i == 0) { // team 0
+                        if (strongestAttacker0 == null || ev.getModAtk() > entities.get(strongestAttacker0).getModAtk()) {
+                            strongestAttacker0 = curEntity;
+                        }
+                        if (mostDefensive0 == null || ev.hp + ev.getModDef() > entities.get(mostDefensive0).hp + entities.get(mostDefensive0).getModDef()) {
+                            mostDefensive0 = curEntity;
+                        }
+                    } else if (i == 1) { // team 1
+                        if (strongestAttacker1 == null ||ev.getModAtk() > entities.get(strongestAttacker1).getModAtk()) {
+                            strongestAttacker1 = curEntity;
+                        }
+                        if (mostDefensive1 == null || ev.hp + ev.getModDef() > entities.get(mostDefensive1).hp + entities.get(mostDefensive1).getModDef()) {
+                            mostDefensive1 = curEntity;
+                        }
+                    }
                 }
-                team0HighestAtk = Math.max(ev.getModAtk(), team0HighestAtk);
-            } else {
-                if (team1HighestHP < ev.hp) {
-                    team1HighestHP = ev.hp;
-                    team1defenseOfHighest = ev.getModDef();
-                }
-                team1HighestAtk = Math.max(ev.getModAtk(), team1HighestAtk);
             }
         }
-        return team0HighestAtk - team1defenseOfHighest >= team1HighestHP || team1HighestAtk - team0defenseOfHighest >= team0HighestHP;
+        // checking if close enough and can kill
+        EntityValue strongestAttacker0EntityValue = entities.get(strongestAttacker0),
+                strongestAttacker1EntityValue = entities.get(strongestAttacker1),
+                mostDefensive0EntityValue = entities.get(mostDefensive0),
+                mostDefensive1EntityValue = entities.get(mostDefensive1);
+        if (strongestAttacker0EntityValue.attack >= mostDefensive1EntityValue.hp + mostDefensive1EntityValue.getModDef()) { // team 0
+            for (Entity e : teams.get(1).getEntities()) {
+                EntityValue curValue = entities.get(e);
+                if (curValue != null &&
+                        stm.get(strongestAttacker0).getModSpd(strongestAttacker0) >= strongestAttacker0EntityValue.pos.taxicabDistance(curValue.pos)) {
+                    // If the strongest attacker is close enough to an entity from the other team, return true. Else search continues
+                    return true;
+                }
+            }
+        }
+        if (strongestAttacker1EntityValue.attack >= mostDefensive0EntityValue.hp + mostDefensive0EntityValue.getModDef()) { // team 1
+            for (Entity e : teams.get(0).getEntities()) {
+                EntityValue curValue = entities.get(e);
+                if (curValue != null &&
+                        stm.get(strongestAttacker1).getModSpd(strongestAttacker1) >= strongestAttacker1EntityValue.pos.taxicabDistance(curValue.pos)) {
+                    // If the strongest attacker is close enough to an entity from the other team, return true. Else search continues
+                    return true;
+                }
+            }
+        }
+        */
 
+        return false;
     }
+
 
     public EntityMap getEntities() {
         return entities;
