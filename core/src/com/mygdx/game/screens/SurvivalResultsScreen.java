@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -86,6 +87,11 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
         //if they did add to highscores
         GRID_WARS.highScoreManager.addHighScoreObject(playerScore);
         GRID_WARS.highScoreManager.saveHighScores();
+
+        //Set "Beat the Game" data to true
+        Preferences preferences = Gdx.app.getPreferences("GridWars Options");
+        preferences.putBoolean("Beat the Game", true);
+        preferences.flush();
 
         //make save file unloadable
         if (loadedFromSave) {

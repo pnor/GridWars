@@ -75,7 +75,10 @@ public class HighScoreScreen extends MenuScreen implements Screen {
         for (int i = 0; i < highScores.size; i++) {
             scoreTable.row().padBottom(VERT_SPACING);
             HighScore curScore = highScores.get(i);
-            scoreTable.add(new Label(curScore.getTeamName(), new Label.LabelStyle(bigFont, Color.YELLOW)));
+            if (curScore.getLastFloor() > 50)
+                scoreTable.add(new Label(curScore.getTeamName(), new Label.LabelStyle(bigFont, Color.CYAN)));
+            else
+                scoreTable.add(new Label(curScore.getTeamName(), new Label.LabelStyle(bigFont, Color.YELLOW)));
             scoreTable.add(new Label("" + curScore.getScore(), new Label.LabelStyle(smallFont, Color.WHITE)));
             scoreTable.add(new Label("" + curScore.getTurns(), new Label.LabelStyle(smallFont, Color.WHITE)));
             //add images

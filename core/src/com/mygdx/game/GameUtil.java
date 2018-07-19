@@ -11,6 +11,7 @@ import com.mygdx.game.ui.LerpColor;
 import java.util.HashMap;
 
 import static com.mygdx.game.GridWars.atlas;
+import static com.mygdx.game.misc.ColorUtils.HSV_to_RGB;
 
 /**
  * Class containing static methods for things that don't belong to any one class
@@ -78,6 +79,8 @@ public class GameUtil {
         colors.put("purple", Color.PURPLE);
 
         colors.put("random", new LerpColor(new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), MathUtils.random(.3f, 3)));
+        colors.put("random2", new LerpColor(new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), MathUtils.random(.3f, 3)));
+        colors.put("randomHSV", new LerpColor(HSV_to_RGB(MathUtils.random(0, 100), 100, 100), HSV_to_RGB(MathUtils.random(0, 100), 100, 100), MathUtils.random(.3f, 3)));
         colors.put("red", Color.RED);
         colors.put("royal", Color.ROYAL);
 

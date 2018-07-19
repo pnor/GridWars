@@ -79,6 +79,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
     //misc
     /** number representing alternate color choices for players */
     private int altNumber;
+    private boolean beatTheGame;
 
     /**
      * Creates a team selection screen for a survival mode. Only one team is selectable
@@ -354,6 +355,8 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
         menuBtnTable.add(clearBtn).size(150, 50);
         table.add(menuBtnTable).colspan(2);
 
+        //Toggle Beat the game secret character
+        beatTheGame = Gdx.app.getPreferences("GridWars Options").getBoolean("Beat the Game");
     }
 
     /**
@@ -451,7 +454,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
             altNumber = 0;
 
         //bonus survival character (only if game has been beaten)
-        if (checkSecretCombo() && team.getEntities().size <= 3) {
+        if (beatTheGame && checkSecretCombo() && team.getEntities().size <= 3) {
             if (Gdx.input.isKeyPressed(Input.Keys.BACKSLASH))
                 team.getEntities().add(EntityConstructor.dragonPneumaPlayer(0, 1));
             else

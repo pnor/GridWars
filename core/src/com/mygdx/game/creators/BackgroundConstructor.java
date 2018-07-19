@@ -1,5 +1,7 @@
 package com.mygdx.game.creators;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.mygdx.game.ui.BackType;
@@ -552,7 +554,12 @@ public class BackgroundConstructor {
         Sprite back = new Sprite(backAtlas.findRegion("BlankBackground"));
         back.setColor(Color.BLACK);
         Sprite glower = new Sprite(backAtlas.findRegion("FadeBackground"));
-        glower.setColor(new Color(1, 1, 1, 0.2f));
+        // Changes based on if game was beat
+        Preferences pref = Gdx.app.getPreferences("GridWars Options");
+        if (pref.getBoolean("Beat the Game"))
+            glower.setColor(new Color(1, 215f/255f, 0, 0.2f));
+        else
+            glower.setColor(new Color(1, 1, 1, 0.2f));
         Sprite overlay = new Sprite(backAtlas.findRegion("CubeBackground"));
         overlay.setColor(new Color(1, 1, 1, .01f));
         return new Background(
