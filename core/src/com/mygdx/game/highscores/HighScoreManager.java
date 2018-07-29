@@ -70,11 +70,11 @@ public class HighScoreManager {
 
     public void prepopulate() {
         highScores = new Array<>();
-        highScores.add(new HighScore("Poor Party", 50, 0, 1, -2, -2, -2, -2));
-        highScores.add(new HighScore("Mediocre Mashup", 100, 10, 5, -2, -2, -2, -2));
-        highScores.add(new HighScore("Standard Squad", 5000, 20, 10, -2, -2, -2, -2));
-        highScores.add(new HighScore("Good Group", 10000, 30, 15, -2, -2, -2, -2));
-        highScores.add(new HighScore("Clever Contrivers", 20000, 40, 50, -2, -2, -2, -2));
+        highScores.add(new HighScore("Poor Party", 100, 0, 1, -2, -2, -2, -2));
+        highScores.add(new HighScore("Mediocre Mashup", 400, 10, 5, -2, -2, -2, -2));
+        highScores.add(new HighScore("Standard Squad", 800, 20, 10, -2, -2, -2, -2));
+        highScores.add(new HighScore("Good Group", 6000, 30, 15, -2, -2, -2, -2));
+        highScores.add(new HighScore("Clever Contrivers", 10000, 40, 50, -2, -2, -2, -2));
         highScores.sort();
         sameAsFile = false;
     }

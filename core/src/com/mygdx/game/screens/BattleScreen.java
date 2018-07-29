@@ -58,7 +58,7 @@ import static com.mygdx.game.GridWars.*;
  * Screen where the battles take place. Contains methods for handling the UI and other visual effects. Here, the player interacts with the game through
  * the buttons and sprites.
  * @author pnore_000
- */
+ */ //TODO FIX Issue where thoughtoise movement squares dont leave after using rest mind. (Fixed prolly?)
 public class BattleScreen implements Screen {
 
     protected final GridWars GRID_WARS;
@@ -1530,7 +1530,7 @@ public class BattleScreen implements Screen {
             default:
                 loadingIcon.setColor(Color.CLEAR);
         }
-        loadingIcon.rotateBy(540f * delta);
+        loadingIcon.rotateBy(540f / GRID_WARS.getGameSpeed() * delta);
     }
 
     /**
@@ -1559,7 +1559,8 @@ public class BattleScreen implements Screen {
      * the board, so a try catch loop should be written around it.
      */
     public void removeMovementTiles() {
-        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity)))
+        // Math.max is used so there is no leftover spaces if the entity reduced its own speed after using a move
+        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, Math.max(stm.get(selectedEntity).getModSpd(selectedEntity), stm.get(selectedEntity).spd)))
             if (t != null) {
                 t.revertTileColor();
                 t.stopListening();

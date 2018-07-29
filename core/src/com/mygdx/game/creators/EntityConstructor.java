@@ -215,7 +215,7 @@ public class EntityConstructor {
     public static Entity cube() {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(5, 0, 0, 0, 0));
+        entity.add(new StatComponent(4, 0, 0, 0, 0));
         entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("cube")))));
         entity.add(new NameComponent("Cube"));
 
@@ -350,7 +350,7 @@ public class EntityConstructor {
     public static Entity gargoyleStatue() {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(7, 0, 0, 2, 0));
+        entity.add(new StatComponent(5, 0, 0, 1, 0));
         entity.add(new ActorComponent(new SpriteActor(atlas.createSprite("gargoyleStatue"), true)));
         entity.add(new NameComponent("Gargoyle Statue"));
 
@@ -366,7 +366,7 @@ public class EntityConstructor {
     public static Entity pillar() {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(10, 0, 0, 0, 0));
+        entity.add(new StatComponent(6, 0, 0, 0, 0));
         entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("pillar")), true)));
         entity.add(new NameComponent("Pillar"));
 
@@ -382,7 +382,7 @@ public class EntityConstructor {
     public static Entity brokenPillar() {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(5, 0, 0, 0, 0));
+        entity.add(new StatComponent(3, 0, 0, 0, 0));
         entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("destroyedPillar")), true)));
         entity.add(new NameComponent("Broken Pillar"));
 
@@ -398,7 +398,7 @@ public class EntityConstructor {
     public static Entity wall() {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(8, 0, 0, 0, 0));
+        entity.add(new StatComponent(6, 0, 0, 0, 0));
         entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("wall")), true)));
         entity.add(new NameComponent("Wall"));
 
@@ -414,7 +414,7 @@ public class EntityConstructor {
     public static Entity toughWall() {
         Entity entity = new Entity();
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(8, 0, 0, 1, 0));
+        entity.add(new StatComponent(6, 0, 0, 1, 0));
         entity.add(new ActorComponent(new SpriteActor((atlas.createSprite("goldWall")), true)));
         entity.add(new NameComponent("Tough Wall"));
 
@@ -1199,7 +1199,7 @@ public class EntityConstructor {
                 atlas.findRegion("thunderSpirit2")
         }, Animation.PlayMode.LOOP, 0.2f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(20, 10, 2, 1, 2));
+        entity.add(new StatComponent(18, 10, 2, 1, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1528,7 +1528,7 @@ public class EntityConstructor {
                 atlas.findRegion("whiteGargoyle2")
         }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(8, 8, 2, 0, 3));
+        entity.add(new StatComponent(6, 8, 2, 0, 3));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;

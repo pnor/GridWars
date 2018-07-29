@@ -2103,13 +2103,13 @@ public class BoardAndRuleConstructor {
         //place things
         for (int i = 1; i < maxSize; i += 4) { //horiz
             for (int j = 1; j < maxSize; j++) {
-                boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(i, j));
+                boardManager.add(EntityConstructor.wall(), new BoardPosition(i, j));
             }
         }
 
         for (int i = 2; i <= maxSize - 2; i++) { //vert
             for (int j = 1; j <= maxSize - 1; j += 4) {
-                boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(i, j));
+                boardManager.add(EntityConstructor.wall(), new BoardPosition(i, j));
             }
         }
 
@@ -2136,8 +2136,8 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(0, maxSize));
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(1, 0));
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(2, 1));
-        boardManager.add(EntityConstructor.pillar(), new BoardPosition(2, 4));
-        boardManager.add(EntityConstructor.pillar(), new BoardPosition(3, 1));
+        boardManager.add(EntityConstructor.toughWall(), new BoardPosition(2, 4));
+        boardManager.add(EntityConstructor.toughWall(), new BoardPosition(3, 1));
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(3, 4));
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(4, maxSize));
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(maxSize, 0));
@@ -2418,7 +2418,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(2, 2));
 
         boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(3, 0));
-        boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(3, 3));
+        boardManager.add(EntityConstructor.superWall(), new BoardPosition(3, 3));
         boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(3, maxSize - 1));
 
         boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(4, 4));

@@ -80,7 +80,8 @@ public class GameUtil {
 
         colors.put("random", new LerpColor(new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), MathUtils.random(.3f, 3)));
         colors.put("random2", new LerpColor(new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), MathUtils.random(.3f, 3)));
-        colors.put("randomHSV", new LerpColor(HSV_to_RGB(MathUtils.random(0, 100), 100, 100), HSV_to_RGB(MathUtils.random(0, 100), 100, 100), MathUtils.random(.3f, 3)));
+        colors.put("randomhsv", new LerpColor(HSV_to_RGB(MathUtils.random(0, 100), 100, 100), HSV_to_RGB(MathUtils.random(0, 100), 100, 100), MathUtils.random(.3f, 3)));
+        colors.put("randomhsv2", new LerpColor(HSV_to_RGB(MathUtils.random(0, 100), 100, 100), HSV_to_RGB(MathUtils.random(0, 100), 100, 100), MathUtils.random(.3f, 3)));
         colors.put("red", Color.RED);
         colors.put("royal", Color.ROYAL);
 
@@ -97,6 +98,7 @@ public class GameUtil {
 
         colors.put("ultimate", new LerpColor(new Color(1, .2f, .3f, 1), Color.GOLDENROD, .5f));
 
+        colors.put("victory", new LerpColor(Color.GOLD, Color.BLACK, .5f));
         colors.put("violet", Color.VIOLET);
         colors.put("vulpedge", new LerpColor(Color.WHITE, Color.RED, 1f));
 

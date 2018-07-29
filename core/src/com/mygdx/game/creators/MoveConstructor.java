@@ -1071,15 +1071,31 @@ public class MoveConstructor {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
                         if (stm.has(enemy))
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
-                        if (status.has(enemy))
-                            status.get(enemy).addStatusEffect(burn(3), enemy);
+                        if (status.has(enemy)) {
+                            if (MathUtils.randomBoolean(.6f)) {
+                                status.get(enemy).addStatusEffect(burn(MathUtils.random(2, 4)), enemy);
+                            }
+                            if (MathUtils.randomBoolean(.1f)) {
+                                status.get(enemy).addStatusEffect(paralyze(1), enemy);
+                            }
+                        }
 
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{explosions, fire})), new MoveInfo(false, 1, burn(3).createStatusEffectInfo()));
-        move.setAttackDescription("Starts a fire using live wires and electricity. Deals regular damage, and Burns the opponent for 3 turns.");
+                new Array<VisualEvent>(new VisualEvent[]{explosions, fire})), new MoveInfo(false, 1, (entity, userEntity) ->
+                {
+                    if (entity.acceptsStatusEffects) { // add only guaranteed boost
+                        if (MathUtils.randomBoolean(.6f)) {
+                            entity.statusEffectInfos.add(burn(MathUtils.random(2, 4)).createStatusEffectInfo());
+                        }
+                        if (MathUtils.randomBoolean(.1f)) {
+                            entity.statusEffectInfos.add(paralyze(1).createStatusEffectInfo());                        }
+                    }
+                }));
+        move.setAttackDescription("Starts a fire using live wires and electricity. Deals regular damage, and has a 60% chance to burn the opponent for 2-4 turns. Also" +
+                " has a 10% chance to paralyze the opponent for 1 turn.");
         return move;
     }
 

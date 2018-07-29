@@ -264,11 +264,17 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         } else if (level >= 31 && level <= 40) { //level 31-40
             overlay = new Sprite(backAtlas.findRegion("SimpleRoundedZag"));
         }  else if (level >= 41 && level <= 49) { //level 41-49
+            Sprite ov = backAtlas.createSprite("CubeBackground");
+            ov.setColor(new Color(1, 1, 1, 0.1f));
             overlay = new Sprite(backAtlas.findRegion("CubeBackground"));
         } else { //level 50
             overlay = new Sprite(backAtlas.findRegion("FadeBackground"));
         }
-        overlay.setColor(0, 0, 0, .2f);
+        if (level >= 41 && level <= 49) { // Should be lighter for Cube one
+            overlay.setColor(0, 0, 0, .05f);
+        } else {
+            overlay.setColor(0, 0, 0, .2f);
+        }
         background = new Background(transparentBack,
                 new Sprite[]{overlay, backgroundLay},
                 new BackType[]{BackType.SCROLL_HORIZONTAL, BackType.NO_MOVE},
@@ -504,8 +510,8 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.yellowLion(1),
                                 EntityConstructor.stoneLeo(1),
-                                EntityConstructor.stoneLeo(1),
-                                EntityConstructor.stoneLeo(1)
+                                EntityConstructor.medicanMan(1),
+                                EntityConstructor.toxicCanman(1)
                         }));
             case 20 :
                 return new Team("Enemy",
@@ -716,10 +722,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return new Team("Enemy",
                         Color.RED,
                         new Array<Entity>(new Entity[] {
-                                EntityConstructor.aquaPneumaAlt(1),
                                 EntityConstructor.greenOrb(1),
-                                EntityConstructor.romanceBook(1),
-                                EntityConstructor.blueOrb(1)
+                                EntityConstructor.aquaPneumaAlt(1),
+                                EntityConstructor.aquaPneumaAlt(1),
+                                EntityConstructor.romanceBook(1)
                         }));
             case 44 :
                 return new Team("Enemy",
