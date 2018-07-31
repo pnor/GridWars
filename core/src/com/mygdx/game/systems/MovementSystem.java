@@ -11,6 +11,8 @@ import static com.mygdx.game.ComponentMappers.mm;
 import static com.mygdx.game.ComponentMappers.pm;
 
 /**
+ * System that allows entities to move across the screen
+ *
  * @author pnore_000
  */
 public class MovementSystem extends IteratingSystem {

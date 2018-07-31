@@ -9,6 +9,8 @@ import static com.mygdx.game.ComponentMappers.stm;
 import static com.mygdx.game.ComponentMappers.vm;
 
 /**
+ * System in charge of processing the damage or death animations for entities.
+ *
  * @author Phillip O'Reggio
  */
 public class DamageDeathSystem extends IteratingSystem {

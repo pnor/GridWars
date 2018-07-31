@@ -8,6 +8,8 @@ import com.mygdx.game.components.LifetimeComponent;
 import static com.mygdx.game.ComponentMappers.lfm;
 
 /**
+ * System that removes entities after a certain amount of time has passed
+ *
  * @author Phillip O'Reggio
  */
 public class LifetimeSystem extends IteratingSystem {

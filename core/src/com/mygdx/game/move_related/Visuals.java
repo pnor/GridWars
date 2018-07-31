@@ -60,8 +60,9 @@ public class Visuals {
             VisualEvent cur = visuals.get(currentVisual);
             cur.doVisuals(user, targetPositions, engine, stage);
             cur.incrementRepeat(1);
-            if (cur.getCurrentAmount() >= cur.getRepeatAmount())
+            if (cur.getCurrentAmount() >= cur.getRepeatAmount()) {
                 currentVisual += 1;
+            }
         }
     }
 
@@ -69,7 +70,8 @@ public class Visuals {
      * Plays the animation (Is called multiple times to play entire thing).
      */
     public void play() {
-        if (timer.checkIfFinished()) { //if its done
+        //if its done (both time wise and if it played all animations)
+        if (timer.checkIfFinished() && currentVisual >= visuals.size) {
             isPlaying = false;
             Visuals.visualsArePlaying -= 1;
             if (autoReset) {

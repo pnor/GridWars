@@ -8,6 +8,8 @@ import com.mygdx.game.components.EventComponent;
 import static com.mygdx.game.ComponentMappers.em;
 
 /**
+ * System allowing entities to run blocks of code after a pre-set time has apssed
+ *
  * @author Phillip O'Reggio
  */
 public class EventSystem extends IteratingSystem {
