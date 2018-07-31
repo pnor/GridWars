@@ -80,10 +80,10 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
                         GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, new LerpColorManager(), Song.STAGE_THEME_4, GRID_WARS));
                     } else if (actor == forest) {
                         board += 8;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, new LerpColorManager(), Song.STAGE_THEME_5, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, new LerpColorManager(), Song.STAGE_ALT_2, GRID_WARS));
                     } else if (actor == island) {
                         board += 10;
-                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, new LerpColorManager(), Song.STAGE_THEME, GRID_WARS));
+                        GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, new LerpColorManager(), Song.STAGE_ALT_3, GRID_WARS));
                     }
                 }
             }

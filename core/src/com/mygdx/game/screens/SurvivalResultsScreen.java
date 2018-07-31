@@ -10,15 +10,15 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.components.*;
 import com.mygdx.game.highscores.HighScore;
 import com.mygdx.game.misc.EventCompUtil;
+import com.mygdx.game.music.Song;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.systems.EventSystem;
 import com.mygdx.game.systems.LifetimeSystem;
@@ -26,7 +26,6 @@ import com.mygdx.game.systems.MovementSystem;
 import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
-import com.mygdx.game.music.Song;
 
 import static com.mygdx.game.ComponentMappers.am;
 import static com.mygdx.game.ComponentMappers.sm;
@@ -45,6 +44,7 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
     private Image[] teamImages;
     private Label lblPoints;
     private Label lblTotalTurns;
+    private Dialog newCharacterDialog;
 
     //highscore related
     private boolean playerGotNewHighScore;
@@ -90,6 +90,7 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
 
         //Set "Beat the Game" data to true
         Preferences preferences = Gdx.app.getPreferences("GridWars Options");
+        boolean firstTimeBeatingGame = !preferences.getBoolean("Beat the Game");
         preferences.putBoolean("Beat the Game", true);
         preferences.flush();
 
@@ -117,13 +118,46 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
             } else
                 teamImages[i].setDrawable(new SpriteDrawable(atlas.createSprite("cube")));
         }
+
+        // Create Dialog things
+        newCharacterDialog = new Dialog("New Character!", skin);
+        param.size = 16;
+        Label messageLabel = new Label("Press both SHIFTs and TAB to use a new character in Survival mode!", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        Image newCharacterImage = new Image(new TextureRegionDrawable(atlas.findRegion("dragonAlt")));
+        newCharacterImage.setSize(64, 64);
+        HoverButton endDialogBtn = new HoverButton("Return", skin, Color.WHITE, Color.DARK_GRAY);
+        Table dialogTable = new Table();
+        dialogTable.add(messageLabel).pad(20f).row();
+        dialogTable.add(newCharacterImage).size(100, 100).padBottom(20f).row();
+        dialogTable.add(endDialogBtn).size(160, 60).padBottom(20f);
+        newCharacterDialog.add(dialogTable);
+
         //Create button
         HoverButton btnReturn = new HoverButton("Return", skin, Color.WHITE, Color.DARK_GRAY);
         ChangeListener listener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
-                    if (actor == btnReturn) {
+                    if (actor == btnReturn) { // if its the first time beating the game, show new character message
+                        if (firstTimeBeatingGame)
+                            newCharacterDialog.show(stage);
+                        else { // normal ending procedure
+                            GRID_WARS.musicManager.setSong(Song.MENU_THEME);
+                            if (playerGotNewHighScore)
+                                GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
+                            else
+                                GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
+                        }
+                    }
+                }
+            }
+        };
+        ChangeListener listenerDialog = new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (((Button) actor).isPressed()) {
+                    if (actor == endDialogBtn) {
+                        newCharacterDialog.hide();
                         GRID_WARS.musicManager.setSong(Song.MENU_THEME);
                         if (playerGotNewHighScore)
                             GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
@@ -134,6 +168,7 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
             }
         };
         btnReturn.addListener(listener);
+        endDialogBtn.addListener(listenerDialog);
 
         //add to main table
         table.add(titleLbl).padBottom(80).colspan(4).row();

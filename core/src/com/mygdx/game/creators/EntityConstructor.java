@@ -1323,7 +1323,7 @@ public class EntityConstructor {
                 atlas.findRegion("dragon2")
         }, Animation.PlayMode.LOOP, 1f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(40, 10, 4, 1, 1));
+        entity.add(new StatComponent(40, 20, 2, 1, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1344,17 +1344,17 @@ public class EntityConstructor {
                         atlas.findRegion("dragonUp"),
                         atlas.findRegion("dragonUp2")},
                         Animation.PlayMode.LOOP, .5f, true),
-                        new StatComponent(40, 10, 6, 0, 3)),
+                        new StatComponent(40, 20, 6, 0, 3)),
                 new Phase(25, 15, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("dragonGlow"),
                         atlas.findRegion("dragon2Glow")},
                         Animation.PlayMode.LOOP, .6f, true),
-                        new StatComponent(40, 10, 5, 1, 2)),
+                        new StatComponent(40, 20, 5, 1, 2)),
                 new Phase(40, 25, new AnimationActor(new TextureRegion[]{
                         atlas.findRegion("dragon"),
                         atlas.findRegion("dragon2")},
                         Animation.PlayMode.LOOP, 1f, true),
-                        new StatComponent(40, 10, 4, 1, 1))
+                        new StatComponent(40, 20, 2, 1, 1))
         ));
 
         return entity;
@@ -2194,6 +2194,38 @@ public class EntityConstructor {
 
         return entity;
     }
+
+    public static Entity sentinelSword(int team) {
+        Entity entity = new Entity();
+        if (team > -1)
+            entity.add(new TeamComponent(team));
+        entity.add(new NameComponent("Sentinel Sword"));
+
+        entity.add(new ActorComponent(new AnimationActor(new TextureRegion[]{
+                atlas.findRegion("possesedSwordRed"),
+                atlas.findRegion("possesedSwordRed2")
+        }, Animation.PlayMode.LOOP, 0.5f, true)));
+        entity.add(new BoardComponent());
+        entity.add(new StatComponent(5, 10, 3, 0, 2));
+        entity.add(new StatusEffectComponent());
+        entity.add(new StateComponent());
+        stm.get(entity).obscureStatInfo = true;
+        state.get(entity).canAttack = true;
+        state.get(entity).canMove = true;
+        entity.add(new VisualsComponent(
+                DamageAnimationConstructor.damageAnimation(entity),
+                DamageAnimationConstructor.heavyDamageAnimation(entity),
+                DamageAnimationConstructor.deathAnimation(entity),
+                DamageAnimationConstructor.shuffleAnimation(entity)));
+        entity.add(new MovesetComponent(new Array<Move>(new Move[]{
+                MoveConstructor.spiritBoost(entity),
+                MoveConstructor.fullRestore(entity),
+                MoveConstructor.ward(entity),
+                MoveConstructor.chargedSlice(entity)
+        })));
+
+        return entity;
+    }
     //books
     public static Entity book(int team) {
         Entity entity = new Entity();
@@ -2332,7 +2364,7 @@ public class EntityConstructor {
                 atlas.findRegion("eliteBook2")
         }, Animation.PlayMode.LOOP, 0.4f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(9, 30, 3, 0, 2));
+        entity.add(new StatComponent(7, 30, 3, 0, 2));
         stm.get(entity).obscureStatInfo = true;
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());

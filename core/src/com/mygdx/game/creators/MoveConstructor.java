@@ -6829,8 +6829,10 @@ public class MoveConstructor {
                                     } else if (chance > .86f && chance <= .9f) { // 4%
                                         status.get(enemy).addStatusEffect(spUp(2), enemy);
                                         status.get(enemy).addStatusEffect(speedUp2(2), enemy);
-                                    } else { //10%
+                                    } else if (chance > .9f && chance < .95f){ // 5%
                                         status.get(enemy).addStatusEffect(supercharged(2), enemy);
+                                    } else {
+                                        status.get(enemy).removeAll(enemy);
                                     }
                                 }
                             } else { //another tree of possible effects (more harmful/unpredictable)
@@ -6853,9 +6855,15 @@ public class MoveConstructor {
                                         status.get(enemy).addStatusEffect(exhausted(2), enemy);
                                     } else if (chance > .72f && chance <= .86f) { // 14%
                                         status.get(enemy).addStatusEffect(berserk(2), enemy);
-                                    } else if (chance > .86f && chance <= .9f) { // 4%
+                                    } else if (chance > .86f && chance <= .88f) { // 3%
                                         status.get(enemy).addStatusEffect(unstable(2), enemy);
                                         status.get(enemy).addStatusEffect(supercharged(2), enemy);
+                                    } else if (chance > .88f && chance < .9f) { // 1%
+                                        status.get(enemy).addStatusEffect(supercharged(2), enemy);
+                                        status.get(enemy).addStatusEffect(berserk(2), enemy);
+                                        status.get(enemy).addStatusEffect(attackUp3(2), enemy);
+                                        status.get(enemy).addStatusEffect(speedUp(2), enemy);
+                                        status.get(enemy).addStatusEffect(unstable(2), enemy);
                                     } else { //10%
                                         status.get(enemy).addStatusEffect(burn(2), enemy);
                                         status.get(enemy).addStatusEffect(curse(2), enemy);
@@ -6878,8 +6886,8 @@ public class MoveConstructor {
                     entity.arbitraryValue += MathUtils.random(-200, 200); //random status effect chance
             }
         ));
-        move.setAttackDescription("Mixes toxins to create a highly unpredictable substance. Deals regular damage and has a chance to inflict " +
-        "Poison and a random combination of (mostly positive) status effects on the target for 2 turns.");
+        move.setAttackDescription("Mixes toxins to create a highly unpredictable outcome. Deals regular damage and has a chance to inflict " +
+        "Poison and a random combination of status effects on the target for 2 turns.");
         return move;
     }
 
@@ -10471,15 +10479,15 @@ public class MoveConstructor {
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e), 0, 999);
 
                         if (status.has(enemy))
-                            status.get(enemy).addStatusEffect(offenseless(1), enemy);
+                            status.get(enemy).addStatusEffect(offenseless(2), enemy);
 
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{sparkleOut, explode, smallBooms, flash, explodeBig, largerRadiusBooms, sparkle, floatUpDiamonds})),
-                new MoveInfo(true, 1, offenseless(1).createStatusEffectInfo()));
-        move.setAttackDescription("Releases a spark of pure energy. Ignores defense and lowers the target's attack for 1 turn.");
+                new MoveInfo(true, 1, offenseless(2).createStatusEffectInfo()));
+        move.setAttackDescription("Releases a spark of pure energy. Ignores defense and lowers the target's attack for 2 turn.");
         return move;
     }
 
@@ -10688,15 +10696,15 @@ public class MoveConstructor {
                         if (stm.has(enemy))
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e), 0, 999);
                         if (status.has(enemy))
-                            status.get(enemy).addStatusEffect(curse(1), enemy);
+                            status.get(enemy).addStatusEffect(curse(2), enemy);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{
                 new BoardPosition(0, -2)
                 }),
                 new Array<VisualEvent>(new VisualEvent[]{
                         explode, nothing, explodePause, explodePause2, ripples, circles
-                })), new MoveInfo(true, 1, curse(1).createStatusEffectInfo()));
-        move.setAttackDescription("Releases negative energy near the target, making them feel weak. Ignores defense and inflicts Curse for 1 turn.");
+                })), new MoveInfo(true, 1, curse(2).createStatusEffectInfo()));
+        move.setAttackDescription("Releases negative energy near the target, making them feel weak. Ignores defense and inflicts Curse for 2 turn.");
         return move;
     }
 
@@ -10843,7 +10851,12 @@ public class MoveConstructor {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
 
                         if (stm.has(enemy))
-                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) * 2, 0, 999);
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e), 0, 999);
+                        if (status.has(enemy)) {
+                            status.get(enemy).addStatusEffect(slowness(1), enemy);
+                            status.get(enemy).addStatusEffect(offenseless(2), enemy);
+                            status.get(enemy).addStatusEffect(shivers(3), enemy);
+                        }
 
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
@@ -10853,8 +10866,9 @@ public class MoveConstructor {
                 new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
                 new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)}),
                 new Array<VisualEvent>(new VisualEvent[]{flashRed, firebreath, explosions, sparks})),
-                new MoveInfo(true, 2));
-        move.setAttackDescription("Attacks a large range with a huge surge of power. Ignores defense and inflicts 2x damage.");
+                new MoveInfo(true, 1, slowness(1).createStatusEffectInfo(), offenseless(2).createStatusEffectInfo(), shivers(3).createStatusEffectInfo()));
+        move.setAttackDescription("Attacks a large range with a surge of power. Ignores defense. Lowers the target's speed, attack and maximum SP for " +
+                "1 turn, 2 turns, and 3 turns respectively.");
         return move;
     }
 
@@ -17641,6 +17655,133 @@ public class MoveConstructor {
                         enemy.statusEffectInfos.add(spUp(2).createStatusEffectInfo());
                 }));
         move.setAttackDescription("Gives the target a large amount of inspirational knowledge. Increases the target's SP by 2 and causes them to recover more SP than usual each turn.");
+        return move;
+    }
+
+    public static Move spiritBoost(Entity user) {
+        VisualEvent explode = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(300 * scale, 300 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        BoardComponent.boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity boom = new Entity();
+                boom.add(new PositionComponent(tilePosition, entitySize.x, entitySize.y, 0));
+                boom.add(new LifetimeComponent(0, .38f));
+                boom.add(new AnimationComponent(.07f,
+                        new TextureRegion[]{atlas.findRegion("diamondBoom"),
+                                atlas.findRegion("diamondBoom2"),
+                                atlas.findRegion("diamondBoom3"),
+                                atlas.findRegion("diamondBoom4"),
+                                atlas.findRegion("diamondBoom5"),
+                                atlas.findRegion("diamondBoom6")},
+                        Color.BLUE,
+                        Animation.PlayMode.NORMAL));
+                boom.add(new EventComponent(.07f, true, EventCompUtil.fadeOut(5)));
+                engine.addEntity(boom);
+            }
+        }, .01f, 1);
+
+        VisualEvent sparkle = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(35 * scale, 35 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity sparkle = new Entity();
+                sparkle.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-30 * scale, 30 * scale), MathUtils.random(-30 * scale, 30 * scale)),
+                        entitySize.x, entitySize.y, 0));
+                sparkle.add(new MovementComponent(new Vector2(0, 15 * scale)));
+                sparkle.add(new LifetimeComponent(0, .6f));
+                Sprite sprite = new Sprite(atlas.findRegion("fourCircles"));
+                sprite.setOriginCenter();
+                sprite.setColor(Color.CYAN);
+                sparkle.add(new SpriteComponent(sprite));
+                sparkle.add(new EventComponent(.1f, true, EventCompUtil.fadeOutAfter(3, 3)));
+
+                engine.addEntity(sparkle);
+            }
+        }, .08f, 14);
+
+        VisualEvent returnToNormalGradual = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+
+                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                    return;
+
+                Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
+                am.get(enemy).actor.shade(am.get(enemy).actor.getColor().lerp(BattleScreen.getShadeColorBasedOnState(user), .1f));
+            }
+        }, .05f, 8);
+
+        VisualEvent changeToBlack = new VisualEvent(new VisualEffect() {
+            private float progress;
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+
+                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                    return;
+                progress = MathUtils.clamp(progress + .1f, 0, 1);
+
+                Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
+                am.get(enemy).actor.shade(am.get(enemy).actor.getColor().cpy().lerp(Color.BLACK, progress));
+            }
+        }, .05f, 10);
+
+        VisualEvent returnToNormal = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+
+                if (!boards.containsPosition(bp) || !boards.getBoard().getTile(bp.r, bp.c).isOccupied())
+                    return;
+
+                Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
+                am.get(enemy).actor.shade(BattleScreen.getShadeColorBasedOnState(enemy));
+            }
+        }, .05f, 1);
+
+        Move move = new Move("Spirit Boon", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
+                        stm.get(enemy).sp += 1;
+                        if (status.has(enemy))
+                            status.get(enemy).addStatusEffect(StatusEffectConstructor.spUp(3), enemy);
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{changeToBlack, sparkle, returnToNormalGradual, explode, returnToNormal})),
+                new MoveInfo(false, 0, (enemy, userEntity) -> {
+                    enemy.sp += 1;
+                    if (enemy.acceptsStatusEffects)
+                        enemy.statusEffectInfos.add(StatusEffectConstructor.spUp(4).createStatusEffectInfo());
+                    if (enemy.maxHp >= 13 && enemy.sp < 7) // Encourage use if it hits the dragon (which has high max hp)
+                        enemy.arbitraryValue += 150;
+
+                }));
+        move.setAttackDescription("Gives the target a spiritual boost. Restores the target's SP by 1 and allows them to regenerate SP faster for 4 turns");
         return move;
     }
     //endregion

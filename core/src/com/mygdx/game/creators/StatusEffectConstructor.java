@@ -17,7 +17,7 @@ import static com.mygdx.game.ComponentMappers.vm;
 public class StatusEffectConstructor {
 
     //region Status Effects
-    //negative
+    //region Negative
     public static StatusEffect poison(int duration) {
         StatusEffect statusEffect = new StatusEffect("Poison", duration, new LerpColor(Color.GREEN, new Color(201f / 255f, 1f, 0f, 1f)), (e) -> {
             stm.get(e).hp -= 1;
@@ -183,6 +183,8 @@ public class StatusEffectConstructor {
                 if (MathUtils.randomBoolean()) { //sp random effect
                     stm.get(e).sp += MathUtils.random(-5, 5);
                 }
+                stm.get(e).hp = Math.max(0, stm.get(e).hp);
+                stm.get(e).sp = Math.max(0, stm.get(e).sp);
             }
             if (vm.has(e) && !vm.get(e).shuffleAnimation.getIsPlaying())
                 vm.get(e).shuffleAnimation.setPlaying(true, true);
@@ -195,18 +197,21 @@ public class StatusEffectConstructor {
             if (MathUtils.randomBoolean()) { //sp random effect
                 entity.sp += MathUtils.random(-5, 5);
             }
+            entity.hp = Math.max(0, entity.hp);
+            entity.sp = Math.max(0, entity.sp);
         }));
         effect.setStatChanges(
                 MathUtils.random(.5f, 3),
                 MathUtils.random(0, 2),
-                MathUtils.random(0, 3),
-                MathUtils.random(0, 3),
+                MathUtils.random(0, 4),
+                MathUtils.random(0, 4),
                 MathUtils.random(0, 3)
         );
         return effect;
     }
+    //endregion
 
-    //boost up
+    //region Positive
     public static StatusEffect speedUp(int duration) {
         StatusEffect effect = new StatusEffect("Quick", duration, new LerpColor(Color.WHITE, Color.CYAN, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
         effect.setStatChanges(1, 1, 1, 1, 2);
@@ -310,6 +315,7 @@ public class StatusEffectConstructor {
         effect.setStatChanges(1, 1, 1, 1, 1);
         return effect;
     }
+    //endregion
     //endregion
 
     //TODO create status effect info creator methods for each status effect (is more efficient). Should be done AFTER above TODO!

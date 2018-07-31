@@ -699,7 +699,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                                 EntityConstructor.blueOrb(1)
                         }));
             //endregion
-            //region 41 - 50
+            //region level 41 - 50
             case 41 :
                 return new Team("Enemy",
                         Color.RED,
@@ -785,8 +785,8 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         Color.RED,
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.dragonPneuma(1),
-                                EntityConstructor.blueSword(1),
-                                EntityConstructor.blueSword(1),
+                                EntityConstructor.sentinelSword(1),
+                                EntityConstructor.sentinelSword(1),
                                 EntityConstructor.blueSword(1)
                         }));
             //endregion
@@ -852,22 +852,34 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
     }
 
     private Song getFloorLevelSong() {
-        //level 1-9
-        if (level >= 1 && level <= 9)
+        // level 1-9
+        if (level == 5 || level == 9)
+            return Song.STAGE_ALT_1;
+        else if (level >= 1 && level <= 9)
             return Song.STAGE_THEME;
-        //level 11-19
+        // level 11-19
+        else if (level == 13 || level == 15 || level == 17 || level == 19)
+            return Song.STAGE_ALT_2;
         else if (level >= 11 && level <= 19)
             return Song.STAGE_THEME_4;
-        //level 21-29
+        // level 21-29
+        else if (level == 24 || level == 25 || level == 27 || level == 29)
+            return Song.STAGE_THEME_3;
         else if (level >= 21 && level <= 29)
             return Song.STAGE_THEME_2;
-        //level 31-39
+        // level 31-39
+        else if (level == 33 || level == 36 || level == 37 || level == 38)
+            return Song.STAGE_ALT_3;
         else if (level >= 31 && level <= 39)
             return Song.STAGE_THEME_3;
-        //level 41-49
-        else if ((level >= 41 && level <= 42) || (level >= 44 && level <= 46) || (level >= 48 && level <= 49))
+        // level 41-49
+        else if (level == 41)
+            return Song.STAGE_ALT_4;
+        else if (level == 46 || level == 49)
+            return Song.DANGER_THEME;
+        else if (level == 42 || (level >= 44 && level <= 45) || level == 48)
             return Song.STAGE_THEME_5;
-        //alternate bosses
+        // Alternate bosses
         else if (level == 40 || level == 43 || level == 47)
             return Song.BOSS_THEME_2;
         //final boss
