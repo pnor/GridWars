@@ -515,16 +515,11 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         teamColor.setText("");
         teamColor.setColor(Color.WHITE);
         //clear teams at current and last slot
-        String genericTeamName = "___";
-        if (curTeam == 0)
-            genericTeamName = "Groovy";
-        else if (curTeam == 1)
-            genericTeamName = "Jazzy";
         teams.get(curTeam).getEntities().clear();
-        teams.get(curTeam).setTeamName(genericTeamName);
+        teams.get(0).setTeamName("Groovy"); // at 0
+        teams.get(1).setTeamName("Jazzy"); // at 1
         teams.get(curTeam).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
         teams.get(curTeam - 1).getEntities().clear();
-        teams.get(curTeam - 1).setTeamName("" + (curTeam - 1));
         teams.get(curTeam - 1).setTeamColor(new Color(.0001f + (float)(Math.random()), .0001f + (float)(Math.random()), .0001f + (float)(Math.random()), 1f));
         //clear AI list
         //search for curTeam

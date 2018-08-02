@@ -112,10 +112,10 @@ public class GridWars extends Game {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		getScreen().render(Gdx.graphics.getDeltaTime() * multiplier);
 
-		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB)) //escape to title
-			setScreen(new TitleScreen(this));
 		//debug --
 		/*
+		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB)) //escape to title
+			setScreen(new TitleScreen(this));
 		if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) { //game speed
 			setGameSpeed((byte) (gameSpeed + 1));
 			System.out.println("Game Speed : " + gameSpeed);

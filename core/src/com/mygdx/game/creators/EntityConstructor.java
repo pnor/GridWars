@@ -2206,7 +2206,7 @@ public class EntityConstructor {
                 atlas.findRegion("possesedSwordRed2")
         }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(5, 10, 3, 0, 2));
+        entity.add(new StatComponent(12, 10, 3, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         stm.get(entity).obscureStatInfo = true;
@@ -2221,7 +2221,7 @@ public class EntityConstructor {
                 MoveConstructor.spiritBoost(entity),
                 MoveConstructor.fullRestore(entity),
                 MoveConstructor.ward(entity),
-                MoveConstructor.chargedSlice(entity)
+                MoveConstructor.disarm(entity)
         })));
 
         return entity;

@@ -125,7 +125,7 @@ public class ComputerPlayer implements Runnable {
                 decidedTurns = getBestTurnsNegamax(currentBoardState, teamControlled);
             }
         }
-        System.out.println("TIME TO PROCESS: " +  ((float)(System.nanoTime() - PROCESSING_TIME) / 1000000000));
+        System.out.println("\nTIME TO PROCESS: " +  ((float)(System.nanoTime() - PROCESSING_TIME) / 1000000000));
         System.out.println("TURNS PROCESSED : " + DEBUG_TURNS_PROCESSED);
         DEBUG_TURNS_PROCESSED = 0;
         processing = false;
@@ -309,11 +309,11 @@ public class ComputerPlayer implements Runnable {
         if (zoneLocations != null) {
             for (int i = 0; i < zoneLocations.size; i++) {
                 for (BoardPosition zone : zoneLocations.get(i)) {
-                    if (board.getEntities().get(zone) != null) {
-                        if (i != teamControlled && board.getEntities().get(zone).team != teamControlled) {
-                            return 9999999 - depth * 30;
-                        } else if (i == teamControlled && board.getEntities().get(zone).team == teamControlled) {
-                            return -9999999 + depth * 30;
+                    if (board.getEntities().get(zone) != null && board.getEntities().get(zone).team == teamControlled) { // Base Win Condition
+                        if (teamControlled == board.getEntities().get(zone).team) { // team Controlled win
+                            return board.evaluate(team) + 100000;
+                        } else if (teamControlled != board.getEntities().get(zone).team) { // enemy win
+                            return board.evaluate(team) - 100000;
                         }
                     }
                 }

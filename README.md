@@ -33,3 +33,14 @@ Zone match adds an additional win objective, which is to land on the enemy team'
 * Death Match allows you to choose 2 teams and a board to start a Death Match in.
 * Zone Match allows you to choose 2 teams and a board to start a Zone Match in.
 * In Survival, you choose a team and fight through 50 consecutive levels. You have a limited number of power ups.
+
+## Credits
+Music from the various games in the Bomberman series.
+* Super Bomberman 1
+* Super Bomberman 2
+* Super Bomberman 3
+* Super Bomberman 4
+* Bomberman Wars
+* Super Bomberman Panic Bomber W
+* The Baku Bomb!!! Baku Bomberman Original Soundtrack (Bomberman 64)
+* A few others as well

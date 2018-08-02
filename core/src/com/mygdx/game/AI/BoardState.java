@@ -277,6 +277,8 @@ public class BoardState {
         if (lowestAlive <= 1) return true;
 
         // An entity is close to their zone
+        // Prolly not really that needed now
+        /*
         boolean entityIsCloseToTheirZone = false;
         if (zones != null) {
             for (Entity e : entities.getAllEntities()) { // Entity Value
@@ -293,62 +295,7 @@ public class BoardState {
 
             if (entityIsCloseToTheirZone) return true;
         }
-
-        // If any team can one hit KO the strongest member of the opposing team + is close to them
-        /*
-        Entity strongestAttacker0 = null, mostDefensive0 = null,
-                strongestAttacker1 = null, mostDefensive1 = null;
-        // get highest HP and ATK of teams
-        for (int i = 0; i < teams.size; i++) {
-            for (int j = 0; j < teams.get(i).getEntities().size; j++) { // through each entity, get strongest for each category
-                Entity curEntity = teams.get(i).getEntities().get(j);
-                EntityValue ev = entities.get(curEntity);
-                if (ev != null) {
-                    if (i == 0) { // team 0
-                        if (strongestAttacker0 == null || ev.getModAtk() > entities.get(strongestAttacker0).getModAtk()) {
-                            strongestAttacker0 = curEntity;
-                        }
-                        if (mostDefensive0 == null || ev.hp + ev.getModDef() > entities.get(mostDefensive0).hp + entities.get(mostDefensive0).getModDef()) {
-                            mostDefensive0 = curEntity;
-                        }
-                    } else if (i == 1) { // team 1
-                        if (strongestAttacker1 == null ||ev.getModAtk() > entities.get(strongestAttacker1).getModAtk()) {
-                            strongestAttacker1 = curEntity;
-                        }
-                        if (mostDefensive1 == null || ev.hp + ev.getModDef() > entities.get(mostDefensive1).hp + entities.get(mostDefensive1).getModDef()) {
-                            mostDefensive1 = curEntity;
-                        }
-                    }
-                }
-            }
-        }
-        // checking if close enough and can kill
-        EntityValue strongestAttacker0EntityValue = entities.get(strongestAttacker0),
-                strongestAttacker1EntityValue = entities.get(strongestAttacker1),
-                mostDefensive0EntityValue = entities.get(mostDefensive0),
-                mostDefensive1EntityValue = entities.get(mostDefensive1);
-        if (strongestAttacker0EntityValue.attack >= mostDefensive1EntityValue.hp + mostDefensive1EntityValue.getModDef()) { // team 0
-            for (Entity e : teams.get(1).getEntities()) {
-                EntityValue curValue = entities.get(e);
-                if (curValue != null &&
-                        stm.get(strongestAttacker0).getModSpd(strongestAttacker0) >= strongestAttacker0EntityValue.pos.taxicabDistance(curValue.pos)) {
-                    // If the strongest attacker is close enough to an entity from the other team, return true. Else search continues
-                    return true;
-                }
-            }
-        }
-        if (strongestAttacker1EntityValue.attack >= mostDefensive0EntityValue.hp + mostDefensive0EntityValue.getModDef()) { // team 1
-            for (Entity e : teams.get(0).getEntities()) {
-                EntityValue curValue = entities.get(e);
-                if (curValue != null &&
-                        stm.get(strongestAttacker1).getModSpd(strongestAttacker1) >= strongestAttacker1EntityValue.pos.taxicabDistance(curValue.pos)) {
-                    // If the strongest attacker is close enough to an entity from the other team, return true. Else search continues
-                    return true;
-                }
-            }
-        }
         */
-
         return false;
     }
 

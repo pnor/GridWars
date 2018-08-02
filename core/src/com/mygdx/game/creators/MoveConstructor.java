@@ -17762,7 +17762,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        Move move = new Move("Spirit Boon", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Spirit Boon", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {

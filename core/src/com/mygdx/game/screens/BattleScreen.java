@@ -564,7 +564,6 @@ public class BattleScreen implements Screen {
         updateAndDraw(delta);
         handleDeadEntities();
         checkWinConditions(delta);
-
         //region Debug
         /*
         //checking if things are working as intended
@@ -775,7 +774,10 @@ public class BattleScreen implements Screen {
             setGameSpeedLblText();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) { //game speed
-            GRID_WARS.setGameSpeed((byte) (GRID_WARS.getGameSpeed() - 1));
+            if (GRID_WARS.getGameSpeed() == 0)
+                GRID_WARS.setGameSpeed((byte) 4);
+            else
+                GRID_WARS.setGameSpeed((byte) (GRID_WARS.getGameSpeed() - 1));
             setGameSpeedLblText();
         }
         // During player turn and no Visuals

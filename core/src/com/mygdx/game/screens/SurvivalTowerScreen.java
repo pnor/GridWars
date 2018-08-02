@@ -41,6 +41,9 @@ import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.*;
 
 /**
+ * The screen that shows the Tower and your team's progress. Has methods to determine what floor to place the player on and what enemies should
+ * populate said floor.
+ *
  * @author Phillip O'Reggio
  */
 public class SurvivalTowerScreen extends MenuScreen implements Screen {
