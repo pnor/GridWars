@@ -504,7 +504,7 @@ public class EntityConstructor {
         nm.get(entity).altColor = altColor;
         
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(3, 5, 2, 2, 2));
+        entity.add(new StatComponent(2, 8, 2, 2, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -544,7 +544,7 @@ public class EntityConstructor {
         nm.get(entity).altColor = altColor;
         
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(6, 4, 5, 0, 1));
+        entity.add(new StatComponent(6, 5, 5, 0, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -623,7 +623,7 @@ public class EntityConstructor {
         nm.get(entity).altColor = altColor;
         
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(8, 4, 1, 0, 1));
+        entity.add(new StatComponent(9, 4, 1, 0, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -703,7 +703,7 @@ public class EntityConstructor {
         nm.get(entity).altColor = altColor;
         
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(4, 3, 2, 1, 2));
+        entity.add(new StatComponent(5, 3, 2, 1, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -743,7 +743,7 @@ public class EntityConstructor {
         nm.get(entity).altColor = altColor;
         
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(7, 5, 1, 0, 1));
+        entity.add(new StatComponent(8, 5, 1, 0, 1));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -823,7 +823,7 @@ public class EntityConstructor {
         nm.get(entity).altColor = altColor;
         
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(4, 6, 3, 0, 2));
+        entity.add(new StatComponent(4, 8, 4, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1620,7 +1620,7 @@ public class EntityConstructor {
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.reflectionBeam(entity),
                 MoveConstructor.refractionBeam(entity),
-                MoveConstructor.recover(entity),
+                MoveConstructor.minicover(entity),
                 MoveConstructor.superGuard(entity)
         })));
         entity.add(new PhaseComponent(
@@ -1961,7 +1961,7 @@ public class EntityConstructor {
                 atlas.findRegion("eliteGolem2")
         }, Animation.PlayMode.LOOP_PINGPONG, .34f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(6, 8, 3, 1, 1));
+        entity.add(new StatComponent(7, 8, 3, 1, 1));
         stm.get(entity).obscureStatInfo = true;
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1972,10 +1972,10 @@ public class EntityConstructor {
                 DamageAnimationConstructor.deathAnimation(entity),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.slamRed(entity),
+                MoveConstructor.ultimateGuard(entity),
                 MoveConstructor.reflectionBeam(entity),
                 MoveConstructor.rouletteReflect(entity),
-                MoveConstructor.ultimateGuard(entity)
+                MoveConstructor.slamRed(entity)
         })));
 
         return entity;
@@ -2176,7 +2176,7 @@ public class EntityConstructor {
                 atlas.findRegion("possesedSwordBlue2")
         }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(2, 4, 5, 0, 2));
+        entity.add(new StatComponent(3, 4, 5, 0, 4));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -2206,7 +2206,7 @@ public class EntityConstructor {
                 atlas.findRegion("possesedSwordRed2")
         }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(12, 10, 3, 0, 2));
+        entity.add(new StatComponent(7, 10, 3, 0, 4));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         stm.get(entity).obscureStatInfo = true;
@@ -2576,5 +2576,6 @@ public class EntityConstructor {
 
         return entity;
     }
+    //endregion
     //endregion
 }

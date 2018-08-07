@@ -43,6 +43,7 @@ public class GameUtil {
         colors.put("emma", new LerpColor(Color.RED, Color.LIGHT_GRAY, .4f, Interpolation.circleOut));
         colors.put("electrical", new LerpColor(Color.YELLOW, Color.BLACK, .8f, Interpolation.pow3In));
 
+        colors.put("fire", new LerpColor(Color.RED, Color.ORANGE, .35f));
         colors.put("firebrick", Color.FIREBRICK);
         colors.put("forest", Color.FOREST);
 
@@ -63,6 +64,7 @@ public class GameUtil {
         colors.put("jazzy", new LerpColor(new Color(.5f, 1, 1, 1), Color.GREEN, .5f, Interpolation.bounceOut));
         colors.put("jj", new LerpColor(Color.PURPLE, Color.NAVY, 4f));
 
+        colors.put("legume", new LerpColor(Color.GREEN, Color.LIME));
         colors.put("light", new LerpColor(Color.WHITE, new Color(.8f, .8f, 1, 1)));
         colors.put("light gray", Color.LIGHT_GRAY);
         colors.put("lime", Color.LIME);

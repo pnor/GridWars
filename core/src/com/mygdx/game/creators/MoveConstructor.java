@@ -459,15 +459,16 @@ public class MoveConstructor {
                         if (stm.has(enemy))
                             stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e), 0, 999);
 
-                        if (status.has(enemy))
+                        if (status.has(enemy)) {
                             status.get(enemy).addStatusEffect(defenseless(1), enemy);
+                        }
 
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{circles.copy(.1f, 5), circles ,sliceVis, crossSliceVis})), new MoveInfo(true, 1, defenseless(1).createStatusEffectInfo()));
-        move.setAttackDescription("Slices the opponent while exposing their weak points. Deals piercing damage and makes the target's defense 0 for 1 turn.");
+        move.setAttackDescription("Slices the opponent while exposing their weak points. Deals piercing damage and makes the target's defense 0 for the rest of the turn.");
         return move;
     }
 
@@ -1070,13 +1071,13 @@ public class MoveConstructor {
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
                         if (stm.has(enemy))
-                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) / 2 - stm.get(enemy).getModDef(enemy), 0, 999);
                         if (status.has(enemy)) {
                             if (MathUtils.randomBoolean(.6f)) {
                                 status.get(enemy).addStatusEffect(burn(MathUtils.random(2, 4)), enemy);
                             }
-                            if (MathUtils.randomBoolean(.1f)) {
-                                status.get(enemy).addStatusEffect(paralyze(1), enemy);
+                            if (MathUtils.randomBoolean(.2f)) {
+                                status.get(enemy).addStatusEffect(paralyze(2), enemy);
                             }
                         }
 
@@ -1084,18 +1085,18 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-2, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{explosions, fire})), new MoveInfo(false, 1, (entity, userEntity) ->
+                new Array<VisualEvent>(new VisualEvent[]{explosions, fire})), new MoveInfo(false, .5f, (entity, userEntity) ->
                 {
                     if (entity.acceptsStatusEffects) { // add only guaranteed boost
                         if (MathUtils.randomBoolean(.6f)) {
                             entity.statusEffectInfos.add(burn(MathUtils.random(2, 4)).createStatusEffectInfo());
                         }
-                        if (MathUtils.randomBoolean(.1f)) {
-                            entity.statusEffectInfos.add(paralyze(1).createStatusEffectInfo());                        }
+                        if (MathUtils.randomBoolean(.2f)) {
+                            entity.statusEffectInfos.add(paralyze(2).createStatusEffectInfo());                        }
                     }
                 }));
-        move.setAttackDescription("Starts a fire using live wires and electricity. Deals regular damage, and has a 60% chance to burn the opponent for 2-4 turns. Also" +
-                " has a 10% chance to paralyze the opponent for 1 turn.");
+        move.setAttackDescription("Starts a fire using live wires and electricity. Deals 1/2x damage, and has a 60% chance to burn the opponent for 2-4 turns. Also" +
+                " has a 20% chance to paralyze the opponent for 2 turns.");
         return move;
     }
 
@@ -1380,11 +1381,13 @@ public class MoveConstructor {
             }
         }, .03f, 30);
 
-        Move move = new Move("Wild Fire", user, 4, new Array<BoardPosition>(new BoardPosition[]{
+        Move move = new Move("Wild Fire", user, 5, new Array<BoardPosition>(new BoardPosition[]{
                 new BoardPosition(-1, -1), new BoardPosition(-1, 0),
                 new BoardPosition(-1, 1), new BoardPosition(0, 1),
                 new BoardPosition(1, 1), new BoardPosition(0, -1),
-                new BoardPosition(1, 0), new BoardPosition(1, -1)}),
+                new BoardPosition(1, 0), new BoardPosition(1, -1),
+                new BoardPosition(2, 0), new BoardPosition(-2, 0),
+                new BoardPosition(0, 2), new BoardPosition(0, -2)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -1398,7 +1401,13 @@ public class MoveConstructor {
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
-                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{}),
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{
+                new BoardPosition(-1, -1), new BoardPosition(-1, 0),
+                new BoardPosition(-1, 1), new BoardPosition(0, 1),
+                new BoardPosition(1, 1), new BoardPosition(0, -1),
+                new BoardPosition(1, 0), new BoardPosition(1, -1),
+                new BoardPosition(2, 0), new BoardPosition(-2, 0),
+                new BoardPosition(0, 2), new BoardPosition(0, -2)}),
                 new Array<VisualEvent>(new VisualEvent[]{explosions})),
                 new MoveInfo(false, .5f, (enemy, userEntity) -> {
                     if (enemy.acceptsStatusEffects && MathUtils.randomBoolean(.7f))
@@ -2953,7 +2962,7 @@ public class MoveConstructor {
 
                         if (status.has(enemy)) {
                             if (!status.get(enemy).contains("Paralyze")) { //Not paralyzed
-                                if (MathUtils.randomBoolean(.5f))
+                                if (MathUtils.randomBoolean(.6f))
                                     status.get(enemy).addStatusEffect(paralyze(3), enemy);
                             } else { //is paralyzed
                                 status.get(enemy).removeStatusEffect(enemy, "Paralyze"); //cure their paralysis
@@ -2971,12 +2980,12 @@ public class MoveConstructor {
                             enemy.statusEffectInfos.removeValue(paralyze(3).createStatusEffectInfo(), false);
                             userEntity.sp+=2;
                         } else { // chance to paralyze
-                            if (MathUtils.randomBoolean(.5f))
+                            if (MathUtils.randomBoolean(.6f))
                                 enemy.statusEffectInfos.add(paralyze(3).createStatusEffectInfo());
                         }
                     }
                 }));
-        move.setAttackDescription("Slashes the target with electrically charged claws. Deals regular damage. Has a 50% chance to paralyze the target for 3 turns. If this move is used" +
+        move.setAttackDescription("Slashes the target with electrically charged claws. Deals regular damage. Has a 60% chance to paralyze the target for 3 turns. If this move is used" +
         " on a paralyzed target, it will cure their paralysis and increase the user's SP by 2 points.");
         return move;
     }
@@ -4015,7 +4024,7 @@ public class MoveConstructor {
             }
         }, .01f, 6);
 
-        Move move = new Move("Ignite", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Ignite", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -4030,7 +4039,7 @@ public class MoveConstructor {
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
-                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Array<VisualEvent>(new VisualEvent[]{redSparkleOut, explode, smallBooms, explodeBig, largerRadiusBooms})), new MoveInfo(false, 1, (enemy, userEntity) -> {
             if (enemy.acceptsStatusEffects && MathUtils.randomBoolean(.5f)) {
                 enemy.statusEffectInfos.add(burn(3).createStatusEffectInfo());
@@ -4944,7 +4953,7 @@ public class MoveConstructor {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
 
                         if (stm.has(enemy))
-                            stm.get(enemy).hp = MathUtils.clamp(stm.get(enemy).hp + 3, 0, stm.get(enemy).getModMaxHp(enemy));
+                            stm.get(enemy).hp = MathUtils.clamp(stm.get(enemy).hp + 2, 0, stm.get(enemy).getModMaxHp(enemy));
 
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
@@ -4956,7 +4965,7 @@ public class MoveConstructor {
                     enemy.hp = MathUtils.clamp(enemy.hp + 3, 0, enemy.maxHp);
                 })
         );
-        move.setAttackDescription("Breathes a soothing wind in a wide arc in front of itself. Heals the targets' health by 3 points.");
+        move.setAttackDescription("Breathes a soothing wind in a wide arc in front of itself. Heals the targets' health by 2 points.");
         return move;
     }
 
@@ -5831,7 +5840,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{mirror, spinning})), new MoveInfo(false, 0,
-                (enemy, userEntity) -> userEntity.arbitraryValue = (MathUtils.randomBoolean())? userEntity.arbitraryValue + 50 : userEntity.arbitraryValue));
+                (enemy, userEntity) -> userEntity.arbitraryValue = (MathUtils.randomBoolean(.4f))? userEntity.arbitraryValue + 50 : userEntity.arbitraryValue));
         move.setAttackDescription("Uses reflection, mirrors, and a bit of luck to copy the target's fighting actions. Copies one of the target's moves at random and " +
                 "replaces the user's last move with it.");
         return move;
@@ -6425,7 +6434,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        Move move = new Move("Status-Purge", nm.get(user).name + " removed itself of any status effects.", user, 6, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Status-Purge", nm.get(user).name + " removed itself of any status effects.", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -7421,6 +7430,78 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{circles, explode, explodeBig})), new MoveInfo(true, 1));
         move.setAttackDescription("Attacks the target with dangerous magic orbs. Ignores the opponents defense and deals regular damage. Reduces the user's" +
         " defense to 0 for 1 turn.");
+        return move;
+    }
+
+    public static Move minicover(Entity user) {
+
+        VisualEvent sparkle = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                Tile t;
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                Vector2 entitySize = new Vector2(30 * scale, 30 * scale);
+                Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
+                tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
+                        boards.getTileHeight() / 2 - entitySize.y / 2f);
+
+                Entity sparkle = new Entity();
+                sparkle.add(new PositionComponent(tilePosition.cpy().add(MathUtils.random(-30 * scale, 30 * scale), MathUtils.random(-30 * scale, 30 * scale)),
+                        entitySize.x, entitySize.y, 0));
+                sparkle.add(new MovementComponent(new Vector2(0, 15 * scale)));
+                sparkle.add(new LifetimeComponent(0, .6f));
+                Sprite sprite = new Sprite(atlas.findRegion("shine"));
+                sprite.setOriginCenter();
+                sprite.setColor(Color.CYAN);
+                sparkle.add(new SpriteComponent(sprite));
+                sparkle.add(new EventComponent(.1f, true, EventCompUtil.fadeOut(6)));
+
+                engine.addEntity(sparkle);
+            }
+        }, .19f, 9);
+
+        VisualEvent returnToNormalGradual = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                am.get(user).actor.shade(am.get(user).actor.getColor().lerp(BattleScreen.getShadeColorBasedOnState(user), .1f));
+            }
+        }, .05f, 8);
+
+        VisualEvent changeToCyan = new VisualEvent(new VisualEffect() {
+            private float progress;
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                progress = MathUtils.clamp(progress + .1f, 0, 1);
+                am.get(user).actor.shade(am.get(user).actor.getColor().cpy().lerp(Color.CYAN, progress));
+            }
+        }, .025f, 12);
+
+        VisualEvent returnToNormal = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+
+                am.get(user).actor.shade(BattleScreen.getShadeColorBasedOnState(user));
+            }
+        }, .05f, 1);
+
+        Move move = new Move("Minicover", nm.get(user).name + " began to recover a little bit.", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+                new Attack() {
+                    @Override
+                    public void effect(Entity e, BoardPosition bp) {
+                        stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + 1, 0, stm.get(e).getModMaxHp(e));
+                    }
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{changeToCyan, sparkle, returnToNormalGradual, returnToNormal})),
+                new MoveInfo(false, 0, (enemy, userEntity) -> {
+                    enemy.hp += 1;
+                }));
+        move.setAttackDescription("Focuses its energy to recover, if even a little bit. Heals 1 point to itself.");
         return move;
     }
     //---Tower Waves (from top of entity)
@@ -8978,7 +9059,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        Move move = new Move("Gather", nm.get(user).name + " began gathering water molecules to regenerate itself!", user, 7, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
+        Move move = new Move("Gather", nm.get(user).name + " began gathering water molecules to regenerate itself!", user, 4, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(0, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -15253,7 +15334,7 @@ public class MoveConstructor {
         }, .3f, 1);
 
         //Move
-        Move move = new Move("Demoralize Blow", nm.get(user).name + " delivered a demoralizing blow!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Trick Shot", nm.get(user).name + " delivered a unexpected blow!", user, 3, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -15268,7 +15349,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{glow, glow2, sliceVis, crossSliceVis})), new MoveInfo(true, 1.5f, petrify(3).createStatusEffectInfo()));
-        move.setAttackDescription("Tricks the target into a full sense of self confidence before going in for the kill." +
+        move.setAttackDescription("Tricks the target into a false sense of self confidence before going in for the kill." +
                 " Deals 1.5x damage and Petrifies for 3 turns.");
         return move;
     }
@@ -17085,8 +17166,8 @@ public class MoveConstructor {
 
         Move move = new Move("Combobulate", nm.get(user).name + " uses enigmatic wizardry!", user, 4,
                 new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(-1, -1), new BoardPosition(-2, -2), new BoardPosition(-3, -3),
-                        new BoardPosition(-1, 1), new BoardPosition(-2, 2), new BoardPosition(-3, 3)
+                        new BoardPosition(-1, -1), new BoardPosition(-2, -2),
+                        new BoardPosition(-1, 1), new BoardPosition(-2, 2), new BoardPosition(-2, 0)
                 }),
                 new Attack() {
                     @Override
@@ -17098,8 +17179,8 @@ public class MoveConstructor {
                             status.get(enemy).addStatusEffect(defenseless(2), enemy);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{
-                        new BoardPosition(-1, -1), new BoardPosition(-2, -2), new BoardPosition(-3, -3),
-                        new BoardPosition(-1, 1), new BoardPosition(-2, 2), new BoardPosition(-3, 3)
+                        new BoardPosition(-1, -1), new BoardPosition(-2, -2),
+                        new BoardPosition(-1, 1), new BoardPosition(-2, 2), new BoardPosition(-2, 0)
                 }),
                 new Array<VisualEvent>(new VisualEvent[]{
                         explode, nothing, flash, setInvert, floatUpDiamonds, sparkle, ripples, floatDiamonds,
