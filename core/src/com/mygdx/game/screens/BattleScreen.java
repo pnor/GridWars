@@ -1551,6 +1551,9 @@ public class BattleScreen implements Screen {
 
     //region Tile Visual Effects
     //Movement
+    /**
+     * Shows the movement tiles of the current selected entity.
+     */
     public void showMovementTiles() {
         for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, stm.get(selectedEntity).getModSpd(selectedEntity))) {
             if (t.isOccupied())

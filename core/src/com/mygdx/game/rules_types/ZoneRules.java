@@ -47,6 +47,10 @@ public class ZoneRules extends Rules {
             return teams.get(currentTeamTurn);
         }
 
+        //if too many turns have passed, always choose team 1
+        if (turnCount >= 60)
+            return teams.get(1);
+
         //Check if in target zone
         for (int i = 0; i < zones.size; i++) //teams with zones
             for (Entity e : teams.get(i).getEntities()) { //entity

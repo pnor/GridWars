@@ -95,6 +95,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     //misc
     /** number representing alternate color choices for players */
     private int altNumber;
+    private boolean beatTheGame;
 
     /**
      * Creates a team selection screen
@@ -427,6 +428,9 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         menuBtnTable.add(nextBtn).size(150, 50);
         table.add(menuBtnTable).colspan(2);
 
+        //Toggle Beat the game secret character
+        beatTheGame = Gdx.app.getPreferences("GridWars Options").getBoolean("Beat the Game");
+
         //table.debug();
         //characterBtnTable.debug();
         //portraitTable.debug();
@@ -560,6 +564,11 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
         nextBtn.setDisabled(true);
     }
 
+    private boolean checkSecretCombo() {
+        //SHIFT left + SHIFT right + TAB
+        return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT) && Gdx.input.isKeyJustPressed(Input.Keys.TAB);
+    }
+
     /**
      * Continues to the next screen if all teams have been set with at least one entity.
      */
@@ -607,6 +616,17 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
             altNumber = 1;
         else
             altNumber = 0;
+
+        //bonus survival character (only if game has been beaten)
+        if (beatTheGame && checkSecretCombo() && teams.get(curTeam).getEntities().size <= 3) {
+            if (Gdx.input.isKeyPressed(Input.Keys.BACKSLASH))
+                teams.get(curTeam).getEntities().add(EntityConstructor.dragonPneumaPlayer(0, 1));
+            else
+                teams.get(curTeam).getEntities().add(EntityConstructor.dragonPneumaPlayer(0, 0));
+            characterPortraits.get(currentEntity).setDrawable(
+                    new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
+            currentEntity++;
+        }
 
         //back a screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {

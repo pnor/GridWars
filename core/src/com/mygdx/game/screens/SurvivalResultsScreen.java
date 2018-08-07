@@ -122,7 +122,7 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
         // Create Dialog things
         newCharacterDialog = new Dialog("New Character!", skin);
         param.size = 16;
-        Label messageLabel = new Label("Press both SHIFTs and TAB to use a new character in Survival mode!", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
+        Label messageLabel = new Label("Press both SHIFTs and TAB to use a new character!", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         Image newCharacterImage = new Image(new TextureRegionDrawable(atlas.findRegion("dragonAlt")));
         newCharacterImage.setSize(64, 64);
         HoverButton endDialogBtn = new HoverButton("Return", skin, Color.WHITE, Color.DARK_GRAY);

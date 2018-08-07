@@ -32,6 +32,10 @@ public class Battle2PRules extends Rules {
         if (teams.get(1).allDead())
             return teams.get(0);
 
+        //if too many turns have passed, always choose team 1
+        if (turnCount >= 60)
+            return teams.get(1);
+
         return null;
     }
 }
