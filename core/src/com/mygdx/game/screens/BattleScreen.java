@@ -95,6 +95,11 @@ public class BattleScreen implements Screen {
     private int moveHover = -1;
     private boolean hoverChanged;
     public boolean attacksEnabled = true;
+    /**
+     * Used to resolve a bug in the highlighting of movement tiles where if an entity's speed decreases during a single turn,
+     * the selection will leave leftover spaces. (Only if the speed is greater than the entity's base speed)
+     */
+    private int lastHighestSpeedOfSelectedEntity;
 
     //Computer Turn variables
     protected final ComputerPlayer computer;
@@ -367,7 +372,10 @@ public class BattleScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
-                    if (mayAttack(selectedEntity)) { //Use attack at button position or say they don't have enough SP
+                    if (mayAttack(selectedEntity)) {
+                        // store speed before entity moves
+                        lastHighestSpeedOfSelectedEntity = Math.max(lastHighestSpeedOfSelectedEntity, stm.get(selectedEntity).getModSpd(selectedEntity));
+                        //Use attack at button position or say they don't have enough SP
                         if (actor == attackBtn1) {
                             if (mvm.get(selectedEntity).moveList.get(0).spCost() > stm.get(selectedEntity).sp) {
                                 infoLbl.setText("Not enough SP!");
@@ -403,10 +411,10 @@ public class BattleScreen implements Screen {
                         }
                         teams.get(team.get(selectedEntity).teamNumber).incrementTotalAttacksUsed();
 
-                        //set canAttack and canMove state to false, and begin move's Visuals.
+                        // set canAttack and canMove state to false, and begin move's Visuals.
                         state.get(selectedEntity).canAttack = false;
                         state.get(selectedEntity).canMove = false;
-                        //disable UI stuff to stop moving after attacking
+                        // disable UI stuff to stop moving after attacking
                         removeMovementTiles();
                         disableUI();
 
@@ -548,7 +556,6 @@ public class BattleScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         syncBoards();
         if (!gameHasEnded && !playingComputerTurn)
             processPlayerInput();
@@ -565,8 +572,8 @@ public class BattleScreen implements Screen {
         handleDeadEntities();
         checkWinConditions(delta);
         //region Debug
-        /*
         //checking if things are working as intended
+        /*
         if (Visuals.visualsArePlaying < 0)
             throw (new IndexOutOfBoundsException("Visuals.visualsArePlaying is < 0"));
         for (Team t : teams) {
@@ -615,15 +622,13 @@ public class BattleScreen implements Screen {
             System.out.println("Frames per Second: " + Gdx.graphics.getFramesPerSecond());
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) { // Computer Control info
             String contents = "";
-            for (Vector2 v : computerControlledTeamsIndex)
+            for (Pair v : computerControlledTeamsIndex)
                 contents = contents.concat(", " + v.toString());
 
             System.out.println("Computer Info: \nplayingComputerTurn = " + playingComputerTurn +
                     "\ncomputerControlledTeamsIndeces = " + contents +
                     "\ncurrentTeam = " + rules.getCurrentTeamNumber() +
-                    "\nCurrent Computer Controlled Entity = " + currentComputerControlledEntity +
-                    "\nComputer is always using first attack = " + computer.getUsingFirstAttack() +
-                    "\nIndex of first attack = " + computer.getIndexOfFirstAttack());
+                    "\nCurrent Computer Controlled Entity = " + currentComputerControlledEntity);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) { // Turn Info
             System.out.println("Turn Info: \n" +
@@ -632,17 +637,6 @@ public class BattleScreen implements Screen {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) { // Turn Info
             System.out.println("ShowingEndTurnMessage = " + showingEndTurnMessageTable);
-        }
-        /*
-        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) { // Turn Info
-            if (selectedEntity != null) {
-                System.out.println("Showing help menu!");
-                showHelpMenu(mvm.get(selectedEntity).moveList.random());
-                System.out.println("help menu visible = " + showingHelpMenu);
-
-            } else {
-                System.out.println("No selected entity = no move to show");
-            }
         }
         */
         //endregion
@@ -858,7 +852,7 @@ public class BattleScreen implements Screen {
     }
     //endregion
 
-    //region selection related
+    //region Selection related
     public void changeSelectedEntity(Entity e) {
         //Undoing effects of selecting previous entity---
         //removes previously highlighted tiles
@@ -877,6 +871,9 @@ public class BattleScreen implements Screen {
             if (mayAttack(selectedEntity) && !attacksEnabled)
                 enableAttacks();
         }
+
+        // clear last highest speed variable
+        lastHighestSpeedOfSelectedEntity = 0;
 
         //check if has a speed > 0, and can move. Also if it is not on another team/has no team
         if (mayMove(selectedEntity)) {
@@ -1258,20 +1255,21 @@ public class BattleScreen implements Screen {
      */
     public void updateStatsAndMoves() {
         if (stm.has(selectedEntity)) {
-            if (!stm.get(selectedEntity).obscureStatInfo) {
+            if (!stm.get(selectedEntity).obscureStatInfo) { // If it doesn't hide stats, show all info:
                 StatComponent stat = stm.get(selectedEntity);
                 hpLbl.setText(MathUtils.clamp(stat.hp, 0, 999) + " / " + stat.getModMaxHp(selectedEntity));
                 spLbl.setText(stat.sp + " / " + stat.getModMaxSp(selectedEntity));
                 atkLbl.setText("" + stat.getModAtk(selectedEntity));
                 defLbl.setText("" + stat.getModDef(selectedEntity));
                 spdLbl.setText("" + stat.getModSpd(selectedEntity));
-            } else {
+            } else { // Obscure Stats display
                 hpLbl.setText("? / ?");
                 spLbl.setText("? / ?");
                 atkLbl.setText("?");
                 defLbl.setText("?");
                 spdLbl.setText("?");
             }
+            // Team Coloring
             if (team.has(selectedEntity)) {
                 if (teams.get(team.get(selectedEntity).teamNumber).getTeamColor() instanceof LerpColor)
                     nameLbl.setColor(((LerpColor) teams.get(team.get(selectedEntity).teamNumber).getTeamColor()).getMiddleColor());
@@ -1279,13 +1277,14 @@ public class BattleScreen implements Screen {
                     nameLbl.setColor(teams.get(team.get(selectedEntity).teamNumber).getTeamColor());
             } else
                 nameLbl.setColor(Color.WHITE);
+            // Label Coloring
             hpLbl.setColor(Color.WHITE);
             spLbl.setColor(Color.WHITE);
             atkLbl.setColor(Color.WHITE);
             defLbl.setColor(Color.WHITE);
             spdLbl.setColor(Color.WHITE);
             statusLbl.setColor(Color.GREEN);
-            if (status.has(selectedEntity) && status.get(selectedEntity).getTotalStatusEffects() > 0) {
+            if (status.has(selectedEntity) && status.get(selectedEntity).getTotalStatusEffects() > 0) { // If has Status Effect
                 statusLbl.setColor(Color.ORANGE);
                 for (StatusEffect status : status.get(selectedEntity).getStatusEffects()) {
                     if (status.getStatChanges().maxHP > 1f && !hpLbl.getColor().equals(Color.RED) && !hpLbl.getColor().equals(Color.GREEN))
@@ -1333,7 +1332,12 @@ public class BattleScreen implements Screen {
                 statusLbl.setText("Healthy");
             else
                 statusLbl.setText("---");
-        } else {
+
+            // If SP limit is above max, color it cyan
+            if (stm.get(selectedEntity).sp > stm.get(selectedEntity).getModMaxSp(selectedEntity)) {
+                spLbl.setColor(Color.CYAN);
+            }
+        } else { // Nothing selected
             hpLbl.setText("-- / --");
             spLbl.setText("-- / --");
             atkLbl.setText("--");
@@ -1348,6 +1352,7 @@ public class BattleScreen implements Screen {
             statusLbl.setColor(Color.WHITE);
         }
 
+        // Move menu
         if (mvm.has(selectedEntity)) {
             MovesetComponent moves = mvm.get(selectedEntity);
             if (moves.moveList.size > 0 && moves.moveList.get(0) != null) {
@@ -1366,12 +1371,13 @@ public class BattleScreen implements Screen {
                 attackBtn4.setText(moves.moveList.get(3).getName() + " (" + moves.moveList.get(3).spCost() + ")");
             else
                 attackBtn4.setText("---");
-        } else {
+        } else { // Nothing Selected
             attackBtn1.setText("---");
             attackBtn2.setText("---");
             attackBtn3.setText("---");
             attackBtn4.setText("---");
         }
+        // Name
         if (nm.has(selectedEntity))
             nameLbl.setText(nm.get(selectedEntity).name);
         else
@@ -1562,7 +1568,7 @@ public class BattleScreen implements Screen {
      */
     public void removeMovementTiles() {
         // Math.max is used so there is no leftover spaces if the entity reduced its own speed after using a move
-        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, Math.max(stm.get(selectedEntity).getModSpd(selectedEntity), stm.get(selectedEntity).spd)))
+        for (Tile t : getMovableSquares(bm.get(selectedEntity).pos, Math.max(stm.get(selectedEntity).getModSpd(selectedEntity), lastHighestSpeedOfSelectedEntity)))
             if (t != null) {
                 t.revertTileColor();
                 t.stopListening();

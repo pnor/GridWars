@@ -28,7 +28,7 @@ public class DamageDeathSystem extends IteratingSystem {
                 stm.get(e).alive = false;
             } else {
                 stm.get(e).alive = false;
-                if (vm.get(e).deathAnimation.getTimer().checkIfFinished()) {
+                if (vm.get(e).deathAnimation.isFinished()) {
                     //Compensate for unfinished animations
                     if (isDamageAnimationPlaying(e) || isHeavyDamageAnimationPlaying(e) || isShufflingAnimationPlaying(e)) {
                         //Visuals.visualsArePlaying -= 1;

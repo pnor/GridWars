@@ -118,7 +118,7 @@ public class StatusEffectConstructor {
 
     public static StatusEffect slowness(int duration) {
         StatusEffect effect =  new StatusEffect("Slowness", duration, new LerpColor(Color.WHITE, Color.NAVY, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
-        effect.setStatChanges(1, 1, 1, 1, 0);
+        effect.setStatChanges(1, 1, 1, 1, .5f);
         return effect;
     }
 

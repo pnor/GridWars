@@ -71,7 +71,7 @@ public class Visuals {
      */
     public void play() {
         //if its done (both time wise and if it played all animations)
-        if (timer.checkIfFinished() && currentVisual >= visuals.size) {
+        if (isFinished()) {
             isPlaying = false;
             Visuals.visualsArePlaying -= 1;
             if (autoReset) {
@@ -82,6 +82,13 @@ public class Visuals {
         }
         if (isPlaying)
             playVisuals();
+    }
+
+    /**
+     * @return if the timer of this object is done and all {@link VisualEvent} have been played.
+     */
+    public boolean isFinished() {
+        return timer.checkIfFinished() && currentVisual >= visuals.size;
     }
 
     /**
