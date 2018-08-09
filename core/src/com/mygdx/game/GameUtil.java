@@ -72,6 +72,7 @@ public class GameUtil {
         colors.put("magenta", Color.MAGENTA);
         colors.put("maroon", Color.MAROON);
         colors.put("metal", new LerpColor(Color.GRAY, Color.BROWN, 1f, Interpolation.pow3));
+        colors.put("monochrome", new LerpColor(Color.BLACK, Color.WHITE, .7f));
         colors.put("mystical cyan", new LerpColor(Color.CYAN, Color.ROYAL, 5f));
 
         colors.put("orange", Color.ORANGE);
@@ -81,16 +82,19 @@ public class GameUtil {
         colors.put("psi", new LerpColor(Color.PURPLE, new Color(0, 1, 1, 0), 1f, Interpolation.bounceIn));
         colors.put("purple", Color.PURPLE);
 
+        colors.put("radiant", new LerpColor(Color.YELLOW, Color.ORANGE, .2f));
         colors.put("random", new LerpColor(new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), MathUtils.random(.3f, 3)));
         colors.put("random2", new LerpColor(new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), MathUtils.random(.3f, 3)));
         colors.put("randomhsv", new LerpColor(HSV_to_RGB(MathUtils.random(0, 100), 100, 100), HSV_to_RGB(MathUtils.random(0, 100), 100, 100), MathUtils.random(.3f, 3)));
         colors.put("randomhsv2", new LerpColor(HSV_to_RGB(MathUtils.random(0, 100), 100, 100), HSV_to_RGB(MathUtils.random(0, 100), 100, 100), MathUtils.random(.3f, 3)));
+        colors.put("rapid", new LerpColor(Color.CHARTREUSE, Color.LIME, .1f));
         colors.put("red", Color.RED);
         colors.put("royal", Color.ROYAL);
 
         colors.put("salmon", Color.SALMON);
         colors.put("scarlet", Color.SCARLET);
         colors.put("sea", new LerpColor(Color.BLUE, Color.CYAN, 6f));
+        colors.put("shine", new LerpColor(Color.WHITE, new Color(.9f, .9f, 1, 1), .3f, Interpolation.exp10));
         colors.put("shiny", new LerpColor(new Color(.9f, .9f, .9f, 1), new Color(.3f, .6f, 1, 1), 5f, Interpolation.exp10In));
         colors.put("sky", Color.SKY);
         colors.put("slate", Color.SLATE);

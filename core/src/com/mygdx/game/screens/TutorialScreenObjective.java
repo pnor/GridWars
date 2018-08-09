@@ -56,7 +56,10 @@ public class TutorialScreenObjective extends MenuScreen {
                 "H + [Number Key 1-4] : Display information about a selected piece's move.\n\n" +
                 "A or D : Scroll through pieces on the board.\n\n" +
                 "Shift (Left) : End the current turn.\n\n" +
-                "= or - : Change game speed.", skin);
+                "= or - : Change game speed.\n\n" +
+                "ESCAPE : Go back one screen. (Only in menus)\n\n" +
+                "ESCAPE + TAB : Go back to title screen. (Only in a battle. If used in Survival, all\n" +
+                        " progress is lost!)", skin);
         nextBtn = new HoverButton("Next", skin, Color.WHITE, Color.DARK_GRAY);
 
         ChangeListener listener = new ChangeListener() {

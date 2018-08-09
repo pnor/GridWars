@@ -187,6 +187,13 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
     }
 
     @Override
+    protected void quitScreen() {
+        GRID_WARS.saveDataManager.makeFileUnloadable();
+        GRID_WARS.saveDataManager.saveSavedData();
+        super.quitScreen();
+    }
+
+    @Override
     protected void disposeLerpColorManager() {
         lerpColorManager.clear();
     }

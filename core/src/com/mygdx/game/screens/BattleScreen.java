@@ -762,18 +762,24 @@ public class BattleScreen implements Screen {
      * Checks if any hot keys have been pressed.
      */
     protected void checkHotKeys() {
-        //whenever
-        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) { //game speed
+        // Can happen whenever
+        //game speed
+        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) {
             GRID_WARS.setGameSpeed((byte) (GRID_WARS.getGameSpeed() + 1));
             setGameSpeedLblText();
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) { //game speed
+        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) {
             if (GRID_WARS.getGameSpeed() == 0)
                 GRID_WARS.setGameSpeed((byte) 4);
             else
                 GRID_WARS.setGameSpeed((byte) (GRID_WARS.getGameSpeed() - 1));
             setGameSpeedLblText();
         }
+        //quit game
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyPressed(Input.Keys.TAB)) {
+            quitScreen();
+        }
+
         // During player turn and no Visuals
         if (!playingComputerTurn && Visuals.visualsArePlaying == 0) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) { //SHIFT : Next turn hotkey
@@ -915,7 +921,7 @@ public class BattleScreen implements Screen {
     }
     //endregion
 
-    //region Computer things
+    //region Computer Player things
     private void processComputerTurn(float delta) {
         //if game has ended stop
         if (gameHasEnded) {
@@ -1717,6 +1723,12 @@ public class BattleScreen implements Screen {
                 state.get(e).canMove && team.has(e) && team.get(e).teamNumber == rules.getCurrentTeamNumber();
     }
     //endregion
+
+    protected void quitScreen() {
+        GRID_WARS.setGameSpeed((byte) 1);
+        computer.stopThread();
+        GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
+    }
 
     /**
      * Creates a {@link LerpColorManager} for the screen, and initializes the {@link StatusEffectComponent} with it.

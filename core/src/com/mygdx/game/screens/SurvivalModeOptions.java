@@ -36,6 +36,7 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
         titleLbl = new Label("Survival", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         startBtn = new HoverButton("Start", skin, Color.LIGHT_GRAY, Color.BLUE);
         loadBtn = new HoverButton("Load", skin, Color.LIGHT_GRAY, Color.TEAL);
+        GRID_WARS.saveDataManager.updateSaveDataWithFile();
         if (!GRID_WARS.saveDataManager.fileIsLoadable())
             loadBtn.setDisabled(true);
         highScoreBtn = new HoverButton("High Scores", skin, Color.LIGHT_GRAY, Color.ORANGE);

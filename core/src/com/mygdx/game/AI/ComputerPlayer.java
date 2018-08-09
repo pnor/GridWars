@@ -24,7 +24,7 @@ public class ComputerPlayer implements Runnable {
     public int DEBUG_TURNS_PROCESSED = 0;
     public long PROCESSING_TIME;
 
-    private boolean processing = false;
+    private volatile boolean processing = false;
     /**
      * Represents how far it is in processing computer's turns. Value is always between 0 and 4, with 1 meaning it is
      * processing the first of a team of 4 and 4 meaning it is on the last entity. 0 means it is not processing. If a team has
@@ -125,6 +125,14 @@ public class ComputerPlayer implements Runnable {
                 decidedTurns = getBestTurnsNegamax(currentBoardState, teamControlled);
             }
         }
+
+        //if thread was cancelled, escape method
+        if (!processing) {
+            //progress = 0;
+            System.out.println("THREAD STOPPED.");
+            return;
+        }
+
         System.out.println("\nTIME TO PROCESS: " +  ((float)(System.nanoTime() - PROCESSING_TIME) / 1000000000));
         System.out.println("TURNS PROCESSED : " + DEBUG_TURNS_PROCESSED);
         DEBUG_TURNS_PROCESSED = 0;
@@ -183,13 +191,13 @@ public class ComputerPlayer implements Runnable {
                 //forgot a move -> skip
                 if (MathUtils.random() < forgetBestMoveChance)
                     continue;
-                BoardState newBoardState = board.copy().tryTurn(t);
 
+                BoardState newBoardState = board.copy().tryTurn(t);
                 // If the game is almost done, use a much smaller depth
                 if (gameCloseToEnding) {
                     curValue = getTurnValNegamax(newBoardState, team, curEntityIndex, startIndex, depthLevel,
                             depthLevel * (teams.get(teamControlled).getEntities().size / 4), true, -9999999, 9999999);
-                System.out.println("|SMALL DEPTH");
+                    System.out.println("|SMALL DEPTH");
                 } else {
                     curValue = getTurnValNegamax(newBoardState, team, curEntityIndex, startIndex, depthLevel,
                             depthLevel * (teams.get(teamControlled).getEntities().size / 2), false, -9999999, 9999999);
@@ -201,6 +209,10 @@ public class ComputerPlayer implements Runnable {
                     bestTurn = t;
                     System.out.print("~");
                 }
+
+                // if thread is stopped, cancel and return null
+                if (!processing)
+                    return null;
             }
             turns.add(bestTurn);
             //System.out.println("~-~-~-~-~-~-~-~-~-~-~-~-");
@@ -698,6 +710,13 @@ public class ComputerPlayer implements Runnable {
                 }
             }
         }
+    }
+
+    /**
+     * Stops the thread. happens while it is hap
+     */
+    public void stopThread() {
+        processing = false;
     }
 
     /**

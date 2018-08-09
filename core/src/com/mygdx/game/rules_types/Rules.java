@@ -19,12 +19,17 @@ public abstract class Rules {
     protected Array<Team> teams;
     protected int currentTeamTurn;
     protected int totalTeams;
+    /**
+     * In any case where the rules change due to it being in Survival mode
+     */
+    protected boolean isSurvival;
 
     protected int turnCount = 0;
 
-    public Rules(BattleScreen s, Array<Team> t) {
+    public Rules(BattleScreen s, Array<Team> t, boolean survivalMode) {
         screen = s;
         teams = t;
+        isSurvival = survivalMode;
         totalTeams = teams.size;
         currentTeamTurn = totalTeams - 1;
     }

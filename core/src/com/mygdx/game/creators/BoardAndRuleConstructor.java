@@ -206,7 +206,6 @@ public class BoardAndRuleConstructor {
    */
 
     //region regular battle stages
-
     //region Simple
     public static Rules makeSimple2P(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
         boardManager.setBoards(new Board(7, 7, 100), new CodeBoard(7, 7));
@@ -223,7 +222,7 @@ public class BoardAndRuleConstructor {
             col--;
         }
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, false);
     }
 
     public static Rules makeSimple2PZone(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -241,7 +240,7 @@ public class BoardAndRuleConstructor {
                         new BoardPosition(0, 2),
                         new BoardPosition(0, 3),
                         new BoardPosition(0, 4)})
-        }));
+        }), false);
 
         //place entities
         int col = 1;
@@ -291,7 +290,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.cube(), new BoardPosition(5, 4));
         boardManager.add(EntityConstructor.cube(), new BoardPosition(5, 6));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, false);
     }
 
     public static Rules makeComplex2PZone(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -309,7 +308,7 @@ public class BoardAndRuleConstructor {
                         new BoardPosition(0, 2),
                         new BoardPosition(0, 3),
                         new BoardPosition(0, 4)})
-        }));
+        }), false);
 
         //place entities
         int col = 1;
@@ -363,7 +362,7 @@ public class BoardAndRuleConstructor {
             col--;
         }
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, false);
     }
 
     public static Rules makeCompact2PZone(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -373,7 +372,7 @@ public class BoardAndRuleConstructor {
         ZoneRules rules = new ZoneRules(screen, teams, new Array<Array<BoardPosition>>(new Array[] {
                 new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(3, 3)}),
                 new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(2, 2)})
-                }));
+                }), false);
 
         //place entities
         int col = 0;
@@ -430,7 +429,7 @@ public class BoardAndRuleConstructor {
                 boardManager.add(EntityConstructor.flowerCactus(), pos);
 
         }
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, false);
     }
 
     public static Rules makeDesert2PZone(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -442,7 +441,7 @@ public class BoardAndRuleConstructor {
                         new BoardPosition(6, 2)}),
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(1, 5)})
-        }));
+        }), false);
 
         //place entities
         int col = 1;
@@ -502,16 +501,23 @@ public class BoardAndRuleConstructor {
             boardManager.add(e, new BoardPosition(maxSize, col));
             col--;
         }
-        //place blocks randomly
-        for (int i = 0; i < 9; i++) {
-            BoardPosition pos = new BoardPosition(MathUtils.random(0, 5), MathUtils.random(0, 5));
-            if (boardManager.getBoard().getTile(pos.r, pos.c).isOccupied()) {
-                i--;
-                continue;
-            }
-            boardManager.add(EntityConstructor.tree(), pos);
-        }
-        return new Battle2PRules(screen, teams);
+
+        //make invisible
+        boardManager.getBoard().getTile(2, 2).setInvisible(true);
+        boardManager.getBoard().getTile(2, 3).setInvisible(true);
+        boardManager.getBoard().getTile(3, 2).setInvisible(true);
+        boardManager.getBoard().getTile(3, 3).setInvisible(true);
+
+        boardManager.getBoard().getTile(2, 5).setInvisible(true);
+        boardManager.getBoard().getTile(3, 5).setInvisible(true);
+
+
+        //place blocks
+        boardManager.add(EntityConstructor.tree(), new BoardPosition(0, 2));
+        boardManager.add(EntityConstructor.tree(), new BoardPosition(1, 3));
+
+
+        return new Battle2PRules(screen, teams, false);
     }
 
     public static Rules makeForest2PZone(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -531,7 +537,7 @@ public class BoardAndRuleConstructor {
                         new BoardPosition(0, 3),
                         new BoardPosition(0, 4)
                 })
-        }));
+        }), false);
 
         //place entities
         int col = 1;
@@ -545,15 +551,21 @@ public class BoardAndRuleConstructor {
             col--;
         }
 
-        //place blocks around zones
-        for (int i = 0; i < 10; i++) {
-            BoardPosition pos = new BoardPosition(MathUtils.random(0, 5), MathUtils.random(0, 5));
-            if (boardManager.getBoard().getTile(pos.r, pos.c).isOccupied()) {
-                i--;
-                continue;
-            }
-            boardManager.add(EntityConstructor.tree(), pos);
-        }
+        //make invisible
+        boardManager.getBoard().getTile(1, 0).setInvisible(true);
+        boardManager.getBoard().getTile(2, 0).setInvisible(true);
+        boardManager.getBoard().getTile(3, 0).setInvisible(true);
+
+        boardManager.getBoard().getTile(2, 2).setInvisible(true);
+        boardManager.getBoard().getTile(3, 2).setInvisible(true);
+
+        boardManager.getBoard().getTile(2, 5).setInvisible(true);
+        boardManager.getBoard().getTile(3, 5).setInvisible(true);
+        boardManager.getBoard().getTile(4, 5).setInvisible(true);
+
+        //place blocks
+        boardManager.add(EntityConstructor.tree(), new BoardPosition(2, 3));
+        boardManager.add(EntityConstructor.tree(), new BoardPosition(3, 4));
 
         //color zones
         rules.colorZones(lerpColorManager);
@@ -617,12 +629,12 @@ public class BoardAndRuleConstructor {
             }
             boardManager.add(EntityConstructor.tree(), pos);
         }
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, false);
     }
 
     public static Rules makeIsland2PZone(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
         //declare rules
-        boardManager.setBoards(new Board(7, 7, new Color(234f / 255f, 155f / 255f, 35f / 255f, 1), new Color(220f / 255f, 238f / 255f, 239f / 255f, 1), 700 / 7), new CodeBoard(7, 7));
+        boardManager.setBoards(new Board(7, 7, new Color(229f / 255f, 238f / 255f, 220f / 255f, 1), new Color(220f / 255f, 238f / 255f, 239f / 255f, 1), 700 / 7), new CodeBoard(7, 7));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
         ZoneRules rules = new ZoneRules(screen, teams, new Array<Array<BoardPosition>>(new Array[] {
                 new Array<BoardPosition>(new BoardPosition[]{
@@ -631,7 +643,7 @@ public class BoardAndRuleConstructor {
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(0, 3)
                 })
-        }));
+        }), false);
 
         //place entities
         int j = 0;
@@ -733,7 +745,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.torch(), new BoardPosition(2, 5));
         boardManager.add(EntityConstructor.torch(), new BoardPosition(3, 5));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNBasic(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -762,7 +774,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.torch(), new BoardPosition(4, 2));
         boardManager.add(EntityConstructor.torch(), new BoardPosition(4, 4));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNHallwayOpen(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -813,7 +825,7 @@ public class BoardAndRuleConstructor {
         boardManager.getBoard().getTile(boardManager.getBoard().getRowSize() - 2, boardManager.getBoard().getColumnSize() - 1).setInvisible(true);
 
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNHallwayCurved(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -857,7 +869,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.torch(), new BoardPosition(1, 0));
 
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNHallway(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -882,7 +894,7 @@ public class BoardAndRuleConstructor {
             boardManager.getBoard().getTile(i, 5).setInvisible(true);
         }
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNTorchRoom(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -920,7 +932,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.torch(), new BoardPosition(3, 4));
 
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNCircle(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -981,7 +993,7 @@ public class BoardAndRuleConstructor {
         boardManager.getBoard().getTile(maxSize - 1, maxSize).setInvisible(true);
         boardManager.getBoard().getTile(maxSize, maxSize - 1).setInvisible(true);
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNSquaresConnect(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -1041,7 +1053,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.spike(), new BoardPosition(1, 1));
         boardManager.add(EntityConstructor.spike(), new BoardPosition(maxSize - 1, maxSize - 1));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
     //endregion
     //region Floor 11 - 19
@@ -1101,7 +1113,7 @@ public class BoardAndRuleConstructor {
                 new BoardPosition(0, 4)
         }));
 
-        ZoneRules rules = new ZoneRules(screen, teams, zones);
+        ZoneRules rules = new ZoneRules(screen, teams, zones, true);
         rules.colorZones(lerpColorManager);
         return rules;
     }
@@ -1163,7 +1175,7 @@ public class BoardAndRuleConstructor {
                 new BoardPosition(0, 0)
         }));
 
-        ZoneRules rules = new ZoneRules(screen, teams, zones);
+        ZoneRules rules = new ZoneRules(screen, teams, zones, true);
         rules.colorZones(lerpColorManager);
         return rules;
     }
@@ -1186,7 +1198,7 @@ public class BoardAndRuleConstructor {
         //place things
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(2, 2));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNBasic2(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -1215,7 +1227,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(4, 2));
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(4, 4));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSZRoundAbout(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -1306,7 +1318,7 @@ public class BoardAndRuleConstructor {
                 new BoardPosition(0, 1)
         }));
 
-        ZoneRules rules = new ZoneRules(screen, teams, zones);
+        ZoneRules rules = new ZoneRules(screen, teams, zones, true);
         rules.colorZones(lerpColorManager);
         return rules;
     }
@@ -1360,7 +1372,7 @@ public class BoardAndRuleConstructor {
             count++;
         }
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSZXPath(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -1413,7 +1425,7 @@ public class BoardAndRuleConstructor {
                 new BoardPosition(0, 4)
         }));
 
-        ZoneRules rules = new ZoneRules(screen, teams, zones);
+        ZoneRules rules = new ZoneRules(screen, teams, zones, true);
         rules.colorZones(lerpColorManager);
         return rules;
     }
@@ -1456,7 +1468,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(4, 2));
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(4, 4));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
     //endregion
     //region Floor 21 - 29
@@ -1512,7 +1524,7 @@ public class BoardAndRuleConstructor {
         boardManager.getBoard().getTile(maxSize, 2).setInvisible(true);
         boardManager.getBoard().getTile(maxSize, maxSize).setInvisible(true);
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNHolesLarge(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -1581,7 +1593,7 @@ public class BoardAndRuleConstructor {
             }
         }
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNHolesLargeAltTowerPlacement(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -1650,7 +1662,7 @@ public class BoardAndRuleConstructor {
             }
         }
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNFatCross(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -1674,7 +1686,7 @@ public class BoardAndRuleConstructor {
         boardManager.getBoard().getTile(maxSize, 0).setInvisible(true);
         boardManager.getBoard().getTile(maxSize, maxSize).setInvisible(true);
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNCopmlexPaths(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -1757,7 +1769,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(6, 4));
         boardManager.add(EntityConstructor.brokenPillar(), new BoardPosition(6, 5));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNDiagUpSlantHoles(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -1793,7 +1805,7 @@ public class BoardAndRuleConstructor {
 
         boardManager.getBoard().getTile(maxSize, maxSize).setInvisible(true);
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNDiagDownSlantPillars(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -1829,7 +1841,7 @@ public class BoardAndRuleConstructor {
 
         boardManager.add(EntityConstructor.pillar(), maxSize, 0);
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNEmptyRowMiddle(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -1858,7 +1870,7 @@ public class BoardAndRuleConstructor {
             }
         }
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNRoundAbout(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -1939,7 +1951,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(0, maxSize));
         boardManager.add(EntityConstructor.brokenPillar(), new BoardPosition(maxSize, 0));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
     //endregion
     //region Floor 31 - 39
@@ -2008,7 +2020,7 @@ public class BoardAndRuleConstructor {
         boardManager.getBoard().getTile(maxSize, maxSize - 1).setInvisible(true);
         boardManager.getBoard().getTile(maxSize - 1, maxSize).setInvisible(true);
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNBasic3Alt(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2077,7 +2089,7 @@ public class BoardAndRuleConstructor {
         boardManager.getBoard().getTile(maxSize - 1, maxSize).setInvisible(true);
 
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNObstacleCircle(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2114,7 +2126,7 @@ public class BoardAndRuleConstructor {
         }
 
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSZCrossObstacle(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2157,7 +2169,7 @@ public class BoardAndRuleConstructor {
                 new BoardPosition(0, 4)
         }));
 
-        ZoneRules rules = new ZoneRules(screen, teams, zones);
+        ZoneRules rules = new ZoneRules(screen, teams, zones, true);
         rules.colorZones(lerpColorManager);
         return rules;
     }
@@ -2221,7 +2233,7 @@ public class BoardAndRuleConstructor {
                 new BoardPosition(0, 4)
         }));
 
-        ZoneRules rules = new ZoneRules(screen, teams, zones);
+        ZoneRules rules = new ZoneRules(screen, teams, zones, true);
         rules.colorZones(lerpColorManager);
         return rules;
     }
@@ -2284,7 +2296,7 @@ public class BoardAndRuleConstructor {
 
 
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNBasic5By5(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2319,7 +2331,7 @@ public class BoardAndRuleConstructor {
             count++;
         }
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSZPlusSign(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2387,7 +2399,7 @@ public class BoardAndRuleConstructor {
                 new BoardPosition(0, 3)
         }));
 
-        ZoneRules rules = new ZoneRules(screen, teams, zones);
+        ZoneRules rules = new ZoneRules(screen, teams, zones, true);
         rules.colorZones(lerpColorManager);
         return rules;
     }
@@ -2433,7 +2445,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(7, 1));
         boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(7, maxSize));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
     //endregion
     //region Floor 41 - 49
@@ -2495,7 +2507,7 @@ public class BoardAndRuleConstructor {
         boardManager.getBoard().getTile(maxSize - 1, maxSize).setInvisible(true);
         boardManager.getBoard().getTile(maxSize, maxSize - 1).setInvisible(true);
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNGargoyles(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2524,7 +2536,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(maxSize - 1, 1));
         boardManager.add(EntityConstructor.gargoyleStatue(), new BoardPosition(maxSize - 1, maxSize - 1));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSZClosedPlus(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2563,7 +2575,7 @@ public class BoardAndRuleConstructor {
                 new BoardPosition(0, 3)
         }));
 
-        ZoneRules rules = new ZoneRules(screen, teams, zones);
+        ZoneRules rules = new ZoneRules(screen, teams, zones, true);
         rules.colorZones(lerpColorManager);
         return rules;
     }
@@ -2613,7 +2625,7 @@ public class BoardAndRuleConstructor {
         boardManager.getBoard().getTile(4, 2).setInvisible(true);
         boardManager.getBoard().getTile(5, 1).setInvisible(true);
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNWierdXShape(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2650,7 +2662,7 @@ public class BoardAndRuleConstructor {
         boardManager.getBoard().getTile(maxSize, 2).setInvisible(true);
         boardManager.getBoard().getTile(maxSize, 3).setInvisible(true);
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNBasicFinal(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2698,11 +2710,9 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.toughWall(), new BoardPosition(3, 2));
         boardManager.add(EntityConstructor.superWall(), new BoardPosition(3, 4));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
     //endregion
-
-
     //region Boss Arenas
     public static Rules makeSNBlazePneumaArena(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
         Sprite lightTiles = atlas.createSprite("LightTileFancy");
@@ -2744,7 +2754,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.torch(), new BoardPosition(4, 2));
         boardManager.add(EntityConstructor.torch(), new BoardPosition(4, 4));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNAquaPneumaArena(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2788,7 +2798,7 @@ public class BoardAndRuleConstructor {
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(maxSize - 1, 1));
         boardManager.add(EntityConstructor.pillar(), new BoardPosition(maxSize - 1, maxSize - 1));
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNElectroPneumaArena(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2834,7 +2844,7 @@ public class BoardAndRuleConstructor {
 
         //make invisible
         boardManager.getBoard().getTile(3, 3).setInvisible(true);
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNBlazeMemoryArena(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2884,7 +2894,7 @@ public class BoardAndRuleConstructor {
         boardManager.getBoard().getTile(maxSize, maxSize).setInvisible(true);
 
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNAquaMemoryArena(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2940,7 +2950,7 @@ public class BoardAndRuleConstructor {
             count++;
         }
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNElectroMemoryArena(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -2998,7 +3008,7 @@ public class BoardAndRuleConstructor {
 
         //make invisible
         boardManager.getBoard().getTile(3, 3).setInvisible(true);
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
     public static Rules makeSNFinal(BattleScreen screen, Array<Team> teams, BoardManager boardManager) {
@@ -3068,8 +3078,9 @@ public class BoardAndRuleConstructor {
         boardManager.getBoard().getTile(maxSize - 1, maxSize).setInvisible(true);
         boardManager.getBoard().getTile(maxSize, maxSize - 1).setInvisible(true);
 
-        return new Battle2PRules(screen, teams);
+        return new Battle2PRules(screen, teams, true);
     }
 
+    //endregion
     //endregion
 }

@@ -1,7 +1,11 @@
 package com.mygdx.game;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -14,6 +18,12 @@ import com.mygdx.game.highscores.SaveDataManager;
 import com.mygdx.game.music.MusicManager;
 import com.mygdx.game.screens.TitleScreen;
 import com.mygdx.game.ui.Background;
+
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class GridWars extends Game {
 	//public AssetManager assets = new AssetManager();
@@ -70,7 +80,6 @@ public class GridWars extends Game {
 		saveDataManager = new SaveDataManager();
 
 		//region Set up crashlogs
-		/*
 		// Prints out the sources of game crashes.
 		FileHandle crashDirectory = new FileHandle("GWcrashlogs");
 		if (!crashDirectory.exists()) {
@@ -99,8 +108,6 @@ public class GridWars extends Game {
 				}
 			}
 		});
-		*/
-
 		//endregion
 
 		setScreen(new TitleScreen(this));
@@ -111,11 +118,11 @@ public class GridWars extends Game {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		getScreen().render(Gdx.graphics.getDeltaTime() * multiplier);
-
-		//debug --
+		//region DEBUG
 		/*
-		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB)) //escape to title
+		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB)) { //escape to title
 			setScreen(new TitleScreen(this));
+		}
 		if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) { //game speed
 			setGameSpeed((byte) (gameSpeed + 1));
 			System.out.println("Game Speed : " + gameSpeed);
@@ -145,7 +152,7 @@ public class GridWars extends Game {
 			//endregion
 		}
 		*/
-
+		//endregion
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -86,16 +85,16 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
 
     @Override
     public void render(float deltaTime) {
-        //background anim
+        //background animation
         stage.getBatch().begin();
         backgroundProgressBar.draw(stage.getBatch());
 
         stage.getBatch().end();
         super.render(deltaTime);
         engine.update(deltaTime);
-
+        //region DEBUG
         //debug--Change floor level from Survival Select Screen
-
+        /*
         //Press
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             level++;
@@ -119,12 +118,13 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
             System.out.println("Level : " + level);
         }
+        */
+        //endregion
     }
 
     @Override
     public void show() {
         super.show();
-
         //set up engine with more systems (For particle effects)
         engine.addSystem(new EventSystem());
         engine.addSystem(new LifetimeSystem());
