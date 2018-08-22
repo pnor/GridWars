@@ -16,7 +16,7 @@ The checker board print in the center is the game board, where the core gameplay
 * Defense represents defensive power. The amount of damage a game-piece receive is based off this value.
 * Speed determines how many tiles a piece can move each turn.
 * The last message tells what status effects a game-piece has. Healthy (or ---) means that they have no status effects active. Status effects can be beneficial or harmful, and can augment stats (the stat will be colored red or green). Some statuses even have end-of-turn effects like poison, which inflicts 1 point of damage at the start of each turn.
-The box on the bottom right is the Move-List, which tells all the attacks a game-piece can use. The number in parenthesis next to the name tells how much SP must be consumed to use the move. The box on the bottom is the Team Bar, which shows all the members on a team. This also has the End Turn Button, which is used to end your turn and begin the opponent’s turn.
+* The box on the bottom right is the Move-List, which tells all the attacks a game-piece can use. The number in parenthesis next to the name tells how much SP must be consumed to use the move. The box on the bottom is the Team Bar, which shows all the members on a team. This also has the End Turn Button, which is used to end your turn and begin the opponent’s turn.
 ### Movement
 To move your team members, click on them. If that piece is on your team, all tiles it can move to will change color. Clicking on any of these colored tiles will move the piece to the selected space. You can only move each piece once per turn! Note that spaces you can move is determined using taxicab distance, so other game-pieces can heavily affect available spaces.
 ### Attacking
