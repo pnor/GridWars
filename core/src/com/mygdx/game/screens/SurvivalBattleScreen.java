@@ -15,17 +15,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.AI.ComputerPlayer;
 import com.mygdx.game.GridWars;
-import com.mygdx.game.components.EventComponent;
-import com.mygdx.game.components.PositionComponent;
-import com.mygdx.game.components.SpriteComponent;
+import com.mygdx.game.components.*;
 import com.mygdx.game.music.Song;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.LerpColor;
 import com.mygdx.game.ui.LerpColorManager;
 import javafx.util.Pair;
 
-import static com.mygdx.game.ComponentMappers.sm;
-import static com.mygdx.game.ComponentMappers.stm;
+import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.*;
 
 /**
@@ -176,12 +173,10 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
         points += calculatePoints();
         if (rules.checkWinConditions() == teams.first()) { // victory
             // Healing Player Team somewhat
-            for (Entity e : team.getEntities()) {
+            for (Entity e : teams.first().getEntities()) {
                 //has status effects
                 if (status.has(e) && status.get(e).getTotalStatusEffects() >= 1)
                     status.get(e).removeAll(e);
-
-                //healing entities
                 //if alive, add one third of total health. Always heals at least 1 and at most 4.
                 if (stm.get(e).alive)
                     stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + MathUtils.clamp(stm.get(e).maxHP / 3, 1, 4), 0, stm.get(e).maxHP);
@@ -192,6 +187,7 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
                     stm.get(e).sp = 0;
                 }
             }
+
             // Decide what screen to go to
             if (level < 50)
                 //is not 50th floor:
