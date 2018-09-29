@@ -330,27 +330,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         table.add(offsetTable);
 
         //set music
-        GRID_WARS.musicManager.setSong(Song.SURVIVAL_TOWER_THEME);
-
-        //Healing Player Team somewhat
-        if (!loadedFromSave) {
-            for (Entity e : team.getEntities()) {
-                //has status effects
-                if (status.has(e) && status.get(e).getTotalStatusEffects() >= 1)
-                    status.get(e).removeAll(e);
-
-                //healing entities
-                //if alive, add one third of total health. Always heals at least 1 and at most 4.
-                if (stm.get(e).alive)
-                    stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + MathUtils.clamp(stm.get(e).maxHP / 3, 1, 4), 0, stm.get(e).maxHP);
-                else {
-                    stm.get(e).setAlive();
-                    vm.get(e).resetVisuals();
-                    stm.get(e).hp = 1;
-                    stm.get(e).sp = 0;
-                }
-            }
-        }
+        GRID_WARS.musicManager.setSong(Song.SURVIVAL_TOWER_THEME);  
     }
 
     private Team getFloorLevelTeam() {

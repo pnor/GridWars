@@ -174,7 +174,25 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
         GRID_WARS.setGameSpeed((byte) 1);
         numberOfTurns += rules.getTurnCount();
         points += calculatePoints();
-        if (rules.checkWinConditions() == teams.first()) { //victory
+        if (rules.checkWinConditions() == teams.first()) { // victory
+            // Healing Player Team somewhat
+            for (Entity e : team.getEntities()) {
+                //has status effects
+                if (status.has(e) && status.get(e).getTotalStatusEffects() >= 1)
+                    status.get(e).removeAll(e);
+
+                //healing entities
+                //if alive, add one third of total health. Always heals at least 1 and at most 4.
+                if (stm.get(e).alive)
+                    stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + MathUtils.clamp(stm.get(e).maxHP / 3, 1, 4), 0, stm.get(e).maxHP);
+                else {
+                    stm.get(e).setAlive();
+                    vm.get(e).resetVisuals();
+                    stm.get(e).hp = 1;
+                    stm.get(e).sp = 0;
+                }
+            }
+            // Decide what screen to go to
             if (level < 50)
                 //is not 50th floor:
                 GRID_WARS.setScreen(new SurvivalTowerScreen(teams.first(), ++level, healthPowerUp, spPowerUp, powerPowerUp, speedPowerUp, points, numberOfTurns, loadedFromSave, GRID_WARS));
