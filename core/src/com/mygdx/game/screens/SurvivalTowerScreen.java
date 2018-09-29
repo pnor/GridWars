@@ -34,6 +34,7 @@ import com.mygdx.game.systems.MovementSystem;
 import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
+import com.mygdx.game.ui.LerpColor;
 import com.mygdx.game.ui.LerpColorManager;
 
 import static com.mygdx.game.ComponentMappers.*;
@@ -244,6 +245,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                                     survivalLerpColorManager, song, GRID_WARS));
                     } else if (actor == btnSave) {
                         StatusEffectComponent.setLerpColorManager(null);
+                        // Change LerpColor so its serializable by Json
+                        if (team.getTeamColor() instanceof LerpColor) {
+                            team.setTeamColor(((LerpColor) team.getTeamColor()).removeInterpolation());
+                        }
                         GRID_WARS.saveDataManager.setSavedData(new SaveData(team, healingPowerUp, spPowerUp, powerPowerUp, speedPowerUp, points, numberOfTurns, level));
                         GRID_WARS.saveDataManager.saveSavedData();
                         GRID_WARS.musicManager.setSong(Song.MENU_THEME);
@@ -311,13 +316,13 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         offsetTable.add(teamImages[3]).padBottom(20f).row();
         //Power Ups
         offsetTable.add(btnRestore).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
-        offsetTable.add(lblHealthPower).colspan(2).size(80, 40).padBottom(20f).row();
+        offsetTable.add(lblHealthPower).colspan(2).size(80, 40).row();
         offsetTable.add(btnSpUp).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
-        offsetTable.add(lblSPPower).colspan(2).size(80, 40).padBottom(30f).row();
+        offsetTable.add(lblSPPower).colspan(2).size(80, 40).row();
         offsetTable.add(btnPowerUp).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
-        offsetTable.add(lblPower).colspan(2).size(80, 40).padBottom(20f).row();
+        offsetTable.add(lblPower).colspan(2).size(80, 40).row();
         offsetTable.add(btnSpeedUp).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
-        offsetTable.add(lblSpeedUp).colspan(2).size(80, 40).padBottom(60f).row();
+        offsetTable.add(lblSpeedUp).colspan(2).size(80, 40).row();
         //Save and Continue Buttons
         offsetTable.add(btnSave).colspan(2).size(170, 40).padRight(20);
         offsetTable.add(btnContinue).colspan(2).size(170, 40).row();
@@ -328,20 +333,22 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         GRID_WARS.musicManager.setSong(Song.SURVIVAL_TOWER_THEME);
 
         //Healing Player Team somewhat
-        for (Entity e : team.getEntities()) {
-            //has status effects
-            if (status.has(e) && status.get(e).getTotalStatusEffects() >= 1)
-                status.get(e).removeAll(e);
+        if (!loadedFromSave) {
+            for (Entity e : team.getEntities()) {
+                //has status effects
+                if (status.has(e) && status.get(e).getTotalStatusEffects() >= 1)
+                    status.get(e).removeAll(e);
 
-            //healing entities
-            //if alive, add one third of total health. Always heals at least 1 and at most 4.
-            if (stm.get(e).alive)
-                stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + MathUtils.clamp(stm.get(e).maxHP / 3, 1, 4), 0, stm.get(e).maxHP);
-            else {
-                stm.get(e).setAlive();
-                vm.get(e).resetVisuals();
-                stm.get(e).hp = 1;
-                stm.get(e).sp = 0;
+                //healing entities
+                //if alive, add one third of total health. Always heals at least 1 and at most 4.
+                if (stm.get(e).alive)
+                    stm.get(e).hp = MathUtils.clamp(stm.get(e).hp + MathUtils.clamp(stm.get(e).maxHP / 3, 1, 4), 0, stm.get(e).maxHP);
+                else {
+                    stm.get(e).setAlive();
+                    vm.get(e).resetVisuals();
+                    stm.get(e).hp = 1;
+                    stm.get(e).sp = 0;
+                }
             }
         }
     }

@@ -157,4 +157,13 @@ public class LerpColor extends Color {
     public Color getMiddleColor() {
         return new Color((startColor.r + endColor.r) / 2f, (startColor.g + endColor.g) / 2f, (startColor.b + endColor.b) / 2f, (startColor.a + endColor.a) / 2f);
     }
+
+    /**
+     * Removes the {@code Interpolation} from this object. Used to allow this class to be saved without crashing.
+     * @return self for chaining
+     */
+    public LerpColor removeInterpolation() {
+        interpolation = null;
+        return this;
+    }
 }

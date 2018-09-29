@@ -1,5 +1,6 @@
 package com.mygdx.game.ui;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.screens.BattleScreen;
@@ -26,6 +27,11 @@ public class BattleInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+        if (keycode == Input.Keys.J)
+            changeAttackDirection(false);
+        else if (keycode == Input.Keys.L)
+            changeAttackDirection(true);
+
         return false;
     }
 
@@ -56,20 +62,33 @@ public class BattleInputProcessor implements InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
+        if (amount > 0)
+            changeAttackDirection(true);
+        else if (amount < 0)
+            changeAttackDirection(false);
+
+        return false;
+    }
+
+    /**
+     * Rotates the attack if the scroll wheel was moved or the keys J or L was pressed. 
+     * @param direction
+     */
+    private void changeAttackDirection(boolean direction) {
         if (disabled)
-            return false;
+            return;
 
         if (battleScreen.getMoveHover() > -1)
             battleScreen.removeAttackTiles();
 
         if (battleScreen.getSelectedEntity() != null) {
-            if (amount == 1) {
+            if (direction) {
                 if (mvm.has(battleScreen.getSelectedEntity())) {
                     for (Move move : mvm.get(battleScreen.getSelectedEntity()).moveList) {
                         Move.orientAttack(true, move);
                     }
                 }
-            } else if (amount == -1) {
+            } else {
                 if (mvm.has(battleScreen.getSelectedEntity())) {
                     for (Move move : mvm.get(battleScreen.getSelectedEntity()).moveList) {
                         Move.orientAttack(false, move);
@@ -80,8 +99,6 @@ public class BattleInputProcessor implements InputProcessor {
 
         if (battleScreen.getMoveHover() > -1)
             battleScreen.showAttackTiles();
-
-        return false;
     }
 
     public void setDisabled(boolean b) {

@@ -33,6 +33,7 @@ public class GameUtil {
 
         colors.put("chartreuse", Color.CHARTREUSE);
         colors.put("color wars", new LerpColor(Color.CYAN, Color.GOLD, 1f));
+        colors.put("cornell", new LerpColor(Color.RED, Color.WHITE, 0.4f));
         colors.put("cyan", Color.CYAN);
         colors.put("canight", new LerpColor(Color.WHITE, Color.CYAN, 1f));
 
@@ -94,8 +95,8 @@ public class GameUtil {
         colors.put("salmon", Color.SALMON);
         colors.put("scarlet", Color.SCARLET);
         colors.put("sea", new LerpColor(Color.BLUE, Color.CYAN, 6f));
-        colors.put("shine", new LerpColor(Color.WHITE, new Color(.9f, .9f, 1, 1), .3f, Interpolation.exp10));
-        colors.put("shiny", new LerpColor(new Color(.9f, .9f, .9f, 1), new Color(.3f, .6f, 1, 1), 5f, Interpolation.exp10In));
+        colors.put("shine", new LerpColor(Color.WHITE, new Color(.9f, .9f, 1, 1), .3f, Interpolation.bounceOut));
+        colors.put("shiny", new LerpColor(new Color(.9f, .9f, .9f, 1), new Color(.3f, .6f, 1, 1), 5f, Interpolation.bounceOut));
         colors.put("sky", Color.SKY);
         colors.put("slate", Color.SLATE);
         colors.put("smokey", new LerpColor(new Color(1, 0, 0, 1), new Color(.1f, .01f, 0, 1), 5f));

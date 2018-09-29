@@ -63,6 +63,7 @@ public class GridWars extends Game {
 		skin.addRegions( new TextureAtlas("fonts/uiskin.atlas"));
 		atlas = new TextureAtlas(Gdx.files.internal("spritesAndBackgrounds/GDSprites.pack"));
 		backAtlas = new TextureAtlas(Gdx.files.internal("spritesAndBackgrounds/BackPack.pack"));
+		ShaderProgram.pedantic = false;
 		// set up options if its first time
 		initializeOptions();
 		// set up music
