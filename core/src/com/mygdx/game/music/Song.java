@@ -24,6 +24,7 @@ public enum  Song {
     FINAL_BOSS_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/12_Bomberman Wars.ogg")), true),
     MENU_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/08 Password.ogg")), true),
     SURVIVAL_TOWER_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/16 Battle Options_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/16 Battle Options.ogg"))),
+    SURVIVAL_TOWER_THEME_2(Gdx.audio.newMusic(Gdx.files.internal("music/Battle Options 2.ogg")), true),
     GAME_RESULTS(Gdx.audio.newMusic(Gdx.files.internal("music/26 Game Results.ogg")), false),
     GAME_RESULTS_SURVIVAL(Gdx.audio.newMusic(Gdx.files.internal("music/26_Multi-Player Victory_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/26_Multi-Player Victory.ogg"))),
     GAME_OVER_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/14_Battle Draw.ogg")), false);

@@ -68,3 +68,11 @@ build/
 ## OS Specific
 .DS_Store
 Thumbs.db
+
+## VS Code Settings
+.vscode
+
+## Save Data from game
+core/assets/GridWarsSavedData
+core/assets/GWcrashlogs
+

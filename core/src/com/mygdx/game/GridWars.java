@@ -82,6 +82,7 @@ public class GridWars extends Game {
 
 		//region Set up crashlogs
 		// Prints out the sources of game crashes.
+		/*
 		FileHandle crashDirectory = new FileHandle("GWcrashlogs");
 		if (!crashDirectory.exists()) {
 			FileHandle newCrashDirectory = new FileHandle("GWcrashlogs/info");
@@ -109,6 +110,7 @@ public class GridWars extends Game {
 				}
 			}
 		});
+		*/
 		//endregion
 
 		setScreen(new TitleScreen(this));
@@ -200,14 +202,14 @@ public class GridWars extends Game {
 	 * Sets the game to shade in grayscale
 	 */
 	public void setGrayScale() {
-		stage.getBatch().setShader(new ShaderProgram(Gdx.files.internal("shaders/GrayscaleVertexShader"), Gdx.files.internal("shaders/GrayscaleFragmentShader")));
+		stage.getBatch().setShader(Shaders.GRAYSCALE.getShaderProgram());
 	}
 
 	/**
 	 * Sets the game to shade all colors inverted
 	 */
 	public void setInvertColor() {
-		stage.getBatch().setShader(new ShaderProgram(Gdx.files.internal("shaders/GrayscaleVertexShader"), Gdx.files.internal("shaders/InvertFragmentShader")));
+		stage.getBatch().setShader(Shaders.INVERT.getShaderProgram());
 	}
 
 	/**
@@ -242,5 +244,30 @@ public class GridWars extends Game {
 
 	public byte getGameSpeed() {
 		return gameSpeed;
+	}
+}
+
+enum Shaders {
+	GRAYSCALE("shaders/GrayscaleVertexShader", "shaders/GrayscaleFragmentShader"),
+	INVERT("shaders/GrayscaleVertexShader", "shaders/InvertFragmentShader");
+
+	private String vertexFilePath;
+	private String fragmentFilePath;
+
+	Shaders(String vertexFilePath, String fragmentFilePath) {
+		this.vertexFilePath = vertexFilePath;
+		this.fragmentFilePath = fragmentFilePath;
+	}
+
+	public String getVertexFilePath() {
+		return vertexFilePath;
+	}
+
+	public String getFragmentFilePath() {
+		return fragmentFilePath;
+	}
+
+	public ShaderProgram getShaderProgram() {
+		return new ShaderProgram(Gdx.files.internal(vertexFilePath), Gdx.files.internal(fragmentFilePath));
 	}
 }

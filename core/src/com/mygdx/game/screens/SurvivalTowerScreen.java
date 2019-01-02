@@ -200,7 +200,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                             }
                             for (Image image : teamImages) {
                                 image.setColor(Color.WHITE);
-                            }
+                            } 
                         }
                     } else if (actor == btnSpUp) {
                         if (spPowerUp > 0) {
@@ -212,7 +212,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                             }
                         }
                     } else if (actor == btnPowerUp) {
-                        if (spPowerUp > 0) {
+                        if (powerPowerUp > 0) {
                             powerPowerUp--;
                             lblPower.setText("Remaining : " + powerPowerUp);
                             createParticleEffect(2);
@@ -222,7 +222,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                             }
                         }
                     } else if (actor == btnSpeedUp) {
-                        if (spPowerUp > 0) {
+                        if (speedPowerUp > 0) {
                             speedPowerUp--;
                             lblSpeedUp.setText("Remaining : " + speedPowerUp);
                             createParticleEffect(3);
@@ -330,7 +330,11 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         table.add(offsetTable);
 
         //set music
-        GRID_WARS.musicManager.setSong(Song.SURVIVAL_TOWER_THEME);  
+        if (level <= 30) {
+            GRID_WARS.musicManager.setSong(Song.SURVIVAL_TOWER_THEME);
+        } else {
+            GRID_WARS.musicManager.setSong(Song.SURVIVAL_TOWER_THEME_2);
+        }  
     }
 
     private Team getFloorLevelTeam() {
