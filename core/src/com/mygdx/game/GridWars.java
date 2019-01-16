@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -26,12 +27,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class GridWars extends Game {
-	//public AssetManager assets = new AssetManager();
+	public AssetManager assetManager = new AssetManager();
 	public static Stage stage;
 	public static Engine engine;
 	public static Skin skin;
 	public static TextureAtlas atlas;
 	public static TextureAtlas backAtlas;
+
 
 	//debug variables
 	/**
@@ -52,17 +54,31 @@ public class GridWars extends Game {
 	//Music
 	public MusicManager musicManager;
 
+	// File Paths
+	final private static String UI_SKIN_JSON = "fonts/uiskin.json";
+	final private static String UI_SKIN_ATLAS = "fonts/uiskin.atlas";
+	final private static String SPRITE_SHEET = "spritesAndBackgrounds/GDSprites.pack";
+	final private static String BACKGROUND_SPRITE_SHEET = "spritesAndBackgrounds/BackPack.pack";
+
 	@Override
 	public void create() {
 		stage = new Stage();
 		stage.setViewport(new FitViewport(1000, 900));
 		stage.getViewport().setScreenSize(1000, 900);
 		engine = new Engine();
+		// set up Asset Manager
+		assetManager = new AssetManager();
+		assetManager.load(UI_SKIN_JSON, Skin.class);
+		assetManager.load(UI_SKIN_ATLAS, TextureAtlas.class);
+		assetManager.load(SPRITE_SHEET, TextureAtlas.class);
+		assetManager.load(BACKGROUND_SPRITE_SHEET, TextureAtlas.class);
+		assetManager.finishLoading();
+
 		// set up assets
-		skin = new Skin(Gdx.files.internal("fonts/uiskin.json"));
-		skin.addRegions( new TextureAtlas("fonts/uiskin.atlas"));
-		atlas = new TextureAtlas(Gdx.files.internal("spritesAndBackgrounds/GDSprites.pack"));
-		backAtlas = new TextureAtlas(Gdx.files.internal("spritesAndBackgrounds/BackPack.pack"));
+		skin = assetManager.get(UI_SKIN_JSON, Skin.class);
+		skin.addRegions(assetManager.get(UI_SKIN_ATLAS, TextureAtlas.class));
+		atlas = assetManager.get(SPRITE_SHEET, TextureAtlas.class);
+		backAtlas = assetManager.get(BACKGROUND_SPRITE_SHEET, TextureAtlas.class);
 		ShaderProgram.pedantic = false;
 		// set up options if its first time
 		initializeOptions();

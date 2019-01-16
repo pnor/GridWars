@@ -23,7 +23,7 @@ import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
 import com.mygdx.game.ui.LerpColor;
-import com.mygdx.game.music.Song;
+import com.mygdx.game.music.*;
 
 import static com.mygdx.game.ComponentMappers.am;
 import static com.mygdx.game.GridWars.backAtlas;
@@ -100,7 +100,6 @@ public class EndResultsScreen extends MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == btnReturn) {
-                        GRID_WARS.musicManager.setSong(Song.MENU_THEME);
                         GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
                     }
                 }
@@ -195,7 +194,7 @@ public class EndResultsScreen extends MenuScreen implements Screen {
         table.add(btnReturn).colspan(2).size(180, 50).row();
 
         //set music
-        GRID_WARS.musicManager.setSong(Song.GAME_RESULTS);
+        GRID_WARS.musicManager.setSong(SongInfo.GAME_RESULTS);
 
         fontGenerator.dispose();
     }

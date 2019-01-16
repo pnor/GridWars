@@ -18,7 +18,7 @@ import com.mygdx.game.GridWars;
 import com.mygdx.game.components.*;
 import com.mygdx.game.highscores.HighScore;
 import com.mygdx.game.misc.EventCompUtil;
-import com.mygdx.game.music.Song;
+import com.mygdx.game.music.*;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.systems.EventSystem;
 import com.mygdx.game.systems.LifetimeSystem;
@@ -142,7 +142,7 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
                         if (firstTimeBeatingGame)
                             newCharacterDialog.show(stage);
                         else { // normal ending procedure
-                            GRID_WARS.musicManager.setSong(Song.MENU_THEME);
+                            GRID_WARS.musicManager.setSong(SongInfo.MENU_THEME);
                             if (playerGotNewHighScore)
                                 GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
                             else
@@ -158,11 +158,12 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
                 if (((Button) actor).isPressed()) {
                     if (actor == endDialogBtn) {
                         newCharacterDialog.hide();
-                        GRID_WARS.musicManager.setSong(Song.MENU_THEME);
-                        if (playerGotNewHighScore)
+                        if (playerGotNewHighScore) {
+                            GRID_WARS.musicManager.setSong(SongInfo.MENU_THEME);
                             GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
-                        else
+                        } else {
                             GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
+                        }
                     }
                 }
             }
@@ -216,7 +217,7 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
         engine.addEntity(whiteCover);
 
         //set music
-        GRID_WARS.musicManager.setSong(Song.GAME_RESULTS_SURVIVAL);
+        GRID_WARS.musicManager.setSong(SongInfo.GAME_RESULTS_SURVIVAL);
     }
 
     @Override

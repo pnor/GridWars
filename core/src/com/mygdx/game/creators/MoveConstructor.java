@@ -50,6 +50,7 @@ public class MoveConstructor {
      * @param stge Stage
      */
     public static void initialize(float scaleFactor, BoardManager manager, Engine eng, Stage stge, GridWars gm) {
+        
         scale = scaleFactor;
         boards = manager;
         engine = eng;

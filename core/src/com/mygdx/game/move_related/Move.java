@@ -220,7 +220,7 @@ public class Move {
         return range;
     }
 
-    public MoveInfo moveInfo() { return moveInfo;}
+    public MoveInfo moveInfo() { return moveInfo; }
 
     public Move createCopy(Entity newUser) {
         Array<BoardPosition> newRange = new Array<>();

@@ -27,6 +27,21 @@ public class MusicManager {
     }
 
     /**
+     * Sets the current song and plays it
+     */
+    public void setSong(SongInfo newSongInfo) {
+        Song newSong = new Song(newSongInfo);
+        if (currentSong != null) {
+            currentSong.stop();
+            currentSong.dispose();
+        }
+        currentSong = newSong;
+        currentSong.setVolume(volume);
+        currentSong.play();
+        isPlaying = true;
+    }
+
+    /**
      * Stops the current song and disposes of it.
      */
     public void disposeSong() {
@@ -43,6 +58,13 @@ public class MusicManager {
         volume = newVolume;
         if (currentSong != null)
             currentSong.setVolume(volume);
+    }
+
+    /**
+     * Checks if the current song is the same as a provided song
+     */
+    public boolean isPlaying(SongInfo songInfo) {
+        return currentSong != null && currentSong.ID == songInfo.ID;
     }
 
     public Song getSong() {

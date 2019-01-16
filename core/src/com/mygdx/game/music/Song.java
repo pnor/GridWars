@@ -8,59 +8,31 @@ import com.badlogic.gdx.audio.Music;
  * Has methods for switching stopping, starting, and resetting music.
  * @author Phillip O'Reggio
  */
-public enum  Song {
-    STAGE_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/04_Level_1_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/04_Level 1.ogg"))),
-    STAGE_THEME_2(Gdx.audio.newMusic(Gdx.files.internal("music/05_Level 2_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/05_Level 2.ogg"))),
-    STAGE_THEME_3(Gdx.audio.newMusic(Gdx.files.internal("music/06_Level 3.ogg")), true),
-    STAGE_THEME_4(Gdx.audio.newMusic(Gdx.files.internal("music/07_Level 4.ogg")), true),
-    STAGE_THEME_5(Gdx.audio.newMusic(Gdx.files.internal("music/06_BGM 2_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/06_BGM 2.ogg"))),
-    STAGE_ALT_1(Gdx.audio.newMusic(Gdx.files.internal("music/08_BGM 4_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/08_BGM 4.ogg"))),
-    STAGE_ALT_2(Gdx.audio.newMusic(Gdx.files.internal("music/12 Bgm 3.ogg")), true),
-    STAGE_ALT_3(Gdx.audio.newMusic(Gdx.files.internal("music/BombFM3_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/BombFM3.ogg"))),
-    STAGE_ALT_4(Gdx.audio.newMusic(Gdx.files.internal("music/BombFM13.ogg")), true),
-    DANGER_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/19_Dastardly Bomber_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/19_Dastardly Bomber.ogg"))),
-    BOSS_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/22 sirius ii_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/22 sirius ii.ogg"))),
-    BOSS_THEME_2(Gdx.audio.newMusic(Gdx.files.internal("music/23 sirius iii_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/23 sirius iii.ogg"))),
-    FINAL_BOSS_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/12_Bomberman Wars.ogg")), true),
-    MENU_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/08 Password.ogg")), true),
-    SURVIVAL_TOWER_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/16 Battle Options_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/16 Battle Options.ogg"))),
-    SURVIVAL_TOWER_THEME_2(Gdx.audio.newMusic(Gdx.files.internal("music/Battle Options 2.ogg")), true),
-    GAME_RESULTS(Gdx.audio.newMusic(Gdx.files.internal("music/26 Game Results.ogg")), false),
-    GAME_RESULTS_SURVIVAL(Gdx.audio.newMusic(Gdx.files.internal("music/26_Multi-Player Victory_Opener.ogg")), Gdx.audio.newMusic(Gdx.files.internal("music/26_Multi-Player Victory.ogg"))),
-    GAME_OVER_THEME(Gdx.audio.newMusic(Gdx.files.internal("music/14_Battle Draw.ogg")), false);
-
+public class Song {
     private boolean hasOpener;
     private boolean loops;
     private boolean playingOpener;
     private Music opener;
     private Music music;
 
-    /**
-     * Creates a song that does not have an opener. Can loop or not loop when song finishes playing.
-     */
-    Song(Music song, boolean doesItLoop) {
-        music = song;
-        music.setLooping(doesItLoop);
-        hasOpener = false;
-        loops = doesItLoop;
-    }
+    public final byte ID;
 
     /**
-     * Creates a song that has an opener and loops
-     * @param musicOpener The opening segment of the song
-     * @param restOfSong the rest of the song
+     * Creates a song from the provided information
      */
-    Song(Music musicOpener, Music restOfSong) {
-        opener = musicOpener;
-        music = restOfSong;
-        opener.setOnCompletionListener(music1 -> {
-            opener.stop();
-            music.play();
-        });
-        music.setLooping(true);
-        playingOpener = true;
-        hasOpener = true;
-        loops = true;
+    public Song(SongInfo songInfo) {
+        if (songInfo.INTRO_PATH != null) {
+            hasOpener = true;
+            playingOpener = true;
+            opener = Gdx.audio.newMusic(Gdx.files.internal(songInfo.INTRO_PATH));
+            opener.setOnCompletionListener(music1 -> {
+                opener.stop();
+                music.play();
+            });
+        } 
+        music = Gdx.audio.newMusic(Gdx.files.internal(songInfo.MAIN_PATH));
+        music.setLooping(songInfo.LOOPS);
+        ID = songInfo.ID;
     }
 
     /**

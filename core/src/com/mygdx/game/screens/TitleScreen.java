@@ -16,7 +16,7 @@ import com.mygdx.game.GridWars;
 import com.mygdx.game.components.*;
 import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.misc.EventCompUtil;
-import com.mygdx.game.music.Song;
+import com.mygdx.game.music.*;
 import com.mygdx.game.systems.EventSystem;
 import com.mygdx.game.systems.LifetimeSystem;
 import com.mygdx.game.systems.MovementSystem;
@@ -102,8 +102,8 @@ public class TitleScreen extends MenuScreen implements Screen {
         }
 
         //set music
-        if (GRID_WARS.musicManager.getSong() != Song.MENU_THEME)
-            GRID_WARS.musicManager.setSong(Song.MENU_THEME);
+        if (!GRID_WARS.musicManager.isPlaying(SongInfo.MENU_THEME))
+            GRID_WARS.musicManager.setSong(SongInfo.MENU_THEME);
 
         fontGenerator.dispose();
     }

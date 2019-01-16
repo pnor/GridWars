@@ -26,7 +26,7 @@ import com.mygdx.game.creators.EntityConstructor;
 import com.mygdx.game.creators.StatusEffectConstructor;
 import com.mygdx.game.highscores.SaveData;
 import com.mygdx.game.misc.EventCompUtil;
-import com.mygdx.game.music.Song;
+import com.mygdx.game.music.*;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.systems.EventSystem;
 import com.mygdx.game.systems.LifetimeSystem;
@@ -251,7 +251,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         }
                         GRID_WARS.saveDataManager.setSavedData(new SaveData(team, healingPowerUp, spPowerUp, powerPowerUp, speedPowerUp, points, numberOfTurns, level));
                         GRID_WARS.saveDataManager.saveSavedData();
-                        GRID_WARS.musicManager.setSong(Song.MENU_THEME);
+                        GRID_WARS.musicManager.setSong(SongInfo.MENU_THEME);
                         GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
                     }
                 }
@@ -331,9 +331,9 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
 
         //set music
         if (level <= 30) {
-            GRID_WARS.musicManager.setSong(Song.SURVIVAL_TOWER_THEME);
+            GRID_WARS.musicManager.setSong(SongInfo.SURVIVAL_TOWER_THEME);
         } else {
-            GRID_WARS.musicManager.setSong(Song.SURVIVAL_TOWER_THEME_2);
+            GRID_WARS.musicManager.setSong(SongInfo.SURVIVAL_TOWER_THEME_2);
         }  
     }
 
@@ -848,40 +848,40 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
     private Song getFloorLevelSong() {
         // level 1-9
         if (level == 5 || level == 8 || level == 9)
-            return Song.STAGE_ALT_1;
+            return new Song(SongInfo.STAGE_ALT_1);
         else if (level >= 1 && level <= 9)
-            return Song.STAGE_THEME;
+            return new Song(SongInfo.STAGE_THEME);
         // level 11-19
         else if (level == 13 || level == 15 || level == 17 || level == 18)
-            return Song.STAGE_ALT_2;
+            return new Song(SongInfo.STAGE_ALT_2);
         else if (level >= 11 && level <= 19)
-            return Song.STAGE_THEME_4;
+            return new Song(SongInfo.STAGE_THEME_4);
         // level 21-29
         else if (level == 24 || level == 25 || level == 27 || level == 29)
-            return Song.STAGE_THEME_3;
+            return new Song(SongInfo.STAGE_THEME_3);
         else if (level >= 21 && level <= 29)
-            return Song.STAGE_THEME_2;
+            return new Song(SongInfo.STAGE_THEME_2);
         // level 31-39
         else if (level == 31 || level == 33 || level == 36 || level == 37 || level == 38)
-            return Song.STAGE_ALT_3;
+            return new Song(SongInfo.STAGE_ALT_3);
         else if (level >= 31 && level <= 39)
-            return Song.STAGE_THEME_3;
+            return new Song(SongInfo.STAGE_THEME_3);
         // level 41-49
         else if (level == 41)
-            return Song.STAGE_ALT_4;
+            return new Song(SongInfo.STAGE_ALT_4);
         else if (level == 46 || level == 49)
-            return Song.DANGER_THEME;
+            return new Song(SongInfo.DANGER_THEME);
         else if (level == 42 || (level >= 44 && level <= 45) || level == 48)
-            return Song.STAGE_THEME_5;
+            return new Song(SongInfo.STAGE_THEME_5);
         // Alternate bosses
         else if (level == 40 || level == 43 || level == 47)
-            return Song.BOSS_THEME_2;
+            return new Song(SongInfo.BOSS_THEME_2);
         //final boss
         else if (level == 50)
-            return Song.FINAL_BOSS_THEME;
+            return new Song(SongInfo.FINAL_BOSS_THEME);
         //boss
         else
-            return Song.BOSS_THEME;
+            return new Song(SongInfo.BOSS_THEME);
     }
 
     private ComputerPlayer.Difficulty getComputerDifficulty() {

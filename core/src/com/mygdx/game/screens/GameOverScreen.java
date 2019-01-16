@@ -16,7 +16,7 @@ import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.BackType;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
-import com.mygdx.game.music.Song;
+import com.mygdx.game.music.*;
 
 import static com.mygdx.game.GridWars.atlas;
 import static com.mygdx.game.GridWars.skin;
@@ -79,11 +79,12 @@ public class GameOverScreen extends MenuScreen implements Screen {
                 if (((Button) actor).isPressed()) {
                     if (actor == btnReturn) {
                         //set music
-                        GRID_WARS.musicManager.setSong(Song.MENU_THEME);
-                        if (playerGotNewHighScore)
+                        if (playerGotNewHighScore) {
+                            GRID_WARS.musicManager.setSong(SongInfo.MENU_THEME);
                             GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
-                        else
+                        } else {
                             GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
+                        }
                     }
                 }
             }
@@ -113,7 +114,7 @@ public class GameOverScreen extends MenuScreen implements Screen {
         }
 
         //set music
-        GRID_WARS.musicManager.setSong(Song.GAME_OVER_THEME);
+        GRID_WARS.musicManager.setSong(SongInfo.GAME_OVER_THEME);
 
         fontGenerator.dispose();
     }
