@@ -14,8 +14,10 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.GridWarsPreferences;
 import com.mygdx.game.highscores.HighScoreManager;
 import com.mygdx.game.highscores.SaveDataManager;
+import com.mygdx.game.music.GameSoundManager;
 import com.mygdx.game.music.MusicManager;
 import com.mygdx.game.screens.TitleScreen;
 import com.mygdx.game.ui.Background;
@@ -27,7 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class GridWars extends Game {
-	public AssetManager assetManager = new AssetManager();
+	public AssetManager assetManager;
 	public static Stage stage;
 	public static Engine engine;
 	public static Skin skin;
@@ -53,6 +55,9 @@ public class GridWars extends Game {
 
 	//Music
 	public MusicManager musicManager;
+
+	//Sound FX
+	public GameSoundManager soundManager;
 
 	// File Paths
 	final private static String UI_SKIN_JSON = "fonts/uiskin.json";
@@ -84,9 +89,12 @@ public class GridWars extends Game {
 		initializeOptions();
 		// set up music
 		musicManager = new MusicManager();
-		musicManager.setMusicVolume(Gdx.app.getPreferences("GridWars Options").getFloat("Music Volume"));
+		musicManager.setMusicVolume(Gdx.app.getPreferences(GridWarsPreferences.GRIDWARS_OPTIONS).getFloat(GridWarsPreferences.MUSIC_VOLUME));
+
+		soundManager = new GameSoundManager(assetManager);
+		soundManager.setVolume(Gdx.app.getPreferences(GridWarsPreferences.GRIDWARS_OPTIONS).getFloat(GridWarsPreferences.SOUND_FX_VOLUME));
 		// animate background if options permit
-		Background.setAnimateBackground(Gdx.app.getPreferences("GridWars Options").getBoolean("Animate Background"));
+		Background.setAnimateBackground(Gdx.app.getPreferences(GridWarsPreferences.GRIDWARS_OPTIONS).getBoolean(GridWarsPreferences.ANIMATE_BACKGROUND));
 		// set up high scores
 		highScoreManager = new HighScoreManager();
 		if (!highScoreManager.fileHandleExists()) {
@@ -95,6 +103,9 @@ public class GridWars extends Game {
 		}
 		// set up save data
 		saveDataManager = new SaveDataManager();
+
+		// Prompt Asset Manager to finish all loading (for menu sounds)
+		assetManager.finishLoading();
 
 		//region Set up crashlogs
 		// Prints out the sources of game crashes.
@@ -137,6 +148,9 @@ public class GridWars extends Game {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		getScreen().render(Gdx.graphics.getDeltaTime() * multiplier);
+		// Load Assets if not done yet
+		assetManager.update();
+
 		//region DEBUG
 		/*
 		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB)) { //escape to title
@@ -201,17 +215,28 @@ public class GridWars extends Game {
 	 * time playing.
 	 */
 	public void initializeOptions() {
-		Preferences preferences = Gdx.app.getPreferences("GridWars Options");
+		Preferences preferences = Gdx.app.getPreferences(GridWarsPreferences.GRIDWARS_OPTIONS);
 		//put in option variables if this is the first time
-		if (preferences.getBoolean("Not First Time") == false) {
-			preferences.putBoolean("Not First Time", true);
-			preferences.putBoolean("Move Animation", true);
-			preferences.putInteger("AI Turn Speed", 1);
-			preferences.putBoolean("Animate Background", true);
-			preferences.putFloat("Music Volume", .5f);
-			preferences.putBoolean("Beat the Game", false);
+		if (preferences.getBoolean(GridWarsPreferences.NOT_FIRST_TIME) == false) {
+			resetOptions();
+			preferences.putBoolean(GridWarsPreferences.BEAT_THE_GAME, false);
 			preferences.flush();
 		}
+	}
+
+	/**
+	 * Resets the values of the options menu to default values. Does not change BEAT_THE_GAME. (NOT_FIRST_TIME will be true though)
+	 */
+	public void resetOptions() {
+		Preferences preferences = Gdx.app.getPreferences(GridWarsPreferences.GRIDWARS_OPTIONS);
+
+		preferences.putBoolean(GridWarsPreferences.NOT_FIRST_TIME, true);
+		preferences.putBoolean(GridWarsPreferences.MOVE_ANIMATION, true);
+		preferences.putInteger(GridWarsPreferences.AI_TURN_SPEED, 1);
+		preferences.putBoolean(GridWarsPreferences.ANIMATE_BACKGROUND, true);
+		preferences.putFloat(GridWarsPreferences.MUSIC_VOLUME, .5f);
+		preferences.putFloat(GridWarsPreferences.SOUND_FX_VOLUME, .5f);
+		preferences.flush();
 	}
 
 	/**

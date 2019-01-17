@@ -18,6 +18,7 @@ import com.mygdx.game.GameUtil;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.creators.EntityConstructor;
+import com.mygdx.game.music.SoundInfo;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.HoverButton;
 import com.mygdx.game.ui.LerpColor;
@@ -140,10 +141,13 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == okBtn) { //OK Button
+                        GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM);
                         confirmSelection();
-                    } else if (actor == backBtn) //Back Button
+                    } else if (actor == backBtn) { //Back Button
+                        GRID_WARS.soundManager.playSound(SoundInfo.BACK);
                         removeLastSelection();
-                    else if (actor == clearBtn) {
+                    } else if (actor == clearBtn) {
+                        GRID_WARS.soundManager.playSound(SoundInfo.BACK);
                         clearSelection();
                     }
                 }
@@ -155,6 +159,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
                 //character buttons
                 if (currentEntity <= 3) {
                     if (actor != null) {
+                        GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
                         if (actor == characterBtns.get(0)) {
                             team.getEntities().add(EntityConstructor.canight(0, altNumber));
                             characterPortraits.get(currentEntity).setDrawable(
@@ -445,6 +450,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
         //go back a screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
+            GRID_WARS.soundManager.playSound(SoundInfo.BACK);
         }
 
         //alternate color number
@@ -455,6 +461,7 @@ public class SurvivalTeamSelectScreen extends MenuScreen implements Screen {
 
         //bonus survival character (only if game has been beaten)
         if (beatTheGame && checkSecretCombo() && team.getEntities().size <= 3) {
+            GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
             if (Gdx.input.isKeyPressed(Input.Keys.BACKSLASH))
                 team.getEntities().add(EntityConstructor.dragonPneumaPlayer(0, 1));
             else

@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
+import com.mygdx.game.music.SoundInfo;
 import com.mygdx.game.ui.HoverButton;
 
 import static com.mygdx.game.GridWars.skin;
@@ -46,10 +47,13 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == startBtn) {
+                        GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
                         GRID_WARS.setScreen(new SurvivalTeamSelectScreen(GRID_WARS));
                     } else if (actor == highScoreBtn) {
+                        GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
                         GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
                     } else if (actor == loadBtn) {
+                        GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
                         GRID_WARS.setScreen(new SurvivalTowerScreen(
                                 GRID_WARS.saveDataManager.getTeamFromData(),
                                 GRID_WARS.saveDataManager.getFloor(),
@@ -82,6 +86,7 @@ public class SurvivalModeOptions extends MenuScreen implements Screen {
         super.render(deltaTime);
         //go back a screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GRID_WARS.soundManager.playSound(SoundInfo.BACK);
             GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
         }
     }

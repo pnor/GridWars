@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
+import com.mygdx.game.music.SoundInfo;
 import com.mygdx.game.ui.HoverButton;
 
 import static com.mygdx.game.GridWars.skin;
@@ -67,6 +68,7 @@ public class TutorialScreenObjective extends MenuScreen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == nextBtn) {
+                        GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
                         GRID_WARS.setScreen(new TutorialScreen(GRID_WARS));
                     }
                 }
@@ -99,6 +101,7 @@ public class TutorialScreenObjective extends MenuScreen {
         super.render(deltaTime);
         //go back a screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GRID_WARS.soundManager.playSound(SoundInfo.BACK);
             GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
         }
     }

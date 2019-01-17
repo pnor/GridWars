@@ -9,7 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.GridWars;
+import com.mygdx.game.GridWarsPreferences;
 import com.mygdx.game.creators.BackgroundConstructor;
+import com.mygdx.game.music.SoundInfo;
 import com.mygdx.game.ui.Background;
 import com.mygdx.game.ui.HoverButton;
 
@@ -25,7 +27,7 @@ public class OptionsScreen extends MenuScreen implements Screen {
 
     public OptionsScreen(GridWars gridWars) {
         super(gridWars);
-        preferences = Gdx.app.getPreferences("GridWars Options");
+        preferences = Gdx.app.getPreferences(GridWarsPreferences.GRIDWARS_OPTIONS);
     }
 
     @Override
@@ -38,7 +40,7 @@ public class OptionsScreen extends MenuScreen implements Screen {
         TextButton btnDontDoAnimation = new TextButton("Don't Show", skin, "toggle");
         animationGroup = new ButtonGroup<>(btnDoAnimation, btnDontDoAnimation);
         animationGroup.setMaxCheckCount(1);
-        if (preferences.getBoolean("Move Animation"))
+        if (preferences.getBoolean(GridWarsPreferences.MOVE_ANIMATION))
             btnDoAnimation.setChecked(true);
         else
             btnDontDoAnimation.setChecked(true);
@@ -51,11 +53,11 @@ public class OptionsScreen extends MenuScreen implements Screen {
         TextButton btnFastAI = new TextButton("Fast", skin, "toggle");
         AIGroup = new ButtonGroup<>(btnSlowAI, btnNormalAI, btnFastAI);
         AIGroup.setMaxCheckCount(1);
-        if (preferences.getInteger("AI Turn Speed") == 0)
+        if (preferences.getInteger(GridWarsPreferences.AI_TURN_SPEED) == 0)
             btnSlowAI.setChecked(true);
-        else if (preferences.getInteger("AI Turn Speed") == 1)
+        else if (preferences.getInteger(GridWarsPreferences.AI_TURN_SPEED) == 1)
             btnNormalAI.setChecked(true);
-        else if (preferences.getInteger("AI Turn Speed") == 2)
+        else if (preferences.getInteger(GridWarsPreferences.AI_TURN_SPEED) == 2)
             btnFastAI.setChecked(true);
 
         Label lblBackgroundInfo = new Label("Background Animations", skin);
@@ -64,18 +66,29 @@ public class OptionsScreen extends MenuScreen implements Screen {
         TextButton btnDontAnimateBackground = new TextButton("Static", skin, "toggle");
         backgroundGroup = new ButtonGroup<>(btnAnimateBackground, btnDontAnimateBackground);
         backgroundGroup.setMaxCheckCount(1);
-        if (preferences.getBoolean("Animate Background"))
+        if (preferences.getBoolean(GridWarsPreferences.ANIMATE_BACKGROUND))
             btnAnimateBackground.setChecked(true);
         else
             btnDontAnimateBackground.setChecked(true);
 
-        Label lblMusicInfo = new Label("Volume", skin);
+        Label lblMusicInfo = new Label("Music Volume", skin);
         Slider volumeSlider = new Slider(0, 1, .01f, false, skin);
-        volumeSlider.setValue(preferences.getFloat("Music Volume"));
+        volumeSlider.setValue(preferences.getFloat(GridWarsPreferences.MUSIC_VOLUME));
         volumeSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 GRID_WARS.musicManager.setMusicVolume(volumeSlider.getPercent());
+            }
+        });
+
+        Label lblSoundInfo = new Label("Sound Effects Volume", skin);
+        Slider soundVolumeSlider = new Slider(0, 1, .01f, false, skin);
+        soundVolumeSlider.setValue(preferences.getFloat(GridWarsPreferences.SOUND_FX_VOLUME));
+        soundVolumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                GRID_WARS.soundManager.setVolume(soundVolumeSlider.getPercent());
+                GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
             }
         });
 
@@ -90,30 +103,34 @@ public class OptionsScreen extends MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == btnBack) {
+                        GRID_WARS.soundManager.playSound(SoundInfo.BACK);
                         GRID_WARS.musicManager.setMusicVolume(preferences.getFloat("Music Volume"));
                         GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
                     } else if (actor == btnOK) {
+                        GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM);
+
                         if (animationGroup.getChecked() == btnDoAnimation)
-                            preferences.putBoolean("Move Animation", true);
+                            preferences.putBoolean(GridWarsPreferences.MOVE_ANIMATION, true);
                         else
-                            preferences.putBoolean("Move Animation", false);
+                            preferences.putBoolean(GridWarsPreferences.MOVE_ANIMATION, false);
 
                         if (AIGroup.getChecked() == btnSlowAI) {
-                            preferences.putInteger("AI Turn Speed", 0);
+                            preferences.putInteger(GridWarsPreferences.AI_TURN_SPEED, 0);
                         } else if (AIGroup.getChecked() == btnNormalAI)
-                            preferences.putInteger("AI Turn Speed", 1);
+                            preferences.putInteger(GridWarsPreferences.AI_TURN_SPEED, 1);
                         else if (AIGroup.getChecked() == btnFastAI)
-                            preferences.putInteger("AI Turn Speed", 2);
+                            preferences.putInteger(GridWarsPreferences.AI_TURN_SPEED, 2);
 
                         if (backgroundGroup.getChecked() == btnAnimateBackground) {
-                            preferences.putBoolean("Animate Background", true);
+                            preferences.putBoolean(GridWarsPreferences.ANIMATE_BACKGROUND, true);
                             Background.setAnimateBackground(true);
                         } else {
-                            preferences.putBoolean("Animate Background", false);
+                            preferences.putBoolean(GridWarsPreferences.ANIMATE_BACKGROUND, false);
                             Background.setAnimateBackground(false);
                         }
 
-                        preferences.putFloat("Music Volume", volumeSlider.getPercent());
+                        preferences.putFloat(GridWarsPreferences.MUSIC_VOLUME, volumeSlider.getPercent());
+                        preferences.putFloat(GridWarsPreferences.SOUND_FX_VOLUME, soundVolumeSlider.getPercent());
 
                         preferences.flush();
                         GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
@@ -146,6 +163,8 @@ public class OptionsScreen extends MenuScreen implements Screen {
         Table musicGroup = new Table();
         musicGroup.add(lblMusicInfo).row();
         musicGroup.add(volumeSlider).row();
+        musicGroup.add(lblSoundInfo).row();
+        musicGroup.add(soundVolumeSlider).row();
         table.add(musicGroup).colspan(2).padBottom(30).row();
         table.add(btnBack).size(90, 50);
         table.add(btnOK).size(90, 50);

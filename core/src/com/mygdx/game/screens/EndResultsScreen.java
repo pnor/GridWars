@@ -100,6 +100,8 @@ public class EndResultsScreen extends MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == btnReturn) {
+                        GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM);
+                        GRID_WARS.musicManager.setSong(SongInfo.MENU_THEME);
                         GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
                     }
                 }

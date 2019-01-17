@@ -67,6 +67,7 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
                 board = (zoneRules) ? 2 : 1;
 
                 if (((Button) actor).isPressed()) {
+                    GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
                     if (actor == basic) {
                         GRID_WARS.setScreen(new BattleScreen(teams, board, AIComputerControlledTeams, new LerpColorManager(), new Song(SongInfo.STAGE_THEME), GRID_WARS));
                     } else if (actor == complex) {

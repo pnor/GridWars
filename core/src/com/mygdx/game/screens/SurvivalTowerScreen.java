@@ -191,6 +191,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 if (((Button) actor).isPressed()) {
                     if (actor == btnRestore) {
                         if (healingPowerUp > 0) {
+                            GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM, -0.5f, -999, -999);
                             healingPowerUp--;
                             lblHealthPower.setText("Remaining : " + healingPowerUp);
                             createParticleEffect(0);
@@ -204,6 +205,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         }
                     } else if (actor == btnSpUp) {
                         if (spPowerUp > 0) {
+                            GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM, -0.5f, -999, -999);
                             spPowerUp--;
                             lblSPPower.setText("Remaining : " + spPowerUp);
                             createParticleEffect(1);
@@ -213,6 +215,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         }
                     } else if (actor == btnPowerUp) {
                         if (powerPowerUp > 0) {
+                            GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM, -0.5f, -999, -999);
                             powerPowerUp--;
                             lblPower.setText("Remaining : " + powerPowerUp);
                             createParticleEffect(2);
@@ -223,6 +226,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         }
                     } else if (actor == btnSpeedUp) {
                         if (speedPowerUp > 0) {
+                            GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM, -0.5f, -999, -999);
                             speedPowerUp--;
                             lblSpeedUp.setText("Remaining : " + speedPowerUp);
                             createParticleEffect(3);
@@ -232,6 +236,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                             }
                         }
                     } else if (actor == btnContinue) {
+                        GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM);
                         //get the song
                         Song song = getFloorLevelSong();
                         Team attackingObjectsTeam = getFloorLevelAttackingObjects();
@@ -244,6 +249,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                                     getComputerDifficulty(), level, healingPowerUp, spPowerUp, powerPowerUp, speedPowerUp, points, numberOfTurns, loadedFromSave,
                                     survivalLerpColorManager, song, GRID_WARS));
                     } else if (actor == btnSave) {
+                        GRID_WARS.soundManager.playSound(SoundInfo.BACK);
                         StatusEffectComponent.setLerpColorManager(null);
                         // Change LerpColor so its serializable by Json
                         if (team.getTeamColor() instanceof LerpColor) {

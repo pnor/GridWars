@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
+import com.mygdx.game.music.SoundInfo;
 import com.mygdx.game.ui.HoverButton;
 
 import static com.mygdx.game.GridWars.skin;
@@ -42,6 +43,7 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
+                    GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
                     if (actor == twoPlayerDeathMatch) {
                         GRID_WARS.setScreen(new TeamSelectScreen(2, false, GRID_WARS));
                     } else if (actor == twoPlayerZones) {
@@ -72,6 +74,7 @@ public class ModeSelectScreen extends MenuScreen implements Screen {
         //go back a screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
+            GRID_WARS.soundManager.playSound(SoundInfo.BACK);
         }
     }
 }

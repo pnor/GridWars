@@ -139,9 +139,11 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == btnReturn) { // if its the first time beating the game, show new character message
-                        if (firstTimeBeatingGame)
+                        if (firstTimeBeatingGame) {
+                            GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
                             newCharacterDialog.show(stage);
-                        else { // normal ending procedure
+                        } else { // normal ending procedure
+                            GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM);
                             GRID_WARS.musicManager.setSong(SongInfo.MENU_THEME);
                             if (playerGotNewHighScore)
                                 GRID_WARS.setScreen(new HighScoreScreen(GRID_WARS));
@@ -157,6 +159,7 @@ public class SurvivalResultsScreen extends MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == endDialogBtn) {
+                        GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM);
                         newCharacterDialog.hide();
                         if (playerGotNewHighScore) {
                             GRID_WARS.musicManager.setSong(SongInfo.MENU_THEME);

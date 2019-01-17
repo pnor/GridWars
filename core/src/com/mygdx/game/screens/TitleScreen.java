@@ -66,6 +66,7 @@ public class TitleScreen extends MenuScreen implements Screen {
                     engine.removeSystem(eventSystem);
                     engine.removeSystem(movementSystem);
                     engine.removeSystem(lifetimeSystem);
+                    GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
                     if (actor == startBtn) {
                         GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
                     } else if (actor == tutorialBtn) {

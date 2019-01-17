@@ -19,6 +19,7 @@ import com.mygdx.game.GameUtil;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
 import com.mygdx.game.creators.EntityConstructor;
+import com.mygdx.game.music.SoundInfo;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.HoverButton;
 import com.mygdx.game.ui.LerpColor;
@@ -186,16 +187,22 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (((Button) actor).isPressed()) {
                     if (actor == okBtn) { //OK Button
+                       GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM);
                        confirmSelection();
-                    } else if (actor == backBtn) //Back Button
+                    } else if (actor == backBtn) {//Back Button
+                        GRID_WARS.soundManager.playSound(SoundInfo.BACK);
                         removeLastSelection();
-                    else if (actor == clearBtn) { //clear
-                       clearSelection();
+                    } else if (actor == clearBtn) { //clear
+                        GRID_WARS.soundManager.playSound(SoundInfo.BACK);
+                        clearSelection();
                     } else if (actor == lastTeamBtn) { //Last Team
+                        GRID_WARS.soundManager.playSound(SoundInfo.BACK);
                         goToLastTeam();
                     } else if (actor == nextBtn) { //Next
+                        GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM);
                         goToNextScreen();
                     } else if (actor == clearAIBtn) { //AI Clear
+                        GRID_WARS.soundManager.playSound(SoundInfo.BACK);
                         AICheckBoxGroup.uncheckAll();
                     }
                 }
@@ -207,9 +214,10 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
             //character buttons
             if (currentEntity <= 3) {
                 if (actor != null) {
+                    GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
                     if (actor == characterBtns.get(0)) {
-                        teams.get(curTeam).getEntities().add(EntityConstructor.eliteBook(curTeam));
-                        //teams.get(curTeam).getEntities().add(EntityConstructor.canight(curTeam, altNumber));
+                        //teams.get(curTeam).getEntities().add(EntityConstructor.eliteBook(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.canight(curTeam, altNumber));
                         characterPortraits.get(currentEntity).setDrawable(
                                 new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(1)) {
@@ -347,6 +355,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                     return;
                 Color color = getColorFromChoices(input);
                 if (color != null) {
+                    GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM);
                     if (color instanceof LerpColor) {
                         textField.setColor(((LerpColor) color).getMiddleColor());
                         teams.get(curTeam).setTeamColor(color);
@@ -430,10 +439,6 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
 
         //Toggle Beat the game secret character
         beatTheGame = Gdx.app.getPreferences("GridWars Options").getBoolean("Beat the Game");
-
-        //table.debug();
-        //characterBtnTable.debug();
-        //portraitTable.debug();
     }
 
     /**
@@ -619,10 +624,12 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
 
         //bonus survival character (only if game has been beaten)
         if (beatTheGame && checkSecretCombo() && teams.get(curTeam).getEntities().size <= 3) {
-            if (Gdx.input.isKeyPressed(Input.Keys.BACKSLASH))
+            GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
+            if (Gdx.input.isKeyPressed(Input.Keys.BACKSLASH)) {
                 teams.get(curTeam).getEntities().add(EntityConstructor.dragonPneumaPlayer(0, 1));
-            else
+            } else {
                 teams.get(curTeam).getEntities().add(EntityConstructor.dragonPneumaPlayer(0, 0));
+            }
             characterPortraits.get(currentEntity).setDrawable(
                     new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
             currentEntity++;
@@ -630,6 +637,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
 
         //back a screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GRID_WARS.soundManager.playSound(SoundInfo.BACK);
             GRID_WARS.setScreen(new ModeSelectScreen(GRID_WARS));
         }
 
