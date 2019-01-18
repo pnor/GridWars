@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -95,8 +96,9 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         engine.update(deltaTime);
         //region DEBUG
         //debug--Change floor level from Survival Select Screen
-        /*
+        
         //Press
+        /*
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             level++;
             backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
@@ -191,7 +193,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 if (((Button) actor).isPressed()) {
                     if (actor == btnRestore) {
                         if (healingPowerUp > 0) {
-                            GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM, -0.5f, -999, -999);
+                            GRID_WARS.soundManager.playSound(SoundInfo.POWER, 1.3f, -999, -999);
                             healingPowerUp--;
                             lblHealthPower.setText("Remaining : " + healingPowerUp);
                             createParticleEffect(0);
@@ -205,7 +207,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         }
                     } else if (actor == btnSpUp) {
                         if (spPowerUp > 0) {
-                            GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM, -0.5f, -999, -999);
+                            GRID_WARS.soundManager.playSound(SoundInfo.POWER);
                             spPowerUp--;
                             lblSPPower.setText("Remaining : " + spPowerUp);
                             createParticleEffect(1);
@@ -215,7 +217,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         }
                     } else if (actor == btnPowerUp) {
                         if (powerPowerUp > 0) {
-                            GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM, -0.5f, -999, -999);
+                            GRID_WARS.soundManager.playSound(SoundInfo.POWER);
                             powerPowerUp--;
                             lblPower.setText("Remaining : " + powerPowerUp);
                             createParticleEffect(2);
@@ -226,7 +228,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         }
                     } else if (actor == btnSpeedUp) {
                         if (speedPowerUp > 0) {
-                            GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM, -0.5f, -999, -999);
+                            GRID_WARS.soundManager.playSound(SoundInfo.POWER);
                             speedPowerUp--;
                             lblSpeedUp.setText("Remaining : " + speedPowerUp);
                             createParticleEffect(3);
@@ -249,7 +251,6 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                                     getComputerDifficulty(), level, healingPowerUp, spPowerUp, powerPowerUp, speedPowerUp, points, numberOfTurns, loadedFromSave,
                                     survivalLerpColorManager, song, GRID_WARS));
                     } else if (actor == btnSave) {
-                        GRID_WARS.soundManager.playSound(SoundInfo.BACK);
                         StatusEffectComponent.setLerpColorManager(null);
                         // Change LerpColor so its serializable by Json
                         if (team.getTeamColor() instanceof LerpColor) {
@@ -257,6 +258,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         }
                         GRID_WARS.saveDataManager.setSavedData(new SaveData(team, healingPowerUp, spPowerUp, powerPowerUp, speedPowerUp, points, numberOfTurns, level));
                         GRID_WARS.saveDataManager.saveSavedData();
+                        GRID_WARS.soundManager.playSound(SoundInfo.BACK);
                         GRID_WARS.musicManager.setSong(SongInfo.MENU_THEME);
                         GRID_WARS.setScreen(new SurvivalModeOptions(GRID_WARS));
                     }

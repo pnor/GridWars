@@ -355,7 +355,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                     return;
                 Color color = getColorFromChoices(input);
                 if (color != null) {
-                    GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM);
+                    GRID_WARS.soundManager.playSound(SoundInfo.POWER);
                     if (color instanceof LerpColor) {
                         textField.setColor(((LerpColor) color).getMiddleColor());
                         teams.get(curTeam).setTeamColor(color);

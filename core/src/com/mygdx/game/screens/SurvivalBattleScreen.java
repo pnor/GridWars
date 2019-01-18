@@ -167,6 +167,7 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
 
     @Override
     public void goToNextScreen() {
+        GRID_WARS.soundManager.unloadSounds();
         gameSpeedSurvival = GRID_WARS.getGameSpeed();
         GRID_WARS.setGameSpeed((byte) 1);
         numberOfTurns += rules.getTurnCount();

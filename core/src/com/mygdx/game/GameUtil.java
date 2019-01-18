@@ -42,6 +42,7 @@ public class GameUtil {
         colors.put("dog", new LerpColor(Color.BROWN, Color.GOLDENROD, 5f, Interpolation.pow2InInverse));
 
         colors.put("emma", new LerpColor(Color.RED, Color.LIGHT_GRAY, .4f, Interpolation.circleOut));
+        colors.put("epic", new LerpColor(Color.RED, Color.BLACK, .1f, Interpolation.bounce));
         colors.put("electrical", new LerpColor(Color.YELLOW, Color.BLACK, .8f, Interpolation.pow3In));
 
         colors.put("fire", new LerpColor(Color.RED, Color.ORANGE, .35f));
@@ -75,6 +76,8 @@ public class GameUtil {
         colors.put("metal", new LerpColor(Color.GRAY, Color.BROWN, 1f, Interpolation.pow3));
         colors.put("monochrome", new LerpColor(Color.BLACK, Color.WHITE, .7f));
         colors.put("mystical cyan", new LerpColor(Color.CYAN, Color.ROYAL, 5f));
+
+        colors.put("neon", new Color(5f / 255f, 239f / 255f, 159f / 255f, 1f));
 
         colors.put("orange", Color.ORANGE);
         colors.put("olive", Color.OLIVE);

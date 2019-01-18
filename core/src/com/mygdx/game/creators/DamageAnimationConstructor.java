@@ -2,6 +2,7 @@ package com.mygdx.game.creators;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -19,6 +20,7 @@ import com.mygdx.game.misc.GameEvent;
 import com.mygdx.game.move_related.VisualEffect;
 import com.mygdx.game.move_related.VisualEvent;
 import com.mygdx.game.move_related.Visuals;
+import com.mygdx.game.music.GameSoundManager;
 import com.mygdx.game.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.*;
@@ -35,17 +37,19 @@ public class DamageAnimationConstructor {
     private static BoardManager boards;
     private static Engine engine;
     private static float scale;
+    private static GameSoundManager soundManager;
 
     /**
-     * Readies the {@link MoveConstructor} for use.
+     * Readies the {@link DamageAnimationConstructor} for use.
      * @param scaleFactor scale of board
      * @param manager BoardManager
      * @param eng Engine
      */
-    public static void initialize(float scaleFactor, BoardManager manager, Engine eng) {
+    public static void initialize(float scaleFactor, BoardManager manager, Engine eng, GameSoundManager sounds) {
         scale = scaleFactor;
         boards = manager;
         engine = eng;
+        soundManager = sounds;
         ready = true;
     }
 
@@ -56,6 +60,8 @@ public class DamageAnimationConstructor {
         scale = 1;
         boards = null;
         engine = null;
+        engine = null;        
+        soundManager = null;
         ready = false;
     }
 

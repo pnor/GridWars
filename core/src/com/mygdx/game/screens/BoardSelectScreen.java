@@ -122,6 +122,7 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
         super.render(deltaTime);
         //go back highscores screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GRID_WARS.soundManager.playSound(SoundInfo.BACK);
             GRID_WARS.setScreen(new TeamSelectScreen(maxTeams, zoneRules, GRID_WARS));
         }
     }

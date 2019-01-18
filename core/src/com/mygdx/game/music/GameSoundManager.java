@@ -25,7 +25,10 @@ public class GameSoundManager {
         this.loadedSounds = new ObjectSet();
         this.loopingSoundIDs = new ObjectMap();
         // Set coreSounds
-        coreSounds = new Array(new SoundInfo[] {SoundInfo.CONFIRM, SoundInfo.BACK, SoundInfo.SELECT});
+        coreSounds = new Array(new SoundInfo[] {
+            SoundInfo.CONFIRM, SoundInfo.BACK, SoundInfo.SELECT, SoundInfo.POWER,
+            SoundInfo.TURN_SHIFT1, SoundInfo.TURN_SHIFT2
+        });
         for (SoundInfo soundInfo : coreSounds) {
             this.assetManager.load(soundInfo.FILE_PATH, Sound.class);
         }
@@ -88,7 +91,10 @@ public class GameSoundManager {
         loopingSoundIDs.clear();
     }
 
-    public void unloadAllSounds() {
+    /**
+     * Makes the SoundManager unload all sounds not used in menus.
+     */
+    public void unloadSounds() {
         for (SoundInfo info : loadedSounds) {
             assetManager.unload(info.FILE_PATH);
         }
@@ -111,7 +117,8 @@ public class GameSoundManager {
                 if (!loadedSounds.contains(info)) {
                     loadedSounds.add(info);
                 }
-                return null;
+                assetManager.finishLoading();
+                return assetManager.get(info.FILE_PATH, Sound.class);
             }
         } else {
             return assetManager.get(info.FILE_PATH, Sound.class);

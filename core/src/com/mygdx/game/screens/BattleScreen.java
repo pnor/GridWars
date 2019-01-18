@@ -42,6 +42,7 @@ import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.StatusEffect;
 import com.mygdx.game.move_related.Visuals;
 import com.mygdx.game.music.Song;
+import com.mygdx.game.music.SoundInfo;
 import com.mygdx.game.rules_types.Rules;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.rules_types.ZoneRules;
@@ -212,7 +213,7 @@ public class BattleScreen implements Screen {
 
         //Initialize Others Constructors
         MoveConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, stage, GRID_WARS);
-        DamageAnimationConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine);
+        DamageAnimationConstructor.initialize(BoardComponent.boards.getBoard().getScale(), BoardComponent.boards, engine, GRID_WARS.soundManager);
 
         //Updating AI with information about rules
         if (rules instanceof ZoneRules)
@@ -1004,6 +1005,11 @@ public class BattleScreen implements Screen {
         disableUI();
         rules.nextTurn();
         showEndTurnDisplay();
+        if (rules.getCurrentTeamNumber() % 2 == 0) {
+            GRID_WARS.soundManager.playSound(SoundInfo.TURN_SHIFT1);
+        } else {
+            GRID_WARS.soundManager.playSound(SoundInfo.TURN_SHIFT2);
+        }
 
         if (!gameHasEnded) {
             //find computer controlled team
@@ -1755,6 +1761,7 @@ public class BattleScreen implements Screen {
         MoveConstructor.clear();
         EntityConstructor.clear();
         DamageAnimationConstructor.clear();
+        GRID_WARS.soundManager.unloadSounds();
         GRID_WARS.setGameSpeed((byte) 1);
         GRID_WARS.setScreen(new EndResultsScreen(teams, teams.indexOf(rules.checkWinConditions(), true), rules, GRID_WARS));
     }

@@ -2,6 +2,7 @@ package com.mygdx.game.creators;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,7 +23,10 @@ import com.mygdx.game.misc.ColorUtils;
 import com.mygdx.game.misc.EventCompUtil;
 import com.mygdx.game.misc.GameEvent;
 import com.mygdx.game.move_related.*;
+import com.mygdx.game.music.SoundInfo;
+import com.mygdx.game.music.GameSoundManager;
 import com.mygdx.game.screens.BattleScreen;
+
 
 import static com.mygdx.game.ComponentMappers.*;
 import static com.mygdx.game.GridWars.atlas;
@@ -41,6 +45,7 @@ public class MoveConstructor {
     private static BoardManager boards;
     private static Engine engine;
     private static Stage stage;
+    private static GameSoundManager soundManager;
 
     /**
      * Readies the {@link MoveConstructor} for use.
@@ -57,6 +62,7 @@ public class MoveConstructor {
         stage = stge;
         game = gm;
         ready = true;
+        soundManager = game.soundManager;
     }
 
     /**
@@ -68,6 +74,7 @@ public class MoveConstructor {
         engine = null;
         stage = null;
         game = null;
+        soundManager = null;
         ready = false;
     }
     
@@ -205,6 +212,7 @@ public class MoveConstructor {
                         atlas.findRegion("vertslash4")},
                         Animation.PlayMode.NORMAL));
                 engine.addEntity(slash);
+                soundManager.playSound(SoundInfo.VOOM);
             }
         }, .21f, 1);
 
@@ -231,6 +239,7 @@ public class MoveConstructor {
                         atlas.findRegion("vertslash4")},
                         Animation.PlayMode.LOOP));
                 engine.addEntity(crossSlash);
+                soundManager.playSound(SoundInfo.VOOM);
             }
         }, .21f, 1);
 
