@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.ObjectSet;
 public class GameSoundManager {
 
     private AssetManager assetManager;
-    private ObjectMap<SoundInfo, Sound> loadedSounds;
+    private ObjectSet<SoundInfo> loadedSounds;
     //private ObjectSet<SoundInfo> loadedSounds;
     private ObjectMap<Long, Sound> loopingSoundIDs;
     private Array<SoundInfo> coreSounds; /** Sounds used frequently enough to not be unloaded */
@@ -23,7 +23,7 @@ public class GameSoundManager {
 
     public GameSoundManager(AssetManager assetManager) {
         this.assetManager = assetManager;
-        this.loadedSounds = new ObjectMap();
+        this.loadedSounds = new ObjectSet();
         this.loopingSoundIDs = new ObjectMap();
         // Set coreSounds
         coreSounds = new Array(new SoundInfo[] {
@@ -93,8 +93,7 @@ public class GameSoundManager {
      * Makes the SoundManager unload all sounds not used in menus.
      */
     public void unloadSounds() {
-        for (SoundInfo info : loadedSounds.keys()) {
-            loadedSounds.get(info).stop();
+        for (SoundInfo info : loadedSounds) {
             assetManager.unload(info.FILE_PATH);
         }
         loadedSounds.clear();
@@ -110,15 +109,14 @@ public class GameSoundManager {
     private Sound getSoundFromInfo(SoundInfo info, boolean checkIfLoaded) {
         if (checkIfLoaded) {
             if (assetManager.isLoaded(info.FILE_PATH)) {
-                return loadedSounds.get(info);
+                return assetManager.get(info.FILE_PATH, Sound.class);
             } else {
                 assetManager.load(info.FILE_PATH, Sound.class);
                 assetManager.finishLoading();
-                Sound newSound =  assetManager.get(info.FILE_PATH, Sound.class);
-                if (!loadedSounds.containsKey(info)) {
-                    loadedSounds.put(info, newSound);
+                if (!loadedSounds.contains(info)) {
+                    loadedSounds.add(info);
                 }
-                return newSound;
+                return assetManager.get(info.FILE_PATH, Sound.class);
             }
         } else {
             return assetManager.get(info.FILE_PATH, Sound.class);
