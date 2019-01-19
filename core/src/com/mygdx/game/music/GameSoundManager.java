@@ -15,14 +15,15 @@ import com.badlogic.gdx.utils.ObjectSet;
 public class GameSoundManager {
 
     private AssetManager assetManager;
-    private ObjectSet<SoundInfo> loadedSounds;
+    private ObjectMap<SoundInfo, Sound> loadedSounds;
+    //private ObjectSet<SoundInfo> loadedSounds;
     private ObjectMap<Long, Sound> loopingSoundIDs;
     private Array<SoundInfo> coreSounds; /** Sounds used frequently enough to not be unloaded */
     private float volume = 1f;
 
     public GameSoundManager(AssetManager assetManager) {
         this.assetManager = assetManager;
-        this.loadedSounds = new ObjectSet();
+        this.loadedSounds = new ObjectMap();
         this.loopingSoundIDs = new ObjectMap();
         // Set coreSounds
         coreSounds = new Array(new SoundInfo[] {
@@ -45,7 +46,6 @@ public class GameSoundManager {
         Sound sound = getSoundFromInfo(info, true);
         if (sound != null) {
             sound.play(volume);
-            loadedSounds.add(info);
         }
     }
     /**
@@ -59,12 +59,11 @@ public class GameSoundManager {
         Sound sound = getSoundFromInfo(info, true);
         if (sound != null) {
             float effectivePitch = (int) pitch == -999? 1 : pitch;
-            float effectiveVolume = (int) volumeModifier == -999 ? volume : volume * volumeModifier;
+            float effectiveVolume = (int) volumeModifier == -999 ? volume : MathUtils.clamp(volume * volumeModifier, 0, 1);
             float effectivePan = (int) pan == -999? 0 : pan;
             long id = sound.play(effectiveVolume);
             sound.setPitch(id, effectivePitch);
             sound.setPan(id, effectivePan, effectiveVolume);
-            loadedSounds.add(info);
         }
     }
 
@@ -77,7 +76,6 @@ public class GameSoundManager {
             long id = sound.play(volume);
             sound.setLooping(id, true);
             loopingSoundIDs.put(id, sound);
-            loadedSounds.add(info);
         }
     }
 
@@ -95,7 +93,8 @@ public class GameSoundManager {
      * Makes the SoundManager unload all sounds not used in menus.
      */
     public void unloadSounds() {
-        for (SoundInfo info : loadedSounds) {
+        for (SoundInfo info : loadedSounds.keys()) {
+            loadedSounds.get(info).stop();
             assetManager.unload(info.FILE_PATH);
         }
         loadedSounds.clear();
@@ -111,14 +110,15 @@ public class GameSoundManager {
     private Sound getSoundFromInfo(SoundInfo info, boolean checkIfLoaded) {
         if (checkIfLoaded) {
             if (assetManager.isLoaded(info.FILE_PATH)) {
-                return assetManager.get(info.FILE_PATH, Sound.class);
+                return loadedSounds.get(info);
             } else {
                 assetManager.load(info.FILE_PATH, Sound.class);
-                if (!loadedSounds.contains(info)) {
-                    loadedSounds.add(info);
-                }
                 assetManager.finishLoading();
-                return assetManager.get(info.FILE_PATH, Sound.class);
+                Sound newSound =  assetManager.get(info.FILE_PATH, Sound.class);
+                if (!loadedSounds.containsKey(info)) {
+                    loadedSounds.put(info, newSound);
+                }
+                return newSound;
             }
         } else {
             return assetManager.get(info.FILE_PATH, Sound.class);

@@ -5,9 +5,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mygdx.game.GridWars;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import javax.swing.ImageIcon;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -17,6 +14,9 @@ public class DesktopLauncher {
 		config.addIcon("icon/WindowsAppIcon.png", Files.FileType.Internal);
 		config.addIcon("icon/LinuxAppIcon.png", Files.FileType.Internal);
 		config.addIcon("icon/MacAppIcon.png", Files.FileType.Internal);
+		System.out.println("AUDIO: " + config.audioDeviceBufferCount);
+		config.audioDeviceBufferCount = 4096*10;
+		System.out.println("AUDIO: " + config.audioDeviceBufferCount);
 
 		new LwjglApplication(new GridWars(), config);
 	}
