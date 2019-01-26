@@ -30,11 +30,11 @@ public class MusicManager {
      * Sets the current song and plays it
      */
     public void setSong(SongInfo newSongInfo) {
-        Song newSong = new Song(newSongInfo);
         if (currentSong != null) {
             currentSong.stop();
             currentSong.dispose();
         }
+        Song newSong = new Song(newSongInfo);
         currentSong = newSong;
         currentSong.setVolume(volume);
         currentSong.play();

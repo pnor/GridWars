@@ -52,4 +52,9 @@ public enum SoundInfo {
         this.FILE_PATH = filePath;
     }
 
+    @Override 
+    public String toString() {
+        return NAME + ": " + FILE_PATH;
+    }
+
 }

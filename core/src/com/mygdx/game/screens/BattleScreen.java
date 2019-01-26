@@ -300,6 +300,9 @@ public class BattleScreen implements Screen {
         Visuals.engine = engine;
         Visuals.stage = stage;
 
+        // Change Sound Effect Manager to Queue mode
+        GRID_WARS.soundManager.startQueueMode();
+
         //set up Board ui -----
         for (int i = 0; i < BoardComponent.boards.getBoard().getRowSize(); i++) {
             for (int j = 0; j < BoardComponent.boards.getBoard().getColumnSize(); j++) {
@@ -1733,6 +1736,8 @@ public class BattleScreen implements Screen {
     protected void quitScreen() {
         GRID_WARS.setGameSpeed((byte) 1);
         computer.stopThread();
+        GRID_WARS.soundManager.endQueueMode();
+        GRID_WARS.soundManager.unloadSounds();
         GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
     }
 
@@ -1757,10 +1762,10 @@ public class BattleScreen implements Screen {
      * Disposes of resources used by {@link BattleScreen} to prepare for the next screen
      */
     public void goToNextScreen() {
-        disposeLerpColorManager();
         MoveConstructor.clear();
         EntityConstructor.clear();
         DamageAnimationConstructor.clear();
+        GRID_WARS.soundManager.endQueueMode();
         GRID_WARS.soundManager.unloadSounds();
         GRID_WARS.setGameSpeed((byte) 1);
         GRID_WARS.setScreen(new EndResultsScreen(teams, teams.indexOf(rules.checkWinConditions(), true), rules, GRID_WARS));

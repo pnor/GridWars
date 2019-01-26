@@ -215,10 +215,12 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
 
     public int calculatePoints() {
         int points = 0;
-        points += MathUtils.clamp((30 - rules.getTurnCount()) * 10, 0, 3000);
+        points += MathUtils.clamp((60 - rules.getTurnCount()) * 10, 0, 6000);
         for (Entity e : teams.first().getEntities()) {
             points += MathUtils.clamp(stm.get(e).hp, 0, 999) * 20;
         }
+        // Modifier for fewer team members
+        points += 200 * MathUtils.clamp(4 - teams.first().getEntities().size, 0, 4);
         return points;
     }
 }

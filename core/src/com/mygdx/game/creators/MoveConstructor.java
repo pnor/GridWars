@@ -524,7 +524,7 @@ public class MoveConstructor {
                 glow.add(new EventComponent(.1f, true, EventCompUtil.fadeOut(5)));
 
                 engine.addEntity(glow);
-                soundManager.playSound(SoundInfo.DEBUFF, -2f, -999, -999);
+                soundManager.playSound(SoundInfo.DEBUFF, 0.5f, -999, -999);
             }
 
         }, .55f, 1);
@@ -634,7 +634,7 @@ public class MoveConstructor {
                         atlas.findRegion("blueslash4")},
                         Animation.PlayMode.NORMAL));
                 engine.addEntity(slash);
-                soundManager.playSound(SoundInfo.CLAW, -0.3f, -999, -999);
+                soundManager.playSound(SoundInfo.CLAW, 0.6f, -999, -999);
             }
         }, .11f, 1);
 
@@ -664,7 +664,7 @@ public class MoveConstructor {
                         new Color(.97f, .97f, 1, 1),
                         Animation.PlayMode.NORMAL));
                 engine.addEntity(slash);
-                soundManager.playSound(SoundInfo.CLAW, 0.3f, -999, -999);
+                soundManager.playSound(SoundInfo.CLAW, 0.5f, -999, -999);
             }
         }, .11f, 1);
 
@@ -2496,10 +2496,10 @@ public class MoveConstructor {
                 engine.addEntity(sparkle);
 
                 if (MathUtils.randomBoolean(0.3f)) {
-                    soundManager.playSound(SoundInfo.BUBBLE, MathUtils.random(-1f, 1f), -999, -999);
+                    soundManager.playSound(SoundInfo.BUBBLE, MathUtils.random(0.5f, 1f), -999, -999);
                 } else {
                     if (MathUtils.randomBoolean(0.5f)) {
-                        soundManager.playSound(SoundInfo.DRIPPING, MathUtils.random(-1f, 1f), -999, -999);
+                        soundManager.playSound(SoundInfo.DRIPPING, MathUtils.random(0.5f, 1f), -999, -999);
                     }
                 }
             }
@@ -2530,7 +2530,7 @@ public class MoveConstructor {
                 bubble.add(new EventComponent(.1f, true, EventCompUtil.fadeIn(5)));
 
                 engine.addEntity(bubble);
-                soundManager.playSound(SoundInfo.BUBBLE2, -0.5f, -999, -999);
+                soundManager.playSound(SoundInfo.BUBBLE2, 0.5f, -999, -999);
             }
         }, .01f, 1);
 
@@ -4111,10 +4111,10 @@ public class MoveConstructor {
                 engine.addEntity(sparkle);
 
                 if (MathUtils.randomBoolean(0.3f)) {
-                    soundManager.playSound(SoundInfo.BUBBLE, MathUtils.random(-1.5f, .5f), -999, -999);
+                    soundManager.playSound(SoundInfo.BUBBLE, MathUtils.random(0.8f, 1.4f), -999, -999);
                 } else {
                     if (MathUtils.randomBoolean(0.5f)) {
-                        soundManager.playSound(SoundInfo.DRIPPING, MathUtils.random(-1.5f, .5f), -999, -999);
+                        soundManager.playSound(SoundInfo.DRIPPING, MathUtils.random(0.9f, 1.5f), -999, -999);
                     }
                 }
             }
@@ -4145,7 +4145,7 @@ public class MoveConstructor {
                 bubble.add(new EventComponent(.1f, true, EventCompUtil.fadeIn(5)));
 
                 engine.addEntity(bubble);
-                soundManager.playSound(SoundInfo.BUBBLE2, -0.8f, -999, -999);
+                soundManager.playSound(SoundInfo.BUBBLE2, 0.6f, -999, -999);
             }
         }, .01f, 1);
 
@@ -4177,7 +4177,7 @@ public class MoveConstructor {
                         Animation.PlayMode.REVERSED));
                 boom.add(new EventComponent(.06f, true, EventCompUtil.fadeOut(5)));
                 engine.addEntity(boom);
-                soundManager.playSound(SoundInfo.BUBBLE_BURST, -0.6f, -999, -999);
+                soundManager.playSound(SoundInfo.BUBBLE_BURST, 0.5f, -999, -999);
             }
         }, .1f, 1);
 
@@ -4217,7 +4217,7 @@ public class MoveConstructor {
                 }));
 
                 engine.addEntity(sparkle);
-                soundManager.playSound(SoundInfo.DRIPPING, -0.1f, -999, -999);
+                soundManager.playSound(SoundInfo.DRIPPING, 0.5f, -999, -999);
             }
         }, .01f, 7);
 
