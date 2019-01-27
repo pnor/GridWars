@@ -368,6 +368,8 @@ public class MoveConstructor {
     public static Move guardPiercer(Entity user) {
         //Visuals---
         VisualEvent circles = new VisualEvent(new VisualEffect() {
+            int timesPlayed = 0;
+
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
@@ -377,6 +379,8 @@ public class MoveConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
+
+                timesPlayed++;
 
                 Vector2 entitySize = new Vector2(70 * scale, 70 * scale);
                 //Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
@@ -403,7 +407,7 @@ public class MoveConstructor {
                 glow.add(new EventComponent(.1f, true, EventCompUtil.fadeIn(6)));
 
                 engine.addEntity(glow);
-                soundManager.playSound(SoundInfo.VOOM, 2f, -999, -999);
+                if (timesPlayed % 3 == 0) soundManager.playSound(SoundInfo.VOOM, 2f, -999, -999);
             }
 
         }, .5f, 1);
@@ -491,6 +495,8 @@ public class MoveConstructor {
     public static Move poisonBlade(Entity user) {
         //Visuals---
         VisualEvent circles = new VisualEvent(new VisualEffect() {
+            int timesCalled = 0;
+
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
@@ -500,6 +506,8 @@ public class MoveConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
+                timesCalled++;
+
                 Vector2 entitySize = new Vector2(70 * scale, 70 * scale);
                 Vector2 tileCenter = t.localToStageCoordinates(new Vector2(t.getWidth() / 2f, t.getHeight() / 2f));
 
@@ -524,7 +532,9 @@ public class MoveConstructor {
                 glow.add(new EventComponent(.1f, true, EventCompUtil.fadeOut(5)));
 
                 engine.addEntity(glow);
-                soundManager.playSound(SoundInfo.DEBUFF, 0.5f, -999, -999);
+                if (timesCalled == 1) {
+                    soundManager.playSound(SoundInfo.DEBUFF, 0.5f, -999, -999);
+                }
             }
 
         }, .55f, 1);
@@ -717,6 +727,21 @@ public class MoveConstructor {
 
     public static Move bark(Entity user) {
         //Visuals---
+        VisualEvent noiseCurious = new VisualEvent(new VisualEffect() {
+            BoardPosition bp;
+            Tile t;
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                soundManager.playSound(SoundInfo.CURIOUS);
+            }
+        }, .01f, 1);
+
         VisualEvent bark = new VisualEvent(new VisualEffect() {
             BoardPosition bp;
             Tile t;
@@ -771,6 +796,7 @@ public class MoveConstructor {
                     pm.get(e).position.add(new Vector2(MathUtils.random(-5 * scale, 5 * scale), MathUtils.random(-5 * scale, 5 * scale)));
                 }));
                 engine.addEntity(zigzag);
+                soundManager.playSound(SoundInfo.SPIRAL, 2, -0.1f, 0.4f);
             }
         }, .5f, 1);
 
@@ -782,20 +808,35 @@ public class MoveConstructor {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
 
                         if (status.has(enemy))
-                            status.get(enemy).addStatusEffect(offenseless(2), enemy);
+                            status.get(enemy).addStatusEffect(petrify(2), enemy);
 
                         if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
 
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{bark.copy(.1f), bark2.copy(.1f), bark.copy(.1f), bark2.copy(.1f) ,bark, bark2})), new MoveInfo(false, 0, offenseless(2).createStatusEffectInfo()));
-        move.setAttackDescription("Barks intimidatingly at the opponent. Halves the attack of the target for 2 turns.");
+                new Array<VisualEvent>(new VisualEvent[]{noiseCurious, bark.copy(.1f), bark2.copy(.1f), bark.copy(.1f), bark2.copy(.1f) ,bark, bark2})), new MoveInfo(false, 0, petrify(2).createStatusEffectInfo()));
+        move.setAttackDescription("Barks intimidatingly at the opponent. Petrifies the target for 2 turns.");
         return move;
     }
 
     public static Move yelp(Entity user) {
         //Visuals---
+        VisualEvent noiseCurious = new VisualEvent(new VisualEffect() {
+            BoardPosition bp;
+            Tile t;
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
+                try {
+                    t = boards.getBoard().getTile(bp.r, bp.c);
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
+                soundManager.playSound(SoundInfo.CURIOUS, 1.2f, 0, 1);
+            }
+        }, .01f, 1);
+
         VisualEvent bark = new VisualEvent(new VisualEffect() {
             BoardPosition bp;
             Tile t;
@@ -850,6 +891,7 @@ public class MoveConstructor {
                     pm.get(e).position.add(new Vector2(MathUtils.random(-5 * scale, 5 * scale), MathUtils.random(-5 * scale, 5 * scale)));
                 }));
                 engine.addEntity(zigzag);
+                soundManager.playSound(SoundInfo.SPIRAL, 1.8f, -0.1f, 0.4f);
             }
         }, .5f, 1);
 
@@ -860,16 +902,18 @@ public class MoveConstructor {
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
 
-                        if (status.has(enemy))
-                            status.get(enemy).addStatusEffect(defenseless(2), enemy);
+                        if (status.has(enemy)) {
+                            status.get(enemy).addStatusEffect(defenseless(3), enemy);
+                            status.get(enemy).addStatusEffect(offenseless(3), enemy);
+                        }
 
                         if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
 
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{bark.copy(.1f), bark2.copy(.1f), bark.copy(.1f), bark2.copy(.1f) ,bark, bark2})), new MoveInfo(false, 0, defenseless(2).createStatusEffectInfo()));
-        move.setAttackDescription("Yelps in order to lower the opponents guard. Brings the target's defense to 0 for 2 turns.");
+                new Array<VisualEvent>(new VisualEvent[]{noiseCurious, bark.copy(.1f), bark2.copy(.1f), bark.copy(.1f), bark2.copy(.1f) ,bark, bark2})), new MoveInfo(false, 0, defenseless(3).createStatusEffectInfo(), offenseless(3).createStatusEffectInfo()));
+        move.setAttackDescription("Yelps in order to lower the opponents guard. Brings the target's defense to 0 and halves their attack for 3 turns.");
         return move;
     }
 
@@ -904,6 +948,7 @@ public class MoveConstructor {
                         atlas.findRegion("claw5")},
                         Animation.PlayMode.NORMAL));
                 engine.addEntity(claw);
+                soundManager.playSound(SoundInfo.CLAW);
             }
         }, .21f, 1);
 
@@ -973,6 +1018,7 @@ public class MoveConstructor {
                 beam.add(new LifetimeComponent(0, .26f));
                 beam.add(new EventComponent(0.02f, true, EventCompUtil.fadeOutAfter(7, 6)));
                 engine.addEntity(beam);
+                soundManager.playSound(SoundInfo.LASER, 1, 0, 0.2f);
             }
         }, .03f, 12);
 
@@ -987,6 +1033,7 @@ public class MoveConstructor {
                     } catch (IndexOutOfBoundsException e) {
                         continue;
                     }
+
                     Vector2 entitySize = new Vector2(100 * scale, 100 * scale);
                     Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
                     tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
@@ -1009,6 +1056,13 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
+        VisualEvent explodeNoise = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                soundManager.playSound(SoundInfo.BOOM);
+            }
+        }, .01f, 1);
+
         Move move = new Move("Laser Beam", nm.get(user).name + " shot a laser beam!", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}),
                 new Attack() {
                     @Override
@@ -1021,7 +1075,7 @@ public class MoveConstructor {
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{laser, explode})), new MoveInfo(false, 1));
+                new Array<VisualEvent>(new VisualEvent[]{laser, explodeNoise, explode})), new MoveInfo(false, 1));
         move.setAttackDescription("Fires a laser beam that attacks all in its way. Deals regular damage.");
         return move;
     }
@@ -1056,6 +1110,7 @@ public class MoveConstructor {
                         Animation.PlayMode.NORMAL));
                 boom.add(new EventComponent(.03f, true, EventCompUtil.fadeOut(5)));
                 engine.addEntity(boom);
+                soundManager.playSound(SoundInfo.FIRE_START);
             }
         }, .1f, 6);
 
@@ -1084,6 +1139,7 @@ public class MoveConstructor {
                 flame.add(new EventComponent(.1f, true, EventCompUtil.fadeOutAfter(6, 6)));
 
                 engine.addEntity(flame);
+                soundManager.playSound(SoundInfo.FIRE_BURNING);
             }
         }, .1f, 1);
 
@@ -1123,6 +1179,21 @@ public class MoveConstructor {
     }
 
     public static Move laserSpray(Entity user) {
+        VisualEvent laserNoise = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                soundManager.playSound(SoundInfo.HIGH, 0.7f, 0, 0.4f);
+                soundManager.playSound(SoundInfo.LASER, 0.8f, 0, 0.2f);
+            }
+        }, .01f, 1);
+
+        VisualEvent explosionNoise = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                soundManager.playSound(SoundInfo.BOOM_DECAY, 1f, 0, 0.8f);
+            }
+        }, .01f, 1);
+
         VisualEvent laser = new VisualEvent(new VisualEffect() {
             Tile startTile;
             float offset = -45;
@@ -1240,7 +1311,7 @@ public class MoveConstructor {
                 new BoardPosition(-1, 0),
                 new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
                 new BoardPosition(-3, 2), new BoardPosition(-3, 1), new BoardPosition(-3, 0), new BoardPosition(-3, -1), new BoardPosition(-3, -2)}),
-                new Array<VisualEvent>(new VisualEvent[]{laser, explode})), new MoveInfo(false, 1));
+                new Array<VisualEvent>(new VisualEvent[]{laserNoise, laser, explosionNoise, explode})), new MoveInfo(false, 1));
         move.setAttackDescription("Fires a laser that sweeps across the battlefield. Has a large, wide range. Deals regular damage.");
         return move;
     }
@@ -1275,6 +1346,8 @@ public class MoveConstructor {
                         Animation.PlayMode.NORMAL));
                 boom.add(new EventComponent(.03f, true, EventCompUtil.fadeOut(5)));
                 engine.addEntity(boom);
+                soundManager.playSound(SoundInfo.BOOM);
+                soundManager.playSound(SoundInfo.BOOM, 0.7f, 0, 1);
             }
         }, .01f, 1);
 
@@ -1322,6 +1395,13 @@ public class MoveConstructor {
     }
 
     public static Move sear(Entity user) {
+        VisualEvent fireNoise = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                soundManager.playSound(SoundInfo.FIRE_BURNING);
+            }
+        }, .01f, 1);
+
         VisualEvent fire = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
@@ -1332,6 +1412,7 @@ public class MoveConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
+
                 Vector2 entitySize = new Vector2(30 * scale, 30 * scale);
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
                 tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
@@ -1349,6 +1430,7 @@ public class MoveConstructor {
                 flame.add(new EventComponent(.1f, true, EventCompUtil.fadeOutAfter(6, 6)));
 
                 engine.addEntity(flame);
+                soundManager.playSound(SoundInfo.FIRE_START);
             }
         }, .3f, 8);
 
@@ -1365,13 +1447,15 @@ public class MoveConstructor {
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{fire})), new MoveInfo(false, 0, burn(3).createStatusEffectInfo()));
+                new Array<VisualEvent>(new VisualEvent[]{fireNoise, fire})), new MoveInfo(false, 0, burn(3).createStatusEffectInfo()));
         move.setAttackDescription("Creates intensely hot flames. Burns the opponent for 3 turns.");
         return move;
     }
 
     public static Move wildFire(Entity user) {
         VisualEvent explosions = new VisualEvent(new VisualEffect() {
+            int timesCalled = 0;
+
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = bm.get(user).pos.copy(); //centered around self
@@ -1381,6 +1465,9 @@ public class MoveConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
+                
+                timesCalled++;
+
                 Vector2 entitySize = new Vector2(120 * scale, 120 * scale);
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
                 tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
@@ -1400,6 +1487,11 @@ public class MoveConstructor {
                         Animation.PlayMode.NORMAL));
                 boom.add(new EventComponent(.03f, true, EventCompUtil.fadeOut(5)));
                 engine.addEntity(boom);
+
+                if (timesCalled % 4 == 0) {
+                    soundManager.playSound(SoundInfo.FIRE_START);
+                    soundManager.playSound(SoundInfo.BOOM);
+                }
             }
         }, .03f, 30);
 
@@ -1466,6 +1558,7 @@ public class MoveConstructor {
                         Animation.PlayMode.LOOP));
                 freeze.add(new EventComponent(.1f, true, EventCompUtil.fadeOutAfter(4, 3)));
                 engine.addEntity(freeze);
+                soundManager.playSound(SoundInfo.STAR_WOOSH, 2, 0, 1);
             }
         }, .5f, 1);
 
@@ -1520,6 +1613,20 @@ public class MoveConstructor {
     }
 
     public static Move tailwind(Entity user) {
+        VisualEvent windNoise = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                soundManager.playSound(SoundInfo.SWIRL_WIND, 1.6f, 0, 0.4f);
+            }
+        }, .01f, 1);
+
+        VisualEvent buffNoise = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                soundManager.playSound(SoundInfo.BUFF, 1.5f, 0, 1);
+            }
+        }, .01f, 1);
+
         VisualEvent largeSparkle = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
@@ -1597,7 +1704,7 @@ public class MoveConstructor {
                             status.get(enemy).addStatusEffect(speedUp(1), enemy);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
-                new Array<VisualEvent>(new VisualEvent[]{largeSparkle, sparkle, largeSparkle.copy(), sparkle.copy()})), new MoveInfo(false, 0, speedUp(1).createStatusEffectInfo()));
+                new Array<VisualEvent>(new VisualEvent[]{windNoise, largeSparkle, sparkle, largeSparkle.copy(), sparkle.copy(), buffNoise})), new MoveInfo(false, 0, speedUp(1).createStatusEffectInfo()));
         move.setAttackDescription("Summons a supportive tailwind to help the target's mobility. Increases the target's speed for 1 turn.");
         return move;
     }
@@ -1613,6 +1720,7 @@ public class MoveConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
+
                 Vector2 entitySize = new Vector2(200 * scale, 200 * scale);
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
                 tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
@@ -1640,6 +1748,8 @@ public class MoveConstructor {
         }, .2f, 2);
 
         VisualEvent sparkle = new VisualEvent(new VisualEffect() {
+            int timesCalled = 0;
+
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 for (BoardPosition position : targetPositions) {
@@ -1650,6 +1760,9 @@ public class MoveConstructor {
                     } catch (IndexOutOfBoundsException e) {
                         return;
                     }
+
+                    timesCalled++;
+
                     Vector2 entitySize = new Vector2(30 * scale, 30 * scale);
                     Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
                     tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
@@ -1666,6 +1779,10 @@ public class MoveConstructor {
                     sparkle.add(new EventComponent(.1f, true, EventCompUtil.fadeOut(5)));
 
                     engine.addEntity(sparkle);
+
+                    if (timesCalled % 3 == 0) {
+                        soundManager.playSound(SoundInfo.SWORD_SWIPE);
+                    }
                 }
             }
         }, .05f, 15);
@@ -1741,6 +1858,7 @@ public class MoveConstructor {
                         Animation.PlayMode.NORMAL));
                 boom.add(new EventComponent(.06f, true, EventCompUtil.fadeOut(5)));
                 engine.addEntity(boom);
+                soundManager.playSound(SoundInfo.BOOM_DECAY, 1.4f, 0, 0.9f);
             }
         }, .3f, 3);
 
@@ -1762,6 +1880,9 @@ public class MoveConstructor {
                 sm.get(flash).sprite.setColor(new Color(.8f, 1, .9f, 1));
                 flash.add(new EventComponent(.025f, true, EventCompUtil.fadeOutAfter(5, 5)));
                 engine.addEntity(flash);
+                soundManager.playSound(SoundInfo.SWIRL_WIND);
+                soundManager.playSound(SoundInfo.WARP_FAST);
+                soundManager.playSound(SoundInfo.ZEP);
             }
         }, .01f, 1);
 
@@ -1776,7 +1897,7 @@ public class MoveConstructor {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
 
                         if (stm.has(enemy))
-                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) - stm.get(enemy).getModDef(enemy), 0, 999);
+                            stm.get(enemy).hp -= MathUtils.clamp(stm.get(e).getModAtk(e) * 1.5f, 0, 999);
 
                         if (vm.has(enemy) && vm.get(enemy).heavyDamageAnimation != null)
                             vm.get(enemy).heavyDamageAnimation.setPlaying(true, true);
@@ -1785,8 +1906,8 @@ public class MoveConstructor {
                 new BoardPosition(-3, 0),
                 new BoardPosition(-3, 1), new BoardPosition(-3, -1),
                 new BoardPosition(-2, 0), new BoardPosition(-4, -0)}),
-                new Array<VisualEvent>(new VisualEvent[]{flash, shuriken, sparkle, explode})), new MoveInfo(false, 1));
-        move.setAttackDescription("Summons a vicious twister. Deals regular damage.");
+                new Array<VisualEvent>(new VisualEvent[]{flash, shuriken, sparkle, explode})), new MoveInfo(true, 1.5f));
+        move.setAttackDescription("Summons a vicious twister. Ignores the targets defence and deals 1.5x damage.");
         return move;
     }
 
@@ -1815,10 +1936,14 @@ public class MoveConstructor {
                 freeze.add(new EventComponent(.1f, true, EventCompUtil.fadeInThenOut(3, 5, 7)));
 
                 engine.addEntity(freeze);
+
+                soundManager.playSound(SoundInfo.WARP_FAST, 1.3f, 0, 0.6f);
             }
         }, .7f, 1);
 
         VisualEvent sparkle = new VisualEvent(new VisualEffect() {
+            int timesCalled = 0;
+
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
@@ -1828,6 +1953,9 @@ public class MoveConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
+
+                timesCalled++;
+
                 Vector2 entitySize = new Vector2(15 * scale, 15 * scale);
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
                 tilePosition.add(boards.getTileWidth() / 2 - entitySize.x / 2f,
@@ -1844,6 +1972,9 @@ public class MoveConstructor {
                 sparkle.add(new EventComponent(.1f, true, EventCompUtil.fadeOutAfter(8, 4)));
 
                 engine.addEntity(sparkle);
+                if (timesCalled % 2 == 0) {
+                    soundManager.playSound(SoundInfo.DRIPPING, MathUtils.random(1.7f, 2), 0, 1);
+                }
             }
         }, .2f, 9);
 
@@ -1892,6 +2023,8 @@ public class MoveConstructor {
                         Animation.PlayMode.NORMAL));
                 boom.add(new EventComponent(.03f, true, EventCompUtil.fadeOut(5)));
                 engine.addEntity(boom);
+
+                soundManager.playSound(SoundInfo.BUFF, 2, 0, 1);
             }
         }, .01f, 1);
 
@@ -1922,6 +2055,8 @@ public class MoveConstructor {
                 sparkle.add(new EventComponent(.1f, true, EventCompUtil.fadeOutAfter(3, 3)));
 
                 engine.addEntity(sparkle);
+
+                soundManager.playSound(SoundInfo.BUBBLE);
             }
         }, .19f, 9);
 
@@ -2012,6 +2147,8 @@ public class MoveConstructor {
                         Animation.PlayMode.NORMAL));
                 boom.add(new EventComponent(.03f, true, EventCompUtil.fadeOut(5)));
                 engine.addEntity(boom);
+
+                soundManager.playSound(SoundInfo.CURIOUS);
             }
         }, .01f, 1);
 
@@ -2042,6 +2179,8 @@ public class MoveConstructor {
                 sparkle.add(new EventComponent(.1f, true, EventCompUtil.fadeOutAfter(3, 3)));
 
                 engine.addEntity(sparkle);
+
+                soundManager.playSound(SoundInfo.BUBBLE);
             }
         }, .19f, 9);
 
@@ -2130,6 +2269,8 @@ public class MoveConstructor {
                 sparkle.add(new EventComponent(.1f, true, EventCompUtil.fadeOut(6)));
 
                 engine.addEntity(sparkle);
+
+                soundManager.playSound(SoundInfo.BUBBLE, 1.1f, 0, 1);
             }
         }, .19f, 9);
 
@@ -2155,6 +2296,7 @@ public class MoveConstructor {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
 
                 am.get(user).actor.shade(BattleScreen.getShadeColorBasedOnState(user));
+                soundManager.playSound(SoundInfo.GOO, 1, 0, 3);
             }
         }, .05f, 1);
 
@@ -2206,6 +2348,8 @@ public class MoveConstructor {
                 ripple.add(new EventComponent(.05f, true, EventCompUtil.fadeOutAfter(18, 6)));
 
                 engine.addEntity(ripple);
+
+                soundManager.playSound(SoundInfo.BUBBLE2, 0.5f, 0, 1);
             }
         }, .19f, 4);
 
@@ -2275,6 +2419,8 @@ public class MoveConstructor {
                 waterBall.add(new EventComponent(.1f, true, EventCompUtil.fadeInThenOut(5, 10, 5)));
 
                 engine.addEntity(waterBall);
+
+                soundManager.playSound(SoundInfo.DRIPPING, 0.5f, 0, 1);
             }
         }, .2f, 1);
 
@@ -2325,6 +2471,7 @@ public class MoveConstructor {
                 }));
 
                 engine.addEntity(sparkle);
+                soundManager.playSound(SoundInfo.BUBBLE, MathUtils.random(0.5f, 0.6f), 0, 1);
             }
         }, .15f, 6);
 

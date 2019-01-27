@@ -14,23 +14,36 @@ public enum SoundInfo {
     POWER("Power", "soundEffects/menus/Power.ogg"),
     //endregion
     //region Moves
+    BEEP_DECAY("Bubble Burst", "soundEffects/battle/BeepDecay.ogg"),
+    BLIP_UP("Blip Up", "soundEffects/battle/BlipUp.ogg"),
     BOOM("Boom", "soundEffects/battle/Boom.ogg"),
     BOOM_DECAY("Boom Decay", "soundEffects/battle/BoomDecay.ogg"),
     BUBBLE("Bubble", "soundEffects/battle/Bubble.ogg"),
     BUBBLE2("Bubble 2", "soundEffects/battle/Bubble2.ogg"),
     BUBBLE_BURST("Bubble Burst", "soundEffects/battle/BubbleBurst.ogg"),
     BUFF("Buff", "soundEffects/battle/Buff.ogg"),
+    BURN_DOWN("Burn Down", "soundEffects/battle/BurnDown.ogg"),
+    BURN_UP("Burn Up", "soundEffects/battle/BurnUp.ogg"),
     CLAW("Claw", "soundEffects/battle/Claw.ogg"),
+    COMPUTER("Computer", "soundEffects/battle/Computer.ogg"),
     CURIOUS("Curious", "soundEffects/battle/Curious.ogg"),
     DEBUFF("Debuff", "soundEffects/battle/Debuff.ogg"),
+    DEEP("Deep", "soundEffects/battle/Deep.ogg"),
     DRIPPING("Dripping", "soundEffects/battle/Dripping.ogg"),
     FANCY_BOOM("Fancy Boom", "soundEffects/battle/FancyBoom.ogg"),
+    FIRE_BURNING("Fire Burning", "soundEffects/battle/FireBurning.ogg"),
+    FIRE_BURNING_LOW("Fire Burning", "soundEffects/battle/FireBurningLow.ogg"),
     FIRE_START("Fire Start", "soundEffects/battle/FireStart.ogg"),
+    GOO("Goo", "soundEffects/battle/Goo.ogg"),
+    HIGH("High", "soundEffects/battle/High.ogg"),
+    HUNGER("Hunger", "soundEffects/battle/Hunger.ogg"),
     LASER("Laser", "soundEffects/battle/Laser.ogg"),
     LASER_ALT("Laser Alt", "soundEffects/battle/LaserAlt.ogg"),
     LASER_LONG("Laser Long", "soundEffects/battle/LaserLong.ogg"),
     MINI_STAR_WOOSH("Mini Star Woosh", "soundEffects/battle/MiniStarWoosh.ogg"),
     MYSTERY("Mystery", "soundEffects/battle/Mystery.ogg"),
+    RINGING("Ringing", "soundEffects/battle/Ringing.ogg"),
+    SHIM("Shim", "soundEffects/battle/Shim.ogg"),
     SPACE_CAW("Space Claw", "soundEffects/battle/SpaceClaw.ogg"),
     SPACE_OUT("Space Out", "soundEffects/battle/SpaceOut.ogg"),
     SPACE_SHOCK("Space Shock", "soundEffects/battle/SpaceShock.ogg"),
@@ -41,7 +54,8 @@ public enum SoundInfo {
     SWORD_SWIPE("Sword Swipe", "soundEffects/battle/SwordSwipe.ogg"),
     VOOM("Voom", "soundEffects/battle/Voom.ogg"),
     WARP("Warp", "soundEffects/battle/Warp.ogg"),
-    WARP_FAST("Warp Fast", "soundEffects/battle/WarpFast.ogg");
+    WARP_FAST("Warp Fast", "soundEffects/battle/WarpFast.ogg"),
+    ZEP("Zep", "soundEffects/battle/Zep.ogg");
     //endregion
 
     public final String NAME;
