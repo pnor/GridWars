@@ -33,6 +33,7 @@ public class GameUtil {
 
         colors.put("chartreuse", Color.CHARTREUSE);
         colors.put("color wars", new LerpColor(Color.CYAN, Color.GOLD, 1f));
+        colors.put("cool", new Color(10f / 255f, 1, 210f / 255f, 1f));
         colors.put("cornell", new LerpColor(Color.RED, Color.WHITE, 0.4f));
         colors.put("cyan", Color.CYAN);
         colors.put("canight", new LerpColor(Color.WHITE, Color.CYAN, 1f));
@@ -51,6 +52,7 @@ public class GameUtil {
 
         colors.put("glow", new LerpColor(new Color(1, 1, .8f, 1), Color.GOLD, 5f));
         colors.put("goldenrod", Color.GOLDENROD);
+        colors.put("good", new Color(1f, 131f / 255f, 0, 1));
         colors.put("green", Color.GREEN);
         colors.put("gray", Color.GRAY);
         colors.put("groovy", new LerpColor(new Color(.4f, .2f, .1f, 1), Color.PURPLE, .5f, Interpolation.bounceOut));
@@ -77,6 +79,7 @@ public class GameUtil {
         colors.put("monochrome", new LerpColor(Color.BLACK, Color.WHITE, .7f));
         colors.put("mystical cyan", new LerpColor(Color.CYAN, Color.ROYAL, 5f));
 
+        colors.put("neat", new Color(1, 243f / 255f, 232f / 255f, 1f));
         colors.put("neon", new Color(5f / 255f, 239f / 255f, 159f / 255f, 1f));
 
         colors.put("orange", Color.ORANGE);
@@ -117,6 +120,7 @@ public class GameUtil {
         colors.put("wild", new LerpColor(Color.GOLDENROD, Color.PURPLE, .4f, Interpolation.bounceIn));
 
         colors.put("yellow", Color.YELLOW);
+        colors.put("yo", new LerpColor(Color.BLACK, Color.YELLOW));
 
         return colors;
     }
