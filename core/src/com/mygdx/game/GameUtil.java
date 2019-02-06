@@ -32,6 +32,7 @@ public class GameUtil {
         colors.put("brown", Color.BROWN);
 
         colors.put("chartreuse", Color.CHARTREUSE);
+        colors.put("clean", new LerpColor(Color.WHITE, new Color(0, 0.7f, 1, 1), Interpolation.bounceIn));
         colors.put("color wars", new LerpColor(Color.CYAN, Color.GOLD, 1f));
         colors.put("cool", new Color(10f / 255f, 1, 210f / 255f, 1f));
         colors.put("cornell", new LerpColor(Color.RED, Color.WHITE, 0.4f));
@@ -40,6 +41,7 @@ public class GameUtil {
 
         colors.put("dark gray", Color.DARK_GRAY);
         colors.put("darkness", new LerpColor(Color.BLACK, Color.CLEAR, 5f, Interpolation.bounce));
+        colors.put("diatomic", new LerpColor(Color.RED, Color.BLUE, 5f));
         colors.put("dog", new LerpColor(Color.BROWN, Color.GOLDENROD, 5f, Interpolation.pow2InInverse));
 
         colors.put("emma", new LerpColor(Color.RED, Color.LIGHT_GRAY, .4f, Interpolation.circleOut));
@@ -53,8 +55,9 @@ public class GameUtil {
         colors.put("glow", new LerpColor(new Color(1, 1, .8f, 1), Color.GOLD, 5f));
         colors.put("goldenrod", Color.GOLDENROD);
         colors.put("good", new Color(1f, 131f / 255f, 0, 1));
-        colors.put("green", Color.GREEN);
         colors.put("gray", Color.GRAY);
+        colors.put("green", Color.GREEN);
+        colors.put("grid wars", new LerpColor(Color.BROWN, Color.GOLD, 1f));
         colors.put("groovy", new LerpColor(new Color(.4f, .2f, .1f, 1), Color.PURPLE, .5f, Interpolation.bounceOut));
         colors.put("ghost", new Color(.6f, .6f, .6f, .65f));
 
@@ -81,6 +84,7 @@ public class GameUtil {
 
         colors.put("neat", new Color(1, 243f / 255f, 232f / 255f, 1f));
         colors.put("neon", new Color(5f / 255f, 239f / 255f, 159f / 255f, 1f));
+        colors.put("noble", new LerpColor(new Color(1, 243f / 255f, 232f / 255, 1), Color.WHITE, 3f));
 
         colors.put("orange", Color.ORANGE);
         colors.put("olive", Color.OLIVE);
@@ -103,6 +107,7 @@ public class GameUtil {
         colors.put("sea", new LerpColor(Color.BLUE, Color.CYAN, 6f));
         colors.put("shine", new LerpColor(Color.WHITE, new Color(.9f, .9f, 1, 1), .3f, Interpolation.bounceOut));
         colors.put("shiny", new LerpColor(new Color(.9f, .9f, .9f, 1), new Color(.3f, .6f, 1, 1), 5f, Interpolation.bounceOut));
+        colors.put("simple", new Color(247f / 255f, 1, 243f / 255f, 1));
         colors.put("sky", Color.SKY);
         colors.put("slate", Color.SLATE);
         colors.put("smokey", new LerpColor(new Color(1, 0, 0, 1), new Color(.1f, .01f, 0, 1), 5f));

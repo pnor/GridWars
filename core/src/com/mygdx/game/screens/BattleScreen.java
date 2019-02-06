@@ -577,7 +577,7 @@ public class BattleScreen implements Screen {
         checkWinConditions(delta);
         //region Debug
         //checking if things are working as intended
-        /*
+        
         if (Visuals.visualsArePlaying < 0)
             throw (new IndexOutOfBoundsException("Visuals.visualsArePlaying is < 0"));
         for (Team t : teams) {
@@ -594,6 +594,7 @@ public class BattleScreen implements Screen {
             }
         }
         //debug: get values via key press
+        /*
         if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {//Visuals
             System.out.println("Visuals.visualsArePlaying = " + Visuals.visualsArePlaying);
             System.out.println("Current Move : " + currentMove);
@@ -641,6 +642,10 @@ public class BattleScreen implements Screen {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) { // Turn Info
             System.out.println("ShowingEndTurnMessage = " + showingEndTurnMessageTable);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) { // Sound Effects Manager
+            System.out.println("Sound Effects Queued:");
+            GRID_WARS.soundManager.printQueuedSounds();
         }
         */
         //endregion

@@ -557,7 +557,8 @@ public class BackgroundConstructor {
         // Changes based on if game was beat
         Preferences pref = Gdx.app.getPreferences("GridWars Options");
         if (pref.getBoolean("Beat the Game"))
-            glower.setColor(new Color(1, 215f/255f, 0, 0.2f));
+            //glower.setColor(new Color(1, 215f/255f, 0, 0.2f));
+            glower.setColor(new Color(1, 1, 0, 0.3f));
         else
             glower.setColor(new Color(1, 1, 1, 0.2f));
         Sprite overlay = new Sprite(backAtlas.findRegion("CubeBackground"));

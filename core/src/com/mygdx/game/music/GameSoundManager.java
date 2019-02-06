@@ -28,7 +28,7 @@ public class GameSoundManager implements Runnable {
     private boolean queueThreadRunning = false;
     private boolean forceStop = false;
     private final long QUEUE_TIME = 60;
-    private final long QUEUE_DOWNTIME = 180; // How many milliseconds should queue wait till ending the thread
+    private final long QUEUE_DOWNTIME = 500; // How many milliseconds should queue wait till ending the thread
     private long lastTime = 0;
 
 
@@ -190,6 +190,7 @@ public class GameSoundManager implements Runnable {
                 if (forceStop || (System.currentTimeMillis() - lastTime >= QUEUE_DOWNTIME && queuedSounds.size == 0)) {
                     queueThreadRunning = false;
                     forceStop = false;
+                    System.out.println("QUEUE ended.");
                     return;
                 }
             }
@@ -253,6 +254,10 @@ public class GameSoundManager implements Runnable {
 
     public boolean isQueueThreadRunning() {
         return queueThreadRunning;
+    }
+
+    public void printQueuedSounds() {
+        System.out.println(queuedSounds);
     }
 
     /**

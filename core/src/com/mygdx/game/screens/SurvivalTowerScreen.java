@@ -121,7 +121,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
             backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
             System.out.println("Level : " + level);
         }
-        */
+        */  
         //endregion
     }
 

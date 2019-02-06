@@ -21,6 +21,7 @@ import com.mygdx.game.move_related.VisualEffect;
 import com.mygdx.game.move_related.VisualEvent;
 import com.mygdx.game.move_related.Visuals;
 import com.mygdx.game.music.GameSoundManager;
+import com.mygdx.game.music.SoundInfo;
 import com.mygdx.game.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.*;
@@ -185,6 +186,7 @@ public class DamageAnimationConstructor {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 am.get(user).actor.shade(Color.RED);
+                soundManager.playSound(SoundInfo.DEBUFF, 0.7f, 0, 0.25f);
             }
         }, .001f, 1);
 
@@ -212,6 +214,7 @@ public class DamageAnimationConstructor {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 am.get(user).actor.shade(Color.RED);
+                soundManager.playSound(SoundInfo.DEBUFF, 0.7f, 0, 0.5f);
             }
         }, .2f, 1);
 
@@ -254,6 +257,7 @@ public class DamageAnimationConstructor {
                     am.get(user).actor.moveBy(-4 * scale, 0);
                 right = !right;
 
+                soundManager.playSound(SoundInfo.BOOM, 0.7f, 0, 1);
             }
         }, .2f, 6);
 
@@ -287,6 +291,7 @@ public class DamageAnimationConstructor {
                         Animation.PlayMode.NORMAL));
                 boom.add(new EventComponent(.02f, true, EventCompUtil.fadeOut(5)));
                 engine.addEntity(boom);
+                soundManager.playSound(SoundInfo.BOOM);
             }
         }, .05f, 18);
 
@@ -328,8 +333,15 @@ public class DamageAnimationConstructor {
             }
         }, .1f, 9);
 
+        VisualEvent finalSound = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                soundManager.playSound(SoundInfo.BOOM_DECAY);
+            }
+        }, .01f, 1);
+
         return new Visuals(user, null,
-                new Array<VisualEvent>(new VisualEvent[]{initialRed, explosions, explosionsFast, endSparkles, fadeAndBlacken.copy(.275f, 1), fadeAndBlacken}));
+                new Array<VisualEvent>(new VisualEvent[]{initialRed, explosions, explosionsFast, finalSound, endSparkles, fadeAndBlacken.copy(.275f, 1), fadeAndBlacken}));
     }
 
     /**
@@ -375,10 +387,14 @@ public class DamageAnimationConstructor {
                         Animation.PlayMode.NORMAL));
                 boom.add(new EventComponent(.02f, true, EventCompUtil.fadeOut(10)));
                 engine.addEntity(boom);
+
+                soundManager.playSound(SoundInfo.BOOM_WAVE);
+                soundManager.playSound(SoundInfo.NOTE, MathUtils.random(0.5f, 2), 0, 1);
             }
-        }, .15f, 20);
+        }, .22f, 30);
 
         VisualEvent explosionsFast = new VisualEvent(new VisualEffect() {
+            int timesCalled = 0;
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = bm.get(user).pos.copy();
@@ -388,6 +404,7 @@ public class DamageAnimationConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
+                timesCalled++;
                 Vector2 entitySize = new Vector2(150 * scale, 150 * scale);
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
                 tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
@@ -407,6 +424,15 @@ public class DamageAnimationConstructor {
                         Animation.PlayMode.NORMAL));
                 boom.add(new EventComponent(.02f, true, EventCompUtil.fadeOut(5)));
                 engine.addEntity(boom);
+                if (timesCalled % 2 == 0) {
+                    soundManager.playSound(SoundInfo.BOOM, MathUtils.random(0.5f, 2), 0, 1);
+                }
+                if (timesCalled == 1) {
+                    soundManager.playSound(SoundInfo.FANCY_BOOM, 2f, 0, 1);
+                }
+                if (timesCalled % 3 == 0 && MathUtils.randomBoolean()) {
+                    soundManager.playSound(SoundInfo.FUTURE, MathUtils.random(0.5f, 2), 0, 1);
+                }
             }
         }, .03f, 40);
 
@@ -439,6 +465,7 @@ public class DamageAnimationConstructor {
                         Animation.PlayMode.NORMAL));
                 boom.add(new EventComponent(.03f, true, EventCompUtil.fadeOut(10)));
                 engine.addEntity(boom);
+                soundManager.playSound(SoundInfo.FANCY_BOOM, 0.8f, 0, 1);
             }
         }, .03f, 1);
 
@@ -528,6 +555,7 @@ public class DamageAnimationConstructor {
         }, .2f, 1);
         
         VisualEvent explosions = new VisualEvent(new VisualEffect() {
+            int timesCalled = 0;
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = bm.get(user).pos.copy();
@@ -537,6 +565,7 @@ public class DamageAnimationConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
+                timesCalled++;
                 Vector2 entitySize = new Vector2(70 * scale, 70 * scale);
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
                 tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
@@ -556,6 +585,9 @@ public class DamageAnimationConstructor {
                         Animation.PlayMode.NORMAL));
                 boom.add(new EventComponent(.02f, true, EventCompUtil.fadeOut(5)));
                 engine.addEntity(boom);
+                if (timesCalled % 3 == 0) {
+                    soundManager.playSound(SoundInfo.BOOM);
+                }
             }
         }, .05f, 3);
 
@@ -670,6 +702,8 @@ public class DamageAnimationConstructor {
                     am.get(user).actor.moveBy(-4 * scale, 0);
                 right = !right;
 
+                soundManager.playSound(SoundInfo.BOOM);
+                soundManager.playSound(SoundInfo.FUTURE, MathUtils.random(0.9f, 1.3f), 0, 1);
             }
         }, .2f, 6);
 

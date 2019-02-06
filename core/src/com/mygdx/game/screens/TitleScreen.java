@@ -78,7 +78,6 @@ public class TitleScreen extends MenuScreen implements Screen {
             }
         };
 
-        //background = BackgroundConstructor.makeTitleScreenBackground();
         background = BackgroundConstructor.makeNewTitle();
 
         startBtn.addListener(listener);

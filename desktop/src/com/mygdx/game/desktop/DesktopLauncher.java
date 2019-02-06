@@ -14,9 +14,6 @@ public class DesktopLauncher {
 		config.addIcon("icon/WindowsAppIcon.png", Files.FileType.Internal);
 		config.addIcon("icon/LinuxAppIcon.png", Files.FileType.Internal);
 		config.addIcon("icon/MacAppIcon.png", Files.FileType.Internal);
-		System.out.println("AUDIO: " + config.audioDeviceBufferCount);
-		config.audioDeviceBufferCount = 4096*10;
-		System.out.println("AUDIO: " + config.audioDeviceBufferCount);
 
 		new LwjglApplication(new GridWars(), config);
 	}

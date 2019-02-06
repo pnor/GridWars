@@ -1528,7 +1528,7 @@ public class EntityConstructor {
                 atlas.findRegion("whiteGargoyle2")
         }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(6, 8, 2, 0, 3));
+        entity.add(new StatComponent(6, 9, 2, 0, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1961,7 +1961,7 @@ public class EntityConstructor {
                 atlas.findRegion("eliteGolem2")
         }, Animation.PlayMode.LOOP_PINGPONG, .34f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(7, 8, 3, 1, 1));
+        entity.add(new StatComponent(12, 10, 1, 1, 3));
         stm.get(entity).obscureStatInfo = true;
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
@@ -1972,10 +1972,10 @@ public class EntityConstructor {
                 DamageAnimationConstructor.deathAnimation(entity),
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
-                MoveConstructor.ultimateGuard(entity),
-                MoveConstructor.reflectionBeam(entity),
-                MoveConstructor.rouletteReflect(entity),
-                MoveConstructor.slamRed(entity)
+                MoveConstructor.hammerStrike(entity),
+                MoveConstructor.poisonPunch(entity),
+                MoveConstructor.stunPunch(entity),
+                MoveConstructor.heavySlamRed(entity)
         })));
 
         return entity;
@@ -2005,7 +2005,6 @@ public class EntityConstructor {
                 DamageAnimationConstructor.shuffleAnimation(entity)));
         entity.add(new MovesetComponent(new Array<Move>(new Move[]{
                 MoveConstructor.slam(entity),
-                MoveConstructor.heavySlam(entity),
                 MoveConstructor.powerWave(entity),
                 MoveConstructor.weakenWave(entity)
         })));
