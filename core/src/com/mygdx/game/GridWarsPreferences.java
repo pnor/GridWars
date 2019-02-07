@@ -13,5 +13,5 @@ public class GridWarsPreferences {
     public static String MUSIC_VOLUME = "Music Volume"; /** Music Volume. Stores a float between 0 and 1 */
     public static String SOUND_FX_VOLUME = "Sound FX Volume"; /** Sound Effects VOlume. Stores a float between 0 and 1 */
     public static String BEAT_THE_GAME = "Beat the Game"; /** Whether the player has beaten the game. Stores boolean */
-
+    
 }

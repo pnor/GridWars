@@ -235,7 +235,7 @@ public class GridWars extends Game {
 		preferences.putInteger(GridWarsPreferences.AI_TURN_SPEED, 1);
 		preferences.putBoolean(GridWarsPreferences.ANIMATE_BACKGROUND, true);
 		preferences.putFloat(GridWarsPreferences.MUSIC_VOLUME, .5f);
-		preferences.putFloat(GridWarsPreferences.SOUND_FX_VOLUME, .25f);
+		preferences.putFloat(GridWarsPreferences.SOUND_FX_VOLUME, .3f);
 		preferences.flush();
 	}
 

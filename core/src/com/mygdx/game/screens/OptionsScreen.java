@@ -92,6 +92,31 @@ public class OptionsScreen extends MenuScreen implements Screen {
             }
         });
 
+        Label lblGameData = new Label("Data Management", skin);
+        HoverButton btnDefaults = new HoverButton("Reset to Default", skin, Color.WHITE, Color.DARK_GRAY);
+        TextButton btnEraseAll = new TextButton("Erase all Data", skin, "toggle");
+        ChangeListener resetDefaultsListener = new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (actor == btnDefaults && ((Button) actor).isPressed()) {
+                    // AI
+                    AIGroup.uncheckAll();
+                    btnNormalAI.setChecked(true);
+                    // Move Animations
+                    animationGroup.uncheckAll();
+                    btnDoAnimation.setChecked(true);
+                    // Background
+                    backgroundGroup.uncheckAll();
+                    btnAnimateBackground.setChecked(true);
+                    // Volume
+                    soundVolumeSlider.setValue(0.3f);
+                    volumeSlider.setValue(0.5f);
+                    GRID_WARS.soundManager.playSound(SoundInfo.POWER);
+                }
+            }
+        };
+        btnDefaults.addListener(resetDefaultsListener);
+
         Table confirmationBox = new Table();
         TextButton btnBack = new HoverButton("Back", skin, Color.WHITE, Color.RED);
         TextButton btnOK = new HoverButton("OK", skin, Color.WHITE, Color.GREEN);
@@ -132,6 +157,15 @@ public class OptionsScreen extends MenuScreen implements Screen {
                         preferences.putFloat(GridWarsPreferences.MUSIC_VOLUME, volumeSlider.getPercent());
                         preferences.putFloat(GridWarsPreferences.SOUND_FX_VOLUME, soundVolumeSlider.getPercent());
 
+                        // Erase data button toggled
+                        if (btnEraseAll.isChecked()) {
+                            GRID_WARS.highScoreManager.prepopulate();
+                            GRID_WARS.highScoreManager.saveHighScores();
+                            preferences.putBoolean(GridWarsPreferences.BEAT_THE_GAME, false);
+                            GRID_WARS.soundManager.playSound(SoundInfo.POWER, 0.5f, 0, 1);
+                            GRID_WARS.soundManager.playSound(SoundInfo.BACK, 0.5f, 0, 1);
+                        }
+
                         preferences.flush();
                         GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
 
@@ -166,9 +200,13 @@ public class OptionsScreen extends MenuScreen implements Screen {
         musicGroup.add(lblSoundInfo).row();
         musicGroup.add(soundVolumeSlider).row();
         table.add(musicGroup).colspan(2).padBottom(30).row();
+        Table dataGroup = new Table();
+        dataGroup.add(btnDefaults).size(140, 50).padBottom(85).row();
+        dataGroup.add(btnEraseAll).size(110, 35);
+        table.add(dataGroup).colspan(2).padBottom(85).row();
         table.add(btnBack).size(90, 50);
         table.add(btnOK).size(90, 50);
-
+        
         background = BackgroundConstructor.makeNewTitle();
     }
 
