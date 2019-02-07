@@ -190,7 +190,6 @@ public class GameSoundManager implements Runnable {
                 if (forceStop || (System.currentTimeMillis() - lastTime >= QUEUE_DOWNTIME && queuedSounds.size == 0)) {
                     queueThreadRunning = false;
                     forceStop = false;
-                    System.out.println("QUEUE ended.");
                     return;
                 }
             }
@@ -208,7 +207,6 @@ public class GameSoundManager implements Runnable {
      * Starts a new thread to play sounds using the queue.
      */
     private void startQueueThread() {
-        System.out.println("QUEUE started.");
         lastTime = System.currentTimeMillis();
         queueThreadRunning = true;
         lastTime = -QUEUE_TIME;
@@ -220,7 +218,6 @@ public class GameSoundManager implements Runnable {
      * Stops the queue thread. (will finish playing sounds if it was about to)
      */
     private void stopQueueThread() {
-        System.out.println("QUEUE ended.");
         forceStop = true;
     }
 
