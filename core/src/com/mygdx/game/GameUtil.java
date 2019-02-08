@@ -27,6 +27,7 @@ public class GameUtil {
         colors.put("acid", new Color(247f / 255f, 234f / 255f, 93f / 255f, 1));
         colors.put("acidic", new LerpColor(new Color(247f / 255f, 234f / 255f, 93f / 255f, 1), Color.LIME));
 
+        colors.put("bad guys", new LerpColor(Color.RED, Color.BLACK, 0.4f));
         colors.put("blue", Color.BLUE);
         colors.put("black", Color.BLACK);
         colors.put("brown", Color.BROWN);
@@ -114,6 +115,7 @@ public class GameUtil {
 
         colors.put("tan", Color.TAN);
         colors.put("teal", Color.TEAL);
+        colors.put("thunder", new LerpColor(Color.YELLOW, new Color(.4f, .4f, 0.4f, 1), 5f));
 
         colors.put("ultimate", new LerpColor(new Color(1, .2f, .3f, 1), Color.GOLDENROD, .5f));
 
@@ -124,6 +126,7 @@ public class GameUtil {
         colors.put("white", Color.WHITE);
         colors.put("wild", new LerpColor(Color.GOLDENROD, Color.PURPLE, .4f, Interpolation.bounceIn));
 
+        colors.put("yeet", new LerpColor(Color.RED, Color.ORANGE, .05f));
         colors.put("yellow", Color.YELLOW);
         colors.put("yo", new LerpColor(Color.BLACK, Color.YELLOW));
 

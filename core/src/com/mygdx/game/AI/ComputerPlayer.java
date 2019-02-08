@@ -189,8 +189,9 @@ public class ComputerPlayer implements Runnable {
             for (Tuple<Integer, Turn> turnValPair : orderedTurns) {
                 Turn t = turnValPair.value2;
                 //forgot a move -> skip
-                if (MathUtils.random() < forgetBestMoveChance)
+                if (MathUtils.random() < forgetBestMoveChance) {
                     continue;
+                }
 
                 BoardState newBoardState = board.copy().tryTurn(t);
                 // If the game is almost done, use a much smaller depth

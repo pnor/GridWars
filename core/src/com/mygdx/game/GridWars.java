@@ -231,11 +231,11 @@ public class GridWars extends Game {
 		Preferences preferences = Gdx.app.getPreferences(GridWarsPreferences.GRIDWARS_OPTIONS);
 
 		preferences.putBoolean(GridWarsPreferences.NOT_FIRST_TIME, true);
-		preferences.putBoolean(GridWarsPreferences.MOVE_ANIMATION, true);
-		preferences.putInteger(GridWarsPreferences.AI_TURN_SPEED, 1);
-		preferences.putBoolean(GridWarsPreferences.ANIMATE_BACKGROUND, true);
-		preferences.putFloat(GridWarsPreferences.MUSIC_VOLUME, .5f);
-		preferences.putFloat(GridWarsPreferences.SOUND_FX_VOLUME, .3f);
+		preferences.putBoolean(GridWarsPreferences.MOVE_ANIMATION, GridWarsPreferences.DEFAULT_MOVE_ANIMATION);
+		preferences.putInteger(GridWarsPreferences.AI_TURN_SPEED, GridWarsPreferences.DEFAULT_AI_TURN_SPEED);
+		preferences.putBoolean(GridWarsPreferences.ANIMATE_BACKGROUND, GridWarsPreferences.DEFAULT_ANIMATE_BACKGROUND);
+		preferences.putFloat(GridWarsPreferences.MUSIC_VOLUME, GridWarsPreferences.DEFAULT_MUSIC);
+		preferences.putFloat(GridWarsPreferences.SOUND_FX_VOLUME, GridWarsPreferences.DEFAULT_SOUND_FX);
 		preferences.flush();
 	}
 

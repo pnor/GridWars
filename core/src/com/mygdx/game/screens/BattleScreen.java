@@ -791,7 +791,7 @@ public class BattleScreen implements Screen {
 
         // During player turn and no Visuals
         if (!playingComputerTurn && Visuals.visualsArePlaying == 0) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) { //SHIFT : Next turn hotkey
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT)) { //SHIFT : Next turn hotkey
                 removeAttackTiles();
                 nextTurn();
             }

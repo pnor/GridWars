@@ -109,8 +109,8 @@ public class OptionsScreen extends MenuScreen implements Screen {
                     backgroundGroup.uncheckAll();
                     btnAnimateBackground.setChecked(true);
                     // Volume
-                    soundVolumeSlider.setValue(0.3f);
-                    volumeSlider.setValue(0.5f);
+                    soundVolumeSlider.setValue(GridWarsPreferences.DEFAULT_SOUND_FX);
+                    volumeSlider.setValue(GridWarsPreferences.DEFAULT_MUSIC);
                     GRID_WARS.soundManager.playSound(SoundInfo.POWER);
                 }
             }

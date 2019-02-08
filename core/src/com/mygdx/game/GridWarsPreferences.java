@@ -14,4 +14,10 @@ public class GridWarsPreferences {
     public static String SOUND_FX_VOLUME = "Sound FX Volume"; /** Sound Effects VOlume. Stores a float between 0 and 1 */
     public static String BEAT_THE_GAME = "Beat the Game"; /** Whether the player has beaten the game. Stores boolean */
     
+    // Default Values
+    public static boolean DEFAULT_MOVE_ANIMATION = true;
+    public static int DEFAULT_AI_TURN_SPEED = 1;
+    public static boolean DEFAULT_ANIMATE_BACKGROUND = true;
+    public static float DEFAULT_MUSIC = .5f;
+    public static float DEFAULT_SOUND_FX = .3f;
 }

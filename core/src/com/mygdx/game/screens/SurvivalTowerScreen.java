@@ -138,7 +138,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         param.size = 50;
         Label titleLbl = new Label("Tower Survival", new Label.LabelStyle(fontGenerator.generateFont(param), Color.WHITE));
         HoverButton btnRestore = new HoverButton("Restore", skin, Color.GRAY, Color.GREEN);
-        HoverButton btnSpUp = new HoverButton("SP UP", skin, Color.GRAY, Color.ORANGE);
+        HoverButton btnSpUp = new HoverButton("SP Up", skin, Color.GRAY, Color.ORANGE);
         HoverButton btnSpeedUp = new HoverButton("Speed +", skin, Color.GRAY, Color.CYAN);
         HoverButton btnPowerUp = new HoverButton("Power +", skin, Color.GRAY, Color.RED);
         HoverButton btnContinue = new HoverButton("Continue", skin, Color.WHITE, Color.GREEN);
@@ -193,7 +193,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 if (((Button) actor).isPressed()) {
                     if (actor == btnRestore) {
                         if (healingPowerUp > 0) {
-                            GRID_WARS.soundManager.playSound(SoundInfo.POWER, 1.3f, -999, -999);
+                            GRID_WARS.soundManager.playSound(SoundInfo.POWER);
                             healingPowerUp--;
                             lblHealthPower.setText("Remaining : " + healingPowerUp);
                             createParticleEffect(0);
@@ -329,13 +329,21 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         offsetTable.add(lblSPPower).colspan(2).size(80, 40).row();
         offsetTable.add(btnPowerUp).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
         offsetTable.add(lblPower).colspan(2).size(80, 40).row();
-        offsetTable.add(btnSpeedUp).colspan(2).size(100, 40).padBottom(20f).padRight(30f);
+        offsetTable.add(btnSpeedUp).colspan(2).size(100, 40).padBottom(30f).padRight(30f);
         offsetTable.add(lblSpeedUp).colspan(2).size(80, 40).row();
         //Save and Continue Buttons
         offsetTable.add(btnSave).colspan(2).size(170, 40).padRight(20);
         offsetTable.add(btnContinue).colspan(2).size(170, 40).row();
         table.add().padRight(200f);
         table.add(offsetTable);
+
+        //FIXME Mirrorman HOTFIX (can be a lot better done)
+        // Fixes situation where mirrorman can boost its base attack
+        for (Entity e : team.getEntities()) {
+            if (nm.get(e).serializeID == 12) {
+                stm.get(e).atk = 1;
+            }
+        }
 
         //set music
         if (level <= 30) {
@@ -844,8 +852,8 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         Color.WHITE,
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.guardTower(1),
-                                EntityConstructor.weakenTower(1),
                                 EntityConstructor.powerTower(1),
+                                EntityConstructor.guardTower(1),
                                 EntityConstructor.powerTower(1)
                         }));
                 //endregion
