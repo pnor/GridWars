@@ -216,8 +216,8 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
                 if (actor != null) {
                     GRID_WARS.soundManager.playSound(SoundInfo.SELECT);
                     if (actor == characterBtns.get(0)) {
-                        teams.get(curTeam).getEntities().add(EntityConstructor.blazePneuma(curTeam));
-                        //teams.get(curTeam).getEntities().add(EntityConstructor.canight(curTeam, altNumber));
+                        //teams.get(curTeam).getEntities().add(EntityConstructor.blazePneuma(curTeam));
+                        teams.get(curTeam).getEntities().add(EntityConstructor.canight(curTeam, altNumber));
                         characterPortraits.get(currentEntity).setDrawable(
                                 new TextureRegionDrawable(am.get(teams.get(curTeam).getEntities().peek()).actor.getSprite()));
                     } else if (actor == characterBtns.get(1)) {

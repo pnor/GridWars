@@ -3,6 +3,7 @@ package com.mygdx.game.highscores;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.mygdx.game.GameUtil;
+import com.mygdx.game.ui.LerpColor;
 import com.mygdx.game.rules_types.Team;
 
 import static com.mygdx.game.ComponentMappers.nm;
@@ -42,6 +43,11 @@ public class SaveData {
         speedPower = speedPowerUps;
         teamName = team.getTeamName();
         teamColor = team.getTeamColor();
+        // Handle Lerpcolors
+        if (teamColor instanceof LerpColor) {
+            System.out.println("CALLED");
+            ((LerpColor) teamColor).readyForSerialization();
+        }
         points = score;
         totalTurns = turns;
         floor = level;
@@ -49,6 +55,10 @@ public class SaveData {
     }
 
     public Team createTeam() {
+        // If it is a LerpColor, set up after being Serialized
+        if (teamColor instanceof LerpColor) {
+            ((LerpColor) teamColor).setInterpolationFromSerializationString();
+        }
         Team team = new Team(teamName, teamColor);
         for (int i = 0; i < stats.length; i++) {
             Entity member = GameUtil.getEntityFromID(IDValues[i], altColors[i]);

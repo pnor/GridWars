@@ -252,10 +252,6 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                                     survivalLerpColorManager, song, GRID_WARS));
                     } else if (actor == btnSave) {
                         StatusEffectComponent.setLerpColorManager(null);
-                        // Change LerpColor so its serializable by Json
-                        if (team.getTeamColor() instanceof LerpColor) {
-                            team.setTeamColor(((LerpColor) team.getTeamColor()).removeInterpolation());
-                        }
                         GRID_WARS.saveDataManager.setSavedData(new SaveData(team, healingPowerUp, spPowerUp, powerPowerUp, speedPowerUp, points, numberOfTurns, level));
                         GRID_WARS.saveDataManager.saveSavedData();
                         GRID_WARS.soundManager.playSound(SoundInfo.BACK);

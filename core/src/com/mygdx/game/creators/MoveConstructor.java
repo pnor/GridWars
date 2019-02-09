@@ -1018,7 +1018,6 @@ public class MoveConstructor {
                 beam.add(new LifetimeComponent(0, .26f));
                 beam.add(new EventComponent(0.02f, true, EventCompUtil.fadeOutAfter(7, 6)));
                 engine.addEntity(beam);
-                soundManager.playSound(SoundInfo.LASER, 1, 0, 0.2f);
             }
         }, .03f, 12);
 
@@ -1053,14 +1052,20 @@ public class MoveConstructor {
                     boom.add(new EventComponent(.04f, true, EventCompUtil.fadeOut(5)));
                     engine.addEntity(boom);
                 }
-                soundManager.playSound(SoundInfo.BOOM);
             }
         }, .01f, 1);
 
         VisualEvent explodeNoise = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
-                //soundManager.playSound(SoundInfo.BOOM);
+                soundManager.playSound(SoundInfo.BOOM);
+            }
+        }, 0f, 1);
+
+        VisualEvent laserNoise = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                soundManager.playSound(SoundInfo.LASER, 1, 0, 0.2f);
             }
         }, 0f, 1);
 
@@ -1075,8 +1080,8 @@ public class MoveConstructor {
                         if (vm.has(enemy) && vm.get(enemy).damageAnimation != null)
                             vm.get(enemy).damageAnimation.setPlaying(true, true);
                     }
-                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{laser, explodeNoise, explode})), new MoveInfo(false, 1));
+                }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0), new BoardPosition(-2, 0), new BoardPosition(-3, 0)}),
+                new Array<VisualEvent>(new VisualEvent[]{laserNoise, laser, explodeNoise, explode})), new MoveInfo(false, 1));
         move.setAttackDescription("Fires a laser beam that attacks all in its way. Deals regular damage.");
         return move;
     }

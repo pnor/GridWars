@@ -32,18 +32,20 @@ public class GameUtil {
         colors.put("black", Color.BLACK);
         colors.put("brown", Color.BROWN);
 
+        colors.put("canight", new LerpColor(Color.WHITE, Color.CYAN, 1f));
         colors.put("chartreuse", Color.CHARTREUSE);
         colors.put("clean", new LerpColor(Color.WHITE, new Color(0, 0.7f, 1, 1), Interpolation.bounceIn));
         colors.put("color wars", new LerpColor(Color.CYAN, Color.GOLD, 1f));
         colors.put("cool", new Color(10f / 255f, 1, 210f / 255f, 1f));
-        colors.put("cornell", new LerpColor(Color.RED, Color.WHITE, 0.4f));
+        colors.put("cornell", new LerpColor(Color.RED, Color.WHITE, 0.7f));
+        colors.put("crazy", new LerpColor(Color.RED, Color.YELLOW, 0.4f, Interpolation.elastic));
         colors.put("cyan", Color.CYAN);
-        colors.put("canight", new LerpColor(Color.WHITE, Color.CYAN, 1f));
 
         colors.put("dark gray", Color.DARK_GRAY);
         colors.put("darkness", new LerpColor(Color.BLACK, Color.CLEAR, 5f, Interpolation.bounce));
         colors.put("diatomic", new LerpColor(Color.RED, Color.BLUE, 5f));
         colors.put("dog", new LerpColor(Color.BROWN, Color.GOLDENROD, 5f, Interpolation.pow2InInverse));
+        colors.put("dream", new LerpColor(Color.CYAN, Color.PURPLE, 5f, Interpolation.pow5));
 
         colors.put("emma", new LerpColor(Color.RED, Color.LIGHT_GRAY, .4f, Interpolation.circleOut));
         colors.put("epic", new LerpColor(Color.RED, Color.BLACK, .1f, Interpolation.bounce));
@@ -126,9 +128,11 @@ public class GameUtil {
         colors.put("white", Color.WHITE);
         colors.put("wild", new LerpColor(Color.GOLDENROD, Color.PURPLE, .4f, Interpolation.bounceIn));
 
-        colors.put("yeet", new LerpColor(Color.RED, Color.ORANGE, .05f));
+        colors.put("yeet", new LerpColor(Color.RED, Color.ORANGE, .05f, Interpolation.bounceOut));
         colors.put("yellow", Color.YELLOW);
         colors.put("yo", new LerpColor(Color.BLACK, Color.YELLOW));
+
+        colors.put("zoo", new LerpColor(Color.BROWN, new Color(0.2f, 0.75f, 1, 1), 1.1f, Interpolation.swingOut));
 
         return colors;
     }

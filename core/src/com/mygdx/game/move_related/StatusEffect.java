@@ -107,6 +107,14 @@ public class StatusEffect {
     }
 
     /**
+     * @return true if the status effect only has 1 turn left of duration. (Used <br>
+     * in {@link Rules} for Petrification and Freeze)
+     */
+    public boolean getIsCloseToFinshing() {
+        return currentTurn + 1 >= DURATION;
+    }
+
+    /**
      * Class for the stat changes a {@link StatusEffect} causes.
      */
     public class StatChanges {

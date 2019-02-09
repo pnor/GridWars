@@ -52,6 +52,10 @@ public class StatusEffectComponent implements Component {
         return statusEffects.containsKey(key);
     }
 
+    public StatusEffect getStatusEffect(String key) {
+        return statusEffects.get(key);
+    }
+
     public void removeAll(Entity e) {
         for (StatusEffect effect : statusEffects.values())
             effect.doEndEffect(e);

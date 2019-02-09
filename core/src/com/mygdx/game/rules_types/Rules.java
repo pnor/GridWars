@@ -3,8 +3,10 @@ package com.mygdx.game.rules_types;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.components.BoardComponent;
+import com.mygdx.game.components.StatusEffectComponent;
 import com.mygdx.game.misc.Phase;
 import com.mygdx.game.move_related.StatusEffect;
+import com.badlogic.gdx.utils.OrderedMap;
 import com.mygdx.game.screens.BattleScreen;
 
 import static com.mygdx.game.ComponentMappers.*;
@@ -89,9 +91,21 @@ public abstract class Rules {
 
                 //toggle states
                 if (state.has(e)) {
-                    state.get(e).canAttack = true; //TODO make it not redundant
-                    if (status.has(e) && (status.get(e).contains("Freeze") || status.get(e).contains("Petrify")))
-                        state.get(e).canAttack = false;
+                    state.get(e).canAttack = true;
+                    // Disable attacking if those status effects have more than 1 turn
+                    /* If it only has 1 turn, then the status effect will resolve while still
+                    rendering the entity unable to attack */
+                    if (status.has(e)) {
+                        StatusEffectComponent statusEffectComp = status.get(e);
+                        boolean freezeCriteria = statusEffectComp.contains("Freeze") && 
+                            !statusEffectComp.getStatusEffect("Freeze").getIsCloseToFinshing();
+                        boolean petrifyCriteria = statusEffectComp.contains("Petrify") && 
+                            !statusEffectComp.getStatusEffect("Petrify").getIsCloseToFinshing();
+
+                        if (freezeCriteria || petrifyCriteria) {
+                            state.get(e).canAttack = false;
+                        }
+                    }
                     state.get(e).canMove = true;
                     if (!screen.checkShading(e))
                         screen.shadeBasedOnState(e);
