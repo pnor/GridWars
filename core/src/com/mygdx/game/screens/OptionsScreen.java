@@ -123,6 +123,17 @@ public class OptionsScreen extends MenuScreen implements Screen {
         confirmationBox.add(btnBack).size(80, 50).padRight(30);
         confirmationBox.add(btnOK).size(80, 50);
 
+        // Delete Data Dialog Confirmation
+        Dialog eraseDataDialog = new Dialog("Warning", skin, "dialog") {
+            public void result(Object obj) {
+                btnEraseAll.setChecked((Boolean) obj);
+            }
+        };
+        eraseDataDialog.text("Are you sure you want to delete all saved data? This includes" + 
+            " High Score data and all Survival Progress.");
+        eraseDataDialog.button("Yes", true);
+        eraseDataDialog.button("No", false);
+
         ChangeListener listener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -169,12 +180,15 @@ public class OptionsScreen extends MenuScreen implements Screen {
                         preferences.flush();
                         GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
 
+                    } else if (actor == btnEraseAll) {
+                        eraseDataDialog.show(GRID_WARS.stage);
                     }
                 }
             }
         };
         btnOK.addListener(listener);
         btnBack.addListener(listener);
+        btnEraseAll.addListener(listener);
 
         table.add();
         table.add().row();
@@ -201,9 +215,9 @@ public class OptionsScreen extends MenuScreen implements Screen {
         musicGroup.add(soundVolumeSlider).row();
         table.add(musicGroup).colspan(2).padBottom(30).row();
         Table dataGroup = new Table();
-        dataGroup.add(btnDefaults).size(140, 50).padBottom(85).row();
+        dataGroup.add(btnDefaults).size(140, 50).padBottom(45).row();
         dataGroup.add(btnEraseAll).size(110, 35);
-        table.add(dataGroup).colspan(2).padBottom(85).row();
+        table.add(dataGroup).colspan(2).padBottom(45).row();
         table.add(btnBack).size(90, 50);
         table.add(btnOK).size(90, 50);
         
