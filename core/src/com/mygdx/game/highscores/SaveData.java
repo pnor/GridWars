@@ -45,7 +45,6 @@ public class SaveData {
         teamColor = team.getTeamColor();
         // Handle Lerpcolors
         if (teamColor instanceof LerpColor) {
-            System.out.println("CALLED");
             ((LerpColor) teamColor).readyForSerialization();
         }
         points = score;
@@ -80,6 +79,13 @@ public class SaveData {
             altColors[index] = nm.get(e).altColor;
             index++;
         }
+    }
+
+    /**  Changes team color to a default (White). Used to prevent crashes due to potential <br>
+     * Serialization errors cuased by LerpColors. (Like when force quitting in Survival)
+    */
+    public void clearColor() {
+        teamColor = Color.WHITE;
     }
 
     public void setLoadable(boolean loadable) {

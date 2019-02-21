@@ -43,6 +43,7 @@ public class GameUtil {
 
         colors.put("dark gray", Color.DARK_GRAY);
         colors.put("darkness", new LerpColor(Color.BLACK, Color.CLEAR, 5f, Interpolation.bounce));
+        colors.put("day", new LerpColor(new Color(1, 238f / 255f, 0, 1), new Color(1, 212f / 255f, 0, 1), 1f, Interpolation.exp10In));
         colors.put("diatomic", new LerpColor(Color.RED, Color.BLUE, 5f));
         colors.put("dog", new LerpColor(Color.BROWN, Color.GOLDENROD, 5f, Interpolation.pow2InInverse));
         colors.put("dream", new LerpColor(Color.CYAN, Color.PURPLE, 5f, Interpolation.pow5));
@@ -87,6 +88,7 @@ public class GameUtil {
 
         colors.put("neat", new Color(1, 243f / 255f, 232f / 255f, 1f));
         colors.put("neon", new Color(5f / 255f, 239f / 255f, 159f / 255f, 1f));
+        colors.put("night", new LerpColor(new Color(0, 4f / 255f, 96f / 255f, 1), Color.BLACK, 1f, Interpolation.exp10In));
         colors.put("noble", new LerpColor(new Color(1, 243f / 255f, 232f / 255, 1), Color.WHITE, 3f));
 
         colors.put("orange", Color.ORANGE);
@@ -114,6 +116,7 @@ public class GameUtil {
         colors.put("sky", Color.SKY);
         colors.put("slate", Color.SLATE);
         colors.put("smokey", new LerpColor(new Color(1, 0, 0, 1), new Color(.1f, .01f, 0, 1), 5f));
+        colors.put("sunset", new LerpColor(new Color(194f / 255f, 91f / 255f, 35f / 255f, 1), new Color(48f / 255f, 11f / 255f, 8f / 255f, 1), 1f, Interpolation.exp10In));
 
         colors.put("tan", Color.TAN);
         colors.put("teal", Color.TEAL);
@@ -128,7 +131,7 @@ public class GameUtil {
         colors.put("white", Color.WHITE);
         colors.put("wild", new LerpColor(Color.GOLDENROD, Color.PURPLE, .4f, Interpolation.bounceIn));
 
-        colors.put("yeet", new LerpColor(Color.RED, Color.ORANGE, .05f, Interpolation.bounceOut));
+        colors.put("yeet", new LerpColor(Color.RED, Color.ORANGE, 0.25f, Interpolation.bounceIn));
         colors.put("yellow", Color.YELLOW);
         colors.put("yo", new LerpColor(Color.BLACK, Color.YELLOW));
 

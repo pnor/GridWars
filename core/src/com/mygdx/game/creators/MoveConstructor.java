@@ -3590,15 +3590,15 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{
                         ions, doNothing, rippleOut.copy(), shocking.copy(), rippleOut, shocking})),
                 new MoveInfo(false, 1, (enemy, userEntity) -> {
-                    if (MathUtils.randomBoolean(.6f) && enemy.acceptsStatusEffects) {
+                    if (MathUtils.randomBoolean(.5f) && enemy.acceptsStatusEffects) {
                         enemy.statusEffectInfos.add(paralyze(3).createStatusEffectInfo());
                     }
-                    if (MathUtils.randomBoolean(.6f) && enemy.acceptsStatusEffects) {
+                    if (MathUtils.randomBoolean(.5f) && enemy.acceptsStatusEffects) {
                         enemy.statusEffectInfos.add(defenseless(3).createStatusEffectInfo());
                     }
                 })
         );
-        move.setAttackDescription("Causes a shower of electricity to rain near the user. Deals regular damage, and has an 60% chance to inflict targets with" +
+        move.setAttackDescription("Causes a shower of electricity to rain near the user. Deals regular damage, and has an 50% chance to inflict targets with" +
         " paralysis and/or defenseless for 3 turns.");
         return move;
     }
@@ -15787,6 +15787,7 @@ public class MoveConstructor {
 
     public static Move stealSkill(Entity user) {
         VisualEvent slashes = new VisualEvent(new VisualEffect() {
+            int timesCalled = 0;
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
@@ -15796,6 +15797,7 @@ public class MoveConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
+                timesCalled++;
                 Vector2 entitySize = new Vector2(15 * scale, 15 * scale);
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
                 tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
@@ -15812,7 +15814,9 @@ public class MoveConstructor {
                                 atlas.findRegion("vertslash4")},
                         Animation.PlayMode.NORMAL));
                 engine.addEntity(boom);
-                soundManager.playSound(SoundInfo.CLAW, 2, 0, 0.6f);
+                if (timesCalled % 3 == 0) {
+                    soundManager.playSound(SoundInfo.CLAW, 2, 0, 0.6f);
+                }
             }
         }, .01f, 3);
 
@@ -15932,6 +15936,7 @@ public class MoveConstructor {
 
     public static Move stealHealth(Entity user) {
         VisualEvent slashes = new VisualEvent(new VisualEffect() {
+            int timesCalled = 0;
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
                 BoardPosition bp = targetPositions.get(0).add(bm.get(user).pos.r, bm.get(user).pos.c);
@@ -15941,6 +15946,7 @@ public class MoveConstructor {
                 } catch (IndexOutOfBoundsException e) {
                     return;
                 }
+                timesCalled++;
                 Vector2 entitySize = new Vector2(15 * scale, 15 * scale);
                 Vector2 tilePosition = t.localToStageCoordinates(new Vector2(0, 0));
                 tilePosition.add(BoardComponent.boards.getTileWidth() / 2 - entitySize.x / 2f,
@@ -15958,7 +15964,9 @@ public class MoveConstructor {
                         Color.GREEN,
                         Animation.PlayMode.NORMAL));
                 engine.addEntity(boom);
-                soundManager.playSound(SoundInfo.CLAW, 1.4f, 0, 0.9f);
+                if (timesCalled % 3 == 0) {
+                    soundManager.playSound(SoundInfo.CLAW, 1.4f, 0, 0.9f);
+                }
             }
         }, .01f, 3);
 

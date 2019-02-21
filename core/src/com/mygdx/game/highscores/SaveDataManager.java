@@ -54,6 +54,7 @@ public class SaveDataManager {
      */
     public void makeFileUnloadable() {
         savedData.setLoadable(false);
+        savedData.clearColor();
         sameAsFile = false;
     }
 
