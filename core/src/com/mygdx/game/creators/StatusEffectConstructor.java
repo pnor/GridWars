@@ -218,6 +218,12 @@ public class StatusEffectConstructor {
         return effect;
     }
 
+    public static StatusEffect tailWind(int duration) {
+        StatusEffect effect = new StatusEffect("Foehn", duration, new LerpColor(Color.CYAN, Color.ORANGE, .25f, Interpolation.fade), (e) -> {/*nothing*/}, null);
+        effect.setStatChanges(1, 1, 1, 1, 2);
+        return effect;
+    }
+
     public static StatusEffect speedUp2(int duration) {
         StatusEffect effect = new StatusEffect("Quick II", duration, new LerpColor(Color.WHITE, Color.CYAN, .5f, Interpolation.fade), (e) -> {/*nothing*/}, null);
         effect.setStatChanges(1, 1, 1, 1, 3);

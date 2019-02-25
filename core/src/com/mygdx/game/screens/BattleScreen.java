@@ -383,6 +383,7 @@ public class BattleScreen implements Screen {
                         if (actor == attackBtn1) {
                             if (mvm.get(selectedEntity).moveList.get(0).spCost() > stm.get(selectedEntity).sp) {
                                 infoLbl.setText("Not enough SP!");
+                                GRID_WARS.soundManager.playSound(SoundInfo.BACK, 0.7f, 0, 1);
                                 return;
                             }
                             mvm.get(selectedEntity).moveList.get(0).useAttack();
@@ -391,6 +392,7 @@ public class BattleScreen implements Screen {
                         } else if (actor == attackBtn2) {
                             if (mvm.get(selectedEntity).moveList.get(1).spCost() > stm.get(selectedEntity).sp) {
                                 infoLbl.setText("Not enough SP!");
+                                GRID_WARS.soundManager.playSound(SoundInfo.BACK, 0.7f, 0, 1);
                                 return;
                             }
                             mvm.get(selectedEntity).moveList.get(1).useAttack();
@@ -399,6 +401,7 @@ public class BattleScreen implements Screen {
                         } else if (actor == attackBtn3) {
                             if (mvm.get(selectedEntity).moveList.get(2).spCost() > stm.get(selectedEntity).sp) {
                                 infoLbl.setText("Not enough SP!");
+                                GRID_WARS.soundManager.playSound(SoundInfo.BACK, 0.7f, 0, 1);
                                 return;
                             }
                             mvm.get(selectedEntity).moveList.get(2).useAttack();
@@ -407,6 +410,7 @@ public class BattleScreen implements Screen {
                         } else if (actor == attackBtn4) {
                             if (mvm.get(selectedEntity).moveList.get(3).spCost() > stm.get(selectedEntity).sp) {
                                 infoLbl.setText("Not enough SP!");
+                                GRID_WARS.soundManager.playSound(SoundInfo.BACK, 0.7f, 0, 1);
                                 return;
                             }
                             mvm.get(selectedEntity).moveList.get(3).useAttack();

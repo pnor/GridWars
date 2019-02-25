@@ -97,6 +97,7 @@ public class GameUtil {
         colors.put("pink", Color.PINK);
         colors.put("psi", new LerpColor(Color.PURPLE, new Color(0, 1, 1, 0), 1f, Interpolation.bounceIn));
         colors.put("purple", Color.PURPLE);
+        colors.put("python", new LerpColor(new Color(54f / 255f, 105f / 255f, 148f / 255f, 1f), new Color(1, 195f / 255f, 49f / 255f, 1f), 1f));
 
         colors.put("radiant", new LerpColor(Color.YELLOW, Color.ORANGE, .2f));
         colors.put("random", new LerpColor(new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), MathUtils.random(.3f, 3)));
@@ -117,6 +118,7 @@ public class GameUtil {
         colors.put("slate", Color.SLATE);
         colors.put("smokey", new LerpColor(new Color(1, 0, 0, 1), new Color(.1f, .01f, 0, 1), 5f));
         colors.put("sunset", new LerpColor(new Color(194f / 255f, 91f / 255f, 35f / 255f, 1), new Color(48f / 255f, 11f / 255f, 8f / 255f, 1), 1f, Interpolation.exp10In));
+        colors.put("swift", new LerpColor(new Color(253f / 255f, 123f / 255f, 27f / 255f, 1f), new Color(1, 1, 241f / 255f, 1f), 1f));
 
         colors.put("tan", Color.TAN);
         colors.put("teal", Color.TEAL);

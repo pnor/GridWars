@@ -33,7 +33,7 @@ public class ComputerPlayer implements Runnable {
     private byte progress = 0;
     private Array<Turn> decidedTurns;
     private int teamControlled;
-    private Array<Array<BoardPosition>> zoneLocations;
+    private Array<Array<BoardPosition>> zoneLocations; /** To win, Entities land on their team's zone */
     private BoardState currentBoardState;
 
     private BoardManager boards;
@@ -290,6 +290,26 @@ public class ComputerPlayer implements Runnable {
                 return -9999999 + depth * 30;
         }
 
+        // Zone Rules: If it's on a zone -> Don't Evaluate Turns after that
+        if (zoneLocations != null) {
+            for (int i = 0; i < zoneLocations.size; i++) {
+                for (BoardPosition zone : zoneLocations.get(i)) {
+                    if (board.getEntities().get(zone) != null) { // Base Win Condition
+                        //System.out.println("Zone: " + zone + " has someone");
+                        if (teamControlled == i && i == board.getEntities().get(zone).team) { // ?? team Controlled win
+                            System.out.println("(We) TeamController: " + teamControlled + " |Entity team: " + board.getEntities().get(zone).team + "  |Zone Team: " + i);
+                            return board.evaluate(team) + 9000;
+                            //return -9999999 + depth * 30;
+                        } else if (teamControlled != i && i == board.getEntities().get(zone).team) { // ?? enemy win
+                            System.out.println("(Player)     TeamController= " + teamControlled + " |Entity team: " + board.getEntities().get(zone).team + "  |Zone Team: " + i);
+                            return board.evaluate(team) + 9000;
+                            //return 9999999 - depth * 30;
+                        }
+                    }
+                }
+            }
+        }
+
         // check alive
         if (board.getEntities().containsKey(entityTeamPairings.get(curEntityIndex).entity)) {
             inBoard = true;
@@ -316,21 +336,6 @@ public class ComputerPlayer implements Runnable {
             else
                 return -getTurnValNegamax(board.copy(), entityTeamPairings.get(nextIndex).team, processedEntityIndex,
                         nextIndex, depth, endDepth, skipTeammates, alpha, beta);
-        }
-
-        // Zone Rules: If it's on a zone -> Don't Evaluate Turns after that
-        if (zoneLocations != null) {
-            for (int i = 0; i < zoneLocations.size; i++) {
-                for (BoardPosition zone : zoneLocations.get(i)) {
-                    if (board.getEntities().get(zone) != null && board.getEntities().get(zone).team == teamControlled) { // Base Win Condition
-                        if (teamControlled == board.getEntities().get(zone).team) { // team Controlled win
-                            return board.evaluate(team) + 100000;
-                        } else if (teamControlled != board.getEntities().get(zone).team) { // enemy win
-                            return board.evaluate(team) - 100000;
-                        }
-                    }
-                }
-            }
         }
 
         // Negamax
@@ -746,7 +751,7 @@ public class ComputerPlayer implements Runnable {
             case HARD:
                 setGetFirstAttackAlways(false);
                 depthLevel = 2;
-                forgetBestMoveChance = .1f;
+                forgetBestMoveChance = 0;//.1f;
                 randomizeDepthLevel = false;
         }
     }

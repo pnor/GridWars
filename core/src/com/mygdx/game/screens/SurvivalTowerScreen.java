@@ -550,8 +550,8 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                         Color.RED,
                         new Array<Entity>(new Entity[] {
                                 EntityConstructor.blueSword(1),
-                                EntityConstructor.blueSword(1),
-                                EntityConstructor.blueSword(1),
+                                EntityConstructor.chemMan(1),
+                                EntityConstructor.chemMan(1),
                                 EntityConstructor.blueSword(1)
                         }));
             case 24 :
@@ -864,13 +864,17 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         else if (level >= 1 && level <= 9)
             return new Song(SongInfo.STAGE_THEME);
         // level 11-19
-        else if (level == 13 || level == 15 || level == 17 || level == 18)
+        else if (level == 13 || level == 17)
+            return new Song(SongInfo.STAGE_ALT_1);
+        else if (level == 12 || level == 15 || level == 18 || level == 19)
             return new Song(SongInfo.STAGE_ALT_2);
         else if (level >= 11 && level <= 19)
             return new Song(SongInfo.STAGE_THEME_4);
         // level 21-29
-        else if (level == 24 || level == 25 || level == 27 || level == 29)
+        else if (level == 24 || level == 27)
             return new Song(SongInfo.STAGE_THEME_3);
+        else if (level == 25 || level == 29)
+            return new Song(SongInfo.STAGE_ALT_2);
         else if (level >= 21 && level <= 29)
             return new Song(SongInfo.STAGE_THEME_2);
         // level 31-39

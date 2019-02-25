@@ -1700,18 +1700,18 @@ public class MoveConstructor {
             }
         }, .2f, 2);
 
-        Move move = new Move("Tailwind", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
+        Move move = new Move("Tailwind", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
 
                         if (status.has(enemy))
-                            status.get(enemy).addStatusEffect(speedUp(1), enemy);
+                            status.get(enemy).addStatusEffect(tailWind(1), enemy);
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, -1)}),
-                new Array<VisualEvent>(new VisualEvent[]{windNoise, largeSparkle, sparkle, largeSparkle.copy(), sparkle.copy(), buffNoise})), new MoveInfo(false, 0, speedUp(1).createStatusEffectInfo()));
-        move.setAttackDescription("Summons a supportive tailwind to help the target's mobility. Increases the target's speed for 1 turn.");
+                new Array<VisualEvent>(new VisualEvent[]{windNoise, largeSparkle, sparkle, largeSparkle.copy(), sparkle.copy(), buffNoise})), new MoveInfo(false, 0, tailWind(1).createStatusEffectInfo()));
+        move.setAttackDescription("Summons a supportive tailwind to help the target's mobility. Increases the target's speed for 1 turn. (Stacks on other speed boosts)");
         return move;
     }
 
@@ -3361,7 +3361,7 @@ public class MoveConstructor {
                     }
                 }
             }
-        }, .02f, 90);
+        }, .02f, 50);
 
         VisualEvent largeSparkle = new VisualEvent(new VisualEffect() {
             private float direction;
