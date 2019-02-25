@@ -292,18 +292,14 @@ public class ComputerPlayer implements Runnable {
 
         // Zone Rules: If it's on a zone -> Don't Evaluate Turns after that
         if (zoneLocations != null) {
-            for (int i = 0; i < zoneLocations.size; i++) {
+            for (int i = 0; i < zoneLocations.size; i++) { // i is which team's zones is being processeds
                 for (BoardPosition zone : zoneLocations.get(i)) {
                     if (board.getEntities().get(zone) != null) { // Base Win Condition
-                        //System.out.println("Zone: " + zone + " has someone");
-                        if (teamControlled == i && i == board.getEntities().get(zone).team) { // ?? team Controlled win
-                            System.out.println("(We) TeamController: " + teamControlled + " |Entity team: " + board.getEntities().get(zone).team + "  |Zone Team: " + i);
+                        if (teamControlled == i && i == board.getEntities().get(zone).team) { // team Controlled win
                             return board.evaluate(team) + 9000;
-                            //return -9999999 + depth * 30;
-                        } else if (teamControlled != i && i == board.getEntities().get(zone).team) { // ?? enemy win
-                            System.out.println("(Player)     TeamController= " + teamControlled + " |Entity team: " + board.getEntities().get(zone).team + "  |Zone Team: " + i);
-                            return board.evaluate(team) + 9000;
-                            //return 9999999 - depth * 30;
+                        } else if (teamControlled != i && i == board.getEntities().get(zone).team) { // enemy win
+                            System.out.println("(Player) TeamController: " + teamControlled + " |Entity team: " + board.getEntities().get(zone).team + "  |Zone Team: " + i);
+                            return board.evaluate(team) - 9000;
                         }
                     }
                 }
@@ -751,7 +747,7 @@ public class ComputerPlayer implements Runnable {
             case HARD:
                 setGetFirstAttackAlways(false);
                 depthLevel = 2;
-                forgetBestMoveChance = 0;//.1f;
+                forgetBestMoveChance = .1f;
                 randomizeDepthLevel = false;
         }
     }
