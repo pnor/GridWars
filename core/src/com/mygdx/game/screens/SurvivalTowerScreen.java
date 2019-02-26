@@ -194,6 +194,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                     if (actor == btnRestore) {
                         if (healingPowerUp > 0) {
                             GRID_WARS.soundManager.playSound(SoundInfo.POWER);
+                            btnRestore.setDisabled(true);
                             healingPowerUp--;
                             lblHealthPower.setText("Remaining : " + healingPowerUp);
                             createParticleEffect(0);
@@ -204,9 +205,12 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                             for (Image image : teamImages) {
                                 image.setColor(Color.WHITE);
                             } 
+                        } else {
+                            GRID_WARS.soundManager.playSound(SoundInfo.BACK);
                         }
                     } else if (actor == btnSpUp) {
                         if (spPowerUp > 0) {
+                            btnSpUp.setDisabled(true);
                             GRID_WARS.soundManager.playSound(SoundInfo.POWER);
                             spPowerUp--;
                             lblSPPower.setText("Remaining : " + spPowerUp);
@@ -214,10 +218,13 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                             for (Entity e : team.getEntities()) {
                                 stm.get(e).sp = stm.get(e).getModMaxSp(e);
                             }
+                        } else {
+                            GRID_WARS.soundManager.playSound(SoundInfo.BACK);
                         }
                     } else if (actor == btnPowerUp) {
                         if (powerPowerUp > 0) {
                             GRID_WARS.soundManager.playSound(SoundInfo.POWER);
+                            btnPowerUp.setDisabled(true);
                             powerPowerUp--;
                             lblPower.setText("Remaining : " + powerPowerUp);
                             createParticleEffect(2);
@@ -225,10 +232,13 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                                 if (status.has(e))
                                     status.get(e).addStatusEffect(StatusEffectConstructor.attackUp(3), e);
                             }
+                        } else {
+                            GRID_WARS.soundManager.playSound(SoundInfo.BACK);
                         }
                     } else if (actor == btnSpeedUp) {
                         if (speedPowerUp > 0) {
                             GRID_WARS.soundManager.playSound(SoundInfo.POWER);
+                            btnSpeedUp.setDisabled(true);
                             speedPowerUp--;
                             lblSpeedUp.setText("Remaining : " + speedPowerUp);
                             createParticleEffect(3);
@@ -236,6 +246,8 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                                 if (status.has(e))
                                     status.get(e).addStatusEffect(StatusEffectConstructor.speedUp(3), e);
                             }
+                        } else {
+                            GRID_WARS.soundManager.playSound(SoundInfo.BACK);
                         }
                     } else if (actor == btnContinue) {
                         GRID_WARS.soundManager.playSound(SoundInfo.CONFIRM);
@@ -859,18 +871,22 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
 
     private Song getFloorLevelSong() {
         // level 1-9
-        if (level == 5 || level == 8 || level == 9)
+        if (level == 5 || level == 8)
             return new Song(SongInfo.STAGE_ALT_1);
         else if (level >= 1 && level <= 9)
             return new Song(SongInfo.STAGE_THEME);
         // level 11-19
         else if (level == 13 || level == 17)
             return new Song(SongInfo.STAGE_ALT_1);
-        else if (level == 12 || level == 15 || level == 18 || level == 19)
+        else if (level == 12 || level == 15 || level == 18)
             return new Song(SongInfo.STAGE_ALT_2);
+        else if (level == 19) 
+            return new Song(SongInfo.STAGE_THEME);
         else if (level >= 11 && level <= 19)
             return new Song(SongInfo.STAGE_THEME_4);
         // level 21-29
+        else if (level == 23)
+            return new Song(SongInfo.STAGE_THEME);
         else if (level == 24 || level == 27)
             return new Song(SongInfo.STAGE_THEME_3);
         else if (level == 25 || level == 29)

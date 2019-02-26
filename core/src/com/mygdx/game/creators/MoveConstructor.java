@@ -5457,7 +5457,7 @@ public class MoveConstructor {
             }
         }, .05f, 1);
 
-        Move move = new Move("Restore", user, 2, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
+        Move move = new Move("Restore", user, 1, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Attack() {
                     @Override
                     public void effect(Entity e, BoardPosition bp) {
@@ -5608,10 +5608,10 @@ public class MoveConstructor {
                 new Array<VisualEvent>(new VisualEvent[]{changeToGreen, regenParticles1, regenParticles2, returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
                 if (enemy.acceptsStatusEffects)
-                    enemy.statusEffectInfos.add(regeneration(3).createStatusEffectInfo());
+                    enemy.statusEffectInfos.add(regeneration(4).createStatusEffectInfo());
                 })
         );
-        move.setAttackDescription("Uses heated water to slowly heal wounds over time. Gives the target Regeneration for 3 turns.");
+        move.setAttackDescription("Uses heated water to slowly heal wounds over time. Gives the target Regeneration for 4 turns.");
         return move;
     }
 
@@ -6568,6 +6568,13 @@ public class MoveConstructor {
             }
         }, .01f, 1);
 
+        VisualEvent soundFXEnd = new VisualEvent(new VisualEffect() {
+            @Override
+            public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
+                soundManager.playSound(SoundInfo.BOOST_WAVE);
+            }
+        }, .01f, 1);
+
         VisualEvent fire = new VisualEvent(new VisualEffect() {
             @Override
             public void doVisuals(Entity user, Array<BoardPosition> targetPositions) {
@@ -6761,7 +6768,6 @@ public class MoveConstructor {
 
                 Entity enemy = boards.getCodeBoard().get(bp.r, bp.c);
                 am.get(enemy).actor.shade(BattleScreen.getShadeColorBasedOnState(enemy));
-                soundManager.playSound(SoundInfo.BOOST_WAVE);
             }
         }, .05f, 1);
 
@@ -6772,12 +6778,16 @@ public class MoveConstructor {
                     public void effect(Entity e, BoardPosition bp) {
                         Entity enemy = BoardComponent.boards.getCodeBoard().get(bp.r, bp.c);
                         stm.get(enemy).hp = stm.get(enemy).maxHP;
+                        stm.get(enemy).sp += 2;
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
-                new Array<VisualEvent>(new VisualEvent[]{soundFXInitial, changeToBlack, fire, soundFXMid, sparkles, smallBooms, explodeBig,
-                        sparkleUp, returnToNormalGradual, returnToNormal})),
-                new MoveInfo(false, 0, (entity, userEntity) -> userEntity.hp = userEntity.maxHp));
-        move.setAttackDescription("Uses a large amount of spare energy to grant the target life energy. Heals all of the target's health points.");
+                new Array<VisualEvent>(new VisualEvent[]{soundFXInitial, changeToBlack, fire, soundFXMid, sparkles, soundFXEnd.copy(), smallBooms, explodeBig,
+                        sparkleUp, soundFXEnd, returnToNormalGradual, returnToNormal})),
+                new MoveInfo(false, 0, (entity, userEntity) -> {
+                    userEntity.hp = userEntity.maxHp;
+                    userEntity.sp += 2;
+                }));
+        move.setAttackDescription("Uses a large amount of spare energy to grant the target life energy. Heals all of the target's health points and increases their SP by 2.");
         return move;
     }
 
@@ -7299,32 +7309,34 @@ public class MoveConstructor {
                                 if (chance <= .25f) { // 25%
                                     status.get(enemy).addStatusEffect(attackUp(2), enemy);
                                 } else if (chance > .25f && chance <= .5f) { // 25%
-                                    status.get(enemy).addStatusEffect(speedUp(2), enemy);
+                                    status.get(enemy).addStatusEffect(speedUp(MathUtils.random(2, 4)), enemy);
                                 } else if (chance > .5f && chance <= .75f) { // 25%
                                     status.get(enemy).addStatusEffect(guardUp(2), enemy);
                                 } else { //remaining 25%: splits into more trees:
                                     chance = (float) Math.random();
                                     if (chance <= .33f) { // 33%
                                         status.get(enemy).addStatusEffect(attackUp3(2), enemy);
+                                        status.get(enemy).addStatusEffect(guardUp2(2), enemy);
+                                        status.get(enemy).addStatusEffect(speedUp2(2), enemy);
                                     } else if (chance > .33f && chance <= .66f) { // 33%
                                         status.get(enemy).addStatusEffect(attackUp2(2), enemy);
                                         status.get(enemy).addStatusEffect(guardUp2(2), enemy);
                                     } else if (chance > .66f && chance <= .86f) { // 20%
-                                        status.get(enemy).addStatusEffect(attackUp(2), enemy);
-                                        status.get(enemy).addStatusEffect(guardUp(2), enemy);
-                                        status.get(enemy).addStatusEffect(speedUp(2), enemy);
+                                        status.get(enemy).addStatusEffect(healthUp(4), enemy);
+                                        status.get(enemy).addStatusEffect(regenerationPlus(4), enemy);
+                                        status.get(enemy).addStatusEffect(regeneration(4), enemy);
                                     } else if (chance > .86f && chance <= .9f) { // 4%
-                                        status.get(enemy).addStatusEffect(spUp(2), enemy);
-                                        status.get(enemy).addStatusEffect(speedUp2(2), enemy);
+                                        status.get(enemy).addStatusEffect(spUp(3), enemy);
+                                        status.get(enemy).addStatusEffect(speedUp2(3), enemy);
                                     } else if (chance > .9f && chance < .95f){ // 5%
                                         status.get(enemy).addStatusEffect(supercharged(2), enemy);
-                                    } else {
+                                    } else { // 5%
                                         status.get(enemy).removeAll(enemy);
                                     }
                                 }
                             } else { //another tree of possible effects (more harmful/unpredictable)
                                 if (chance <= .15f) { // 15%
-                                    status.get(enemy).addStatusEffect(burn(2), enemy);
+                                    status.get(enemy).addStatusEffect(burn(MathUtils.random(2, 4)), enemy);
                                 } else if (chance > .15f && chance <= .3f) { // 15%
                                     status.get(enemy).addStatusEffect(petrify(2), enemy);
                                 } else if (chance > .3f && chance <= .45f) { // 15%
@@ -7332,19 +7344,17 @@ public class MoveConstructor {
                                 } else { //remaining 25%: splits into more trees:
                                     chance = (float) Math.random();
                                     if (chance <= .33f) { // 33%
-                                        status.get(enemy).addStatusEffect(attackUp3(2), enemy);
-                                        status.get(enemy).addStatusEffect(guardUp2(2), enemy);
-                                        status.get(enemy).addStatusEffect(speedUp2(2), enemy);
                                         status.get(enemy).addStatusEffect(toxic(2), enemy);
+                                        status.get(enemy).addStatusEffect(shivers(2), enemy);
                                     } else if (chance > .33f && chance <= .66f) { // 33%
-                                        status.get(enemy).addStatusEffect(unstable(2), enemy);
+                                        status.get(enemy).addStatusEffect(unstable(MathUtils.random(2, 5)), enemy);
                                     } else if (chance > .66f && chance <= .72f) { // 6%
                                         status.get(enemy).addStatusEffect(exhausted(2), enemy);
                                     } else if (chance > .72f && chance <= .86f) { // 14%
                                         status.get(enemy).addStatusEffect(berserk(2), enemy);
                                     } else if (chance > .86f && chance <= .88f) { // 3%
-                                        status.get(enemy).addStatusEffect(unstable(2), enemy);
-                                        status.get(enemy).addStatusEffect(supercharged(2), enemy);
+                                        status.get(enemy).addStatusEffect(slowness(2), enemy);
+                                        status.get(enemy).addStatusEffect(inept(2), enemy);
                                     } else if (chance > .88f && chance < .9f) { // 1%
                                         status.get(enemy).addStatusEffect(supercharged(2), enemy);
                                         status.get(enemy).addStatusEffect(berserk(2), enemy);
@@ -7373,8 +7383,8 @@ public class MoveConstructor {
                     entity.arbitraryValue += MathUtils.random(-200, 200); //random status effect chance
             }
         ));
-        move.setAttackDescription("Mixes toxins to create a highly unpredictable outcome. Deals regular damage and has a chance to inflict " +
-        "Poison and a random combination of status effects on the target for 2 turns.");
+        move.setAttackDescription("Mixes toxins to create a highly unpredictable attack. Deals regular damage and has a chance to inflict " +
+        "Poison and a random combination of status effects on the target for around 2 turns.");
         return move;
     }
 
@@ -18113,7 +18123,7 @@ public class MoveConstructor {
             }
         }, .3f, 1);
 
-        Move move = new Move("Combobulate", nm.get(user).name + " uses enigmatic wizardry!", user, 4,
+        Move move = new Move("Combobulate", nm.get(user).name + " uses enigmatic wizardry!", user, 5,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, -1), new BoardPosition(-2, -2),
                         new BoardPosition(-1, 1), new BoardPosition(-2, 2), new BoardPosition(-2, 0)

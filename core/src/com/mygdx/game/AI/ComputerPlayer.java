@@ -129,7 +129,7 @@ public class ComputerPlayer implements Runnable {
         //if thread was cancelled, escape method
         if (!processing) {
             //progress = 0;
-            System.out.println("THREAD STOPPED.");
+            System.out.println("\nTHREAD STOPPED.");
             return;
         }
 
@@ -298,7 +298,7 @@ public class ComputerPlayer implements Runnable {
                         if (teamControlled == i && i == board.getEntities().get(zone).team) { // team Controlled win
                             return board.evaluate(team) + 9000;
                         } else if (teamControlled != i && i == board.getEntities().get(zone).team) { // enemy win
-                            System.out.println("(Player) TeamController: " + teamControlled + " |Entity team: " + board.getEntities().get(zone).team + "  |Zone Team: " + i);
+                            //System.out.println("(Player) TeamController: " + teamControlled + " |Entity team: " + board.getEntities().get(zone).team + "  |Zone Team: " + i);
                             return board.evaluate(team) - 9000;
                         }
                     }

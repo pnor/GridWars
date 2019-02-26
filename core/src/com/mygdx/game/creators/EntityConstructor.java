@@ -2175,7 +2175,7 @@ public class EntityConstructor {
                 atlas.findRegion("possesedSwordBlue2")
         }, Animation.PlayMode.LOOP, 0.5f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(3, 4, 5, 0, 4));
+        entity.add(new StatComponent(2, 4, 5, 0, 4));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;
