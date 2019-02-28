@@ -598,7 +598,6 @@ public class BattleScreen implements Screen {
             }
         }
         //debug: get values via key press
-        /*
         if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {//Visuals
             System.out.println("Visuals.visualsArePlaying = " + Visuals.visualsArePlaying);
             System.out.println("Current Move : " + currentMove);
@@ -651,7 +650,7 @@ public class BattleScreen implements Screen {
             System.out.println("Sound Effects Queued:");
             GRID_WARS.soundManager.printQueuedSounds();
         }
-        */
+        
         //endregion
     }
 

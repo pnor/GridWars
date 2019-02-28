@@ -107,38 +107,8 @@ public class GridWars extends Game {
 		// Prompt Asset Manager to finish all loading (for menu sounds)
 		assetManager.finishLoading();
 
-		//region Set up crashlogs
 		// Prints out the sources of game crashes.
-		/*
-		FileHandle crashDirectory = new FileHandle("GWcrashlogs");
-		if (!crashDirectory.exists()) {
-			FileHandle newCrashDirectory = new FileHandle("GWcrashlogs/info");
-			newCrashDirectory.writeString("This file was created so GridWars can write errors to this directory.", false);
-		}
-		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				Calendar cal = Calendar.getInstance();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-
-				String filename = "GWcrashlogs/"+sdf.format(cal.getTime())+".txt";
-
-				PrintStream writer;
-				try {
-					writer = new PrintStream(filename, "UTF-8");
-					writer.println(e.getClass() + ": " + e.getMessage());
-					for (int i = 0; i < e.getStackTrace().length; i++) {
-						writer.println(e.getStackTrace()[i].toString());
-					}
-
-				} catch (FileNotFoundException | UnsupportedEncodingException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
-		*/
-		//endregion
+		//enableCrashReports();
 
 		setScreen(new TitleScreen(this));
 	}
@@ -237,6 +207,37 @@ public class GridWars extends Game {
 		preferences.putFloat(GridWarsPreferences.MUSIC_VOLUME, GridWarsPreferences.DEFAULT_MUSIC);
 		preferences.putFloat(GridWarsPreferences.SOUND_FX_VOLUME, GridWarsPreferences.DEFAULT_SOUND_FX);
 		preferences.flush();
+	}
+
+	/** Calling this will make the stack trace saved to assets/GWcrashlogs/ */
+	private void enableCrashReports() {
+		FileHandle crashDirectory = new FileHandle("GWcrashlogs");
+		if (!crashDirectory.exists()) {
+			FileHandle newCrashDirectory = new FileHandle("GWcrashlogs/info");
+			newCrashDirectory.writeString("This file was created so GridWars can write errors to this directory.", false);
+		}
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				Calendar cal = Calendar.getInstance();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+
+				String filename = "GWcrashlogs/"+sdf.format(cal.getTime())+".txt";
+
+				PrintStream writer;
+				try {
+					writer = new PrintStream(filename, "UTF-8");
+					writer.println(e.getClass() + ": " + e.getMessage());
+					for (int i = 0; i < e.getStackTrace().length; i++) {
+						writer.println(e.getStackTrace()[i].toString());
+					}
+
+				} catch (FileNotFoundException | UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 	}
 
 	/**
