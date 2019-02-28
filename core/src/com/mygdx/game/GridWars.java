@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -65,6 +66,15 @@ public class GridWars extends Game {
 	final private static String SPRITE_SHEET = "spritesAndBackgrounds/GDSprites.pack";
 	final private static String BACKGROUND_SPRITE_SHEET = "spritesAndBackgrounds/BackPack.pack";
 
+	// Debugging Mode
+	/**
+	 * True means the entire game is in Debugging mode. This cuases: <br>
+	 * - Can access debug controls at any time with 
+	 * - Certain Battle Screen debug button presses are active
+	 * - Can skip / return to levels in Survival with Q, W, E, R
+	 */
+	public static boolean DEBUGGING = true;
+
 	@Override
 	public void create() {
 		stage = new Stage();
@@ -108,7 +118,11 @@ public class GridWars extends Game {
 		assetManager.finishLoading();
 
 		// Prints out the sources of game crashes.
-		//enableCrashReports();
+		if (!DEBUGGING) {
+			enableCrashReports();
+		} else {
+			System.out.println("Running in DEBUG Configurations; change DEBUGGING in GridWars.java to false if you want otherwise.");
+		}
 
 		setScreen(new TitleScreen(this));
 	}
@@ -121,41 +135,10 @@ public class GridWars extends Game {
 		// Load Assets if not done yet
 		assetManager.update();
 
-		//region DEBUG
-		/*
-		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB)) { //escape to title
-			setScreen(new TitleScreen(this));
+		//Debuggin
+		if (DEBUGGING) {
+			checkDebuggingInputs();
 		}
-		if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) { //game speed
-			setGameSpeed((byte) (gameSpeed + 1));
-			System.out.println("Game Speed : " + gameSpeed);
-		}
-		if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) { //music info
-			System.out.println("MUSIC DEBUG:" +
-					"Music Volume : " + musicManager.getSong().getVolume() + "\n" +
-					"Music loops? : " + musicManager.getSong().getLooping() + "\n" +
-					"Music opener? : " + musicManager.getSong().getHasOpener() + "\n" +
-					"Playing Opener? : " + musicManager.getSong().getPlayingOpener() + "\n" +
-					"Music Position : " + musicManager.getSong().getMusic().getPosition());
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.F3)) { //print cursor location
-			System.out.println("Mouse X : " + Gdx.input.getX());
-			System.out.println("Mouse Y : " + Gdx.input.getY());
-		}
-		if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-			System.out.println(Gdx.graphics.getFramesPerSecond());
-		}
-		if (Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT)) { // throw an exception
-			//region Divide by Zero
-			//int inconceivable = 1 / 0;
-			//endregion
-			//region  Array out of Bounds
-			int[] troublesome = new int[0];
-			System.out.println(troublesome[1]);
-			//endregion
-		}
-		*/
-		//endregion
 	}
 
 	@Override
@@ -238,6 +221,47 @@ public class GridWars extends Game {
 				}
 			}
 		});
+	}
+
+	/**
+	 * Checks to see if any Debugging keys were pressed. <br>
+	 * - Escape + Tab + Shift (Left) : Go to Title Screen <br>
+	 * - = + Shift(Left) : Change game speed <br>
+	 * - F2 : See Music Information <br>
+	 * - F3 : See Mouse Location <br>
+	 * - F : See FPS <br>
+	 * - Left Arrow : Throw an exception
+	 */
+	private void checkDebuggingInputs() {
+		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && Gdx.input.isKeyJustPressed(Input.Keys.TAB) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) { //escape to title
+			System.out.println("DEBUG: Went to title screen");
+			setScreen(new TitleScreen(this));
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) { //game speed
+			System.out.println("DEBUG: Changing Game Speed...");
+			setGameSpeed((byte) (gameSpeed + 1));
+			System.out.println("Game Speed : " + gameSpeed);
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) { //music info
+			System.out.println("MUSIC DEBUG:" +
+					"Music Volume : " + musicManager.getSong().getVolume() + "\n" +
+					"Music loops? : " + musicManager.getSong().getLooping() + "\n" +
+					"Music opener? : " + musicManager.getSong().getHasOpener() + "\n" +
+					"Playing Opener? : " + musicManager.getSong().getPlayingOpener() + "\n" +
+					"Music Position : " + musicManager.getSong().getMusic().getPosition());
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.F3)) { //print cursor location
+			System.out.println("DEBUG:");
+			System.out.println("Mouse X : " + Gdx.input.getX());
+			System.out.println("Mouse Y : " + Gdx.input.getY());
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+			System.out.println("DEBUG: FPS = " + Gdx.graphics.getFramesPerSecond());
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT)) { // throw an exception
+			System.out.println("DEBUG: Crashing the program with an Exception");
+			throw new IndexOutOfBoundsException("Nothing went wrong; CONTROL_LEFT was pressed in debug mode.");
+		}
 	}
 
 	/**

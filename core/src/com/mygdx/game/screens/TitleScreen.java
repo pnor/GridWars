@@ -33,6 +33,7 @@ public class TitleScreen extends MenuScreen implements Screen {
     private HoverButton startBtn;
     private HoverButton tutorialBtn;
     private HoverButton optionBtn;
+    private Label debugLbl;
 
     // not null if player beat the game
     private boolean beatTheGame;
@@ -58,6 +59,8 @@ public class TitleScreen extends MenuScreen implements Screen {
         startBtn = new HoverButton("Start", skin, Color.WHITE, Color.DARK_GRAY);
         tutorialBtn = new HoverButton("Tutorial", skin, Color.WHITE, Color.DARK_GRAY);
         optionBtn = new HoverButton("Options", skin, Color.WHITE, Color.DARK_GRAY);
+        debugLbl = new Label("<DEBUG>", skin);
+        debugLbl.setColor(Color.WHITE);
 
         ChangeListener listener = new ChangeListener() {
             @Override
@@ -88,6 +91,10 @@ public class TitleScreen extends MenuScreen implements Screen {
         table.add(startBtn).size(300, 90).padBottom(40).row();
         table.add(tutorialBtn).size(300, 90).padBottom(40).row();
         table.add(optionBtn).size(300, 90);
+        if (GridWars.DEBUGGING) {
+            table.row();
+            table.add(debugLbl).center().size(70, 30);
+        }
 
         // IF BEAT THE GAME set up engine for potential particle effects
         //set up engine with more systems (for particle effects)

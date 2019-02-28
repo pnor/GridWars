@@ -579,79 +579,10 @@ public class BattleScreen implements Screen {
         updateAndDraw(delta);
         handleDeadEntities();
         checkWinConditions(delta);
-        //region Debug
-        //checking if things are working as intended
-        
-        if (Visuals.visualsArePlaying < 0)
-            throw (new IndexOutOfBoundsException("Visuals.visualsArePlaying is < 0"));
-        for (Team t : teams) {
-            for (Entity e : t.getEntities()) {
-                if (status.has(e))
-                    if (status.get(e).getTotalStatusEffects() < 0) {
-                        if (nm.has(e) && team.has(e))
-                            throw (new IndexOutOfBoundsException("An Entity, " + nm.get(e).name + ", on Team " + team.get(e).teamNumber + " has less than 0 status effects!"));
-                        else if (nm.has(e))
-                            throw (new IndexOutOfBoundsException("An Entity, " + nm.get(e).name + ", has less than 0 status effects!"));
-                        else
-                            throw (new IndexOutOfBoundsException("An unnamed Entity has less than 0 status effects!"));
-                    }
-            }
+        //Debuggin
+        if (GridWars.DEBUGGING) {
+            checkDebugInputs();
         }
-        //debug: get values via key press
-        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {//Visuals
-            System.out.println("Visuals.visualsArePlaying = " + Visuals.visualsArePlaying);
-            System.out.println("Current Move : " + currentMove);
-            if (currentMove != null) {
-                System.out.println("Current Move Visuals : " + currentMove.getVisuals());
-                System.out.println("- isPlaying : " + currentMove.getVisuals().getIsPlaying());
-                System.out.println("- Timer : " + currentMove.getVisuals().getTimer());
-                System.out.println("- EndTime : " + currentMove.getVisuals().getTimer().getEndTime());
-            }
-            //check entity on all teams
-            System.out.println("Team 0 ~~~");
-            boolean visualsPlaying = false;
-            for (Entity e : teams.get(0).getEntities()) {
-                visualsPlaying = vm.get(e).shuffleAnimation.getIsPlaying() || vm.get(e).deathAnimation.getIsPlaying() || vm.get(e).damageAnimation.getIsPlaying()
-                        || vm.get(e).heavyDamageAnimation.getIsPlaying();
-                System.out.println("Entity : " + nm.get(e).name + "(" + teams.get(0).getEntities().indexOf(e, true) + ") has visuals playing = " + visualsPlaying);
-            }
-            System.out.println("Team 1 ~~~");
-            for (Entity e : teams.get(1).getEntities()) {
-                visualsPlaying = vm.get(e).shuffleAnimation.getIsPlaying() || vm.get(e).deathAnimation.getIsPlaying() || vm.get(e).damageAnimation.getIsPlaying()
-                        || vm.get(e).heavyDamageAnimation.getIsPlaying();
-                System.out.println("Entity : " + nm.get(e).name + "(" + teams.get(1).getEntities().indexOf(e, true) + ") has visuals playing = " + visualsPlaying);
-            }
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.V) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) { //Force Visuals to 0
-            System.out.println("Visuals forced to 0.");
-            Visuals.visualsArePlaying = 0;
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) //Frames
-            System.out.println("Frames per Second: " + Gdx.graphics.getFramesPerSecond());
-        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) { // Computer Control info
-            String contents = "";
-            for (Pair v : computerControlledTeamsIndex)
-                contents = contents.concat(", " + v.toString());
-
-            System.out.println("Computer Info: \nplayingComputerTurn = " + playingComputerTurn +
-                    "\ncomputerControlledTeamsIndeces = " + contents +
-                    "\ncurrentTeam = " + rules.getCurrentTeamNumber() +
-                    "\nCurrent Computer Controlled Entity = " + currentComputerControlledEntity);
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) { // Turn Info
-            System.out.println("Turn Info: \n" +
-                    "Turn Count = " + rules.getTurnCount() +
-                    "\nTeam Number = " + rules.getCurrentTeamNumber());
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) { // Turn Info
-            System.out.println("ShowingEndTurnMessage = " + showingEndTurnMessageTable);
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) { // Sound Effects Manager
-            System.out.println("Sound Effects Queued:");
-            GRID_WARS.soundManager.printQueuedSounds();
-        }
-        
-        //endregion
     }
 
     //region Render Loop Methods
@@ -867,6 +798,87 @@ public class BattleScreen implements Screen {
             if (Visuals.visualsArePlaying == 0)
                 changeScreenTimer += deltaTime;
         }
+    }
+
+    /**
+     * Checks to see if it should print any Debuggin Information. <br>
+     * (Throws an exception if Visuals.visualsArePlaying < 0 or an entity has < 0 status effects) <br>
+     * - V : Show info about Visuals and Moves<br>
+     * - V + Shift(Left) : Forces Visuals.visualsArePlaying to 0<br>
+     * - C : Show Computer Controlled Information
+     * - T : Show Information about the current Turn
+     * - Q : Show whether the end turn message table is being presented
+     * - S : Prints out all sound effects in the Queue
+     */
+    private void checkDebugInputs() {
+        //checking if things are working as intended
+        if (Visuals.visualsArePlaying < 0)
+            throw (new IndexOutOfBoundsException("DEBUG: Visuals.visualsArePlaying is < 0"));
+        for (Team t : teams) {
+            for (Entity e : t.getEntities()) {
+                if (status.has(e))
+                    if (status.get(e).getTotalStatusEffects() < 0) {
+                        if (nm.has(e) && team.has(e))
+                            throw (new IndexOutOfBoundsException("An Entity, " + nm.get(e).name + ", on Team " + team.get(e).teamNumber + " has less than 0 status effects!"));
+                        else if (nm.has(e))
+                            throw (new IndexOutOfBoundsException("An Entity, " + nm.get(e).name + ", has less than 0 status effects!"));
+                        else
+                            throw (new IndexOutOfBoundsException("An unnamed Entity has less than 0 status effects!"));
+                    }
+            }
+        }
+        //debug: get values via key press
+        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {//Visuals
+            System.out.println("DEBUG: Visuals.visualsArePlaying = " + Visuals.visualsArePlaying);
+            System.out.println("Current Move : " + currentMove);
+            if (currentMove != null) {
+                System.out.println("Current Move Visuals : " + currentMove.getVisuals());
+                System.out.println("- isPlaying : " + currentMove.getVisuals().getIsPlaying());
+                System.out.println("- Timer : " + currentMove.getVisuals().getTimer());
+                System.out.println("- EndTime : " + currentMove.getVisuals().getTimer().getEndTime());
+            }
+            //check entity on all teams
+            System.out.println("Team 0 ~~~");
+            boolean visualsPlaying = false;
+            for (Entity e : teams.get(0).getEntities()) {
+                visualsPlaying = vm.get(e).shuffleAnimation.getIsPlaying() || vm.get(e).deathAnimation.getIsPlaying() || vm.get(e).damageAnimation.getIsPlaying()
+                        || vm.get(e).heavyDamageAnimation.getIsPlaying();
+                System.out.println("Entity : " + nm.get(e).name + "(" + teams.get(0).getEntities().indexOf(e, true) + ") has visuals playing = " + visualsPlaying);
+            }
+            System.out.println("Team 1 ~~~");
+            for (Entity e : teams.get(1).getEntities()) {
+                visualsPlaying = vm.get(e).shuffleAnimation.getIsPlaying() || vm.get(e).deathAnimation.getIsPlaying() || vm.get(e).damageAnimation.getIsPlaying()
+                        || vm.get(e).heavyDamageAnimation.getIsPlaying();
+                System.out.println("Entity : " + nm.get(e).name + "(" + teams.get(1).getEntities().indexOf(e, true) + ") has visuals playing = " + visualsPlaying);
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.V) && Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) { //Force Visuals to 0
+            System.out.println("Visuals forced to 0.");
+            Visuals.visualsArePlaying = 0;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) { // Computer Control info
+            String contents = "";
+            for (Pair v : computerControlledTeamsIndex)
+                contents = contents.concat(", " + v.toString());
+
+            System.out.println("DEBUG: Computer Info: \nplayingComputerTurn = " + playingComputerTurn +
+                    "\ncomputerControlledTeamsIndeces = " + contents +
+                    "\ncurrentTeam = " + rules.getCurrentTeamNumber() +
+                    "\nCurrent Computer Controlled Entity = " + currentComputerControlledEntity);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) { // Turn Info
+            System.out.println("DEBUG: Turn Info: \n" +
+                    "Turn Count = " + rules.getTurnCount() +
+                    "\nTeam Number = " + rules.getCurrentTeamNumber());
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) { // Turn Info
+            System.out.println("DEBUG: ShowingEndTurnMessage = " + showingEndTurnMessageTable);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) { // Sound Effects Manager
+            System.out.println("DEBUG: Sound Effects Queued:");
+            GRID_WARS.soundManager.printQueuedSounds();
+        }
+        
     }
     //endregion
 

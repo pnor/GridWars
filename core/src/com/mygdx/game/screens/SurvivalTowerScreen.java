@@ -94,35 +94,10 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         stage.getBatch().end();
         super.render(deltaTime);
         engine.update(deltaTime);
-        //region DEBUG
-        //debug--Change floor level from Survival Select Screen
-        
-        //Press
-        /*
-        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-            level++;
-            backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
-            System.out.println("Level : " + level);
-
+        //Debug--Change floor level from Survival Select Screen
+        if (GridWars.DEBUGGING) {
+            checkDebugInputs();
         }
-        else if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            level--;
-            backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
-            System.out.println("Level : " + level);
-        }
-        //HOld
-        if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-            level++;
-            backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
-            System.out.println("Level : " + level);
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-            level--;
-            backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
-            System.out.println("Level : " + level);
-        }
-        */  
-        //endregion
     }
 
     @Override
@@ -997,6 +972,38 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
                 return entity;
         }
         return null;
+    }
+
+    /**
+	 * Checks to see if any Debugging keys were pressed. <br>
+	 * - Q : Increases Level by 1 <br>
+	 * - W : Decreases Level by 1 <br>
+	 * - E : Increases Level as long as held <br>
+	 * - R : Decreases Level as long as held
+	 */
+    private void checkDebugInputs() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+            level++;
+            backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
+            System.out.println("DEBUG: Level : " + level);
+
+        }
+        else if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            level--;
+            backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
+            System.out.println("DEBUG: Level : " + level);
+        }
+        //HOld
+        if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+            level++;
+            backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
+            System.out.println("DEBUG: Level : " + level);
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+            level--;
+            backgroundProgressBar.setPosition(0, ((float) level / 50f) * 500 - 700);
+            System.out.println("DEBUG: Level : " + level);
+        }
     }
 
     public static void clearSurvivalLerpColorManager() {
