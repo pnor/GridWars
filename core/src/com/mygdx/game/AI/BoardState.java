@@ -37,7 +37,7 @@ public class BoardState {
                 if (team.has(entity)) { //on a team
                     if (!status.has(entity)) { //does not have status effect
                         value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, bm.get(entity).BOARD_ENTITY_ID, stm.get(entity).hp,
-                                stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, 0);
+                                stm.get(entity).maxHP, stm.get(entity).sp, stm.get(entity).maxSP,  stm.get(entity).atk, stm.get(entity).def, 0);
                     } else { //does have status effect
                         Array<StatusEffect> currentStatusEffects = status.get(entity).getStatusEffects();
                         StatusEffectInfo[] statusInfos = new StatusEffectInfo[status.get(entity).getTotalStatusEffects()];
@@ -45,20 +45,20 @@ public class BoardState {
                             statusInfos[i] = currentStatusEffects.get(i).createStatusEffectInfo();
 
                         value = new EntityValue(bm.get(entity).pos, team.get(entity).teamNumber, bm.get(entity).BOARD_ENTITY_ID, stm.get(entity).hp,
-                                stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, statusInfos, 0);
+                            stm.get(entity).maxHP, stm.get(entity).sp, stm.get(entity).maxSP, stm.get(entity).atk, stm.get(entity).def, statusInfos, 0);
                     }
                 } else { //not on a team
                     if (!status.has(entity)) {
-                        value = new EntityValue(bm.get(entity).pos, -1, -1, stm.get(entity).hp,
-                                stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, 0);
+                        value = new EntityValue(bm.get(entity).pos, -1, -1, stm.get(entity).hp, stm.get(entity).maxHP,
+                             stm.get(entity).sp, stm.get(entity).maxSP, stm.get(entity).atk, stm.get(entity).def, 0);
                     } else {
                         Array<StatusEffect> currentStatusEffects = status.get(entity).getStatusEffects();
                         StatusEffectInfo[] statusInfos = new StatusEffectInfo[status.get(entity).getTotalStatusEffects()];
                         for (int i = 0; i < currentStatusEffects.size; i++)
                             statusInfos[i] = currentStatusEffects.get(i).createStatusEffectInfo();
 
-                        value = new EntityValue(bm.get(entity).pos, -1, -1, stm.get(entity).hp,
-                                stm.get(entity).getModMaxHp(entity), stm.get(entity).sp, stm.get(entity).atk, stm.get(entity).def, statusInfos, 0);
+                        value = new EntityValue(bm.get(entity).pos, -1, -1, stm.get(entity).hp, stm.get(entity).maxHP,
+                             stm.get(entity).sp, stm.get(entity).maxSP, stm.get(entity).atk, stm.get(entity).def, statusInfos, 0);
                     }
                 }
             } else continue;
@@ -120,9 +120,9 @@ public class BoardState {
                     // damage
                     int oldHp = e.hp;
                     if (move.moveInfo().pierces)
-                        e.hp = MathUtils.clamp(e.hp - (int) (move.moveInfo().ampValue * userEntity.getModAtk()), 0, e.maxHp);
+                        e.hp = MathUtils.clamp(e.hp - (int) (move.moveInfo().ampValue * userEntity.getModAtk()), 0, e.getModMaxHp());
                     else
-                        e.hp = MathUtils.clamp(e.hp - (MathUtils.clamp((int) (move.moveInfo().ampValue * userEntity.getModAtk()) - e.getModDef(), 0, 999)), 0, e.maxHp);
+                        e.hp = MathUtils.clamp(e.hp - (MathUtils.clamp((int) (move.moveInfo().ampValue * userEntity.getModAtk()) - e.getModDef(), 0, 999)), 0, e.getModMaxHp());
 
                     // discourage hitting allies with damaging attacks
                     /*
@@ -143,8 +143,8 @@ public class BoardState {
                         move.moveInfo().miscEffects.doMiscEffects(e, userEntity);
 
                     //clamp hp to max hp
-                    if (e.hp > e.maxHp)
-                        e.hp = e.maxHp;
+                    if (e.hp > e.getModMaxHp())
+                        e.hp = e.getModMaxHp();
 
                     //remove dead
                     if (e.hp <= 0) {
@@ -175,14 +175,15 @@ public class BoardState {
         for (EntityValue e : entityValues) {
             if (e.team == team && e.statusEffectInfos != null && e.statusEffectInfos.size > 0) {
                 //increment SP
-                e.sp++;
+                e.sp = MathUtils.clamp(e.sp + 1, 0, e.getModMaxSp());
                 for (StatusEffectInfo s : e.statusEffectInfos) {
                     if (s.turnEffectInfo != null) {
                         s.turnEffectInfo.doTurnEffect(e);
                     }
                     s.incrementTurn();
-                    if (s.checkDuration())
+                    if (s.checkDuration()) {
                         e.statusEffectInfos.removeValue(s, true);
+                    }
                 }
             }
         }

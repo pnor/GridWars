@@ -5953,7 +5953,7 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{changeToBlack, rippleSelf, rippleOther, returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
-                    enemy.sp += 2;
+                    enemy.sp = MathUtils.clamp(enemy.sp + 2, 0, enemy.getModMaxSp());
                 }));
         move.setAttackDescription("Transfers the user's energy to any object or character. Increases the target's SP by 2 points.");
         return move;
@@ -6051,7 +6051,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})),
-                new MoveInfo(false, 0, (enemy, userEntity) -> userEntity.arbitraryValue = (MathUtils.randomBoolean())? userEntity.arbitraryValue + 50 : userEntity.arbitraryValue));
+                new MoveInfo(false, 0, (enemy, userEntity) -> userEntity.arbitraryValue = (MathUtils.randomBoolean(.3f))? userEntity.arbitraryValue + 50 : userEntity.arbitraryValue));
         move.setAttackDescription("Uses reflection to copy the target's fighting tactics. Copies the target's first move and replaces the user's last move with it.");
         return move;
     }
@@ -6146,7 +6146,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{mirror, largeSparkle})),
-                new MoveInfo(false, 0, (enemy, userEntity) -> userEntity.arbitraryValue = (MathUtils.randomBoolean())? userEntity.arbitraryValue + 50 : userEntity.arbitraryValue));
+                new MoveInfo(false, 0, (enemy, userEntity) -> userEntity.arbitraryValue = (MathUtils.randomBoolean(.3f))? userEntity.arbitraryValue + 50 : userEntity.arbitraryValue));
         move.setAttackDescription("Uses mirrors to copy the target's alternate fighting tactics. Copies the target's last move and replaces the user's last move with it.");
         return move;
     }
@@ -6242,7 +6242,7 @@ public class MoveConstructor {
                     }
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{mirror, spinning})), new MoveInfo(false, 0,
-                (enemy, userEntity) -> userEntity.arbitraryValue = (MathUtils.randomBoolean(.4f))? userEntity.arbitraryValue + 50 : userEntity.arbitraryValue));
+                (enemy, userEntity) -> userEntity.arbitraryValue = (MathUtils.randomBoolean(.3f))? userEntity.arbitraryValue + 50 : userEntity.arbitraryValue));
         move.setAttackDescription("Uses reflection, mirrors, and a bit of luck to copy the target's fighting actions. Copies one of the target's moves at random and " +
                 "replaces the user's last move with it.");
         return move;
@@ -18726,7 +18726,7 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{changeToBlack, rippleSelf, rippleOther, returnToNormalGradual, returnToNormal})),
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
-                    enemy.sp += 2;
+                    enemy.sp = MathUtils.clamp(enemy.sp + 2, 0, enemy.getModMaxSp());
                     if (enemy.acceptsStatusEffects)
                         enemy.statusEffectInfos.add(spUp(2).createStatusEffectInfo());
                 }));
@@ -18858,7 +18858,7 @@ public class MoveConstructor {
                 }, new Visuals(user, new Array<BoardPosition>(new BoardPosition[]{new BoardPosition(-1, 0)}),
                 new Array<VisualEvent>(new VisualEvent[]{changeToBlack, sparkle, returnToNormalGradual, explode, returnToNormal})),
                 new MoveInfo(false, 0, (enemy, userEntity) -> {
-                    enemy.sp += 1;
+                    enemy.sp = MathUtils.clamp(enemy.sp + 1, 0, enemy.getModMaxSp());
                     if (enemy.acceptsStatusEffects)
                         enemy.statusEffectInfos.add(StatusEffectConstructor.spUp(4).createStatusEffectInfo());
                     if (enemy.maxHp >= 13 && enemy.sp < 7) // Encourage use if it hits the dragon (which has high max hp)

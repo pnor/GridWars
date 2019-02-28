@@ -18,6 +18,7 @@ public class EntityValue implements Comparable {
     public int hp;
     public int maxHp;
     public int sp;
+    public int maxSp;
     public int attack;
     public int defense;
 
@@ -42,7 +43,7 @@ public class EntityValue implements Comparable {
      * @param atk Entity's attack value
      * @param def Entity's defense value
      */
-    public EntityValue(BoardPosition position, int teamNo, int boardEntityID, int health, int maxHealth, int skill, int atk, int def, int arbitrary) {
+    public EntityValue(BoardPosition position, int teamNo, int boardEntityID, int health, int maxHealth, int skill, int maxSp, int atk, int def, int arbitrary) {
         pos = position;
         team = teamNo;
         BOARD_ENTITY_ID = boardEntityID;
@@ -57,7 +58,7 @@ public class EntityValue implements Comparable {
         arbitraryValue = arbitrary;
     }
 
-    public EntityValue(BoardPosition position, int teamNo, int boardEntityID, int health, int maxHealth, int skill, int atk, int def, StatusEffectInfo[] statusEffects, int arbitrary) {
+    public EntityValue(BoardPosition position, int teamNo, int boardEntityID, int health, int maxHealth, int skill, int maxSp, int atk, int def, StatusEffectInfo[] statusEffects, int arbitrary) {
         pos = position;
         team = teamNo;
         BOARD_ENTITY_ID = boardEntityID;
@@ -117,13 +118,13 @@ public class EntityValue implements Comparable {
 
     public EntityValue copy() {
         if (statusEffectInfos == null)
-            return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, attack, defense, arbitraryValue);
+            return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, maxSp, attack, defense, arbitraryValue);
         else {
             //copy status effects
             StatusEffectInfo[] copyStatus = new StatusEffectInfo[statusEffectInfos.size];
             for (int i = 0; i < statusEffectInfos.size; i++)
                 copyStatus[i] = statusEffectInfos.get(i).copy();
-            return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, attack, defense, copyStatus, arbitraryValue);
+            return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, maxSp, attack, defense, copyStatus, arbitraryValue);
         }
     }
 
@@ -133,7 +134,7 @@ public class EntityValue implements Comparable {
     public int getModAtk() {
         int atk = attack;
         if (statusEffectInfos == null)
-            return sp;
+            return atk;
 
         for (StatusEffectInfo status : statusEffectInfos) {
             if (status.statChanges == null) continue;
@@ -149,7 +150,7 @@ public class EntityValue implements Comparable {
     public int getModDef() {
         int def = defense;
         if (statusEffectInfos == null)
-            return sp;
+            return def;
 
         for (StatusEffectInfo status : statusEffectInfos) {
             if (status.statChanges == null) continue;
@@ -157,6 +158,38 @@ public class EntityValue implements Comparable {
         }
 
         return def;
+    }
+
+    /**
+     * Max HP value after status effects and other effects are applied
+     */
+    public int getModMaxHp() {
+        int maxHP = maxHp;
+        if (statusEffectInfos == null)
+            return maxHP;
+
+        for (StatusEffectInfo status : statusEffectInfos) {
+            if (status.statChanges == null) continue;
+            maxHP = (int) (maxHP * status.statChanges.maxHP);
+        }
+
+        return maxHP;
+    }
+
+    /**
+     * Max SP value after status effects and other effects are applied
+     */
+    public int getModMaxSp() {
+        int maxSP = maxSp;
+        if (statusEffectInfos == null)
+            return maxSP;
+
+        for (StatusEffectInfo status : statusEffectInfos) {
+            if (status.statChanges == null) continue;
+            maxSP = (int) (maxSP * status.statChanges.maxSP);
+        }
+
+        return maxSP;
     }
 
     @Override
