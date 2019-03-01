@@ -95,6 +95,7 @@ public class OptionsScreen extends MenuScreen implements Screen {
         Label lblGameData = new Label("Data Management", skin);
         HoverButton btnDefaults = new HoverButton("Reset to Default", skin, Color.WHITE, Color.DARK_GRAY);
         TextButton btnEraseAll = new TextButton("Erase all Data", skin, "toggle");
+        TextButton btnToggleGameBeat = new TextButton("DEBUG: Beat the Game", skin, "toggle");
         ChangeListener resetDefaultsListener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -177,6 +178,11 @@ public class OptionsScreen extends MenuScreen implements Screen {
                             GRID_WARS.soundManager.playSound(SoundInfo.BACK, 0.5f, 0, 1);
                         }
 
+                        // Debug: btnToggleGameBeat
+                        if (btnToggleGameBeat.isChecked()) {
+                            preferences.putBoolean(GridWarsPreferences.BEAT_THE_GAME, true);
+                        }
+
                         preferences.flush();
                         GRID_WARS.setScreen(new TitleScreen(GRID_WARS));
 
@@ -189,6 +195,7 @@ public class OptionsScreen extends MenuScreen implements Screen {
         btnOK.addListener(listener);
         btnBack.addListener(listener);
         btnEraseAll.addListener(listener);
+        btnToggleGameBeat.addListener(listener);
 
         table.add();
         table.add().row();
@@ -217,6 +224,10 @@ public class OptionsScreen extends MenuScreen implements Screen {
         Table dataGroup = new Table();
         dataGroup.add(btnDefaults).size(140, 50).padBottom(45).row();
         dataGroup.add(btnEraseAll).size(110, 35);
+        if (GridWars.DEBUGGING) {
+            dataGroup.row();
+            dataGroup.add(btnToggleGameBeat).size(200, 35);
+        }
         table.add(dataGroup).colspan(2).padBottom(45).row();
         table.add(btnBack).size(90, 50);
         table.add(btnOK).size(90, 50);
