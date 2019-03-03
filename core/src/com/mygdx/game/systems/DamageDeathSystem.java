@@ -23,7 +23,7 @@ public class DamageDeathSystem extends IteratingSystem {
     public void processEntity(Entity e, float deltaTime) {
         //note : death and damage animation won't occur at the same time
         //death
-        if (stm.get(e).hp <= 0) {
+        if (stm.get(e).hp <= 0 || !stm.get(e).alive) {
             if (vm.has(e) && vm.get(e).deathAnimation == null) {
                 stm.get(e).alive = false;
             } else {
@@ -46,6 +46,9 @@ public class DamageDeathSystem extends IteratingSystem {
                         }
                     }
                     stm.get(e).readyToRemoveFromGame = true;
+                    // All dead entities must have 0 hp; ensures this is true, since AI can
+                    // actually heal them while they die, violating this
+                    stm.get(e).hp = 0; 
                 }
 
                 if (!vm.get(e).deathAnimation.getIsPlaying()) {

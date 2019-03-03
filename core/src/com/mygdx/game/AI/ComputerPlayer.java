@@ -740,13 +740,13 @@ public class ComputerPlayer implements Runnable {
                 break;
             case NORMAL:
                 setGetFirstAttackAlways(false);
-                depthLevel = 2;//1;
-                forgetBestMoveChance = .1f;//.3f;
+                depthLevel = 1;
+                forgetBestMoveChance = .3f;
                 randomizeDepthLevel = false;
                 break;
             case HARD:
                 setGetFirstAttackAlways(false);
-                depthLevel = 3;//2;
+                depthLevel = 2;
                 forgetBestMoveChance = .05f;
                 randomizeDepthLevel = false;
         }
