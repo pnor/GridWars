@@ -13,4 +13,8 @@ public class Tuple<U, V> {
         value1 = firstVal;
         value2 = secondValue;
     }
+
+    public String toString() {
+        return "(" + value1.toString() + ", " + value2.toString() + ")";
+    }
 }

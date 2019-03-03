@@ -20,4 +20,10 @@ public class GridWarsPreferences {
     public static boolean DEFAULT_ANIMATE_BACKGROUND = true;
     public static float DEFAULT_MUSIC = .5f;
     public static float DEFAULT_SOUND_FX = .3f;
+    // AI Turn Speeds (0: Slow, 1: Medium, 2: Fast, 3: Very Fast)
+    // Movement
+    public static float[] MOVEMENT_WAIT_TIME = {1f, .5f, .1f, 0.02f};
+    public static float[] ATTACK_WAIT_TIME = {1.5f, 1f, .3f, 0.05f};
+    public static float[] DISPLAY_WAIT_TIME = {1f, .5f, .25f, .08f};
 }
+

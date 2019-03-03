@@ -38,6 +38,7 @@ import com.mygdx.game.boards.BoardManager;
 import com.mygdx.game.boards.BoardPosition;
 import com.mygdx.game.components.*;
 import com.mygdx.game.creators.*;
+import com.mygdx.game.misc.Tuple;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.move_related.StatusEffect;
 import com.mygdx.game.move_related.Visuals;
@@ -48,7 +49,7 @@ import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.rules_types.ZoneRules;
 import com.mygdx.game.systems.*;
 import com.mygdx.game.ui.*;
-import javafx.util.Pair;
+import com.mygdx.game.GridWarsPreferences;
 
 import java.util.Iterator;
 
@@ -105,12 +106,12 @@ public class BattleScreen implements Screen {
     //Computer Turn variables
     protected final ComputerPlayer computer;
     /**
-     * x-coordinate of the vector is team index. y-coordinate is the depth level.
+     * value1: team index. value2: difficulty
      * <p> Easy -> 0 </p>
      * <p> Normal -> 2 </p>
      * <p> Hard ->  6 </p>
      */
-    private Pair<Integer, ComputerPlayer.Difficulty>[] computerControlledTeamsIndex;
+    private Tuple<Integer, ComputerPlayer.Difficulty>[] computerControlledTeamsIndex;
     private boolean playingComputerTurn;
     private float timeAfterMove;
     private float movementWaitTime;
@@ -198,7 +199,7 @@ public class BattleScreen implements Screen {
      * @param song Song that will play
      * @param game Instance of the game
      */
-    public BattleScreen(Array<Team> selectedTeams, int boardIndex, Pair[] AIControlled, LerpColorManager colorManager, Song song, GridWars game) {
+    public BattleScreen(Array<Team> selectedTeams, int boardIndex, Tuple[] AIControlled, LerpColorManager colorManager, Song song, GridWars game) {
         GRID_WARS = game;
         teams = selectedTeams;
 
@@ -235,22 +236,12 @@ public class BattleScreen implements Screen {
         lerpColorManager.registerLerpColor(SELECTION_COLOR);
 
         //Options preferences
-        Preferences pref = Gdx.app.getPreferences("GridWars Options");
-        Move.doesAnimations = pref.getBoolean("Move Animation");
-        int AISpeed = pref.getInteger("AI Turn Speed");
-        if (AISpeed == 0) { //slow
-            movementWaitTime = 1f;
-            attackWaitTime = 1.5f;
-            displayEndTurnMessageTime = 1f;
-        } else if (AISpeed == 1) { //normal
-            movementWaitTime = .5f;
-            attackWaitTime = 1f;
-            displayEndTurnMessageTime = .5f;
-        } else { //fast
-            movementWaitTime = .1f;
-            attackWaitTime = .3f;
-            displayEndTurnMessageTime = .25f;
-        }
+        Preferences pref = Gdx.app.getPreferences(GridWarsPreferences.GRIDWARS_OPTIONS);
+        Move.doesAnimations = pref.getBoolean(GridWarsPreferences.MOVE_ANIMATION);
+        int AISpeed = pref.getInteger(GridWarsPreferences.AI_TURN_SPEED);
+        movementWaitTime = GridWarsPreferences.MOVEMENT_WAIT_TIME[AISpeed];
+        attackWaitTime = GridWarsPreferences.ATTACK_WAIT_TIME[AISpeed];
+        displayEndTurnMessageTime = GridWarsPreferences.DISPLAY_WAIT_TIME[AISpeed];
 
         //play the music
         GRID_WARS.musicManager.setSong(song);
@@ -858,13 +849,19 @@ public class BattleScreen implements Screen {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) { // Computer Control info
             String contents = "";
-            for (Pair v : computerControlledTeamsIndex)
-                contents = contents.concat(", " + v.toString());
+            for (Tuple p : computerControlledTeamsIndex) {
+                if (contents.length() != 0) {
+                    contents += ", ";
+                }
+                contents += p.toString();
+            }
 
             System.out.println("DEBUG: Computer Info: \nplayingComputerTurn = " + playingComputerTurn +
-                    "\ncomputerControlledTeamsIndeces = " + contents +
+                    "\ncomputerControlledTeamsIndeces: " + contents +
                     "\ncurrentTeam = " + rules.getCurrentTeamNumber() +
-                    "\nCurrent Computer Controlled Entity = " + currentComputerControlledEntity);
+                    "\nTurn Phase = " + turnPhase +
+                    "\nCurrent Computer Controlled Entity = " + currentComputerControlledEntity +
+                    "\nTime After Move = " + timeAfterMove);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) { // Turn Info
             System.out.println("DEBUG: Turn Info: \n" +
@@ -956,8 +953,9 @@ public class BattleScreen implements Screen {
         Entity currentEntity;
         Turn currentTurn =
                 (currentComputerControlledEntity < computer.getDecidedTurns().size)? computer.getDecidedTurns().get(currentComputerControlledEntity) : null;
-        if (!showingEndTurnMessageTable)
+        if (!showingEndTurnMessageTable) {
             timeAfterMove += delta;
+        }
 
         if ((currentTurn == null && currentComputerControlledEntity < computer.getDecidedTurns().size) || (currentTurn != null && !stm.get(currentTurn.entity).alive)) { //entity is dead/skip turn
             currentComputerControlledEntity++;
@@ -1039,7 +1037,7 @@ public class BattleScreen implements Screen {
             boolean processingAComputerControlledTeam = false;
             int controlledTeamIndex = -1;
             for (int i = 0; i < computerControlledTeamsIndex.length; i++) {
-                if (computerControlledTeamsIndex[i].getKey() == rules.getCurrentTeamNumber()) {
+                if (computerControlledTeamsIndex[i].value1 == rules.getCurrentTeamNumber()) {
                     processingAComputerControlledTeam = true;
                     controlledTeamIndex = i;
                     break;
@@ -1048,15 +1046,15 @@ public class BattleScreen implements Screen {
 
             if (processingAComputerControlledTeam) {
                 playingComputerTurn = true;
-                computer.setTeamControlled(computerControlledTeamsIndex[controlledTeamIndex].getKey());
-                Pair AIPair = computerControlledTeamsIndex[controlledTeamIndex];
-                if ((ComputerPlayer.Difficulty) AIPair.getValue() == ComputerPlayer.Difficulty.FIRST_ATTACK) { //first attack
+                computer.setTeamControlled(computerControlledTeamsIndex[controlledTeamIndex].value1);
+                Tuple AITuple = computerControlledTeamsIndex[controlledTeamIndex];
+                if ((ComputerPlayer.Difficulty) AITuple.value2 == ComputerPlayer.Difficulty.FIRST_ATTACK) { //first attack
                     computer.setDifficulty(ComputerPlayer.Difficulty.FIRST_ATTACK);
-                } else if ((ComputerPlayer.Difficulty) AIPair.getValue() == ComputerPlayer.Difficulty.EASY) { //easy
+                } else if ((ComputerPlayer.Difficulty) AITuple.value2 == ComputerPlayer.Difficulty.EASY) { //easy
                     computer.setDifficulty(ComputerPlayer.Difficulty.EASY);
-                } else if ((ComputerPlayer.Difficulty) AIPair.getValue() == ComputerPlayer.Difficulty.NORMAL) { //normal
+                } else if ((ComputerPlayer.Difficulty) AITuple.value2 == ComputerPlayer.Difficulty.NORMAL) { //normal
                     computer.setDifficulty(ComputerPlayer.Difficulty.NORMAL);
-                } else if ((ComputerPlayer.Difficulty) AIPair.getValue() == ComputerPlayer.Difficulty.HARD) { //hard
+                } else if ((ComputerPlayer.Difficulty) AITuple.value2 == ComputerPlayer.Difficulty.HARD) { //hard
                     computer.setDifficulty(ComputerPlayer.Difficulty.HARD);
                 }
                 if (rules instanceof ZoneRules)
@@ -1065,8 +1063,9 @@ public class BattleScreen implements Screen {
                     computer.updateComputerPlayer(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), null));
 
                 new Thread(computer).start();
-            } else
+            } else {
                 playingComputerTurn = false;
+            }
 
             if (!playingComputerTurn)
                 enableUI();
@@ -1756,6 +1755,8 @@ public class BattleScreen implements Screen {
     protected void quitScreen() {
         GRID_WARS.setGameSpeed((byte) 1);
         computer.stopThread();
+        battleInputProcessor.setDisabled(false);
+        Visuals.visualsArePlaying = 0;
         GRID_WARS.soundManager.endQueueMode();
         GRID_WARS.soundManager.unloadSounds();
         GRID_WARS.setScreen(new TitleScreen(GRID_WARS));

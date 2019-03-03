@@ -13,11 +13,11 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.AI.ComputerPlayer;
 import com.mygdx.game.GridWars;
 import com.mygdx.game.creators.BackgroundConstructor;
+import com.mygdx.game.misc.Tuple;
 import com.mygdx.game.music.*;
 import com.mygdx.game.rules_types.Team;
 import com.mygdx.game.ui.HoverButton;
 import com.mygdx.game.ui.LerpColorManager;
-import javafx.util.Pair;
 
 import static com.mygdx.game.GridWars.skin;
 
@@ -29,7 +29,7 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
     private int maxTeams;
     private boolean zoneRules;
     private Array<Team> teams;
-    private Pair<Integer, ComputerPlayer.Difficulty>[] AIComputerControlledTeams;
+    private Tuple<Integer, ComputerPlayer.Difficulty>[] AIComputerControlledTeams;
     /**
      * 1 : basic 2 player <p>
      * 2 : basic zone 2 player <p>
@@ -37,7 +37,7 @@ public class BoardSelectScreen extends MenuScreen implements Screen {
      */
     private int board;
 
-    public BoardSelectScreen(int max, boolean isZones, Array<Team> selectedTeams, Pair<Integer, ComputerPlayer.Difficulty>[] AIControlled, GridWars gridWars) {
+    public BoardSelectScreen(int max, boolean isZones, Array<Team> selectedTeams, Tuple<Integer, ComputerPlayer.Difficulty>[] AIControlled, GridWars gridWars) {
         super(gridWars);
         maxTeams = max;
         zoneRules = isZones;

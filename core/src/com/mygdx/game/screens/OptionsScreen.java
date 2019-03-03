@@ -51,7 +51,8 @@ public class OptionsScreen extends MenuScreen implements Screen {
         TextButton btnSlowAI = new TextButton("Slow", skin, "toggle");
         TextButton btnNormalAI = new TextButton("Normal", skin, "toggle");
         TextButton btnFastAI = new TextButton("Fast", skin, "toggle");
-        AIGroup = new ButtonGroup<>(btnSlowAI, btnNormalAI, btnFastAI);
+        TextButton btnVeryFastAI = new TextButton("Very Fast", skin, "toggle");
+        AIGroup = new ButtonGroup<>(btnSlowAI, btnNormalAI, btnFastAI, btnVeryFastAI);
         AIGroup.setMaxCheckCount(1);
         if (preferences.getInteger(GridWarsPreferences.AI_TURN_SPEED) == 0)
             btnSlowAI.setChecked(true);
@@ -59,7 +60,8 @@ public class OptionsScreen extends MenuScreen implements Screen {
             btnNormalAI.setChecked(true);
         else if (preferences.getInteger(GridWarsPreferences.AI_TURN_SPEED) == 2)
             btnFastAI.setChecked(true);
-
+        else if (preferences.getInteger(GridWarsPreferences.AI_TURN_SPEED) == 3)
+            btnVeryFastAI.setChecked(true);
         Label lblBackgroundInfo = new Label("Background Animations", skin);
         ButtonGroup<TextButton> backgroundGroup;
         TextButton btnAnimateBackground = new TextButton("Animate", skin, "toggle");
@@ -153,10 +155,13 @@ public class OptionsScreen extends MenuScreen implements Screen {
 
                         if (AIGroup.getChecked() == btnSlowAI) {
                             preferences.putInteger(GridWarsPreferences.AI_TURN_SPEED, 0);
-                        } else if (AIGroup.getChecked() == btnNormalAI)
+                        } else if (AIGroup.getChecked() == btnNormalAI) {
                             preferences.putInteger(GridWarsPreferences.AI_TURN_SPEED, 1);
-                        else if (AIGroup.getChecked() == btnFastAI)
+                        } else if (AIGroup.getChecked() == btnFastAI) {
                             preferences.putInteger(GridWarsPreferences.AI_TURN_SPEED, 2);
+                        } else if (AIGroup.getChecked() == btnVeryFastAI) {
+                            preferences.putInteger(GridWarsPreferences.AI_TURN_SPEED, 3);
+                        }
 
                         if (backgroundGroup.getChecked() == btnAnimateBackground) {
                             preferences.putBoolean(GridWarsPreferences.ANIMATE_BACKGROUND, true);
@@ -209,6 +214,7 @@ public class OptionsScreen extends MenuScreen implements Screen {
         AIBtnGroup.add(btnSlowAI).size(80, 50);
         AIBtnGroup.add(btnNormalAI).size(80, 50);
         AIBtnGroup.add(btnFastAI).size(80, 50);
+        AIBtnGroup.add(btnVeryFastAI).size(80, 50);
         table.add(AIBtnGroup).colspan(2).padBottom(20).row();
         table.add(lblBackgroundInfo).colspan(2).padBottom(20).row();
         Table animBackgroundGroup = new Table();
