@@ -173,16 +173,19 @@ public class BoardState {
         Array<EntityValue> entityValues = entities.getEntityValues();
 
         for (EntityValue e : entityValues) {
-            if (e.team == team && e.statusEffectInfos != null && e.statusEffectInfos.size > 0) {
+            if (e.team == team) {
                 //increment SP
                 e.sp = MathUtils.clamp(e.sp + 1, 0, e.getModMaxSp());
-                for (StatusEffectInfo s : e.statusEffectInfos) {
-                    if (s.turnEffectInfo != null) {
-                        s.turnEffectInfo.doTurnEffect(e);
-                    }
-                    s.incrementTurn();
-                    if (s.checkDuration()) {
-                        e.statusEffectInfos.removeValue(s, true);
+                // Increment Status Effects
+                if (e.statusEffectInfos != null && e.statusEffectInfos.size > 0) {
+                    for (StatusEffectInfo s : e.statusEffectInfos) {
+                        if (s.turnEffectInfo != null) {
+                            s.turnEffectInfo.doTurnEffect(e);
+                        }
+                        s.incrementTurn();
+                        if (s.checkDuration()) {
+                            e.statusEffectInfos.removeValue(s, true);
+                        }
                     }
                 }
             }

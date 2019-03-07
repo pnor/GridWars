@@ -84,8 +84,9 @@ public class EntityValue implements Comparable {
         int value = 0;
         value += arbitraryValue;
 
-        if (hp > 0)
+        if (hp > 0 && team != -1) {
             value += 300 + (hp * 30);
+        }
 
         // Slightly encourage not using SP for similar situations
         value += sp;
@@ -117,9 +118,9 @@ public class EntityValue implements Comparable {
     }
 
     public EntityValue copy() {
-        if (statusEffectInfos == null)
+        if (statusEffectInfos == null) {
             return new EntityValue(pos.copy(), team, BOARD_ENTITY_ID, hp, maxHp, sp, maxSp, attack, defense, arbitraryValue);
-        else {
+        } else {
             //copy status effects
             StatusEffectInfo[] copyStatus = new StatusEffectInfo[statusEffectInfos.size];
             for (int i = 0; i < statusEffectInfos.size; i++)

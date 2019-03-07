@@ -406,14 +406,15 @@ public class BoardAndRuleConstructor {
         boardManager.setBoards(new Board(9, 9, new Color(221f / 255, 221f / 255f, 119f / 255f, 1), new Color(1, 1, 102f / 255f, 1), 700 / 9), new CodeBoard(9, 9));
         final int maxSize = boardManager.getBoard().getColumnSize() - 1;
         //place entities
-        int col = 0;
+        int inset = 2;
+        int col = 3;
         for (Entity e : teams.get(0).getEntities()) {
-            boardManager.add(e, new BoardPosition(0, col));
+            boardManager.add(e, new BoardPosition(0 + inset, col));
             col++;
         }
-        col = 8;
+        col = 5;
         for (Entity e : teams.get(1).getEntities()) {
-            boardManager.add(e, new BoardPosition(maxSize, col));
+            boardManager.add(e, new BoardPosition(maxSize - inset, col));
             col--;
         }
         //place blocks randomly
@@ -444,14 +445,15 @@ public class BoardAndRuleConstructor {
         }), false);
 
         //place entities
-        int col = 1;
+        int inset = 2;
+        int col = 2;
         for (Entity e : teams.get(0).getEntities()) {
-            boardManager.add(e, new BoardPosition(0, col));
+            boardManager.add(e, new BoardPosition(0 + inset, col));
             col++;
         }
-        col = 6;
+        col = 5;
         for (Entity e : teams.get(1).getEntities()) {
-            boardManager.add(e, new BoardPosition(maxSize, col));
+            boardManager.add(e, new BoardPosition(maxSize - inset, col));
             col--;
         }
 
