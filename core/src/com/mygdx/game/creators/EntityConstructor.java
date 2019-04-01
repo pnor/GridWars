@@ -1199,7 +1199,7 @@ public class EntityConstructor {
                 atlas.findRegion("thunderSpirit2")
         }, Animation.PlayMode.LOOP, 0.2f, true)));
         entity.add(new BoardComponent());
-        entity.add(new StatComponent(18, 10, 2, 1, 2));
+        entity.add(new StatComponent(22, 10, 2, 1, 2));
         entity.add(new StatusEffectComponent());
         entity.add(new StateComponent());
         state.get(entity).canAttack = true;

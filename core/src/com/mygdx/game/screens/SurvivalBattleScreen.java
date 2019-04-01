@@ -213,6 +213,14 @@ public class SurvivalBattleScreen extends BattleScreen implements Screen {
         lerpColorManager.clear();
     }
 
+    @Override
+    protected void setWinConditionsMet() {
+        super.setWinConditionsMet();
+        // Invalidate Save File
+        GRID_WARS.saveDataManager.makeFileUnloadable();
+        GRID_WARS.saveDataManager.saveSavedData();
+    }
+
     public int calculatePoints() {
         int points = 0;
         points += MathUtils.clamp((60 - rules.getTurnCount()) * 10, 0, 6000);

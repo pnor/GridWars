@@ -75,8 +75,12 @@ public class BattleScreen implements Screen {
 
     //Rules
     protected static Rules rules;
+    /**  True when the screen is preparing to swap to another screen (Win condition has
+     * been met and no move's animation is currently playing
+    */
     private boolean gameHasEnded;
-    private int winningTeamIndex;
+    /** True *the moment* a win condition has been met by either team. */
+    protected boolean waitingToEndGame; 
     private float changeScreenTimer;
 
     //Entities
@@ -772,24 +776,25 @@ public class BattleScreen implements Screen {
      * Checks the win condition of the game. If the game has ended, then it does a transition to the next screen.
      */
     protected void checkWinConditions(float deltaTime) {
-        if (rules.checkWinConditions() != null && currentMove == null) {
-            if (!gameHasEnded) {
-                endTurnBtn.setDisabled(true);
-                gameHasEnded = true;
+        if (rules.checkWinConditions() != null) {
+            setWinConditionsMet(); 
+
+            if (currentMove == null) {
+                if (!gameHasEnded) {
+                    endTurnBtn.setDisabled(true);
+                    gameHasEnded = true;
+                }
+
+                //fade to black
+                if (changeScreenTimer >= 2) doScreenTransitionAnimation();
+
+                //go to results screen
+                if (changeScreenTimer >= 3) goToNextScreen();
+
+                if (Visuals.visualsArePlaying == 0) changeScreenTimer += deltaTime;
             }
-
-            //fade to black
-            if (changeScreenTimer >= 2)
-                doScreenTransitionAnimation();
-
-            //go to results screen
-            if (changeScreenTimer >= 3)
-                goToNextScreen();
-
-            if (Visuals.visualsArePlaying == 0)
-                changeScreenTimer += deltaTime;
         }
-    }
+    } 
 
     /**
      * Checks to see if it should print any Debuggin Information. <br>
@@ -1793,39 +1798,19 @@ public class BattleScreen implements Screen {
     }
 
     /**
+     * Set variables and do actions that should be done the moment a match's win condition is met 
+     */
+    protected void setWinConditionsMet() {
+        waitingToEndGame = true;
+    }
+
+    /**
      * Adds a entity meant to act as a visual particle effect (Ex. a sparkle or explosion). This method is not how
      * {@link Move}s and Death/Damage visuals act.
      * @param e Entity being added
      */
     public void addParticleEntity(Entity e) {
         engine.addEntity(e);
-    }
-
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        for (EntitySystem e : engine.getSystems())
-            engine.removeSystem(e);
     }
 
     //region getters
@@ -1848,5 +1833,25 @@ public class BattleScreen implements Screen {
     public Rules getRules() {
         return rules;
     }
+    //endregion
+
+    //region Screen overrides
+    @Override
+    public void dispose() {
+        for (EntitySystem e : engine.getSystems())
+            engine.removeSystem(e);
+    }
+
+    @Override
+    public void resize(int width, int height) {}
+
+    @Override
+    public void pause() {}
+
+    @Override
+    public void resume() {}
+
+    @Override
+    public void hide() {}
     //endregion
 }
