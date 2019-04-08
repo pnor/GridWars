@@ -1,15 +1,20 @@
 # GridWars
 
+<p align="center">
+<img src=readme-pics/pieceOfBoard.png height="120">
+</p>
+
 Grid Wars is a Chess-Like Turn-Based game written in Java using libgdx libraries. The game features two teams of creatures that compete to either defeat all members of the other team, or land on the other team's "Zone". The game has 3 main modes: Death Match, Zone Match, and Survival.
 
 I made the project to work on when I have free time, so I could familiarize myself more with the Java and programming in general while working towards a cool end product.
 
 ## Running the Game
 
-To use the release version, download the latest jar file with at least Java 8 installed. 
+To use the release version, download the latest jar file with at least Java 8 installed.
 
 To run the source code:
-- Set ```GridWars.DEBUGGING = true``` so crash stack traces aren't written to a file
+
+- Set ```DEBUGGING = true``` in core/src/com/game/GridWars.java so crash stack traces aren't written to a file
 
 - To run use ```gradle run```
 
@@ -20,23 +25,28 @@ After selecting teams in the Team Select menu, you will be placed right into the
 
 ### The Battle Screen UI
 
+<p align="center">
+<img src=readme-pics/fullwindow.png>
+</p>
+
 The checker board print in the center is the game board, where the core gameplay happens. The box at the top is the Infobar, which says different messages based on what is happening in the game. The box to the top-right is the Status Box, which lists all the information about a game piece.
 
-- HP represents the amount of damage a piece can take before being defeated.
+- **Health** represents the amount of damage a piece can take before being defeated.
 
-- SP represents a skill points. Certain attacks consume skill points to work, and you regain 1 skill point at the beginning of your turn.
+- **Skill** represents a skill points. Certain attacks consume skill points to work, and you regain 1 skill point at the beginning of your turn.
 
-- Attack represents attack power. The amount of damage a game-piece can inflict is based off this value.
+- **Attack** represents attack power. The amount of damage a game-piece can inflict is based off this value.
 
-- Defense represents defensive power. The amount of damage a game-piece receive is based off this value.
+- **Defense** represents defensive power. The amount of damage a game-piece receive is based off this value.
 
-- Speed determines how many tiles a piece can move each turn.
+- **Speed** determines how many tiles a piece can move each turn.
 
-- The last message tells what status effects a game-piece has. Healthy (or ---) means that they have no status effects active. Status effects can be beneficial or harmful, and can augment stats (the stat will be colored red or green). Some statuses even have end-of-turn effects like poison, which inflicts 1 point of damage at the start of each turn.
+- The last message tells what status effects a game-piece has. Healthy (or ---) means that they have no status effects active. Status effects can be beneficial or harmful, and can augment stats (the stat will be colored red or green). Some statuses have end-of-turn effects like poison, which inflicts 1 point of damage at the start of each turn.
 
-- The box on the bottom right is the Move-List, which tells all the attacks a game-piece can use. The number in parenthesis next to the name tells how much SP must be consumed to use the move. The box on the bottom is the Team Bar, which shows all the members on a team. This also has the End Turn Button, which is used to end your turn and begin the opponent’s turn.
+- The box on the bottom right is the Move List, which tells all the attacks a game-piece can use. The number in parenthesis next to the name tells how much SP must be consumed to use the move. The box on the bottom is the Team Bar, which shows all the members on a team. This also has the End Turn Button, which is used to end your turn and begin the opponent’s turn.
 
 ### Movement
+
 To move your team members, click on them. If that piece is on your team, all tiles it can move to will change color. Clicking on any of these colored tiles will move the piece to the selected space. You can only move each piece once per turn! Note that spaces you can move is determined using taxicab distance, so other game-pieces can heavily affect available spaces.
 
 ### Attacking

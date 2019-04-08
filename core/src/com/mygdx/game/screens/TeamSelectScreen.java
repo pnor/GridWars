@@ -88,7 +88,7 @@ public class TeamSelectScreen extends MenuScreen implements Screen {
     private final int MAX_ENTITY_PER_TEAM = 4;
     private boolean zones;
     private Array<Team> teams;
-    /**
+    /**d
      * x-coordinate of the vector is team index. y-coordinate is the difficulty. 1 is easy, 2 is normal, 3 is hard.
      */
     private Array<Tuple<Integer, ComputerPlayer.Difficulty>> AIControlledTeams = new Array<>();

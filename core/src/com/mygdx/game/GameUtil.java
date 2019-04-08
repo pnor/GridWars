@@ -30,6 +30,7 @@ public class GameUtil {
         colors.put("bad guys", new LerpColor(Color.RED, Color.BLACK, 0.4f));
         colors.put("blue", Color.BLUE);
         colors.put("black", Color.BLACK);
+        colors.put("brave", new LerpColor(new Color(168f / 255f, 0, 0, 1), new Color(10f / 255f, 125f / 255f, 189f / 255f, 1)));
         colors.put("brown", Color.BROWN);
 
         colors.put("canight", new LerpColor(Color.WHITE, Color.CYAN, 1f));
@@ -110,6 +111,7 @@ public class GameUtil {
         colors.put("red", Color.RED);
         colors.put("royal", Color.ROYAL);
 
+        colors.put("sadness", new LerpColor(new Color(0f, 71f / 255f, 186f / 255f, 1), new Color(39f / 255f, 1f / 255f, 117f / 255f, 1), 8f));
         colors.put("salmon", Color.SALMON);
         colors.put("scarlet", Color.SCARLET);
         colors.put("sea", new LerpColor(Color.BLUE, Color.CYAN, 6f));
