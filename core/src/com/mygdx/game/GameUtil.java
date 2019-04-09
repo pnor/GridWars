@@ -70,6 +70,7 @@ public class GameUtil {
         colors.put("hold my coffee", new LerpColor(new Color(.4f, .29f, .227f, 1f), Color.ORANGE, 1f));
 
         colors.put("invisible", new Color(1, 1, 1, 0));
+        colors.put("almost invisible", new LerpColor(new Color(1, 1, 1, 0), new LerpColor(Color.WHITE, new Color(0, 0, 0, 0), 5f, Interpolation.bounceOut)));
 
         colors.put("jared", new LerpColor(new Color(.1f, .1f, .1f, .5f), Color.NAVY, 4f));
         colors.put("java", new LerpColor(new Color(.4f, .29f, .227f, 1f), new Color(.51f, .36f, .29f, 1f), 1f));
@@ -84,6 +85,7 @@ public class GameUtil {
         colors.put("magenta", Color.MAGENTA);
         colors.put("maroon", Color.MAROON);
         colors.put("metal", new LerpColor(Color.GRAY, Color.BROWN, 1f, Interpolation.pow3));
+        colors.put("miracle", new LerpColor(new LerpColor(Color.WHITE, Color.GOLD, 5f), new LerpColor(Color.CYAN, Color.LIME, 3.5f)));
         colors.put("monochrome", new LerpColor(Color.BLACK, Color.WHITE, .7f));
         colors.put("mystical cyan", new LerpColor(Color.CYAN, Color.ROYAL, 5f));
 
@@ -96,11 +98,14 @@ public class GameUtil {
         colors.put("olive", Color.OLIVE);
 
         colors.put("pink", Color.PINK);
+        colors.put("prism", new LerpColor(new LerpColor(Color.RED, Color.BLUE, 1), new LerpColor(Color.YELLOW, Color.GREEN, 1), 1.3f));
+        colors.put("prismatic", new LerpColor(new LerpColor(Color.CYAN, Color.ORANGE, 1), new LerpColor(Color.PURPLE, Color.GOLDENROD, 1.3f)));
         colors.put("psi", new LerpColor(Color.PURPLE, new Color(0, 1, 1, 0), 1f, Interpolation.bounceIn));
         colors.put("purple", Color.PURPLE);
         colors.put("python", new LerpColor(new Color(54f / 255f, 105f / 255f, 148f / 255f, 1f), new Color(1, 195f / 255f, 49f / 255f, 1f), 1f));
 
         colors.put("radiant", new LerpColor(Color.YELLOW, Color.ORANGE, .2f));
+        colors.put("rainbow", new LerpColor(new LerpColor(Color.RED, Color.GREEN, 1.5f), new LerpColor(new LerpColor(Color.BLUE, Color.VIOLET, 2.3f), new LerpColor(Color.ORANGE, Color.YELLOW, 3.2f))));
         colors.put("random", new LerpColor(new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), MathUtils.random(.3f, 3)));
         colors.put("random2", new LerpColor(new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), MathUtils.random(.3f, 3)));
         colors.put("random3", new LerpColor(new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), new Color(MathUtils.random(0, 1), MathUtils.random(0, 1), MathUtils.random(0, 1), 1), MathUtils.random(.3f, 3)));
@@ -121,6 +126,7 @@ public class GameUtil {
         colors.put("sky", Color.SKY);
         colors.put("slate", Color.SLATE);
         colors.put("smokey", new LerpColor(new Color(1, 0, 0, 1), new Color(.1f, .01f, 0, 1), 5f));
+        colors.put("success", new LerpColor(new Color(0, 157f / 255f, 1f, 0), new Color(1, 212f / 255f, 0, 1), 4f));
         colors.put("sunset", new LerpColor(new Color(194f / 255f, 91f / 255f, 35f / 255f, 1), new Color(48f / 255f, 11f / 255f, 8f / 255f, 1), 1f, Interpolation.exp10In));
         colors.put("swift", new LerpColor(new Color(253f / 255f, 123f / 255f, 27f / 255f, 1f), new Color(1, 1, 241f / 255f, 1f), 1f));
 
@@ -129,12 +135,14 @@ public class GameUtil {
         colors.put("thunder", new LerpColor(Color.YELLOW, new Color(.4f, .4f, 0.4f, 1), 5f));
 
         colors.put("ultimate", new LerpColor(new Color(1, .2f, .3f, 1), Color.GOLDENROD, .5f));
+        colors.put("ultimate2", new LerpColor(new LerpColor(new Color(1, .2f, .3f, 1), Color.GOLDENROD, .5f), new LerpColor(Color.ORANGE, Color.GOLD, 5f, Interpolation.exp10In)));
 
         colors.put("victory", new LerpColor(Color.GOLD, Color.BLACK, .5f));
         colors.put("violet", Color.VIOLET);
         colors.put("vulpedge", new LerpColor(Color.WHITE, Color.RED, 1f));
 
         colors.put("white", Color.WHITE);
+        colors.put("wierd", new LerpColor(new LerpColor(Color.RED, new Color(0.4f, 1f, 1f, 0.7f), 1.3f, Interpolation.swingOut), new LerpColor(Color.CYAN, Color.BLACK, 3f)));
         colors.put("wild", new LerpColor(Color.GOLDENROD, Color.PURPLE, .4f, Interpolation.bounceIn));
 
         colors.put("yeet", new LerpColor(Color.RED, Color.ORANGE, 0.25f, Interpolation.bounceIn));

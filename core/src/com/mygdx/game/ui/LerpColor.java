@@ -111,7 +111,11 @@ public class LerpColor extends Color {
             this.b = interpolation.apply(startColor.b, endColor.b, totalDelta / timeToChange);
             this.a = interpolation.apply(startColor.a, endColor.a, totalDelta / timeToChange);
         }
-        //System.out.println("Lerp Color Balue (of highscores): " + this.highscores);
+
+        // Check recursively
+        if (startColor instanceof LerpColor) ((LerpColor) startColor).update(delta);
+        if (endColor instanceof LerpColor) ((LerpColor) endColor).update(delta);
+
     }
 
     /**
@@ -155,7 +159,24 @@ public class LerpColor extends Color {
      * @return Color in the middle of the start and end colors
      */
     public Color getMiddleColor() {
-        return new Color((startColor.r + endColor.r) / 2f, (startColor.g + endColor.g) / 2f, (startColor.b + endColor.b) / 2f, (startColor.a + endColor.a) / 2f);
+        Color start, end = null;
+        // Recursively find start and end Colors
+        if (startColor instanceof LerpColor) {
+           start = ((LerpColor) startColor).getMiddleColor(); 
+        } else {
+            start = startColor;
+        }
+        if (endColor instanceof LerpColor) {
+            end = ((LerpColor) endColor).getMiddleColor();
+        } else {
+            end = endColor;
+        }
+        return new Color(
+            (start.r + end.r) / 2f,
+            (start.g + end.g) / 2f,
+            (start.b + end.b) / 2f,
+            (start.a + end.a) / 2f
+        );
     }
 
     /**
@@ -164,6 +185,9 @@ public class LerpColor extends Color {
      */
     public LerpColor removeInterpolation() {
         interpolation = null;
+        if (startColor instanceof LerpColor) { ((LerpColor) startColor).removeInterpolation(); }
+        if (endColor instanceof LerpColor) { ((LerpColor) endColor).removeInterpolation(); }
+        
         return this;
     }
 
@@ -176,6 +200,9 @@ public class LerpColor extends Color {
             serializationString = getStringFromInterpolation(interpolation);
             removeInterpolation();
         }
+
+        if (startColor instanceof LerpColor) { ((LerpColor) startColor).readyForSerialization(); }
+        if (endColor instanceof LerpColor) { ((LerpColor) endColor).readyForSerialization(); }
     }
 
     /**
@@ -185,6 +212,9 @@ public class LerpColor extends Color {
         if (serializationString != null) {
             interpolation = getInterpolationFromString(serializationString);
         }
+
+        if (startColor instanceof LerpColor) { ((LerpColor) startColor).setInterpolationFromSerializationString(); }
+        if (endColor instanceof LerpColor) { ((LerpColor) endColor).setInterpolationFromSerializationString(); }
     }
 
     /**
