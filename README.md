@@ -61,7 +61,7 @@ Zone match adds an additional win objective, which is to land on the enemy team'
 ### Shortcut Keys
 
 - A & D - shift through game-pieces
-- SHIFT - End turn
+- SHIFT / Middle Click - End turn
 - MINUS or EQUAL - change game speed
 
 ## Game Modes

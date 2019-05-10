@@ -258,10 +258,6 @@ public class GridWars extends Game {
 		if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
 			System.out.println("DEBUG: FPS = " + Gdx.graphics.getFramesPerSecond());
 		}
-		if (Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT)) { // throw an exception
-			System.out.println("DEBUG: Crashing the program with an Exception");
-			throw new IndexOutOfBoundsException("Nothing went wrong; CONTROL_LEFT was pressed in debug mode.");
-		}
 	}
 
 	/**

@@ -1,9 +1,11 @@
 package com.mygdx.game.ui;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.game.move_related.Move;
 import com.mygdx.game.screens.BattleScreen;
+import com.mygdx.game.move_related.Visuals;
 
 import static com.mygdx.game.ComponentMappers.mvm;
 
@@ -42,6 +44,12 @@ public class BattleInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        // Middle Click -> Next Turn
+        if (button == Buttons.MIDDLE && !battleScreen.getPlayingComputerTurn() &&
+         Visuals.visualsArePlaying == 0 && !battleScreen.getWaitingToEndGame()) {
+            battleScreen.startNextTurn();
+        }
+
         return false;
     }
 

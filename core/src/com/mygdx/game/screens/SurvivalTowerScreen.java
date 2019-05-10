@@ -325,6 +325,7 @@ public class SurvivalTowerScreen extends MenuScreen implements Screen {
         for (Entity e : team.getEntities()) {
             if (nm.get(e).serializeID == 12) {
                 stm.get(e).atk = 1;
+                am.get(e).actor.setSize(64, 64);
             }
         }
 

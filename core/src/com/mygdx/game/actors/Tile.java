@@ -3,6 +3,7 @@ package com.mygdx.game.actors;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -149,6 +150,7 @@ public class Tile extends Group {
             tileBack.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    if (button == Buttons.MIDDLE) return false; // Reserved for Next Turn Hotkey
                     lastSelected = true;
                     return false;
                 }

@@ -60,7 +60,7 @@ import static com.mygdx.game.GridWars.*;
  * Screen where the battles take place. Contains methods for handling the UI and other visual effects. Here, the player interacts with the game through
  * the buttons and sprites.
  * @author pnore_000
- */ //TODO FIX Issue where thoughtoise movement squares dont leave after using rest mind. (Fixed prolly?)
+ **/
 public class BattleScreen implements Screen {
 
     protected final GridWars GRID_WARS;
@@ -721,8 +721,7 @@ public class BattleScreen implements Screen {
         // During player turn and no Visuals
         if (!playingComputerTurn && Visuals.visualsArePlaying == 0) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT)) { //SHIFT : Next turn hotkey
-                removeAttackTiles();
-                nextTurn();
+                startNextTurn();
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.D)) { //D : Scroll though forward
                 hotkeyTeamsIndex = (byte) ((hotkeyTeamsIndex + 1) % TOTAL_ENTITIES_ON_TEAMS);
@@ -781,6 +780,7 @@ public class BattleScreen implements Screen {
 
             if (currentMove == null) {
                 if (!gameHasEnded) {
+                    GRID_WARS.soundManager.playSound(SoundInfo.FORM_SHIFT, 1.5f, 0, 1);
                     endTurnBtn.setDisabled(true);
                     gameHasEnded = true;
                 }
@@ -1025,7 +1025,16 @@ public class BattleScreen implements Screen {
 
     //region Turns
     /**
-     * Ends the current turn and starts the next.
+     * Ends the current turn and starts the next. Does so cleanly by clearing any artifacts
+     * that may be left over. 
+     */
+    public void startNextTurn() {
+        removeAttackTiles();
+        nextTurn();
+    }
+    /**
+     * Ends the current turn and starts the next. (Internal method that does not handle cleaning
+     * up artifacts like attack tiles)
      */
     private void nextTurn() {
         disableUI();
@@ -1067,7 +1076,9 @@ public class BattleScreen implements Screen {
                 else
                     computer.updateComputerPlayer(new BoardState(BoardComponent.boards.getCodeBoard().getEntities(), null));
 
-                new Thread(computer).start();
+                Thread thread = new Thread(computer);
+                thread.setPriority(Thread.MAX_PRIORITY);
+                thread.start();
             } else {
                 playingComputerTurn = false;
             }
@@ -1832,6 +1843,14 @@ public class BattleScreen implements Screen {
 
     public Rules getRules() {
         return rules;
+    }
+
+    public boolean getPlayingComputerTurn() {
+        return playingComputerTurn;
+    }
+
+    public boolean getWaitingToEndGame() {
+        return waitingToEndGame;
     }
     //endregion
 
