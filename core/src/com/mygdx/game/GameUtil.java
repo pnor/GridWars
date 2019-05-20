@@ -97,6 +97,12 @@ public class GameUtil {
         colors.put("jazzy", new LerpColor(new Color(.5f, 1, 1, 1), Color.GREEN, .5f, Interpolation.bounceOut));
         colors.put("jj", new LerpColor(Color.PURPLE, Color.NAVY, 4f));
 
+        colors.put("lazy", 
+            new LerpColor(
+                new LerpColor(Color.WHITE, new Color(0, 0.9f, 0.7f, 1), 7.2f), 
+                new LerpColor(new Color(0, 0.9f, 1, 1), new Color(1, 0, 0, 1), 5.2f)
+            )
+        );
         colors.put("legume", new LerpColor(Color.GREEN, Color.LIME));
         colors.put("light", new LerpColor(Color.WHITE, new Color(.8f, .8f, 1, 1)));
         colors.put("light gray", Color.LIGHT_GRAY);
@@ -134,6 +140,15 @@ public class GameUtil {
 
         colors.put("orange", Color.ORANGE);
         colors.put("olive", Color.OLIVE);
+        colors.put("ominous", 
+            new LerpColor(
+                new LerpColor(Color.DARK_GRAY, Color.BLACK, 0.3f), 
+                new LerpColor(
+                    new LerpColor(new Color(0, 0, 0.3f, 0.8f), Color.VIOLET, 0.2f), 
+                    new LerpColor(new Color(0.5f, 0, 0, 0.9f), Color.NAVY, 0.1f)
+                )
+            )
+        );
 
         colors.put("party", 
             new LerpColor(
@@ -153,6 +168,12 @@ public class GameUtil {
             new LerpColor(
                 new LerpColor(Color.CYAN, Color.ORANGE, 1), 
                 new LerpColor(Color.PURPLE, Color.GOLDENROD, 1.3f)
+            )
+        );
+        colors.put("procrastination", 
+            new LerpColor(
+                new LerpColor(Color.RED, Color.ORANGE, 1), 
+                new LerpColor(Color.LIME, Color.SKY, 0.3f)
             )
         );
         colors.put("psi", new LerpColor(Color.PURPLE, new Color(0, 1, 1, 0), 1f, Interpolation.bounceIn));

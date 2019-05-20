@@ -10920,7 +10920,7 @@ public class MoveConstructor {
             }
         }, .05f, 15);
 
-        Move move = new Move("Roar", nm.get(user).name + "'s roar scared the enemy!", user, 3,
+        Move move = new Move("Roar", nm.get(user).name + "'s roar scared the enemy!", user, 2,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
@@ -11863,7 +11863,7 @@ public class MoveConstructor {
             }
         }, .24f, 2);
 
-        Move move = new Move("Roar", nm.get(user).name + " roared!", user, 4,
+        Move move = new Move("Roar", nm.get(user).name + " roared!", user, 1,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
@@ -12296,7 +12296,7 @@ public class MoveConstructor {
             }
         }, .1f, 7);
 
-        Move move = new Move("Neo-Roar", nm.get(user).name + "'s roar electrified the air!", user, 4,
+        Move move = new Move("Neo-Roar", nm.get(user).name + "'s roar electrified the air!", user, 1,
                 new Array<BoardPosition>(new BoardPosition[]{
                         new BoardPosition(-1, 0),
                         new BoardPosition(-2, 1), new BoardPosition(-2, 0), new BoardPosition(-2, -1),
