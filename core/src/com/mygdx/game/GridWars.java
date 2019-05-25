@@ -73,7 +73,7 @@ public class GridWars extends Game {
 	 * - Certain Battle Screen debug button presses are active
 	 * - Can skip / return to levels in Survival with Q, W, E, R
 	 */
-	public static boolean DEBUGGING = true;
+	public static boolean DEBUGGING = false;
 
 	@Override
 	public void create() {
